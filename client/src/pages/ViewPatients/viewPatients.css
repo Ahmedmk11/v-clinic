@@ -1,0 +1,6 @@
+@import '../../styles/variables.css';
+
+.viewPatients-page{
+    flex-grow: 1;
+    padding: 30px;
+}
