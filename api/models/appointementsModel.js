@@ -23,7 +23,7 @@ const appointementsSchema = new mongoose.Schema(
             required: true,
         },
         start_time: {
-            type: String,
+            type: Date,
             required: true,
         },
     },

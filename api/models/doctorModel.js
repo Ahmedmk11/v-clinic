@@ -40,7 +40,6 @@ const doctorSchema = new mongoose.Schema(
         },
         dob: {
             type: Date,
-            required: [true, 'Please enter your date of birth'],
         },
         hourly_rate: {
             type: Number,
@@ -53,6 +52,16 @@ const doctorSchema = new mongoose.Schema(
         education: {
             type: String,
             required: [true, 'Please enter your education'],
+        },
+        status: {
+            type: String,
+            enum: ['active', 'pending'],
+            default: 'pending',
+        },
+        speciality: {
+            type: String,
+            required: [true, 'Please enter your speciality'],
+            default: 'general',
         },
     },
     {

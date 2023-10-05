@@ -18,14 +18,11 @@ const corsOptions = {
     credentials: true,
 }
 
-app.use(express.json());
+app.use(express.json())
 app.use(cors(corsOptions))
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
-// --------------------------------------------------
-// Mongoose
-// --------------------------------------------------
 
 connectToDatabase().then(() => {
     app.listen(port, () => {
