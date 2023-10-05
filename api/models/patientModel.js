@@ -109,8 +109,6 @@ const patientModel = new mongoose.Schema(
                 validate: [
                     {
                         validator: function (value) {
-                            // Validate that the phone number contains only allowed characters.
-                            // The regex pattern /^[0-9\s()+-]+$/ allows numbers, spaces, brackets, hyphens, and plus signs.
                             return /^[0-9\s()+-]+$/.test(value)
                         },
                         message:
@@ -118,6 +116,10 @@ const patientModel = new mongoose.Schema(
                     },
                 ],
             },
+        },
+        package: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Package',
         },
     },
     {
