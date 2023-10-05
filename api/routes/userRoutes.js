@@ -3,7 +3,7 @@ import UserModel from '../models/userModel.js'
 
 const router = express.Router()
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         // Use Mongoose to find all users
         const users = await UserModel.find()

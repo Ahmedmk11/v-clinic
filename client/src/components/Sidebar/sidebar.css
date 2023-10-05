@@ -1,0 +1,13 @@
+.sidebar{
+    flex:0 0 5%;
+    
+    max-width: 40px;
+    background: var(--complementary-gray);
+    
+}
+
+@media (max-width: 768px) {
+    .sidebar{
+       display: none;
+    }
+}

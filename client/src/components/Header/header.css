@@ -1,0 +1,26 @@
+.navbar {
+    width: 100%;
+    background-color: var(--main-green);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--complementary-blue);
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+        rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    & span {
+        color: var(--complementary-red);
+    }
+}

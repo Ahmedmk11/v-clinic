@@ -17,7 +17,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-app.use('/api', userRoutes)
+app.use('/api/users', userRoutes)
 
 // --------------------------------------------------
 // Mongoose

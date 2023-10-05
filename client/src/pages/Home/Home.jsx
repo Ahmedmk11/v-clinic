@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-
 function Home() {
     const [users, setUsers] = useState([])
 
@@ -19,6 +18,7 @@ function Home() {
         <div id='home-page'>
             <div id='home-container'>this is the home page</div>
             <h2>Users:</h2>
+            <p>lorem*50</p>
             <ul>
                 {users.map((user) => (
                     <li key={user._id}>
