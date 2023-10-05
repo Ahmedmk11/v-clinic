@@ -4,8 +4,12 @@
 
 import express from 'express'
 import cors from 'cors'
+<<<<<<< HEAD
 import userRoutes from './routes/userRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
+=======
+import patientRoutes from './routes/patientRoutes.js'
+>>>>>>> refs/remotes/origin/main
 import { connectToDatabase } from './database.js'
 
 const app = express()
@@ -19,8 +23,12 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions))
+<<<<<<< HEAD
 app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
+=======
+app.use('/api/patient', patientRoutes)
+>>>>>>> refs/remotes/origin/main
 
 // --------------------------------------------------
 // Mongoose
