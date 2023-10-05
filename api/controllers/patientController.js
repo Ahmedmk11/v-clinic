@@ -1,4 +1,5 @@
 import PatientModel from '../models/patientModel.js'
+import AppointementModel from '../models/appointementsModel.js'
 
 async function createPatient(req, res) {
     try {
@@ -44,11 +45,32 @@ async function getPatients(req, res) {
     }
 }
 
-async function getPatientsByDoctor(req, res) {
+async function getPatientByID(req, res) {
     try {
-        // const { did } = req.body
-        // const doctor = await
-    } catch {}
+        const { pid } = req.body
+        const patient = await PatientModel.findById(pid)
+        res.status(200).json(patient)
+    } catch (err) {
+        console.error('Error fetching patient:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 }
 
-export { createPatient, getPatients }
+async function getPatientsByDoctorID(req, res) {
+    try {
+        const { did } = req.params
+        const appointments = await AppointementModel.find({
+            doctor_id: did,
+        })
+        const patientIds = appointments.map(
+            (appointment) => appointment.patient_id
+        )
+        const patients = await PatientModel.find({ _id: { $in: patientIds } })
+        res.status(200).json(patients)
+    } catch (err) {
+        console.error('Error fetching patients by doctor id:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+export { createPatient, getPatients, getPatientByID, getPatientsByDoctorID }

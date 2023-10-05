@@ -5,7 +5,7 @@ function Home() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:10000/api/users')
+            .get('http://localhost:3000/api/users')
             .then((response) => {
                 setUsers(response.data)
             })
