@@ -3,6 +3,7 @@ import PatientModel from '../models/patientModel.js'
 async function createPatient(req, res) {
     try {
         const {
+            username,
             name,
             email,
             password,
@@ -14,6 +15,7 @@ async function createPatient(req, res) {
         } = req.body
 
         const newPatient = new PatientModel({
+            username,
             name,
             email,
             password,
@@ -40,6 +42,13 @@ async function getPatients(req, res) {
         console.error('Error fetching patients:', err)
         res.status(500).json({ error: 'Internal Server Error' })
     }
+}
+
+async function getPatientsByDoctor(req, res) {
+    try {
+        // const { did } = req.body
+        // const doctor = await
+    } catch {}
 }
 
 export { createPatient, getPatients }

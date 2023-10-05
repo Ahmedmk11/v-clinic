@@ -19,7 +19,8 @@
         "mongodb": "^6.1.0",
         "mongodb-connection-string-url": "^2.6.0",
         "mongoose": "^7.5.4",
-        "prettier": "^3.0.3"
+        "prettier": "^3.0.3",
+        "validator": "^13.11.0"
     },
     "devDependencies": {
         "eslint": "^8.50.0"
