@@ -1,0 +1,60 @@
+.patient-info-container {
+    flex-grow: 1;
+    margin: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px var(--color-shadow);
+}
+
+.patient-info {
+    background-color: var(--accent-background-color);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 20px;
+    font-size: 1.1rem;
+}
+
+.patient-info h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.patient-info div {
+    margin-bottom: 15px;
+}
+
+/* Styles for input fields in edit mode */
+.patient-info input[type='text'],
+.patient-info input[type='date'] {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Styles for buttons */
+.patient-info button {
+    border-radius: 5px;
+}
+
+/* Styles for save feedback messages */
+.save-message {
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.save-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.save-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
