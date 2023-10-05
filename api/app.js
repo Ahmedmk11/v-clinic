@@ -4,7 +4,7 @@
 
 import express from 'express'
 import cors from 'cors'
-import userRoutes from './routes/userRoutes.js'
+import patientRoutes from './routes/patientRoutes.js'
 import { connectToDatabase } from './database.js'
 
 const app = express()
@@ -17,7 +17,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-app.use('/api', userRoutes)
+app.use('/api/patient', patientRoutes)
 
 // --------------------------------------------------
 // Mongoose
