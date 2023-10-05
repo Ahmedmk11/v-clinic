@@ -4,7 +4,6 @@
 
 import express from 'express'
 import cors from 'cors'
-import userRoutes from './routes/userRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import patientRoutes from './routes/patientRoutes.js'
 import { connectToDatabase } from './database.js'
@@ -20,7 +19,6 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions))
-app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 
