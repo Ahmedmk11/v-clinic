@@ -13,7 +13,7 @@ const router = express.Router()
 router.post('/create-patient', createPatient)
 router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id', getPatientByID)
-router.get('/get-patients-by-doctor-id', getPatientsByDoctorID)
+router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
 router.get('/get-patient-appointments', getPatientAppointments)
 
 export default router

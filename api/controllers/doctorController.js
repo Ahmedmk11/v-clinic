@@ -1,4 +1,4 @@
-import Doctor from '../models/doctorModel.js'
+import DoctorModel from '../models/doctorModel.js'
 
 // @desc    Create a doctor
 // @route   POST /api/doctors/create-doctor
@@ -14,7 +14,7 @@ const createDoctor = async (req, res) => {
         affiliation,
         education,
     } = req.body
-    const newDoctor = new Doctor({
+    const newDoctor = new DoctorModel({
         username,
         name,
         password,
@@ -37,7 +37,7 @@ const createDoctor = async (req, res) => {
 // @access  Public
 const getDoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.find({})
+        const doctors = await DoctorModel.find({})
         res.json(doctors)
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -49,7 +49,7 @@ const getDoctors = async (req, res) => {
 // @access  Public
 const getDoctorById = async (req, res) => {
     try {
-        const doctor = await Doctor.findById(req.params.id)
+        const doctor = await DoctorModel.findById(req.params.id)
         res.json(doctor)
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -61,7 +61,7 @@ const getDoctorById = async (req, res) => {
 // @access  Public
 const updateDoctorById = async (req, res) => {
     try {
-        const doctor = await Doctor.findById(req.params.id)
+        const doctor = await DoctorModel.findById(req.params.id)
         if (doctor) {
             doctor.email = req.body.email || doctor.email
             doctor.hourly_rate = req.body.hourly_rate || doctor.hourly_rate
@@ -74,15 +74,15 @@ const updateDoctorById = async (req, res) => {
     }
 }
 
-// @desc    Get all appointements by doctor id
+// @desc    Get all appointments by doctor id
 // @route   GET /api/get-appoinments/:id
 // @access  Public
-const getAppoinmentsByDoctorId = async (req, res) => {
+const getAppointmentsByDoctorId = async (req, res) => {
     try {
-        let doctor = await Doctor.findById(req.params.id)
+        let doctor = await DoctorModel.findById(req.params.id)
         if (doctor) {
-            doctor = await doctor.populate('appointements')
-            res.json(doctor.appointements)
+            doctor = await doctor.populate('appointments')
+            res.json(doctor.appointments)
         } else res.status(404).json({ message: 'Doctor not found' })
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -94,5 +94,5 @@ export {
     getDoctors,
     getDoctorById,
     updateDoctorById,
-    getAppoinmentsByDoctorId,
+    getAppointmentsByDoctorId,
 }

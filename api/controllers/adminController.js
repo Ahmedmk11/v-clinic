@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import adminModel from '../models/adminModel.js'
-import doctorModel from '../models/doctorModel.js'
+import DoctorModel from '../models/doctorModel.js'
 import { getPatients } from './patientController.js'
 import { getDoctors } from './doctorController.js'
 import packageModel from '../models/packageModel.js'
@@ -74,7 +74,7 @@ const getDoctorRequest = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id))
         return res.status(500).send({ error: 'invalid id' })
     try {
-        const ret = await doctorModel.find({ _id: id, status: 'pending' })
+        const ret = await DoctorModel.find({ _id: id, status: 'pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(500).send({ err: 'database failed' })
@@ -83,7 +83,7 @@ const getDoctorRequest = async (req, res) => {
 
 const getAllDoctorRequest = async (req, res) => {
     try {
-        const ret = await doctorModel.find({ status: 'pending' })
+        const ret = await DoctorModel.find({ status: 'pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(503).send({ err: 'database failed' })

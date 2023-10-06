@@ -140,8 +140,8 @@ patientModel.methods.comparePassword = async function (
     return await bcrypt.compare(enteredPassword, hashedPassword)
 }
 
-patientModel.virtual('appointements', {
-    ref: 'Appointement',
+patientModel.virtual('appointments', {
+    ref: 'Appointment',
     foreignField: 'patient_id',
     localField: '_id',
 })

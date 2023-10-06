@@ -40,6 +40,7 @@ const doctorSchema = new mongoose.Schema(
         },
         dob: {
             type: Date,
+            required: [true, 'Please enter your date of birth'],
         },
         hourly_rate: {
             type: Number,
@@ -83,10 +84,11 @@ doctorSchema.methods.comparePassword = async function (
     return await bcrypt.compare(enteredPassword, hashedPassword)
 }
 
-doctorSchema.virtual('appointements', {
-    ref: 'Appointement',
+doctorSchema.virtual('appointments', {
+    ref: 'Appointment',
     foreignField: 'doctor_id',
     localField: '_id',
 })
 
-export default mongoose.model('Doctor', doctorSchema)
+const DoctorModel=mongoose.model('Doctor', doctorSchema)
+export default DoctorModel

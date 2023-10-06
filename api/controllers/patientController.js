@@ -1,5 +1,5 @@
 import PatientModel from '../models/patientModel.js'
-import AppointementModel from '../models/appointementsModel.js'
+import AppointmentModel from '../models/appointmentsModel.js'
 
 async function createPatient(req, res) {
     try {
@@ -59,7 +59,7 @@ async function getPatientByID(req, res) {
 async function getPatientsByDoctorID(req, res) {
     try {
         const { did } = req.params
-        const appointments = await AppointementModel.find({
+        const appointments = await AppointmentModel.find({
             doctor_id: did,
         })
         const patientIds = appointments.map(
@@ -77,10 +77,10 @@ async function getPatientAppointments(req, res) {
     try {
         const patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            const appointements = await patient
-                .populate('appointements')
+            const appointments = await patient
+                .populate('appointments')
                 .execPopulate()
-            res.json(appointements)
+            res.json(appointments)
         }
     } catch (error) {
         res.status(404).json({ message: error.message })
