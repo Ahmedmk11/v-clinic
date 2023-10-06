@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import './patientInfo.css'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import DoctorContext from '../../context/Doctor'
 
 export const calcAge = (birthdate) => {
     birthdate = new Date(birthdate)
@@ -19,18 +20,10 @@ export const calcAge = (birthdate) => {
 }
 
 const PatientInfoComponent = () => {
-    const [SelectedPatient, setSelectedPatient] = useState({})
+    const { SelectedPatient } = useContext(DoctorContext)
     const [downloadMessage, setDownloadMessage] = useState('')
     const [buttonClicked, setButtonClicked] = useState(false)
     const { id } = useParams()
-
-    useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
-            .then((res) => {
-                setSelectedPatient(res.data)
-            })
-    }, [id])
 
     const axiosDownloadFile = (fileName) => {
         setDownloadMessage('')
@@ -59,14 +52,13 @@ const PatientInfoComponent = () => {
             .catch((error) => {
                 console.log('error: ', error)
                 setDownloadMessage('failed')
-               
-            }).finally(() => {
+            })
+            .finally(() => {
                 setTimeout(() => {
                     setDownloadMessage('')
                 }, 4000)
                 setButtonClicked(false)
             })
-
     }
 
     const getPatientInfo = () => {
@@ -94,12 +86,17 @@ const PatientInfoComponent = () => {
                     </li>
                     <li>
                         <strong>Last Visit: </strong>{' '}
-                        {SelectedPatient.lastVisit || 'No previous visits'}
+                        {SelectedPatient.lastVisit
+                            ? new Date(SelectedPatient.lastVisit).toDateString()
+                            : 'No previous visits'}
                     </li>
                     <li>
                         <strong>Next Appointment: </strong>{' '}
-                        {SelectedPatient.nextAppointment ||
-                            'No upcoming appointments'}
+                        {SelectedPatient.nextAppointment
+                            ? new Date(
+                                  SelectedPatient.nextAppointment
+                              ).toDateString()
+                            : 'No upcoming appointments'}
                     </li>
                     <li>
                         <strong>Emergency Contact: </strong>{' '}
