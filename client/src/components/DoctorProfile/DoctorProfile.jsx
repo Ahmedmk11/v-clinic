@@ -74,7 +74,7 @@ const DoctorProfile = ({ doctor, setDoctor }) => {
         setSaveButtonClicked(true)
         try {
             await axios.put(
-                `http://localhost:3000/api/doctor/update-docor`,
+                `http://localhost:3000/api/doctor/update-doctor`,
                 DoctorInfo
             )
             setDoctor(DoctorInfo)
