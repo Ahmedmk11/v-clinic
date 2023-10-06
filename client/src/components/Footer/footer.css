@@ -1,15 +1,19 @@
 .footer {
     background-color: var(--main-green);
-    color: white;
+    color: var(--text-color);
     text-align: center;
     padding: 10px;
     font-size: 0.75rem;
     max-height: 120px;
 }
 
+.copyrights {
+    font-size: 12px;
+}
+
 .footer-content {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -20,9 +24,4 @@
 .icon {
     margin: 0 10px;
     cursor: pointer;
-}
-
-.footer-description {
-    max-width: 400px;
-    text-align: left;
 }

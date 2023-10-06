@@ -35,6 +35,7 @@
 
     .ant-avatar {
         cursor: pointer;
+        color: var(--text-color);
     }
 }
 

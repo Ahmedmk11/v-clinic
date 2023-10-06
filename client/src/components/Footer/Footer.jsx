@@ -11,13 +11,7 @@ const Footer = () => {
     return (
         <footer className='footer'>
             <div className='footer-content'>
-                <div className='footer-description'>
-                    <h2>About Us</h2>
-                    <p>
-                        Your Health Clinic is dedicated to providing
-                        high-quality healthcare services to our patients.
-                    </p>
-                </div>
+                <div className='copyrights'>&copy; 2023 V-Clinic</div>
                 <div className='social-icons'>
                     <FontAwesomeIcon icon={faFacebook} className='icon' />
                     <FontAwesomeIcon icon={faTwitter} className='icon' />
