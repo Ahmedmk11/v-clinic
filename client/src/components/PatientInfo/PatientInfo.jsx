@@ -52,22 +52,21 @@ const PatientInfoComponent = () => {
                 anchorElement.click()
 
                 setDownloadMessage('success')
-                setTimeout(() => {
-                    setDownloadMessage('')
-                }, 4000) // Reset download message after 5 seconds
 
                 document.body.removeChild(anchorElement)
                 window.URL.revokeObjectURL(href)
-                setButtonClicked(false)
             })
             .catch((error) => {
                 console.log('error: ', error)
                 setDownloadMessage('failed')
+               
+            }).finally(() => {
                 setTimeout(() => {
                     setDownloadMessage('')
                 }, 4000)
                 setButtonClicked(false)
             })
+
     }
 
     const getPatientInfo = () => {
@@ -110,10 +109,10 @@ const PatientInfoComponent = () => {
                         </a>
                     </li>
                 </ul>
-                <div className={`download-message ${downloadMessage}`}>
+                <div className={`message ${downloadMessage}`}>
                     {downloadMessage === 'success'
                         ? `${SelectedPatient.name} file downloaded successfully!`
-                        : 'File download failed. Please try again later or contact support.'}
+                        : 'File download failed. Please try again later.'}
                 </div>
                 <button
                     className='button download-button'

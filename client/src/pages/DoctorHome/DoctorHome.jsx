@@ -45,20 +45,15 @@ const DoctorHome = () => {
                 <Route path='/' element={newLocal} />
                 <Route
                     path='/profile'
-                    element={<DoctorProfile doctor={Doctor} />}
-                />
-                <Route
-                    path='/patients'
                     element={
-                        <ViewPatients
-                            doctorId={id}
-                        />
+                        <DoctorProfile doctor={Doctor} setDoctor={setDoctor} />
                     }
                 />
                 <Route
-                    path='/patient/:id'
-                    element={<PatientInfo />}
+                    path='/patients'
+                    element={<ViewPatients doctorId={id} />}
                 />
+                <Route path='/patient/:id' element={<PatientInfo />} />
                 <Route path='/*' element={<Redirect />} />
             </Routes>
         </Layout>

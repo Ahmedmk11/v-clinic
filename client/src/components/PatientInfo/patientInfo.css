@@ -45,25 +45,26 @@
 }
 
 
-.download-message {
+.message {
     opacity: 0;
+    color: transparent;
     font-size: 0.75rem;
     padding: 5px;
     border-radius: 5px;
     max-width: 500px;
     margin-bottom: 10px;
     border: 1px solid transparent;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.8s ease-in-out;
 }
 
-.download-message.success {
+.message.success {
     opacity: 1;
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-.download-message.failed {
+.message.failed {
     opacity: 1;
     background-color: #f8d7da;
     color: #721c24;
@@ -73,5 +74,5 @@
 .button[disabled] {
     background-color: var(--accent-green);
     cursor: not-allowed;
-    transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.8s ease-in-out;
 }
