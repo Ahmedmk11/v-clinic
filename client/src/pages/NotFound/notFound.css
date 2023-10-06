@@ -1,0 +1,31 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.error-heading {
+    font-size: 2rem;
+    margin: 20px 0;
+}
+
+.error-message {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.home-link a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}

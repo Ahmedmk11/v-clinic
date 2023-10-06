@@ -1,18 +1,20 @@
 import './viewPatients.css'
 import PatientList from '../../components/PatientList/PatientList'
 import { useEffect,useState } from 'react'
+import axios from 'axios'
 
-const ViewPatients = () => {
+const ViewPatients = ({doctorId}) => {
     const [Patients, setPatients] = useState([])
-    const [SelectedPatient, setSelectedPatient] = useState({})
     useEffect(() => {
         fetchPatients()
     }, [])
     const fetchPatients = () => {
         // axios
-        //     .get('http://localhost:10000/api/patients')
-        //     .then((response) => setPatients(response.data))
-        //     .catch((error) => console.error('Error fetching patients:', error))
+        // .get(
+        //     `http://localhost:3000/api/patient/get-patients-by-doctor-id/${doctorId}`
+        // )
+        // .then((res) => setPatients(res.data))
+        // .catch((err) => console.log(err))
         const patientsTemp = [
             {
                 id: 1,

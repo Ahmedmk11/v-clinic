@@ -1,10 +1,10 @@
 import './patientCard.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 const PatientCard = ({ patient }) => {
-  const navigate = useNavigate()
+    const navigate = useNavigate()
     const handlePatientSelect = () => {
-        navigate(`/patient/${patient.id}`)
+        navigate(`/doctor/patient/${patient.id}`)
     }
     return (
         <div className='patient-card' onClick={handlePatientSelect}>

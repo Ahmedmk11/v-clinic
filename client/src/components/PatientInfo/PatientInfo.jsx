@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react'
 import './patientInfo.css'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const PatientInfoComponent = () => {
-    const { id } = useParams()
     const [editedPatient, setEditedPatient] = useState({})
     const [isEditMode, setIsEditMode] = useState(false)
     const [saveMessage, setSaveMessage] = useState(null)
+    const { id } = useParams()
 
     useEffect(() => {
-        fetchPatientById(id)
+        axios
+            .get(`http://localhost:3000/api/patient/get-patient/${id}`)
+            .then((res) => {
+                setEditedPatient(res.data)
+            })
     }, [id])
 
-    const fetchPatientById = (id) => {
-        // axios
-        //     .get(`http://localhost:10000/api/patients/${id}`)
-        //     .then((response) => setEditedPatient(response.data))
-        //     .catch((error) =>
-        //         console.error('Error fetching patient by id:', error)
-        //     )
-    }
-
-    const editPatientById = (id, patient) => {
-        console.log('will edit', id, patient.name, ' on db')
+    const editPatientById = (patient) => {
+        console.log('will edit', patient.name, ' on db')
     }
 
     const handleInputChange = (e) => {
@@ -36,8 +32,10 @@ const PatientInfoComponent = () => {
     const handleSaveClick = () => {
         editPatientById(editedPatient.id, editedPatient)
         setIsEditMode(false)
-        setSaveMessage('Changes saved successfully.') // Set success message after saving changes
-        // You can also handle error cases and set appropriate error messages here if needed
+        setSaveMessage('Changes saved successfully.')
+        setTimeout(() => {
+            setSaveMessage(null)
+        }, 3000)
     }
 
     return (
@@ -123,7 +121,9 @@ const PatientInfoComponent = () => {
                 ) : (
                     <button
                         className='edit-button button'
-                        onClick={() => setIsEditMode(true)}>
+                        onClick={() => {
+                            setIsEditMode(true), setSaveMessage(null)
+                        }}>
                         Edit
                     </button>
                 )}

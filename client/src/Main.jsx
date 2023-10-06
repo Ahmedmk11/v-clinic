@@ -9,9 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <ErrorBoundary>
         <BrowserRouter>
-            <Layout>
-                <RouteSwitch />
-            </Layout>
+                <RouteSwitch />    
         </BrowserRouter>
         </ErrorBoundary>
     </React.StrictMode>

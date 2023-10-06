@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import Home from './pages/Home/Home'
-import ViewPatients from './pages/ViewPatients/ViewPatients'
-import PatientInfo from './pages/PatientInfo/PatientInfo.jsx'
-import NotFound from './pages/NotFound/NotFound'
+import Login from './pages/Login/Login'
+import DoctorHome from './pages/DoctorHome/DoctorHome'
+import NotFound, { Redirect } from './pages/NotFound/NotFound'
 
 const RouteSwitch = () => {
     const location = useLocation()
@@ -14,10 +13,10 @@ const RouteSwitch = () => {
 
     return (
         <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/patients' element={<ViewPatients />} />
-            <Route path='/patient/:id' element={<PatientInfo />} />
-            <Route path='*' element={<NotFound />} />
+            <Route path='/' element={<Login />} />
+            <Route path='/doctor/*' element={<DoctorHome />} />
+            <Route path='/NotFound' element={<NotFound />} />
+            <Route path='*' element={<Redirect />} />
         </Routes>
     )
 }
