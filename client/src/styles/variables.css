@@ -55,10 +55,20 @@
 
 /* Text Colors */
 :root {
+    & body.light-mode {
+        --text-color: rgba(255, 255, 255, 0.8);
+    }
+
+    & body.dark-mode {
+        --text-color: rgba(0, 0, 0, 0.8);
+    }
+
     --text-light: #333333;
     /* Dark text color for light mode */
     --text-dark: #f5f5f5;
     /* Light text color for dark mode */
+    --text-color-dark: rgba(0, 0, 0, 0.8);
+
 }
 
 /* Tips for Usage */

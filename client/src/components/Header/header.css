@@ -1,14 +1,45 @@
 .navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
     width: 100%;
     background-color: var(--main-green);
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+    padding: 12px 24px 12px 24px;
+}
+
+#navbar-buttons {
+    width: 15%;
     display: flex;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    .ant-btn {
+        height: 45px;
+        width: 120px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px !important;
+        transition: color 0ms;
+        -webkit-transition: color 0ms;
+        -moz-transition: color 0ms;
+        -ms-transition: color 0ms;
+        -o-transition: color 0ms;
+        color: var(--text-color);
+    }
+
+    .ant-avatar {
+        cursor: pointer;
+    }
 }
 
 .logo {
+    cursor: pointer;
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
@@ -20,6 +51,7 @@
         rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
         rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
         rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
     & span {
         color: var(--complementary-red);
     }
