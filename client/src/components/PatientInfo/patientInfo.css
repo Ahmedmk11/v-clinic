@@ -1,60 +1,78 @@
 .patient-info-container {
     flex-grow: 1;
-    margin: 30px;
-    padding: 20px;
+    margin: 3%;
+    padding: 2%;
     border-radius: 8px;
     box-shadow: 0px 0px 20px 0px var(--color-shadow);
 }
 
-.patient-info {
+.patient-name {
     background-color: var(--accent-background-color);
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px var(--color-shadow);
     border-radius: 10px;
     margin: 20px;
     font-size: 1.1rem;
 }
 
-.patient-info h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+.patient-name h2 {
+    font-size: 24px; 
 }
 
-.patient-info div {
-    margin-bottom: 15px;
+.patient-info {
+    background-color: var(--accent-background-color);
+    padding: 30px;
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    margin: 20px;
+    font-size: 1.1rem;
 }
 
-/* Styles for input fields in edit mode */
-.patient-info input[type='text'],
-.patient-info input[type='date'] {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+.patient-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.patient-info ul li {
+    font-size: 1.2rem;
+    margin: 10px 0px;
+
+    & a{
+        color: var(--main-green);
+        text-decoration: none;
+    }
+}
+
+
+.message {
+    opacity: 0;
+    color: transparent;
+    font-size: 0.75rem;
+    padding: 5px;
     border-radius: 5px;
+    max-width: 500px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    transition: opacity 0.8s ease-in-out;
 }
 
-/* Styles for buttons */
-.patient-info button {
-    border-radius: 5px;
-}
-
-/* Styles for save feedback messages */
-.save-message {
-    font-size: 14px;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.save-message.success {
+.message.success {
+    opacity: 1;
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-.save-message.error {
+.message.failed {
+    opacity: 1;
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+.button[disabled] {
+    background-color: var(--accent-green);
+    cursor: not-allowed;
+    transition: background-color 0.8s ease-in-out;
 }

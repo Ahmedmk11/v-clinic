@@ -56,13 +56,13 @@ const doctorSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['active', 'pending'],
-            default: 'pending',
+            enum: ['Active', 'Pending','Rejected'],
+            default: 'Pending',
         },
         speciality: {
             type: String,
             required: [true, 'Please enter your speciality'],
-            default: 'general',
+            default: 'General',
         },
     },
     {

@@ -19,7 +19,7 @@ const PatientList = ({ patients }) => {
             (patient) =>
                 (!showUpcomingAppointments ||
                     new Date(patient.nextAppointment) >= today) &&
-                patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+                patient.name?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFilteredPatients(filteredPatients)
         setCurrentPage(1)

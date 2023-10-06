@@ -1,134 +1,140 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import './patientInfo.css'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import DoctorContext from '../../context/Doctor'
+
+export const calcAge = (birthdate) => {
+    birthdate = new Date(birthdate)
+    const currentDate = new Date()
+    const age = currentDate.getFullYear() - birthdate.getFullYear()
+
+    // Check if the current date has passed the birthday this year
+    const hasBirthdayPassed =
+        currentDate.getMonth() > birthdate.getMonth() ||
+        (currentDate.getMonth() === birthdate.getMonth() &&
+            currentDate.getDate() >= birthdate.getDate())
+
+    // If the birthday hasn't occurred this year, subtract 1 from the age
+    return hasBirthdayPassed ? age : age - 1
+}
 
 const PatientInfoComponent = () => {
-    const [editedPatient, setEditedPatient] = useState({})
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [saveMessage, setSaveMessage] = useState(null)
+    const { SelectedPatient } = useContext(DoctorContext)
+    const [downloadMessage, setDownloadMessage] = useState('')
+    const [buttonClicked, setButtonClicked] = useState(false)
     const { id } = useParams()
 
-    useEffect(() => {
-        console.log('fetching patient with id', id)
-        axios
-            .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
-            .then((res) => {
-                setEditedPatient(res.data)
+    const axiosDownloadFile = (fileName) => {
+        setDownloadMessage('')
+        setButtonClicked(true)
+        axios({
+            url: SelectedPatient.healthRecords,
+            method: 'GET',
+            responseType: 'blob',
+        })
+            .then((response) => {
+                const href = window.URL.createObjectURL(response.data)
+
+                const anchorElement = document.createElement('a')
+
+                anchorElement.href = href
+                anchorElement.download = fileName
+
+                document.body.appendChild(anchorElement)
+                anchorElement.click()
+
+                setDownloadMessage('success')
+
+                document.body.removeChild(anchorElement)
+                window.URL.revokeObjectURL(href)
             })
-    }, [id])
-
-    const editPatientById = (patient) => {
-        console.log('will edit', patient.name, ' on db')
+            .catch((error) => {
+                console.log('error: ', error)
+                setDownloadMessage('failed')
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setDownloadMessage('')
+                }, 4000)
+                setButtonClicked(false)
+            })
     }
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setEditedPatient((prevPatient) => ({
-            ...prevPatient,
-            [name]: value,
-        }))
-    }
-
-    const handleSaveClick = () => {
-        editPatientById(editedPatient.id, editedPatient)
-        setIsEditMode(false)
-        setSaveMessage('Changes saved successfully.')
-        setTimeout(() => {
-            setSaveMessage(null)
-        }, 3000)
+    const getPatientInfo = () => {
+        return (
+            <>
+                <ul>
+                    <li>
+                        <strong>Age: </strong>{' '}
+                        {calcAge(SelectedPatient.birthdate)}
+                    </li>
+                    <li>
+                        <strong>Gender: </strong> {SelectedPatient.gender}
+                    </li>
+                    <li>
+                        <strong>Phone Number: </strong>
+                        <a href={`tel:${SelectedPatient.phoneNumber}`}>
+                            {SelectedPatient.phoneNumber}
+                        </a>
+                    </li>
+                    <li>
+                        <strong>Email: </strong>{' '}
+                        <a href={`mailto:${SelectedPatient.email}`}>
+                            {SelectedPatient.email}
+                        </a>
+                    </li>
+                    <li>
+                        <strong>Last Visit: </strong>{' '}
+                        {SelectedPatient.lastVisit
+                            ? new Date(SelectedPatient.lastVisit).toDateString()
+                            : 'No previous visits'}
+                    </li>
+                    <li>
+                        <strong>Next Appointment: </strong>{' '}
+                        {SelectedPatient.nextAppointment
+                            ? new Date(
+                                  SelectedPatient.nextAppointment
+                              ).toDateString()
+                            : 'No upcoming appointments'}
+                    </li>
+                    <li>
+                        <strong>Emergency Contact: </strong>{' '}
+                        {`${SelectedPatient.emergencyName},`}{' '}
+                        <a href={`tel:${SelectedPatient.emergencyPhoneNumber}`}>
+                            {SelectedPatient.emergencyPhoneNumber}
+                        </a>
+                    </li>
+                </ul>
+                <div className={`message ${downloadMessage}`}>
+                    {downloadMessage === 'success'
+                        ? `${SelectedPatient.name} file downloaded successfully!`
+                        : 'File download failed. Please try again later.'}
+                </div>
+                <button
+                    className='button download-button'
+                    disabled={buttonClicked}
+                    onClick={() => {
+                        axiosDownloadFile(
+                            `${SelectedPatient.name}'s health records`
+                        )
+                    }}>
+                    Download Health Records
+                </button>
+            </>
+        )
     }
 
     return (
         <div className='patient-info-container'>
             <h2>Selected Patient</h2>
-            <div className='patient-info'>
+            <div className='patient-name'>
                 <h2>
-                    {editedPatient.name}
+                    {SelectedPatient.name}
                     {"'s Information"}
-                    {isEditMode ? ' (Edit Mode)' : ''}
                 </h2>
-                {saveMessage && (
-                    <div
-                        className={`save-message ${
-                            saveMessage.includes('success')
-                                ? 'success'
-                                : 'error'
-                        }`}>
-                        {saveMessage}
-                    </div>
-                )}
-                <div>
-                    <strong>ID:</strong> {editedPatient.id}
-                </div>
-                <div>
-                    <strong>Age:</strong>{' '}
-                    {isEditMode ? (
-                        <input
-                            type='text'
-                            name='age'
-                            value={editedPatient.age}
-                            onChange={handleInputChange}
-                        />
-                    ) : (
-                        editedPatient.age
-                    )}
-                </div>
-                <div>
-                    <strong>Contact:</strong>{' '}
-                    {isEditMode ? (
-                        <input
-                            type='text'
-                            name='contact'
-                            value={editedPatient.contact}
-                            onChange={handleInputChange}
-                        />
-                    ) : (
-                        editedPatient.contact
-                    )}
-                </div>
-                <div>
-                    <strong>Last Visit:</strong>{' '}
-                    {isEditMode ? (
-                        <input
-                            type='date'
-                            name='lastVisit'
-                            value={editedPatient.lastVisit}
-                            onChange={handleInputChange}
-                        />
-                    ) : (
-                        editedPatient.lastVisit
-                    )}
-                </div>
-                <div>
-                    <strong>Next Appointment:</strong>{' '}
-                    {isEditMode ? (
-                        <input
-                            type='date'
-                            name='nextAppointment'
-                            value={editedPatient.nextAppointment}
-                            onChange={handleInputChange}
-                        />
-                    ) : (
-                        editedPatient.nextAppointment
-                    )}
-                </div>
-                {isEditMode ? (
-                    <button
-                        className='save-button button'
-                        onClick={handleSaveClick}>
-                        Save
-                    </button>
-                ) : (
-                    <button
-                        className='edit-button button'
-                        onClick={() => {
-                            setIsEditMode(true), setSaveMessage(null)
-                        }}>
-                        Edit
-                    </button>
-                )}
             </div>
+            <div className='patient-info'>{getPatientInfo()}</div>
         </div>
     )
 }

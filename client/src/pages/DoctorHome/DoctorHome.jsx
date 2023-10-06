@@ -7,6 +7,8 @@ import PatientInfo from '../../components/PatientInfo/PatientInfo'
 import DoctorProfile from '../../components/DoctorProfile/DoctorProfile.jsx'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import './doctorHome.css'
+import { Provider } from '../../context/Doctor'
 const DoctorHome = () => {
     const [Doctor, setDoctor] = useState({})
     const navigate = useNavigate()
@@ -40,27 +42,24 @@ const DoctorHome = () => {
 
     return (
         <Layout>
+            <Provider>
             <Sidebar />
             <Routes>
                 <Route path='/' element={newLocal} />
                 <Route
                     path='/profile'
-                    element={<DoctorProfile doctor={Doctor} />}
-                />
-                <Route
-                    path='/patients'
                     element={
-                        <ViewPatients
-                            doctorId={id}
-                        />
+                        <DoctorProfile doctor={Doctor} setDoctor={setDoctor} />
                     }
                 />
                 <Route
-                    path='/patient/:id'
-                    element={<PatientInfo />}
+                    path='/patients'
+                    element={<ViewPatients doctorId={id} />}
                 />
+                <Route path='/patient/info' element={<PatientInfo />} />
                 <Route path='/*' element={<Redirect />} />
             </Routes>
+            </Provider >
         </Layout>
     )
 }

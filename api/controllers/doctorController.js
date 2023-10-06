@@ -59,13 +59,14 @@ const getDoctorById = async (req, res) => {
 // @desc    Update a doctor by id
 // @route   PUT /api/update-doctor/:id
 // @access  Public
-const updateDoctorById = async (req, res) => {
+const updateDoctor = async (req, res) => {
     try {
-        const doctor = await DoctorModel.findById(req.params.id)
+        const doctor = await DoctorModel.findById(req.body.id)
         if (doctor) {
             doctor.email = req.body.email || doctor.email
             doctor.hourly_rate = req.body.hourly_rate || doctor.hourly_rate
             doctor.affiliation = req.body.affiliation || doctor.affiliation
+            doctor.speciality = req.body.speciality || doctor.speciality
             const updatedDoctor = await doctor.save()
             res.json(updatedDoctor)
         } else res.status(404).json({ message: 'Doctor not found' })
@@ -93,6 +94,6 @@ export {
     createDoctor,
     getDoctors,
     getDoctorById,
-    updateDoctorById,
+    updateDoctor,
     getAppointmentsByDoctorId,
 }
