@@ -47,8 +47,8 @@ async function getPatients(req, res) {
 
 async function getPatientByID(req, res) {
     try {
-        const { pid } = req.body
-        const patient = await PatientModel.findById(pid)
+        const { id } = req.params
+        const patient = await PatientModel.findById(id)
         res.status(200).json(patient)
     } catch (err) {
         console.error('Error fetching patient:', err)
@@ -58,9 +58,9 @@ async function getPatientByID(req, res) {
 
 async function getPatientsByDoctorID(req, res) {
     try {
-        const { did } = req.params
+        const { id } = req.params
         const appointments = await AppointmentModel.find({
-            doctor_id: did,
+            doctor_id: id,
         })
         const patientIds = appointments.map(
             (appointment) => appointment.patient_id

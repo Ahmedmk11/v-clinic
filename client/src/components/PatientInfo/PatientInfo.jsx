@@ -10,8 +10,9 @@ const PatientInfoComponent = () => {
     const { id } = useParams()
 
     useEffect(() => {
+        console.log('fetching patient with id', id)
         axios
-            .get(`http://localhost:3000/api/patient/get-patient/${id}`)
+            .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
             .then((res) => {
                 setEditedPatient(res.data)
             })
