@@ -4,6 +4,7 @@ import Login from './pages/Login/Login'
 import DoctorHome from './pages/DoctorHome/DoctorHome'
 import PatientMain from './pages/PatientMain/PatientMain'
 import PatientHome from './pages/PatientHome/PatientHome'
+import DoctorInfoPage from './pages/DoctorInfoPage/DoctorInfoPage'
 import PatientProfile from './components/PatientProfile/PatientProfile'
 import PatientAppointments from './components/PatientAppointments/PatientAppointments'
 import NotFound, { Redirect } from './pages/NotFound/NotFound'
@@ -41,6 +42,7 @@ const RouteSwitch = () => {
                 <Route index element={<PatientHome />} />
                 <Route path='profile' element={<PatientProfile />} />
                 <Route path='appointments' element={<PatientAppointments />} />
+                <Route path='doctor-info/:id' element={<DoctorInfoPage />} />
                 <Route path='*' element={<Redirect />} />
             </Route>
 
