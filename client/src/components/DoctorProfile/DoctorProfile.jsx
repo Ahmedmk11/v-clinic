@@ -1,18 +1,16 @@
 import './doctorProfile.css'
 import doctorImg from '../../assets/imgs/doctorProfile.png'
-import { useEffect, useState } from 'react'
-import { calcAge } from '../PatientInfo/PatientInfo'
+import { useEffect, useState ,useContext} from 'react'
 import axios from 'axios'
-const DoctorProfile = ({ doctor, setDoctor }) => {
-    const [DoctorInfo, setDoctorInfo] = useState(doctor)
+import DoctorContext from '../../context/Doctor'
+const DoctorProfile = () => {
+    const{Doctor,setDoctor}=useContext(DoctorContext)
+    const [DoctorInfo, setDoctorInfo] = useState(Doctor)
     const [EditMessage, setEditMessage] = useState('')
     const [EditMode, setEditMode] = useState(false)
     const [SaveButtonClicked, setSaveButtonClicked] = useState(false)
 
-    useEffect(() => {
-        setDoctorInfo(doctor)
-    }, [doctor])
-
+  
     const handleInputChange = (e, changedField) => {
         setDoctorInfo({ ...DoctorInfo, [changedField]: e.target.value })
     }
@@ -31,9 +29,9 @@ const DoctorProfile = ({ doctor, setDoctor }) => {
                         }}
                     />
                 ) : key === 'email' ? (
-                    <a>{doctor[key]}</a>
+                    <a>{Doctor[key]}</a>
                 ) : (
-                    doctor[key]
+                    Doctor[key]
                 )}
             </li>
         )
@@ -118,10 +116,10 @@ const DoctorProfile = ({ doctor, setDoctor }) => {
             <div className='doctor-name-img'>
                 <img src={doctorImg} alt='Profile Image' />
                 <section>
-                    <h2>Dr. {doctor.name}</h2>
+                    <h2>Dr. {Doctor.name}</h2>
                     <p>
                         <strong>Status: </strong>
-                        <span className={doctor.status}> {doctor.status} </span>
+                        <span className={Doctor.status}> {Doctor.status} </span>
                     </p>
                 </section>
             </div>

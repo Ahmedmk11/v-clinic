@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 const PatientHome = () => {
     const navigate = useNavigate()
     const [currUser, setCurrUser] = useState(null)
-
+    
     return (
         <Layout>
             <Outlet />

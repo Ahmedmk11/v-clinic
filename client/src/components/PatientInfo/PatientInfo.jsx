@@ -109,6 +109,9 @@ const PatientInfoComponent = () => {
                 <div className={`message ${downloadMessage}`}>
                     {downloadMessage === 'success'
                         ? `${SelectedPatient.name} file downloaded successfully!`
+                        : downloadMessage === 'failed' &&
+                          !SelectedPatient.healthRecords
+                        ? 'Patient has not uploaded any health records!'
                         : 'File download failed. Please try again later.'}
                 </div>
                 <button
