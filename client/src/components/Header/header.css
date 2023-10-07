@@ -9,7 +9,7 @@
 }
 
 #navbar-buttons {
-    width: 15%;
+    /* width: 15%; */
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -18,7 +18,7 @@
 
     .ant-btn {
         height: 45px;
-        width: 120px;
+        width: 100px;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -43,6 +43,7 @@
     cursor: pointer;
     font-size: 1.25rem;
     font-weight: 700;
+    height: fit-content;
     text-decoration: none;
     color: var(--complementary-blue);
     background-color: white;

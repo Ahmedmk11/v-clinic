@@ -88,9 +88,11 @@ function getPatientLastVisit(patientId, appointments) {
         (appointment) =>
             appointment.patient_id == patientId && appointment.date < new Date()
     )
-    patientAppointemnts.sort((a, b) => new Date(b.date) - new Date(a.date))
-    const lastVisit =
-        patientAppointemnts.length > 0 ? patientAppointemnts[0].date : null
+    let lastVisit = null
+    for (let i = 0; i < patientAppointemnts.length; i++)
+        if (lastVisit === null || patientAppointemnts[i].date > lastVisit)
+            lastVisit = patientAppointemnts[i].date
+
     return lastVisit
 }
 
@@ -100,9 +102,14 @@ function getPatientNextAppointment(patientId, appointments) {
             appointment.patient_id === patientId &&
             appointment.date >= new Date()
     )
-    patientAppointemnts.sort((a, b) => new Date(a.date) - new Date(b.date))
-    const nextAppointment =
-        patientAppointemnts.length > 0 ? patientAppointemnts[0].date : null
+    let nextAppointment = null
+    for (let i = 0; i < patientAppointemnts.length; i++)
+        if (
+            nextAppointment === null ||
+            patientAppointemnts[i].date < nextAppointment
+        )
+            nextAppointment = patientAppointemnts[i].date
+
     return nextAppointment
 }
 

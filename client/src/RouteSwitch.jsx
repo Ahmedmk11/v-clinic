@@ -8,6 +8,10 @@ import DoctorInfoPage from './pages/DoctorInfoPage/DoctorInfoPage'
 import PatientProfile from './components/PatientProfile/PatientProfile'
 import PatientAppointments from './components/PatientAppointments/PatientAppointments'
 import NotFound, { Redirect } from './pages/NotFound/NotFound'
+import DoctorMain from './pages/DoctorMain/DoctorMain'
+import DoctorProfile from './components/DoctorProfile/DoctorProfile'
+import ViewPatients from './pages/ViewPatients/ViewPatients'
+import PatientInfo from './components/PatientInfo/PatientInfo'
 
 const RouteSwitch = () => {
     const location = useLocation()
@@ -19,8 +23,15 @@ const RouteSwitch = () => {
     return (
         <Routes>
             <Route path='/' element={<Login />} />
-            <Route path='/doctor/*' element={<DoctorHome />} />
 
+            <Route path='/doctor' element={<DoctorMain />}>
+                <Route index element={<DoctorHome />} />
+                <Route path='profile' element={<DoctorProfile />} />
+                <Route path='patients' element={<ViewPatients />} />
+                <Route path='patient/info' element={<PatientInfo />} />
+                {/* <Route path='appointments' element={<PatientAppointments />} /> */}
+                <Route path='*' element={<Redirect />} />
+            </Route>
             <Route path='/patient' element={<PatientMain />}>
                 <Route index element={<PatientHome />} />
                 <Route path='profile' element={<PatientProfile />} />

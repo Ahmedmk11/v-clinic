@@ -36,7 +36,7 @@
 }
 
 .sidebar-expanded {
-    width: 160px;
+    width: 180px;
     margin-left: 0;
 }
 
@@ -46,8 +46,7 @@
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        width: 0;
-        display: none;
+    .sidebar-expanded {
+      position: absolute;
     }
 }

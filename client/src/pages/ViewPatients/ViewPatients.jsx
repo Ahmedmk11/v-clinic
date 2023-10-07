@@ -1,9 +1,10 @@
 import './viewPatients.css'
 import PatientList from '../../components/PatientList/PatientList'
-import { useEffect,useState } from 'react'
+import { useEffect,useState,useContext } from 'react'
 import axios from 'axios'
-
-const ViewPatients = ({doctorId}) => {
+import DoctorContext from '../../context/Doctor'
+const ViewPatients = () => {
+    const { Doctor } = useContext(DoctorContext)
     const [Patients, setPatients] = useState([])
     useEffect(() => {
         fetchPatients()
@@ -11,7 +12,7 @@ const ViewPatients = ({doctorId}) => {
     const fetchPatients = () => {
         axios
         .get(
-            `http://localhost:3000/api/patient/get-patients-by-doctor-id/${doctorId}`
+            `http://localhost:3000/api/patient/get-patients-by-doctor-id/${Doctor._id}`
         )
         .then((res) => setPatients(res.data))
         .catch((err) => console.log(err))
