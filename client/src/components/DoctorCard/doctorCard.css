@@ -1,0 +1,23 @@
+.patient-card {
+    padding: 20px;
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    background-color: var(--accent-background-color);
+    
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    & h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    & p {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+}
