@@ -3,23 +3,9 @@ import './patientInfo.css'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import DoctorContext from '../../context/Doctor'
+import  calcAge  from '../../utils/calcAge'
 
-export const calcAge = (birthdate) => {
-    birthdate = new Date(birthdate)
-    const currentDate = new Date()
-    const age = currentDate.getFullYear() - birthdate.getFullYear()
-
-    // Check if the current date has passed the birthday this year
-    const hasBirthdayPassed =
-        currentDate.getMonth() > birthdate.getMonth() ||
-        (currentDate.getMonth() === birthdate.getMonth() &&
-            currentDate.getDate() >= birthdate.getDate())
-
-    // If the birthday hasn't occurred this year, subtract 1 from the age
-    return hasBirthdayPassed ? age : age - 1
-}
-
-const PatientInfoComponent = () => {
+const PatientInfo = () => {
     const { SelectedPatient } = useContext(DoctorContext)
     const [downloadMessage, setDownloadMessage] = useState('')
     const [buttonClicked, setButtonClicked] = useState(false)
@@ -142,4 +128,4 @@ const PatientInfoComponent = () => {
     )
 }
 
-export default PatientInfoComponent
+export default PatientInfo

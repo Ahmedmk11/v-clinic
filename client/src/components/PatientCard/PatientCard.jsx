@@ -1,6 +1,6 @@
 import './patientCard.css'
 import { useNavigate } from 'react-router-dom'
-import { calcAge } from '../PatientInfo/PatientInfo'
+import calcAge from '../../utils/calcAge'
 import DoctorContext from '../../context/Doctor'
 import { useContext } from 'react'
 
