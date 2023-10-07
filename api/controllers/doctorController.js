@@ -57,7 +57,7 @@ const getDoctorById = async (req, res) => {
 }
 
 // @desc    Update a doctor by id
-// @route   PUT /api/update-doctor/:id
+// @route   PUT /api/update-doctor
 // @access  Public
 const updateDoctor = async (req, res) => {
     try {
