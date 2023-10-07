@@ -36,18 +36,18 @@ const getAllAdmins = async (req, res) => {
 
 /* -----------------user funcs------------------------ */
 const getUser = async (req, res) => {
-    const { id } = req.params
+    const { id,type } = req.params
     if (!mongoose.Types.ObjectId.isValid(id))
         return res.status(500).send({ error: 'invalid id' })
 
-    if (req.body.type === 'admin') {
+    if (type === 'admin') {
         const ret = await adminModel.findById(id)
         if (ret) {
             res.status(200).json(ret)
         } else {
             res.status(404).send({ error: 'user not found' })
         }
-    } else if (req.body.type === 'doctor'){
+    } else if (type === 'doctor'){
         const ret = await DoctorModel.findById(id)
         if (ret) {
             res.status(200).json(ret)
@@ -55,7 +55,7 @@ const getUser = async (req, res) => {
             res.status(404).send({ error: 'user not found' })
         }
     }
-    else if (req.body.type === 'patient'){
+    else if (type === 'patient'){
         const ret = await PatientModel.findById(id)
         if (ret) {
             res.status(200).json(ret)

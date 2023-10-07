@@ -5,7 +5,7 @@ import adminController from '../controllers/adminController.js'
 router.get('/getAllAdmins', adminController.getAllAdmins)
 router.get('/getAllDoctors', adminController.getAllDoctors)
 router.get('/getAllPatients', adminController.getAllPatients)
-router.get('/getUser/:id', adminController.getUser)
+router.get('/getUser/:id/:type', adminController.getUser)
 router.get('/getDoctorRequest/:id', adminController.getDoctorRequest)
 router.get('/getAllDoctorRequest', adminController.getAllDoctorRequest)
 router.get('/getAllPackages', adminController.getAllPackages)

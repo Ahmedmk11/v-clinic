@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import AdminPatientList from '../../components/AdminPatientList/AdminPatientList'
+import AdminPatientList from '../../components/AdminComponents/AdminPatientList/AdminPatientList'
 
 const AdminViewPatients = () => {
     const [patients, setPatients] = useState(null)

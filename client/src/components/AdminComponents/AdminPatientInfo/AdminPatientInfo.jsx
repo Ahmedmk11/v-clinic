@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import calcAge from '../../utils/calcAge'
+import calcAge from '../../../utils/calcAge'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
 const { confirm } = Modal

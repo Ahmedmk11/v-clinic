@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminPatientCard from "../AdminPatientCard/AdminPatientCard";
-import Pagination from "../Pagination/Pagination";
-import Search from "../Search/Search";
+import Pagination from "../../Pagination/Pagination";
+import Search from "../../Search/Search";
 
 const PatientList = ({ patients }) => {
   const [searchTerm, setSearchTerm] = useState("");

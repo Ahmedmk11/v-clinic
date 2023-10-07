@@ -16,7 +16,8 @@ import AdminViewDoctors from './pages/AdminPages/AdminViewDoctors'
 import DoctorProfile from './components/DoctorProfile/DoctorProfile'
 import ViewPatients from './pages/ViewPatients/ViewPatients'
 import PatientInfo from './components/PatientInfo/PatientInfo'
-import AdminPatientInfo from './components/AdminPatientInfo/AdminPatientInfo'
+import AdminPatientInfo from './components/AdminComponents/AdminPatientInfo/AdminPatientInfo'
+import AdminDoctorInfo from './components/AdminComponents/AdminDoctorInfo'
 
 const RouteSwitch = () => {
     const location = useLocation()
@@ -51,6 +52,7 @@ const RouteSwitch = () => {
                 <Route path='view-doctors' element={<AdminViewDoctors/>}/>
                 <Route path='view-patients' element={<AdminViewPatients/>}/>
                 <Route path='patient/:id' element={<AdminPatientInfo />} />
+                <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='*' element={<Redirect />} />
             </Route>
 

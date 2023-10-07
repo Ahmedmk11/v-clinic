@@ -10,7 +10,10 @@ function Provider({ children }) {
     useEffect(() => {
         axios
             .get(`http://localhost:3000/api/doctor/get-doctor/${id}`)
-            .then((res) => {setDoctor(res.data);console.log(res.data)})
+            .then((res) => {
+                setDoctor(res.data)
+                console.log(res.data)
+            })
             .catch((err) => console.log(err))
     }, [])
     useEffect(() => {
@@ -20,15 +23,15 @@ function Provider({ children }) {
     }, [])
     useEffect(() => {
         if (SelectedPatient._id)
-        window.localStorage.setItem(
-            'SelectedPatient',
-            JSON.stringify(SelectedPatient)
-        )
+            window.localStorage.setItem(
+                'SelectedPatient',
+                JSON.stringify(SelectedPatient)
+            )
     }, [SelectedPatient])
 
     return (
         <DoctorContext.Provider
-            value={{ SelectedPatient, setSelectedPatient, Doctor }}>
+            value={{ SelectedPatient, setSelectedPatient, Doctor, setDoctor }}>
             {children}
         </DoctorContext.Provider>
     )
