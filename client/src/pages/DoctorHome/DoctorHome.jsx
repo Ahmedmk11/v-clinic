@@ -43,23 +43,25 @@ const DoctorHome = () => {
     return (
         <Layout>
             <Provider>
-            <Sidebar />
-            <Routes>
-                <Route path='/' element={newLocal} />
-                <Route
-                    path='/profile'
-                    element={
-                        <DoctorProfile doctor={Doctor} setDoctor={setDoctor} />
-                    }
-                />
-                <Route
-                    path='/patients'
-                    element={<ViewPatients doctorId={id} />}
-                />
-                <Route path='/patient/info' element={<PatientInfo />} />
-                <Route path='/*' element={<Redirect />} />
-            </Routes>
-            </Provider >
+                <Routes>
+                    <Route path='/' element={newLocal} />
+                    <Route
+                        path='/profile'
+                        element={
+                            <DoctorProfile
+                                doctor={Doctor}
+                                setDoctor={setDoctor}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/patients'
+                        element={<ViewPatients doctorId={id} />}
+                    />
+                    <Route path='/patient/info' element={<PatientInfo />} />
+                    <Route path='/*' element={<Redirect />} />
+                </Routes>
+            </Provider>
         </Layout>
     )
 }

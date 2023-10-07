@@ -7,6 +7,7 @@ const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false)
     const navigate = useNavigate()
     const page = window.location.pathname.split('/').pop()
+    const userType = window.location.pathname.split('/')[1]
 
     return (
         <div
@@ -16,40 +17,44 @@ const Sidebar = () => {
             <div>
                 <p
                     className={
-                        page === 'doctor'
+                        page === 'doctor' || page === 'patient'
                             ? 'sidebar-item selected-sidebar-item'
                             : 'sidebar-item'
                     }
                     onClick={() => {
-                        navigate('/doctor')
+                        navigate(`/${userType}`)
                     }}>
                     <HomeOutlined />
                     {isExpanded ? 'Home' : ''}
                 </p>
-                <p
-                    className={
-                        page === 'patients'
-                            ? 'sidebar-item selected-sidebar-item'
-                            : 'sidebar-item'
-                    }
-                    onClick={() => {
-                        navigate('patients')
-                    }}>
-                    <TeamOutlined />
-                    {isExpanded ? 'Patients' : ''}
-                </p>
-                <p
-                    className={
-                        page === 'appointments'
-                            ? 'sidebar-item selected-sidebar-item'
-                            : 'sidebar-item'
-                    }
-                    onClick={() => {
-                        navigate('appointments')
-                    }}>
-                    <ScheduleOutlined />
-                    {isExpanded ? 'Appointments' : ''}
-                </p>
+                {userType === 'doctor' && ( // to be changed when adding more patient pages
+                    <p
+                        className={
+                            page === 'patients'
+                                ? 'sidebar-item selected-sidebar-item'
+                                : 'sidebar-item'
+                        }
+                        onClick={() => {
+                            navigate('patients')
+                        }}>
+                        <TeamOutlined />
+                        {isExpanded ? 'Patients' : ''}
+                    </p>
+                )}
+                {userType === 'doctor' && ( // to be changed when adding more patient pages
+                    <p
+                        className={
+                            page === 'appointments'
+                                ? 'sidebar-item selected-sidebar-item'
+                                : 'sidebar-item'
+                        }
+                        onClick={() => {
+                            navigate('appointments')
+                        }}>
+                        <ScheduleOutlined />
+                        {isExpanded ? 'Appointments' : ''}
+                    </p>
+                )}
             </div>
         </div>
     )
