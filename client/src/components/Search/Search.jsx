@@ -4,7 +4,7 @@ import './search.css'
 const Search = ({ onSearch }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const onSearchTermChange = (e) => {
-        const searchString = e.target.value.replace(/[^a-z]/gi, '')
+        const searchString = e.target.value.replace(/[^a-z\s]/gi, '')
         setSearchTerm(searchString)
         onSearch(searchString)
     }
