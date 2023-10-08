@@ -8,8 +8,8 @@ import PatientModel from '../models/patientModel.js'
 
 /* -----------------admin funcs------------------------ */
 const addAdmin = async (req, res) => {
-    const fetchedAdmin = await adminModel.find()
     console.log(req.body)
+    const fetchedAdmin = await adminModel.find()
     for (let i = 0; i < fetchedAdmin.length; i++)
         if (fetchedAdmin.at(i).Username === req.body.Username) {
             res.status(500).send({ message: 'this username is in use' })
@@ -20,7 +20,7 @@ const addAdmin = async (req, res) => {
         .save()
         .then((result) => res.status(200).send(result))
         .catch((err) =>
-            res.status(500).send({ error: 'failed to create admin' })
+            res.status(500).send(err)
         )
 }
 
