@@ -8,7 +8,6 @@ import PatientModel from '../models/patientModel.js'
 
 /* -----------------admin funcs------------------------ */
 const addAdmin = async (req, res) => {
-    console.log(req.body)
     const fetchedAdmin = await adminModel.find()
     for (let i = 0; i < fetchedAdmin.length; i++)
         if (fetchedAdmin.at(i).Username === req.body.Username) {

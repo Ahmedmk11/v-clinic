@@ -6,7 +6,7 @@ const DoctorContext = createContext()
 function Provider({ children }) {
     const [SelectedPatient, setSelectedPatient] = useState({})
     const [Doctor, setDoctor] = useState({})
-    const id = '651f4e29f81290fe0e1dd83a'
+    const id = '65219089f27b074cbbae82c4'
     useEffect(() => {
         axios
             .get(`http://localhost:3000/api/doctor/get-doctor/${id}`)
@@ -18,7 +18,7 @@ function Provider({ children }) {
     }, [])
     useEffect(() => {
         let selectedPatient =
-            window.localStorage.getItem('SelectedPatient') || {}
+            window.localStorage.getItem('SelectedPatient') || JSON.stringify({})
         setSelectedPatient(JSON.parse(selectedPatient))
     }, [])
     useEffect(() => {

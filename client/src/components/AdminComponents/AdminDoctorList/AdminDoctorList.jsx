@@ -4,6 +4,7 @@ import Pagination from "../../Pagination/Pagination";
 import Search from "../../Search/Search";
 
 const AdminDoctorList = ({ doctors }) => {
+    
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [filtereddoctors, setFiltereddoctors] = useState(doctors);
