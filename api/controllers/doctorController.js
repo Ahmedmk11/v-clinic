@@ -13,6 +13,7 @@ const createDoctor = async (req, res) => {
         hourly_rate,
         affiliation,
         education,
+        speciality
     } = req.body
     const newDoctor = new DoctorModel({
         username,
@@ -23,6 +24,7 @@ const createDoctor = async (req, res) => {
         hourly_rate,
         affiliation,
         education,
+        speciality
     })
     try {
         await newDoctor.save()

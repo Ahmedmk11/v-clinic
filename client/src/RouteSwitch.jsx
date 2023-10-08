@@ -18,7 +18,7 @@ import ViewPatients from './pages/ViewPatients/ViewPatients'
 import PatientInfo from './components/PatientInfo/PatientInfo'
 import AdminPatientInfo from './components/AdminComponents/AdminPatientInfo/AdminPatientInfo'
 import AdminDoctorInfo from './components/AdminComponents/AdminDoctorInfo'
-import AddAdminForm from './components/AdminComponents/AddAdminForm'
+import AddAdminForm from './components/AdminComponents/AddAdminForm/AddAdminForm'
 import AddPackageForm from './components/AdminComponents/AddPackageForm'
 import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
 
