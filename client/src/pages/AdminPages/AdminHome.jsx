@@ -6,6 +6,9 @@ const AdminHome = () => {
             <Link to='/admin/add-admin'>
                 <h2>Add Adminstrator</h2>
             </Link>
+            <Link to='/admin/add-package'>
+                <h2>Add Package</h2>
+            </Link>
             <Link to='/admin/view-patients'>
                 <h2>View Patients</h2>
             </Link>
