@@ -8,6 +8,7 @@ const navigate = useNavigate()
         <div className='patient-card' onClick={handleSubmit}>
             <h3>{doctor.username}</h3>
             <p><strong>ID: </strong>{doctor._id}</p>
+            <p><strong>Status: </strong>{doctor.status}</p>
             <p><strong>Name: </strong>{doctor.name}</p>
             <p><strong>Education: </strong>{doctor.education}</p>
             <p><strong>Speciality: </strong>{doctor.speciality}</p>

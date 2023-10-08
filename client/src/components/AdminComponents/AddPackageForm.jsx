@@ -39,8 +39,11 @@ const AddPackageForm = () => {
     }
 
     return (
-        <form className="adminForm" onSubmit={handleSubmit}>
-            <h3>Add a new Package</h3>
+
+        <div className="admin-page">
+       <div className="admin-form-container">
+            <h2>Add a new Package</h2>
+       <form className="adminForm" onSubmit={handleSubmit}>
 
             <label><strong>Name:</strong></label>
             <input 
@@ -82,6 +85,8 @@ const AddPackageForm = () => {
             {error ? <div className="errorAdminForm">{error}</div> : null}
             {success ? <div className="successAdminForm">{success}</div> : null}
         </form>
+            </div>
+       </div>
     )
 }
 

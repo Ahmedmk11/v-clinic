@@ -31,11 +31,10 @@ const addAdminForm = () => {
     }
 
     return (
-        <div className='viewPatients-page'>
-            <div className='patient-list-conatiner'>
+        <div className='admin-page'>
+            <div className='admin-form-container'>
+                    <h2>Add a new Admin</h2>
                 <form className='adminForm' onSubmit={handleSubmit}>
-                    <h3>Add a new Admin</h3>
-
                     <label>
                         <strong>Username:</strong>
                     </label>

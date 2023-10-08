@@ -1,11 +1,30 @@
+.admin-page{
+    flex-grow: 1;
+    padding: 3%;
+}
+.admin-form-container{
+    padding: 3%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px var(--color-shadow);
+    height: 100%;
+}
 
 .adminForm {
     display: flex;
     flex-direction: column;
     gap: 6px;
     padding: 5px;
-    margin-left: 10px;
+    margin: auto;
     width: 200px;
+    & button{
+        margin-top: 15px;
+    }
+    & label{
+        font-size: 1.1rem;
+    }
+    & input{
+        font-size: 1.1rem;
+    }
 }
 
 .errorAdminForm {
