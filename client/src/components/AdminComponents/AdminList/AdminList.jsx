@@ -11,8 +11,6 @@ const AdminList = ({ Admins, setAdmins }) => {
     const AdminsPerPage = 8
 
     useEffect(() => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
         const filteredAdmins = Admins.filter((admin) =>
             admin.Username?.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -51,7 +49,7 @@ const AdminList = ({ Admins, setAdmins }) => {
     return (
         <section className='patient-list-conatiner'>
             <h2>Admins</h2>
-            <Search onSearch={onSearch} />
+            <Search onSearch={onSearch} placeholder={"username"}/>
             <div className='patient-list'>{getCurrentAdmins()}</div>
             <Pagination
                 itemsPerPage={AdminsPerPage}

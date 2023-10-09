@@ -4,6 +4,7 @@ import DoctorModel from '../models/doctorModel.js'
 // @route   POST /api/doctors/create-doctor
 // @access  Public
 const createDoctor = async (req, res) => {
+    try {
     const {
         username,
         name,
@@ -26,7 +27,7 @@ const createDoctor = async (req, res) => {
         education,
         speciality
     })
-    try {
+    
         await newDoctor.save()
         res.status(201).json(newDoctor)
     } catch (error) {
@@ -63,7 +64,7 @@ const getDoctorById = async (req, res) => {
 // @access  Public
 const updateDoctor = async (req, res) => {
     try {
-        const doctor = await DoctorModel.findById(req.body.id)
+        const doctor = await DoctorModel.findById(req.body._id)
         if (doctor) {
             doctor.email = req.body.email || doctor.email
             doctor.hourly_rate = req.body.hourly_rate || doctor.hourly_rate

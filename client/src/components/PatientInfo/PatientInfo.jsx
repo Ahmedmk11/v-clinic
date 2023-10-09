@@ -73,7 +73,7 @@ const PatientInfo = () => {
                     <li>
                         <strong>Last Visit: </strong>{' '}
                         {SelectedPatient.lastVisit
-                            ? new Date(SelectedPatient.lastVisit).toDateString()
+                            ? new Date(SelectedPatient.lastVisit).toLocaleString()
                             : 'No previous visits'}
                     </li>
                     <li>
@@ -81,7 +81,7 @@ const PatientInfo = () => {
                         {SelectedPatient.nextAppointment
                             ? new Date(
                                   SelectedPatient.nextAppointment
-                              ).toDateString()
+                              ).toLocaleString()
                             : 'No upcoming appointments'}
                     </li>
                     <li>

@@ -99,7 +99,7 @@ function getPatientLastVisit(patientId, appointments) {
 function getPatientNextAppointment(patientId, appointments) {
     const patientAppointemnts = appointments.filter(
         (appointment) =>
-            appointment.patient_id === patientId &&
+            appointment.patient_id == patientId &&
             appointment.date >= new Date()
     )
     let nextAppointment = null

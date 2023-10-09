@@ -19,6 +19,9 @@ const AdminHome = () => {
                 <Link to='/admin/view-admins'>
                     <h2>View Adminstrators</h2>
                 </Link>
+                <Link to='/admin/view-requests'>
+                    <h2>View Dr Requests</h2>
+                </Link>
             </div>
         </div>
     )

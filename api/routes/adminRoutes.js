@@ -14,6 +14,7 @@ router.post('/addPackage', adminController.addPackage)
 router.put('/updatePackage/:id', adminController.updatePackage)
 router.delete('/deleteUser/:id', adminController.removeUser)
 router.delete('/deletePackage/:id', adminController.deletePackage)
+router.put('/updateDoctorStatus', adminController.updateDoctorStatus)
 //router.get('/getUsers', )
 
 

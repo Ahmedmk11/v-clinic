@@ -106,7 +106,7 @@ const getDoctorRequest = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id))
         return res.status(500).send({ error: 'invalid id' })
     try {
-        const ret = await DoctorModel.find({ _id: id, status: 'pending' })
+        const ret = await DoctorModel.find({ _id: id, status: 'Pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(500).send({ err: 'database failed' })
@@ -115,10 +115,25 @@ const getDoctorRequest = async (req, res) => {
 
 const getAllDoctorRequest = async (req, res) => {
     try {
-        const ret = await DoctorModel.find({ status: 'pending' })
+        const ret = await DoctorModel.find({ status: 'Pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(503).send({ err: 'database failed' })
+    }
+}
+
+const updateDoctorStatus=async (req,res)=>{
+    try {
+    const {id} = req.body
+    if(!mongoose.Types.ObjectId.isValid(id))
+    return res.status(500).send({error:"invalid id sent to database"})
+        const doctor = await DoctorModel.findById(id)
+        if (doctor) {
+            await doctor.updateOne({status:req.body.status})
+            res.status(200).send("updated")
+        } else res.status(404).json({ message: 'Doctor not found' })
+    } catch (error) {
+        res.status(404).json({ message: error.message })
     }
 }
 
@@ -193,6 +208,6 @@ const adminController = {
     getAllPackages,
     updatePackage,
     deletePackage,
-    addPackage
+    addPackage,updateDoctorStatus
 }
 export default adminController
