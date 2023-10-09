@@ -76,7 +76,7 @@ const updateDoctor = async (req, res) => {
 }
 
 // @desc    Get all appointments by doctor id
-// @route   GET /api/get-appoinments/:id
+// @route   GET /api/get-appointments/:id
 // @access  Public
 const getAppointmentsByDoctorId = async (req, res) => {
     try {
@@ -86,7 +86,7 @@ const getAppointmentsByDoctorId = async (req, res) => {
             res.json(doctor.appointments)
         } else res.status(404).json({ message: 'Doctor not found' })
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({ message: error.message })
     }
 }
 

@@ -26,6 +26,10 @@ const appointmentsSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
+        end_time: {
+            type: Date,
+            required: true,
+        },
     },
     {
         toJSON: { virtuals: true },
