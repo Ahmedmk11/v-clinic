@@ -4,11 +4,17 @@ import axios from 'axios'
 
 import { formatDateRange } from '../../utils/convertDateToString.js'
 
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
+
 const AppointmentsList = () => {
     const [appointmentsList, setAppointmentsList] = useState([])
+    const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [tempDoctorName, setTempDoctorName] = useState('')
 
-    const [selectedSpecialities, setSelectedSpecialities] = useState([])
+    const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
 
     const [currUser, setCurrUser] = useState({
@@ -26,6 +32,39 @@ const AppointmentsList = () => {
             })
     }
 
+    const applyFilters = () => {
+        let filtered = appointmentsList
+
+        if (selectedStates.length > 0) {
+            filtered = filtered.filter((appointment) =>
+                selectedStates.includes(appointment.status)
+            )
+        }
+
+        if (dateRange) {
+            const datePartOfRange = dayjs(dateRange).format('YYYY-MM-DD')
+            filtered = filtered.filter((appointment) => {
+                const datePartOfStartDate = dayjs(
+                    appointment.start_time
+                ).format('YYYY-MM-DD')
+                const datePartOfEndDate = dayjs(appointment.end_time).format(
+                    'YYYY-MM-DD'
+                )
+
+                return (
+                    datePartOfStartDate === datePartOfRange ||
+                    datePartOfEndDate === datePartOfRange
+                )
+            })
+        }
+
+        setDisplayedAppointments(filtered)
+    }
+
+    useEffect(() => {
+        applyFilters()
+    }, [selectedStates, dateRange])
+
     useEffect(() => {
         axios
             .get(
@@ -33,6 +72,7 @@ const AppointmentsList = () => {
             )
             .then((res) => {
                 setAppointmentsList(res.data)
+                setDisplayedAppointments(res.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -40,7 +80,7 @@ const AppointmentsList = () => {
     }, [currUser])
 
     const handleChange = (value) => {
-        setSelectedSpecialities(value)
+        setSelectedStates(value)
     }
 
     const handleDateChange = (dates) => {
@@ -49,17 +89,11 @@ const AppointmentsList = () => {
 
     return (
         <div>
-            <DatePicker
-                showTime={{
-                    format: 'hh:mm a',
-                }}
-                format='YYYY-MM-DD hh:mm a'
-                onChange={handleDateChange}
-            />
+            <DatePicker format='YYYY-MM-DD' onChange={handleDateChange} />
             <Select
                 mode='multiple'
                 allowClear
-                placeholder='Select specialities'
+                placeholder='Select state'
                 onChange={handleChange}
                 options={[
                     {
@@ -71,7 +105,7 @@ const AppointmentsList = () => {
                     { label: 'Rescheduled', value: 'rescheduled' },
                 ]}
             />
-            {appointmentsList.map(
+            {displayedAppointments.map(
                 (appointment) => (
                     getDoctor(appointment.doctor_id),
                     (

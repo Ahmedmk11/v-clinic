@@ -111,30 +111,6 @@ const PatientHome = () => {
                             (appointment) => {
                                 const selectedDateTime = dateRange
 
-                                console.log(
-                                    'selectedDateTime',
-                                    selectedDateTime,
-                                    typeof selectedDateTime
-                                )
-                                console.log(
-                                    'appointmentStartTime',
-                                    dayjs.utc(appointment.start_time)
-                                )
-                                console.log(
-                                    'appointmentEndTime',
-                                    dayjs.utc(appointment.end_time)
-                                )
-
-                                console.log(
-                                    'check',
-                                    selectedDateTime.isAfter(
-                                        dayjs.utc(appointment.start_time)
-                                    ) &&
-                                        selectedDateTime.isBefore(
-                                            dayjs.utc(appointment.end_time)
-                                        )
-                                )
-
                                 return (
                                     selectedDateTime >=
                                         dayjs.utc(appointment.start_time) &&
