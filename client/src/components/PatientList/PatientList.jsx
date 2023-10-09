@@ -40,7 +40,7 @@ const PatientList = ({ patients }) => {
     }
 
     const onSearch = (searchString) => {
-        setSearchTerm(searchString)
+        setSearchTerm(searchString, true)
     }
 
     const onCheckboxChange = () => {

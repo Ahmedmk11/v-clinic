@@ -2,7 +2,7 @@ import './patientAppointments.css'
 import AppointmentsList from '../../components/AppointmentsList/AppointmentsList.jsx'
 
 const PatientAppointments = () => {
-    // REQ 23, view all appointments, filter by date and status
+    // REQ 23, view all appointments, filter by date and status DONE
     return (
         <>
             <div>Patient Appointments</div>

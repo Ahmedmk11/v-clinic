@@ -44,7 +44,6 @@
     }
 }
 
-
 .message {
     opacity: 0;
     color: transparent;
@@ -75,4 +74,8 @@
     background-color: var(--accent-green);
     cursor: not-allowed;
     transition: background-color 0.8s ease-in-out;
+}
+
+.patient-pdf-viewer{
+    margin-top: 20px;
 }

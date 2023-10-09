@@ -9,10 +9,19 @@ import PatientProfile from './components/PatientProfile/PatientProfile'
 import PatientAppointments from './components/PatientAppointments/PatientAppointments'
 import NotFound, { Redirect } from './pages/NotFound/NotFound'
 import DoctorMain from './pages/DoctorMain/DoctorMain'
+import AdminMain from './pages/AdminMain/AdminMain'
+import AdminHome from './pages/AdminPages/AdminHome'
+import AdminViewPatients from './pages/AdminPages/AdminviewPatients'
+import AdminViewDoctors from './pages/AdminPages/AdminViewDoctors'
 import DoctorProfile from './components/DoctorProfile/DoctorProfile'
 import ViewPatients from './pages/ViewPatients/ViewPatients'
 import PatientInfo from './components/PatientInfo/PatientInfo'
-
+import AdminPatientInfo from './components/AdminComponents/AdminPatientInfo/AdminPatientInfo'
+import AdminDoctorInfo from './components/AdminComponents/AdminDoctorInfo'
+import AddAdminForm from './components/AdminComponents/AddAdminForm/AddAdminForm'
+import AddPackageForm from './components/AdminComponents/AddPackageForm'
+import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
+import AdminViewRequests from './pages/AdminPages/AdminViewRequests'
 const RouteSwitch = () => {
     const location = useLocation()
 
@@ -32,11 +41,25 @@ const RouteSwitch = () => {
                 {/* <Route path='appointments' element={<PatientAppointments />} /> */}
                 <Route path='*' element={<Redirect />} />
             </Route>
+
             <Route path='/patient' element={<PatientMain />}>
                 <Route index element={<PatientHome />} />
                 <Route path='profile' element={<PatientProfile />} />
                 <Route path='appointments' element={<PatientAppointments />} />
                 <Route path='doctor-info/:id' element={<DoctorInfoPage />} />
+                <Route path='*' element={<Redirect />} />
+            </Route>
+
+            <Route path='/admin' element={<AdminMain />}>
+                <Route index element={<AdminHome />}/>
+                <Route path='view-doctors' element={<AdminViewDoctors/>}/>
+                <Route path='view-patients' element={<AdminViewPatients/>}/>
+                <Route path='view-admins' element={<AdminViewAdmins/>}/>
+                <Route path='add-admin/' element={<AddAdminForm />} />
+                <Route path='add-package/' element={<AddPackageForm/>} />
+                <Route path='patient/:id' element={<AdminPatientInfo />} />
+                <Route path='doctor/:id' element={<AdminDoctorInfo />} />
+                <Route path='view-requests' element={<AdminViewRequests/>}/>
                 <Route path='*' element={<Redirect />} />
             </Route>
 

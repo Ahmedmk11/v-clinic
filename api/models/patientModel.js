@@ -121,6 +121,9 @@ const patientModel = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Package',
         },
+        health_records: {
+            type: String,
+        },
     },
     {
         toJSON: { virtuals: true },
