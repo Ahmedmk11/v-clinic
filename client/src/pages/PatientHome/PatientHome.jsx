@@ -18,7 +18,7 @@ dayjs.extend(utc)
 const PatientHome = () => {
     // REQ 37 | View all doctors, DONE
     // REQ 38 | search by name or speciality, DONE
-    // REQ 39 | filter by speciality and or availability, IN PROGRESS
+    // REQ 39 | filter by speciality and or availability, DONE (FIX BUG WHEN FILTERING BY AVAILABILITY AND SPECIALITY)
     // REQ 40 | navigate to selected doctor
     const [doctors, setDoctors] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')

@@ -115,15 +115,13 @@ function getPatientNextAppointment(patientId, appointments) {
 
 async function getPatientAppointments(req, res) {
     try {
-        const patient = await PatientModel.findById(req.params.id)
+        let patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            const appointments = await patient
-                .populate('appointments')
-                .execPopulate()
-            res.json(appointments)
-        }
+            patient = await patient.populate('appointments')
+            res.json(patient.appointments)
+        } else res.status(404).json({ message: 'Patient not found' })
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({ message: error.message })
     }
 }
 

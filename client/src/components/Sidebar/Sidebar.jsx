@@ -41,20 +41,18 @@ const Sidebar = () => {
                         {isExpanded ? 'Patients' : ''}
                     </p>
                 )}
-                {userType === 'doctor' && ( // to be changed when adding more patient pages
-                    <p
-                        className={
-                            page === 'appointments'
-                                ? 'sidebar-item selected-sidebar-item'
-                                : 'sidebar-item'
-                        }
-                        onClick={() => {
-                            navigate('appointments')
-                        }}>
-                        <ScheduleOutlined />
-                        {isExpanded ? 'Appointments' : ''}
-                    </p>
-                )}
+                <p
+                    className={
+                        page === 'appointments'
+                            ? 'sidebar-item selected-sidebar-item'
+                            : 'sidebar-item'
+                    }
+                    onClick={() => {
+                        navigate('appointments')
+                    }}>
+                    <ScheduleOutlined />
+                    {isExpanded ? 'Appointments' : ''}
+                </p>
             </div>
         </div>
     )
