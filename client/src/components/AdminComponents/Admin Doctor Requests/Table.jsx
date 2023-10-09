@@ -155,7 +155,7 @@ const AntTable = ({ requests, setRequests }) => {
     const pagination = {
         pageSizeOptions, // Options for the number of columns per page dropdown
         showSizeChanger: true, // Show the columns per page dropdown
-        showTotal: (total) => `Total ${total} columns`, // Custom text displayed for total columns count
+        showTotal: (total) => `Total ${total} rows`, // Custom text displayed for total rows count
     }
     return (
         <>

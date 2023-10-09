@@ -12,7 +12,6 @@ function Provider({ children }) {
             .get(`http://localhost:3000/api/doctor/get-doctor/${id}`)
             .then((res) => {
                 setDoctor(res.data)
-                console.log(res.data)
             })
             .catch((err) => console.log(err))
     }, [])
@@ -38,3 +37,5 @@ function Provider({ children }) {
 }
 export { Provider }
 export default DoctorContext
+
+
