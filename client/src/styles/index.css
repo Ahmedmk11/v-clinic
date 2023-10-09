@@ -59,4 +59,5 @@ h1 {
 
 input:focus {
     outline: var(--main-green) auto 1px;
+    border-color: var(--main-green);
 }
