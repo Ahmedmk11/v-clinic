@@ -9,7 +9,7 @@ const DoctorCard = (props) => {
         <div
             className='doctor-card'
             onClick={() => {
-                navigate(`/doctor-info/${doctor.id}`)
+                navigate(`/patient/doctor-info/${doctor.id}`)
             }}>
             <h3>Dr. {doctor.name}</h3>
             <p>{doctor.speciality}</p>
