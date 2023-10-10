@@ -23,6 +23,7 @@ import AddPackageForm from './components/AdminComponents/AddPackageForm'
 import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
 import AdminViewRequests from './pages/AdminPages/AdminViewRequests'
 import DoctorAppointments from './components/DoctorAppointments/DoctorAppointments'
+import AdminProfile from './components/AdminComponents/AdminProfile'
 const RouteSwitch = () => {
     const location = useLocation()
 
@@ -52,6 +53,7 @@ const RouteSwitch = () => {
 
             <Route path='/admin' element={<AdminMain />}>
                 <Route index element={<AdminHome />} />
+                <Route path='profile' element={<AdminProfile />} />
                 <Route path='view-doctors' element={<AdminViewDoctors />} />
                 <Route path='view-patients' element={<AdminViewPatients />} />
                 <Route path='view-admins' element={<AdminViewAdmins />} />
@@ -60,6 +62,7 @@ const RouteSwitch = () => {
                 <Route path='patient/:id' element={<AdminPatientInfo />} />
                 <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='view-requests' element={<AdminViewRequests />} />
+                {/* <Route path='view-packages' element={<AdminViewPackages />} /> */}
                 <Route path='*' element={<Redirect />} />
             </Route>
 
