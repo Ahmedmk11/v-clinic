@@ -3,48 +3,22 @@ import './patientInfo.css'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import DoctorContext from '../../context/Doctor'
-import  calcAge  from '../../utils/calcAge'
+import calcAge from '../../utils/calcAge'
+import PdfViewer from '../PdfViewer/PdfViewer'
 
 const PatientInfo = () => {
     const { SelectedPatient } = useContext(DoctorContext)
-    const [downloadMessage, setDownloadMessage] = useState('')
     const [buttonClicked, setButtonClicked] = useState(false)
+    const [displayPdf, setDisplayPdf] = useState('none')
     const { id } = useParams()
 
-    const axiosDownloadFile = (fileName) => {
-        setDownloadMessage('')
+    const viewHealthRecords = () => {
         setButtonClicked(true)
-        axios({
-            url: SelectedPatient.healthRecords,
-            method: 'GET',
-            responseType: 'blob',
-        })
-            .then((response) => {
-                const href = window.URL.createObjectURL(response.data)
-
-                const anchorElement = document.createElement('a')
-
-                anchorElement.href = href
-                anchorElement.download = fileName
-
-                document.body.appendChild(anchorElement)
-                anchorElement.click()
-
-                setDownloadMessage('success')
-
-                document.body.removeChild(anchorElement)
-                window.URL.revokeObjectURL(href)
-            })
-            .catch((error) => {
-                console.log('error: ', error)
-                setDownloadMessage('failed')
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    setDownloadMessage('')
-                }, 4000)
-                setButtonClicked(false)
-            })
+        setDisplayPdf('block')
+    }
+    const handleClose = () => {
+        setButtonClicked(false)
+        setDisplayPdf('none')
     }
 
     const getPatientInfo = () => {
@@ -73,7 +47,9 @@ const PatientInfo = () => {
                     <li>
                         <strong>Last Visit: </strong>{' '}
                         {SelectedPatient.lastVisit
-                            ? new Date(SelectedPatient.lastVisit).toDateString()
+                            ? new Date(
+                                  SelectedPatient.lastVisit
+                              ).toLocaleString()
                             : 'No previous visits'}
                     </li>
                     <li>
@@ -81,7 +57,7 @@ const PatientInfo = () => {
                         {SelectedPatient.nextAppointment
                             ? new Date(
                                   SelectedPatient.nextAppointment
-                              ).toDateString()
+                              ).toLocaleString()
                             : 'No upcoming appointments'}
                     </li>
                     <li>
@@ -92,24 +68,20 @@ const PatientInfo = () => {
                         </a>
                     </li>
                 </ul>
-                <div className={`message ${downloadMessage}`}>
-                    {downloadMessage === 'success'
-                        ? `${SelectedPatient.name} file downloaded successfully!`
-                        : downloadMessage === 'failed' &&
-                          !SelectedPatient.healthRecords
-                        ? 'Patient has not uploaded any health records!'
-                        : 'File download failed. Please try again later.'}
+                <div className='edit-buttons'>
+                    <button
+                        className='button '
+                        disabled={buttonClicked}
+                        onClick={viewHealthRecords}>
+                        View Health Records
+                    </button>
+                    <button
+                        style={{ display: displayPdf }}
+                        className='button cancel-button'
+                        onClick={handleClose}>
+                        Close
+                    </button>
                 </div>
-                <button
-                    className='button download-button'
-                    disabled={buttonClicked}
-                    onClick={() => {
-                        axiosDownloadFile(
-                            `${SelectedPatient.name}'s health records`
-                        )
-                    }}>
-                    Download Health Records
-                </button>
             </>
         )
     }
@@ -123,7 +95,14 @@ const PatientInfo = () => {
                     {"'s Information"}
                 </h2>
             </div>
-            <div className='patient-info'>{getPatientInfo()}</div>
+            <div className='patient-info'>
+                {getPatientInfo()}
+                <div
+                    className='patient-pdf-viewer'
+                    style={{ display: displayPdf }}>
+                    <PdfViewer pdfUrl={SelectedPatient.health_records}/>
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,16 +1,15 @@
 import './doctorProfile.css'
 import doctorImg from '../../assets/imgs/doctorProfile.png'
-import { useEffect, useState ,useContext} from 'react'
+import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import DoctorContext from '../../context/Doctor'
 const DoctorProfile = () => {
-    const{Doctor,setDoctor}=useContext(DoctorContext)
+    const { Doctor, setDoctor } = useContext(DoctorContext)
     const [DoctorInfo, setDoctorInfo] = useState(Doctor)
     const [EditMessage, setEditMessage] = useState('')
     const [EditMode, setEditMode] = useState(false)
     const [SaveButtonClicked, setSaveButtonClicked] = useState(false)
 
-  
     const handleInputChange = (e, changedField) => {
         setDoctorInfo({ ...DoctorInfo, [changedField]: e.target.value })
     }

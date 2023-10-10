@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminPatientCard from "../AdminPatientCard/AdminPatientCard";
-import Pagination from "../Pagination/Pagination";
-import Search from "../Search/Search";
+import Pagination from "../../Pagination/Pagination";
+import Search from "../../Search/Search";
 
 const PatientList = ({ patients }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,8 +10,6 @@ const PatientList = ({ patients }) => {
   const patientsPerPage = 8;
 
   useEffect(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const filteredPatients = patients.filter((patient) =>
       patient.username?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -40,7 +38,7 @@ const PatientList = ({ patients }) => {
   return (
     <section className="patient-list-conatiner">
       <h2>Patients</h2>
-      <Search onSearch={onSearch} />
+      <Search onSearch={onSearch} placeholder={"username"}/>
       <div className="patient-list">{getCurrentPatients()}</div>
       <Pagination
         itemsPerPage={patientsPerPage}

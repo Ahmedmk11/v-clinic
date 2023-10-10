@@ -1,0 +1,22 @@
+.requests-table-page{
+    flex-grow: 1;
+    width: 80%;
+    padding: 3%;
+}
+
+.requests-table-container{
+    padding: 2%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px var(--color-shadow);
+    width: 100%;
+    & a {
+        color: var(--main-green);
+    }
+    & h4{
+        background-color: var(--complementary-yellow);
+        color: aliceblue;
+        padding: 5px;
+        border-radius: 8px;
+        width: fit-content;
+    }
+}

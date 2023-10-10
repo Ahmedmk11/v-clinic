@@ -34,13 +34,13 @@ const PatientList = ({ patients }) => {
         )
         return currentPatients.length
             ? currentPatients.map((patient) => (
-                  <PatientCard key={patient.id} patient={patient} />
+                  <PatientCard key={patient.id+"0"} patient={patient} />
               ))
             : 'No patients to show'
     }
 
     const onSearch = (searchString) => {
-        setSearchTerm(searchString)
+        setSearchTerm(searchString, true)
     }
 
     const onCheckboxChange = () => {

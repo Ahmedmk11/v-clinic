@@ -9,7 +9,6 @@ import PatientModel from '../models/patientModel.js'
 /* -----------------admin funcs------------------------ */
 const addAdmin = async (req, res) => {
     const fetchedAdmin = await adminModel.find()
-    console.log(req.body)
     for (let i = 0; i < fetchedAdmin.length; i++)
         if (fetchedAdmin.at(i).Username === req.body.Username) {
             res.status(500).send({ message: 'this username is in use' })
@@ -20,7 +19,7 @@ const addAdmin = async (req, res) => {
         .save()
         .then((result) => res.status(200).send(result))
         .catch((err) =>
-            res.status(500).send({ error: 'failed to create admin' })
+            res.status(500).send(err)
         )
 }
 
@@ -36,18 +35,18 @@ const getAllAdmins = async (req, res) => {
 
 /* -----------------user funcs------------------------ */
 const getUser = async (req, res) => {
-    const { id } = req.params
+    const { id,type } = req.params
     if (!mongoose.Types.ObjectId.isValid(id))
         return res.status(500).send({ error: 'invalid id' })
 
-    if (req.body.type === 'admin') {
+    if (type === 'admin') {
         const ret = await adminModel.findById(id)
         if (ret) {
             res.status(200).json(ret)
         } else {
             res.status(404).send({ error: 'user not found' })
         }
-    } else if (req.body.type === 'doctor'){
+    } else if (type === 'doctor'){
         const ret = await DoctorModel.findById(id)
         if (ret) {
             res.status(200).json(ret)
@@ -55,7 +54,7 @@ const getUser = async (req, res) => {
             res.status(404).send({ error: 'user not found' })
         }
     }
-    else if (req.body.type === 'patient'){
+    else if (type === 'patient'){
         const ret = await PatientModel.findById(id)
         if (ret) {
             res.status(200).json(ret)
@@ -107,7 +106,7 @@ const getDoctorRequest = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id))
         return res.status(500).send({ error: 'invalid id' })
     try {
-        const ret = await DoctorModel.find({ _id: id, status: 'pending' })
+        const ret = await DoctorModel.find({ _id: id, status: 'Pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(500).send({ err: 'database failed' })
@@ -116,10 +115,25 @@ const getDoctorRequest = async (req, res) => {
 
 const getAllDoctorRequest = async (req, res) => {
     try {
-        const ret = await DoctorModel.find({ status: 'pending' })
+        const ret = await DoctorModel.find({ status: 'Pending' })
         res.status(200).send(ret)
     } catch (error) {
         res.status(503).send({ err: 'database failed' })
+    }
+}
+
+const updateDoctorStatus=async (req,res)=>{
+    try {
+    const {id} = req.body
+    if(!mongoose.Types.ObjectId.isValid(id))
+    return res.status(500).send({error:"invalid id sent to database"})
+        const doctor = await DoctorModel.findById(id)
+        if (doctor) {
+            await doctor.updateOne({status:req.body.status})
+            res.status(200).send("updated")
+        } else res.status(404).json({ message: 'Doctor not found' })
+    } catch (error) {
+        res.status(404).json({ message: error.message })
     }
 }
 
@@ -194,6 +208,6 @@ const adminController = {
     getAllPackages,
     updatePackage,
     deletePackage,
-    addPackage
+    addPackage,updateDoctorStatus
 }
 export default adminController
