@@ -127,10 +127,39 @@ async function getPatientAppointments(req, res) {
     }
 }
 
+
+async function getPatientPerscriptions(req,res){
+    try {
+        const patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            const perscriptions = await patient
+                .populate('perscriptions')
+                res.json(perscriptions)
+        }
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
+async function getFamilyMembers(req,res){
+    try {
+        const patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            const familymembers = await patient
+                .populate('familymember')
+                res.json(familymembers)
+        }
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
+    getPatientPerscriptions,
+    getFamilyMembers,
 }
