@@ -19,7 +19,7 @@ const PatientHome = () => {
     // REQ 37 | View all doctors, DONE (missing package)
     // REQ 38 | search by name or speciality, DONE
     // REQ 39 | filter by speciality and or availability, DONE (FIX BUG WHEN FILTERING BY AVAILABILITY AND SPECIALITY)
-    // REQ 40 | navigate to selected doctor
+    // REQ 40 | navigate to selected doctor DONE
     const [doctors, setDoctors] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
@@ -138,8 +138,8 @@ const PatientHome = () => {
 
     useEffect(() => {
         let options = []
-        if (displayedDoctors?.length > 0) {
-            displayedDoctors.forEach((doctor) => {
+        if (doctors?.length > 0) {
+            doctors.forEach((doctor) => {
                 if (!options.some((obj) => obj.value === doctor.speciality)) {
                     options.push({
                         label: doctor.speciality,
@@ -218,39 +218,41 @@ const PatientHome = () => {
     }
 
     return (
-        <section className='doctor-list-conatiner'>
-            <h2>Doctors</h2>
-            <Search onSearch={onSearch} />
-            <div id='doctors-filters'>
-                <DatePicker
-                    showTime={{
-                        format: 'hh:mm a',
-                    }}
-                    format='YYYY-MM-DD hh:mm a'
-                    onChange={handleDateChange}
+        <div className='viewPatients-page'>
+            <section className='doctor-list-conatiner'>
+                <h2>Doctors</h2>
+                <Search onSearch={onSearch} />
+                <div id='doctors-filters'>
+                    <DatePicker
+                        showTime={{
+                            format: 'hh:mm a',
+                        }}
+                        format='YYYY-MM-DD hh:mm a'
+                        onChange={handleDateChange}
+                    />
+                    <Select
+                        mode='multiple'
+                        allowClear
+                        placeholder='Select specialities'
+                        onChange={handleChange}
+                        options={specialties}
+                    />
+                </div>
+                <div className='doctor-list'>{getDoctors()}</div>
+                <Pagination
+                    itemsPerPage={doctorsPerPage}
+                    totalItems={displayedDoctors?.length}
+                    paginate={(pageNumber) => setCurrentPage(pageNumber)}
+                    currentPage={currentPage}
                 />
-                <Select
-                    mode='multiple'
-                    allowClear
-                    placeholder='Select specialities'
-                    onChange={handleChange}
-                    options={specialties}
-                />
-            </div>
-            <div className='doctor-list'>{getDoctors()}</div>
-            <Pagination
-                itemsPerPage={doctorsPerPage}
-                totalItems={displayedDoctors?.length}
-                paginate={(pageNumber) => setCurrentPage(pageNumber)}
-                currentPage={currentPage}
-            />
-            <button
-                onClick={() => {
-                    generateDummyData(10, 'doctor')
-                }}>
-                Add Data
-            </button>
-        </section>
+                {/* <button
+                    onClick={() => {
+                        generateDummyData(10, 'doctor')
+                    }}>
+                    Add Data
+                </button> */}
+            </section>
+        </div>
     )
 }
 
