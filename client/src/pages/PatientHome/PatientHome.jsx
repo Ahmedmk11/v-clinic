@@ -218,39 +218,41 @@ const PatientHome = () => {
     }
 
     return (
-        <section className='doctor-list-conatiner'>
-            <h2>Doctors</h2>
-            <Search onSearch={onSearch} />
-            <div id='doctors-filters'>
-                <DatePicker
-                    showTime={{
-                        format: 'hh:mm a',
-                    }}
-                    format='YYYY-MM-DD hh:mm a'
-                    onChange={handleDateChange}
+        <div className='viewPatients-page'>
+            <section className='doctor-list-conatiner'>
+                <h2>Doctors</h2>
+                <Search onSearch={onSearch} />
+                <div id='doctors-filters'>
+                    <DatePicker
+                        showTime={{
+                            format: 'hh:mm a',
+                        }}
+                        format='YYYY-MM-DD hh:mm a'
+                        onChange={handleDateChange}
+                    />
+                    <Select
+                        mode='multiple'
+                        allowClear
+                        placeholder='Select specialities'
+                        onChange={handleChange}
+                        options={specialties}
+                    />
+                </div>
+                <div className='doctor-list'>{getDoctors()}</div>
+                <Pagination
+                    itemsPerPage={doctorsPerPage}
+                    totalItems={displayedDoctors?.length}
+                    paginate={(pageNumber) => setCurrentPage(pageNumber)}
+                    currentPage={currentPage}
                 />
-                <Select
-                    mode='multiple'
-                    allowClear
-                    placeholder='Select specialities'
-                    onChange={handleChange}
-                    options={specialties}
-                />
-            </div>
-            <div className='doctor-list'>{getDoctors()}</div>
-            <Pagination
-                itemsPerPage={doctorsPerPage}
-                totalItems={displayedDoctors?.length}
-                paginate={(pageNumber) => setCurrentPage(pageNumber)}
-                currentPage={currentPage}
-            />
-            <button
-                onClick={() => {
-                    generateDummyData(10, 'doctor')
-                }}>
-                Add Data
-            </button>
-        </section>
+                {/* <button
+                    onClick={() => {
+                        generateDummyData(10, 'doctor')
+                    }}>
+                    Add Data
+                </button> */}
+            </section>
+        </div>
     )
 }
 

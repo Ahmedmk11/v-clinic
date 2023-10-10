@@ -4,10 +4,9 @@ import AppointmentsList from '../../components/AppointmentsList/AppointmentsList
 const PatientAppointments = () => {
     // REQ 23, view all appointments, filter by date and status DONE
     return (
-        <>
-            <div>Patient Appointments</div>
+        <div className='viewPatients-page'>
             <AppointmentsList />
-        </>
+        </div>
     )
 }
 
