@@ -24,6 +24,8 @@ import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
 import AdminViewRequests from './pages/AdminPages/AdminViewRequests'
 import DoctorAppointments from './components/DoctorAppointments/DoctorAppointments'
 import AdminProfile from './components/AdminComponents/AdminProfile'
+import PatientRegistration from './pages/Register/Register'
+import DoctorRegistration from './pages/Register/RegisterDoctor'
 const RouteSwitch = () => {
     const location = useLocation()
 
@@ -34,6 +36,8 @@ const RouteSwitch = () => {
     return (
         <Routes>
             <Route path='/' element={<Login />} />
+            <Route path='/register' element={<PatientRegistration />} />
+            <Route path='/register/doctor' element={<DoctorRegistration />} />
             <Route path='/doctor' element={<DoctorMain />}>
                 <Route index element={<DoctorHome />} />
                 <Route path='profile' element={<DoctorProfile />} />
