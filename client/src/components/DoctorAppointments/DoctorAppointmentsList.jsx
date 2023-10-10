@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { DatePicker, Select } from 'antd'
-import axios from 'axios'
+import Pagination from '../Pagination/Pagination'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
@@ -8,9 +8,10 @@ dayjs.extend(utc)
 const DoctorAppointmentsList = ({ Appointments }) => {
     const [displayedAppointments, setDisplayedAppointments] =
         useState(Appointments)
+        const [currentPage, setCurrentPage] = useState(1)
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
-
+    const AppointmentsPerPage = 8
     const applyFilters = () => {
         let filtered = Appointments
         if (selectedStates.length > 0) {
@@ -35,6 +36,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
         }
 
         setDisplayedAppointments(filtered)
+        setCurrentPage(1)
     }
 
     useEffect(() => {
@@ -48,6 +50,23 @@ const DoctorAppointmentsList = ({ Appointments }) => {
     const handleDateChange = (dates) => {
         setDateRange(dates)
     }
+    const getCurrentAppointments = () => {
+        const indexOfLastPatient = currentPage * AppointmentsPerPage
+        const indexOfFirstPatient = indexOfLastPatient - AppointmentsPerPage
+        const currentAppointments = displayedAppointments.slice(
+            indexOfFirstPatient,
+            indexOfLastPatient
+        )
+        return currentAppointments.length > 0
+            ? currentAppointments.map((appointment) => (
+                  <AppointmentCard
+                      key={appointment._id}
+                      Appointment={appointment}
+                  />
+              ))
+            : 'No appointments to show'
+    }
+
     return (
         <div className='patient-list-conatiner'>
             <h2>My Appointments</h2>
@@ -76,15 +95,14 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                 ]}
             />
             <div className='patient-list'>
-                {displayedAppointments.length > 0
-                    ? displayedAppointments.map((appointment) => (
-                          <AppointmentCard
-                              key={appointment._id}
-                              Appointment={appointment}
-                          />
-                      ))
-                    : 'No appointments to show'}
+                {getCurrentAppointments()}
             </div>
+            <Pagination
+                itemsPerPage={AppointmentsPerPage}
+                totalItems={displayedAppointments.length}
+                paginate={(pageNumber) => setCurrentPage(pageNumber)}
+                currentPage={currentPage}
+            />
         </div>
     )
 }
