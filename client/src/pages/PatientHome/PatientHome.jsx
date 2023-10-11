@@ -191,11 +191,18 @@ const PatientHome = () => {
     useEffect(() => {
         if (currUser) {
             axios
+                .post(
+                    `http://localhost:3000/api/patient/add-package-test/${currUser._id}`
+                )
+                .then((res) => {})
+                .catch((err) => console.log(err))
+            axios
                 .get(
-                    `http://localhost:3000/api/patient/get-patient-packages/${currUser._id}`
+                    `http://localhost:3000/api/patient/get-patient-package/${currUser._id}`
                 )
                 .then((res) => {
-                    setDiscount(res.data.sessionDiscount / 100)
+                    setDiscount(1 - res.data.sessionDiscount / 100)
+                    console.log(res.data)
                 })
                 .catch((err) => console.log(err))
         }

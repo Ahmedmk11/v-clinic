@@ -198,6 +198,15 @@ async function getPatientDiscount(req, res) {
     }
 }
 
+async function testingAddPackage(req, res) {
+    // for adding a package to patient to test the discounted session price, change in next sprint
+    try {
+        await PatientModel.findByIdAndUpdate(req.params.id, {
+            package: '652299326ad7a764de83a2aa',
+        })
+    } catch (error) {}
+}
+
 export {
     createPatient,
     getPatients,
@@ -208,4 +217,5 @@ export {
     getFamilyMembers,
     populateFamilyMembers,
     getPatientDiscount,
+    testingAddPackage,
 }
