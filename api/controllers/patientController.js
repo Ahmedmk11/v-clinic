@@ -125,30 +125,43 @@ async function getPatientAppointments(req, res) {
     }
 }
 
-
-async function getPatientPerscriptions(req,res){
+async function getPatientPrescription(req, res) {
     try {
         const patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            const perscriptions = await patient
-                .populate('perscriptions')
-                res.json(perscriptions)
+            const populatedPatient = await patient.populate({
+                path: 'prescriptions',
+                populate: {
+                    path: 'doctor_id',
+                    model: 'Doctor',
+                },
+            })
+            let prescriptions = populatedPatient.prescriptions.map(
+                (prescription) => {
+                    const { doctor_id, ...rest } = prescription._doc
+                    return {
+                        ...rest,
+                        doctorName: prescription.doctor_id.name,
+                    }
+                }
+            )
+            res.json(prescriptions)
         }
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        console.log(error)
+        res.status(500).json({ message: error.message })
     }
 }
 
-async function getFamilyMembers(req,res){
+async function getFamilyMembers(req, res) {
     try {
         const patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            const familymembers = await patient
-                .populate('familymember')
-                res.json(familymembers)
+            const familymembers = await patient.populate('familymember')
+            res.json(familymembers)
         }
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({ message: error.message })
     }
 }
 
@@ -158,6 +171,6 @@ export {
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
-    getPatientPerscriptions,
     getFamilyMembers,
+    getPatientPrescription,
 }

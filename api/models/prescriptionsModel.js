@@ -1,50 +1,58 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-const prescriptionSchema= new mongoose.Schema({
-    name:{
-        type:String,
-        required:  [
-            true,
-            'Please enter the name of the prescription.',
-        ],
-        validate: [
-            {
-                validator: function (value) {
-                    return /^[A-Za-z\s]+$/.test(value)
-                },
-                message: 'Name must contain only letters and spaces.',
+const prescriptionSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: [true, 'Please enter the name of the prescription.'],
+        },
+        patient_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Patient',
+        },
+        doctor_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Doctor',
+        },
+        status: {
+            type: String,
+            enum: ['filled', 'unfilled'],
+            default: 'unfilled',
+        },
+        date: {
+            type: Date,
+            default: Date.now,
+        },
+        medications: [{
+            name: {
+                type: String,
+                required: [true, 'Please enter the medication name.'],
             },
-        ],
-        minlength: [
-            3,
-            'Please enter a username that is 3 characters or longer',
-        ],
+            dosage: {
+                type: String,
+                required: [true, 'Please enter the dosage.'],
+            },
+            frequency: {
+                type: String,
+                required: [true, 'Please enter the frequency.'],
+            },
+            duration: {
+                type: String,
+                required: [true, 'Please enter the duration.'],
+            }
+        }],
+        notes: {
+            type: String,
+        },
     },
-    patient_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Patient',
-    },
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
+    }
+);
 
+const PrescriptionModel = mongoose.model('Prescription', prescriptionSchema);
 
-TimesperWeek:{
-    type: Number,
-    min: [1, 'enter a positive number at min 1'],
-        required: true,
-},
-
-TimesperDay:{
-    type: Number,
-    min: [1, 'enter a positive number at min 1'],
-        required: true,
-
-},
-
-},
-{
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-}
-
-)
-
+export default PrescriptionModel;

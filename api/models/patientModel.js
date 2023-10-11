@@ -116,11 +116,7 @@ const patientModel = new mongoose.Schema(
                     },
                 ],
             },
-
         },
-
-        
-       
         package: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Package',
@@ -153,7 +149,7 @@ patientModel.virtual('appointments', {
     localField: '_id',
 })
 patientModel.virtual('prescriptions', {
-    ref: 'Prescriptions',
+    ref: 'Prescription',
     foreignField: 'patient_id',
     localField: '_id',
 })
@@ -163,7 +159,6 @@ patientModel.virtual('familymember', {
     foreignField: 'patient_id',
     localField: '_id',
 })
-
 
 const PatientModel = mongoose.model('Patient', patientModel)
 

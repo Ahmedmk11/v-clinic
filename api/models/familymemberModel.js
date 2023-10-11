@@ -65,3 +65,7 @@ const familymemberSchema= new mongoose.Schema({
     toObject: { virtuals: true },
 }
 )
+
+const FamilymemberModel = mongoose.model('Familymember', familymemberSchema)
+
+export default FamilymemberModel
