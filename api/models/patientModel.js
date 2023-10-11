@@ -68,19 +68,15 @@ const patientModel = new mongoose.Schema(
         phoneNumber: {
             type: String,
             required: [true, 'Please enter your phone number.'],
-            phoneNumber: {
-                type: String,
-                required: [true, 'Please enter your phone number'],
-                validate: [
-                    {
-                        validator: function (value) {
-                            return /^[0-9\s()+-]+$/.test(value)
-                        },
-                        message:
-                            'Phone number can only contain numbers, spaces, brackets, hyphens, and plus signs.',
+            validate: [
+                {
+                    validator: function (value) {
+                        return /^[0-9\s()+-]+$/.test(value)
                     },
-                ],
-            },
+                    message:
+                        'Phone number can only contain numbers, spaces, brackets, hyphens, and plus signs.',
+                },
+            ],
         },
         emergencyName: {
             type: String,
@@ -99,23 +95,16 @@ const patientModel = new mongoose.Schema(
         },
         emergencyPhoneNumber: {
             type: String,
-            required: [
-                true,
-                'Please enter the phone number of your emergency contact.',
-            ],
-            phoneNumber: {
-                type: String,
-                required: [true, 'Please enter your phone number'],
-                validate: [
-                    {
-                        validator: function (value) {
-                            return /^[0-9\s()+-]+$/.test(value)
-                        },
-                        message:
-                            'Phone number can only contain numbers, spaces, brackets, hyphens, and plus signs.',
+            required: [true, 'Please enter an emergency phone number.'],
+            validate: [
+                {
+                    validator: function (value) {
+                        return /^[0-9\s()+-]+$/.test(value)
                     },
-                ],
-            },
+                    message:
+                        'Phone number can only contain numbers, spaces, brackets, hyphens, and plus signs.',
+                },
+            ],
         },
         package: {
             type: mongoose.Schema.Types.ObjectId,
@@ -154,8 +143,8 @@ patientModel.virtual('prescriptions', {
     localField: '_id',
 })
 
-patientModel.virtual('familymember', {
-    ref: 'Familymember',
+patientModel.virtual('familymembers', {
+    ref: 'FamilyMember',
     foreignField: 'patient_id',
     localField: '_id',
 })

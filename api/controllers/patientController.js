@@ -1,5 +1,6 @@
 import PatientModel from '../models/patientModel.js'
 import AppointmentModel from '../models/appointmentsModel.js'
+import FamilyMemberModel from '../models/familyMemberModel.js'
 
 async function createPatient(req, res) {
     try {
@@ -155,13 +156,23 @@ async function getPatientPrescription(req, res) {
 
 async function getFamilyMembers(req, res) {
     try {
-        const patient = await PatientModel.findById(req.params.id)
+        let patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            const familymembers = await patient.populate('familymember')
-            res.json(familymembers)
-        }
+            patient = await patient.populate('familymembers')
+            res.json(patient.familymembers)
+        } else res.status(404).json({ message: 'Patient not found' })
     } catch (error) {
         res.status(500).json({ message: error.message })
+    }
+}
+
+async function populateFamilyMembers(req, res) {
+    try {
+        const newFamilyMember = new FamilyMemberModel(req.body)
+        const savedFamilyMember = await newFamilyMember.save()
+        res.status(201).json(savedFamilyMember)
+    } catch (err) {
+        res.status(400).json({ error: err.message })
     }
 }
 
@@ -171,6 +182,7 @@ export {
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
-    getFamilyMembers,
     getPatientPrescription,
+    getFamilyMembers,
+    populateFamilyMembers,
 }
