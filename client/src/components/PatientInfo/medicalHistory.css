@@ -1,0 +1,26 @@
+.medical-history-view {
+    display: flex;
+    overflow-x: auto;
+    padding: 2%;
+}
+.history-card {
+    flex: 0 0 auto;
+    margin-right: 2%;
+    padding: 2%;
+    padding-top: 4%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--color-shadow);
+    outline: solid 1px var(--color-shadow);
+    & p {
+        font-size: 1rem;
+        margin: 10px 0px;
+    }
+    & strong {
+        font-size: 1.1rem;
+        margin: 10px 0px;
+    }
+    & h3 {
+        font-size: 1.2rem;
+        margin: 10px 0px;
+    }
+}
