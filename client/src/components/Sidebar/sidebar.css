@@ -23,6 +23,7 @@
         cursor: pointer;
         padding: 12px 0px 12px 18px;
         color: var(--text-color-dark);
+        white-space: nowrap;
 
         .anticon {
             font-size: 22px;
@@ -36,7 +37,7 @@
 }
 
 .sidebar-expanded {
-    width: 180px;
+    width: 190px;
     margin-left: 0;
 }
 

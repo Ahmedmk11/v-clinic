@@ -21,14 +21,20 @@ const DoctorInfoPage = () => {
     }, [])
 
     return (
-        <div>
-            <h2>Doctor Info</h2>
-            <div className='doctor-info'>
+        <div className='patient-info-container'>
+            <h2>Selected Doctor</h2>
+            <div className='patient-name'>
+                <h2>
+                    {doctor.name}
+                    {"'s Information"}
+                </h2>
+            </div>
+            <div className='patient-info'>
                 <h3>Dr. {doctor.name}</h3>
-                <p>Speciality: {doctor.speciality}</p>
-                <p>Education: {doctor.education}</p>
-                <p>Affiliation: {doctor.affiliation}</p>
-                <p>Hourly Rate: {doctor.hourly_rate}</p>
+                <p><strong>Speciality: </strong>{doctor.speciality}</p>
+                <p><strong>Education: </strong>{doctor.education}</p>
+                <p><strong>Affiliation: </strong>{doctor.affiliation}</p>
+                <p><strong>Hourly Rate: </strong>{doctor.hourly_rate}</p>
             </div>
         </div>
     )

@@ -64,6 +64,10 @@ const doctorSchema = new mongoose.Schema(
             required: [true, 'Please enter your speciality'],
             default: 'General',
         },
+        uploaded_documents: {
+            type: [String],
+            default: [],
+        },
     },
     {
         toJSON: { virtuals: true },

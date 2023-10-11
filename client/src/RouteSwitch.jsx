@@ -23,6 +23,11 @@ import AddPackageForm from './components/AdminComponents/AddPackageForm'
 import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
 import AdminViewRequests from './pages/AdminPages/AdminViewRequests'
 import DoctorAppointments from './components/DoctorAppointments/DoctorAppointments'
+import AdminProfile from './components/AdminComponents/AdminProfile'
+import PatientViewPrescription from './pages/PatientViewPrescription/PatientViewPrescription'
+import PrescriptionInfo from './components/ViewPrescriptions/PrescriptionInfo'
+import PatientRegistration from './pages/Register/Register'
+import DoctorRegistration from './pages/Register/RegisterDoctor'
 const RouteSwitch = () => {
     const location = useLocation()
 
@@ -33,6 +38,8 @@ const RouteSwitch = () => {
     return (
         <Routes>
             <Route path='/' element={<Login />} />
+            <Route path='/register' element={<PatientRegistration />} />
+            <Route path='/register/doctor' element={<DoctorRegistration />} />
             <Route path='/doctor' element={<DoctorMain />}>
                 <Route index element={<DoctorHome />} />
                 <Route path='profile' element={<DoctorProfile />} />
@@ -47,11 +54,14 @@ const RouteSwitch = () => {
                 <Route path='profile' element={<PatientProfile />} />
                 <Route path='appointments' element={<PatientAppointments />} />
                 <Route path='doctor-info/:id' element={<DoctorInfoPage />} />
+                <Route path='view-prescriptions' element={<PatientViewPrescription/>} />
+                <Route path='prescription-info' element={<PrescriptionInfo/>} />
                 <Route path='*' element={<Redirect />} />
             </Route>
 
             <Route path='/admin' element={<AdminMain />}>
                 <Route index element={<AdminHome />} />
+                <Route path='profile' element={<AdminProfile />} />
                 <Route path='view-doctors' element={<AdminViewDoctors />} />
                 <Route path='view-patients' element={<AdminViewPatients />} />
                 <Route path='view-admins' element={<AdminViewAdmins />} />
@@ -60,6 +70,7 @@ const RouteSwitch = () => {
                 <Route path='patient/:id' element={<AdminPatientInfo />} />
                 <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='view-requests' element={<AdminViewRequests />} />
+                {/* <Route path='view-packages' element={<AdminViewPackages />} /> */}
                 <Route path='*' element={<Redirect />} />
             </Route>
 

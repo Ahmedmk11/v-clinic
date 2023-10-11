@@ -125,10 +125,52 @@ async function getPatientAppointments(req, res) {
     }
 }
 
+async function getPatientPrescription(req, res) {
+    try {
+        const patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            const populatedPatient = await patient.populate({
+                path: 'prescriptions',
+                populate: {
+                    path: 'doctor_id',
+                    model: 'Doctor',
+                },
+            })
+            let prescriptions = populatedPatient.prescriptions.map(
+                (prescription) => {
+                    const { doctor_id, ...rest } = prescription._doc
+                    return {
+                        ...rest,
+                        doctorName: prescription.doctor_id.name,
+                    }
+                }
+            )
+            res.json(prescriptions)
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function getFamilyMembers(req, res) {
+    try {
+        const patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            const familymembers = await patient.populate('familymember')
+            res.json(familymembers)
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
+    getFamilyMembers,
+    getPatientPrescription,
 }

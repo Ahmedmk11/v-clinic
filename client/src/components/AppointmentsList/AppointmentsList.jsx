@@ -96,14 +96,20 @@ const AppointmentsList = () => {
     }
 
     return (
-        <div>
+        <div className='patient-list-conatiner'>
+            <h2>My Appointments</h2>
+            <label>Pick a date to filter on: </label>
             <DatePicker
                 disabled={isLoading}
+                className='DatePicker'
                 format='YYYY-MM-DD'
                 onChange={handleDateChange}
             />
+            <br></br>
+            <label>Pick a status to filter on: </label>
             <Select
                 disabled={isLoading}
+                className='Select'
                 mode='multiple'
                 allowClear
                 placeholder='Select state'
@@ -118,23 +124,28 @@ const AppointmentsList = () => {
                     { label: 'Rescheduled', value: 'rescheduled' },
                 ]}
             />
-            {displayedAppointments.map(
-                (appointment) => (
-                    getDoctor(appointment.doctor_id),
-                    (
-                        <div key={appointment.id}>
-                            <p>{tempDoctorName}</p>
-                            <p>{appointment.status}</p>
-                            <p>
-                                {formatDateRange(
-                                    appointment.start_time,
-                                    appointment.end_time
-                                )}
-                            </p>
-                        </div>
+            <div className='patient-list'>
+                {displayedAppointments.map(
+                    (appointment) => (
+                        getDoctor(appointment.doctor_id),
+                        (
+                            <div className='patient-card' key={appointment.id}>
+                                <h3>Dr. {tempDoctorName}</h3>
+                                <strong>
+                                    {formatDateRange(
+                                        appointment.start_time,
+                                        appointment.end_time
+                                    )}
+                                </strong>
+                                <p>
+                                    <strong>Status: </strong>
+                                    {appointment.status}
+                                </p>
+                            </div>
+                        )
                     )
-                )
-            )}
+                )}
+            </div>
         </div>
     )
 }

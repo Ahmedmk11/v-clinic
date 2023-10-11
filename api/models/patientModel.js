@@ -148,6 +148,17 @@ patientModel.virtual('appointments', {
     foreignField: 'patient_id',
     localField: '_id',
 })
+patientModel.virtual('prescriptions', {
+    ref: 'Prescription',
+    foreignField: 'patient_id',
+    localField: '_id',
+})
+
+patientModel.virtual('familymember', {
+    ref: 'Familymember',
+    foreignField: 'patient_id',
+    localField: '_id',
+})
 
 const PatientModel = mongoose.model('Patient', patientModel)
 

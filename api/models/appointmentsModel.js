@@ -31,6 +31,8 @@ const appointmentsSchema = new mongoose.Schema(
             required: true,
         },
     },
+
+
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },

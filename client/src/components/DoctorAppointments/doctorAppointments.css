@@ -1,10 +1,9 @@
 .DatePicker {
     width: 30%;
-    margin-bottom: 5px;
 }
 .Select {
     width: 30%;
-    margin-top: 5px;
+    margin: 5px 0px;
 }
 
 .status.upcoming {

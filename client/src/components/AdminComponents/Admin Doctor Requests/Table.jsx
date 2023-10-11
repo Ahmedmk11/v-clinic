@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Space, Table, Button } from 'antd'
 import PopMessage from './PopMessage'
 import { message } from 'antd'
+import ImageGallery from '../../ImageGallery/ImageGallery'
 const AntTable = ({ requests, setRequests }) => {
     const columns = [
         {
@@ -122,9 +123,11 @@ const AntTable = ({ requests, setRequests }) => {
         try {
             await axios.put(
                 `http://localhost:3000/api/admin/updateDoctorStatus`,
-                { id: doctor._id, status: newStatus}
+                { id: doctor._id, status: newStatus }
             )
-            newStatus === 'Active'? message.success('Doctor Accepted'): message.error('Doctor Rejected')
+            newStatus === 'Active'
+                ? message.success('Doctor Accepted')
+                : message.error('Doctor Rejected')
             setRequests(
                 requests.map((request) =>
                     request._id === doctor._id ? doctor : request
@@ -137,9 +140,12 @@ const AntTable = ({ requests, setRequests }) => {
     }
 
     const expandable = {
-        expandedRowRender: (record) => (
-            <p>{'Uploaded docs should appear here'}</p>
-        ), //TBA
+        expandedRowRender: (record) =>
+            record.uploaded_documents.length > 0 ? (
+                <ImageGallery images={record.uploaded_documents} />
+            ) : (
+                <p>No Documents Uploaded</p>
+            ),
         fixed: true,
     }
 

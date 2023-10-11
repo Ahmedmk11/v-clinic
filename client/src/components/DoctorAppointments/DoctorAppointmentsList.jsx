@@ -7,7 +7,7 @@ import AppointmentCard from './AppointmentCard'
 dayjs.extend(utc)
 const DoctorAppointmentsList = ({ Appointments }) => {
     const [displayedAppointments, setDisplayedAppointments] =
-        useState(Appointments)
+        useState([])
         const [currentPage, setCurrentPage] = useState(1)
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
@@ -41,7 +41,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
 
     useEffect(() => {
         applyFilters()
-    }, [selectedStates, dateRange])
+    }, [selectedStates, dateRange, Appointments])
 
     const handleChange = (value) => {
         setSelectedStates(value)
@@ -51,11 +51,11 @@ const DoctorAppointmentsList = ({ Appointments }) => {
         setDateRange(dates)
     }
     const getCurrentAppointments = () => {
-        const indexOfLastPatient = currentPage * AppointmentsPerPage
-        const indexOfFirstPatient = indexOfLastPatient - AppointmentsPerPage
+        const indexOfLastAppointment = currentPage * AppointmentsPerPage
+        const indexOfFirstAppointment = indexOfLastAppointment - AppointmentsPerPage
         const currentAppointments = displayedAppointments.slice(
-            indexOfFirstPatient,
-            indexOfLastPatient
+            indexOfFirstAppointment,
+            indexOfLastAppointment
         )
         return currentAppointments.length > 0
             ? currentAppointments.map((appointment) => (
@@ -70,14 +70,16 @@ const DoctorAppointmentsList = ({ Appointments }) => {
     return (
         <div className='patient-list-conatiner'>
             <h2>My Appointments</h2>
-            <label>Pick a date to filter on: </label>
+            <label style={{margin:0}}>Pick a date to filter on: </label>
+            <br></br>
             <DatePicker
                 className='DatePicker'
                 format='YYYY-MM-DD'
                 onChange={handleDateChange}
             />
             <br></br>
-            <label>Pick a status to filter on: </label>
+            <label style={{margin:0}}>Pick a status to filter on: </label>
+            <br></br>
             <Select
                 className='Select'
                 mode='multiple'
