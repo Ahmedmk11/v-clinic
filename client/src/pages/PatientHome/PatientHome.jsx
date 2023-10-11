@@ -4,7 +4,6 @@ import Search from '../../components/Search/Search'
 import Pagination from '../../components/Pagination/Pagination'
 import { DatePicker, Select } from 'antd'
 
-import { generateDummyData } from '../../utils/generateDummyData'
 import { findIntersection } from '../../utils/intersectionForSearch'
 
 import './patientHome.css'
@@ -16,7 +15,7 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
 const PatientHome = () => {
-    // REQ 37 | View all doctors, DONE (missing package)
+    // REQ 37 | View all doctors, DONE
     // REQ 38 | search by name or speciality, DONE
     // REQ 39 | filter by speciality and or availability, DONE (FIX BUG WHEN FILTERING BY AVAILABILITY AND SPECIALITY)
     // REQ 40 | navigate to selected doctor DONE
@@ -30,6 +29,8 @@ const PatientHome = () => {
     const [selectedSpecialities, setSelectedSpecialities] = useState([])
     const [dateRange, setDateRange] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [discount, setDiscount] = useState(1)
+    const [currUser, setCurrUser] = useState(null)
 
     const doctorsPerPage = 8
 
@@ -71,7 +72,7 @@ const PatientHome = () => {
     }, [doctors])
 
     const searchByNameOrSpeciality = () => {
-        return doctors.filter(
+        return filteredDoctors?.filter(
             (doctor) =>
                 findIntersection(
                     searchTerm.split(' '),
@@ -176,7 +177,29 @@ const PatientHome = () => {
                 setDoctors(res.data)
             })
             .catch((err) => console.log(err))
+
+        axios
+            .get(
+                `http://localhost:3000/api/patient/get-patient-by-id/652185cdf27b074cbbae82bc`
+            )
+            .then((res) => {
+                setCurrUser(res.data)
+            })
+            .catch((err) => console.log(err))
     }, [])
+
+    useEffect(() => {
+        if (currUser) {
+            axios
+                .get(
+                    `http://localhost:3000/api/patient/get-patient-packages/${currUser._id}`
+                )
+                .then((res) => {
+                    setDiscount(res.data.sessionDiscount / 100)
+                })
+                .catch((err) => console.log(err))
+        }
+    }, [currUser])
 
     useEffect(() => {
         if (doctors) {
@@ -218,7 +241,11 @@ const PatientHome = () => {
         )
         return currentDoctor ?? currentDoctor?.length > 0
             ? currentDoctor.map((doctor) => (
-                  <DoctorCard key={doctor.id} doctor={doctor} />
+                  <DoctorCard
+                      key={doctor.id}
+                      doctor={doctor}
+                      discount={discount}
+                  />
               ))
             : 'No doctors to show'
     }
