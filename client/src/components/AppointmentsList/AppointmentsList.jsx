@@ -14,6 +14,8 @@ const AppointmentsList = () => {
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [tempDoctorName, setTempDoctorName] = useState('')
 
+    const [isLoading, setIsLoading] = useState(true)
+
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
 
@@ -66,6 +68,12 @@ const AppointmentsList = () => {
     }, [selectedStates, dateRange])
 
     useEffect(() => {
+        if (appointmentsList.length > 0) {
+            setIsLoading(false)
+        }
+    }, [appointmentsList])
+
+    useEffect(() => {
         axios
             .get(
                 `http://localhost:3000/api/patient/get-patient-appointments/${currUser._id}`
@@ -89,8 +97,13 @@ const AppointmentsList = () => {
 
     return (
         <div>
-            <DatePicker format='YYYY-MM-DD' onChange={handleDateChange} />
+            <DatePicker
+                disabled={isLoading}
+                format='YYYY-MM-DD'
+                onChange={handleDateChange}
+            />
             <Select
+                disabled={isLoading}
                 mode='multiple'
                 allowClear
                 placeholder='Select state'

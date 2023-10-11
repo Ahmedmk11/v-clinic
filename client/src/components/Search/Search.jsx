@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './search.css'
 
-const Search = ({ onSearch, placeholder }) => {
+const Search = ({ onSearch, placeholder, disabled }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const onSearchTermChange = (e, mode = false) => {
         let searchString = e.target.value
@@ -15,6 +15,7 @@ const Search = ({ onSearch, placeholder }) => {
     return (
         <div className='search-bar'>
             <input
+                disabled={disabled}
                 type='text'
                 placeholder={`Search by ${placeholder || 'name'}...`}
                 value={searchTerm}
@@ -22,6 +23,10 @@ const Search = ({ onSearch, placeholder }) => {
             />
         </div>
     )
+}
+
+Search.defaultProps = {
+    disabled: false,
 }
 
 export default Search

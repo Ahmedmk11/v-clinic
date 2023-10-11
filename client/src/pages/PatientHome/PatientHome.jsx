@@ -29,6 +29,8 @@ const PatientHome = () => {
     const [appointments, setAppointments] = useState([])
     const [selectedSpecialities, setSelectedSpecialities] = useState([])
     const [dateRange, setDateRange] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+
     const doctorsPerPage = 8
 
     useEffect(() => {
@@ -61,6 +63,12 @@ const PatientHome = () => {
     useEffect(() => {
         console.log('apps', appointments)
     }, [appointments])
+
+    useEffect(() => {
+        if (doctors) {
+            setIsLoading(false)
+        }
+    }, [doctors])
 
     const searchByNameOrSpeciality = () => {
         return doctors.filter(
@@ -115,7 +123,9 @@ const PatientHome = () => {
                                     selectedDateTime >=
                                         dayjs.utc(appointment.start_time) &&
                                     selectedDateTime <=
-                                        dayjs.utc(appointment.end_time)
+                                        dayjs.utc(appointment.end_time) &&
+                                    appointment.status !== 'cancelled' &&
+                                    appointment.status !== 'completed'
                                 )
                             }
                         )
@@ -220,9 +230,10 @@ const PatientHome = () => {
     return (
         <section className='doctor-list-conatiner'>
             <h2>Doctors</h2>
-            <Search onSearch={onSearch} />
+            <Search disabled={isLoading} onSearch={onSearch} />
             <div id='doctors-filters'>
                 <DatePicker
+                    disabled={isLoading}
                     showTime={{
                         format: 'hh:mm a',
                     }}
@@ -230,6 +241,7 @@ const PatientHome = () => {
                     onChange={handleDateChange}
                 />
                 <Select
+                    disabled={isLoading}
                     mode='multiple'
                     allowClear
                     placeholder='Select specialities'
