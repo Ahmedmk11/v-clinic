@@ -39,6 +39,7 @@ const familyMemberSchema = new mongoose.Schema(
         gender: {
             type: String,
             required: [true, 'Please select your gender.'],
+            enum: ['Male', 'Female'],
         },
         age: {
             type: Number,
@@ -48,7 +49,7 @@ const familyMemberSchema = new mongoose.Schema(
         relation: {
             type: String,
             required: [true, 'Please select your a relation.'],
-            enum: ['Wife', 'Husband', 'Children'],
+            enum: ['Wife', 'Husband', 'Child'],
         },
     },
     {

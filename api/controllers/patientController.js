@@ -175,8 +175,12 @@ async function getFamilyMembers(req, res) {
 async function populateFamilyMembers(req, res) {
     try {
         const newFamilyMember = new FamilyMemberModel(req.body)
-        const savedFamilyMember = await newFamilyMember.save()
-        res.status(201).json(savedFamilyMember)
+        await newFamilyMember.save()
+        let patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            patient = await patient.populate('familymembers')
+            res.json(patient.familymembers)
+        } else res.status(404).json({ message: 'Patient not found' })
     } catch (err) {
         res.status(400).json({ error: err.message })
     }

@@ -14,7 +14,7 @@ import {
 const router = express.Router()
 
 router.post('/create-patient', createPatient)
-router.post('/populate-family-members', populateFamilyMembers)
+router.post('/populate-family-members/:id', populateFamilyMembers)
 router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id/:id', getPatientByID)
 router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
