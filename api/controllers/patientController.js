@@ -186,6 +186,18 @@ async function populateFamilyMembers(req, res) {
     }
 }
 
+async function getPatientDiscount(req, res) {
+    try {
+        let patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            patient = await patient.populate('package')
+            res.json(patient.package)
+        } else res.status(404).json({ message: 'Patient not found' })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -195,4 +207,5 @@ export {
     getPatientPrescription,
     getFamilyMembers,
     populateFamilyMembers,
+    getPatientDiscount,
 }

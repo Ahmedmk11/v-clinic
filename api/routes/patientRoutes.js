@@ -9,6 +9,7 @@ import {
     getPatientPrescription,
     getFamilyMembers,
     populateFamilyMembers,
+    getPatientDiscount,
 } from '../controllers/patientController.js'
 
 const router = express.Router()
@@ -21,5 +22,6 @@ router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
 router.get('/get-patient-appointments/:id', getPatientAppointments)
 router.get('/get-patient-prescription/:id', getPatientPrescription)
 router.get('/get-patient-family-members/:id', getFamilyMembers)
+router.get('/get-patient-package/:id', getPatientDiscount)
 
 export default router
