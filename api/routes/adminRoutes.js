@@ -9,6 +9,7 @@ router.get('/getUser/:id/:type', adminController.getUser)
 router.get('/getDoctorRequest/:id', adminController.getDoctorRequest)
 router.get('/getAllDoctorRequest', adminController.getAllDoctorRequest)
 router.get('/getAllPackages', adminController.getAllPackages)
+router.get('/getPackage/:id', adminController.getPackagebyID)
 router.post('/addAdmin', adminController.addAdmin)
 router.post('/addPackage', adminController.addPackage)
 router.put('/updatePackage/:id', adminController.updatePackage)
@@ -16,7 +17,6 @@ router.delete('/deleteUser/:id', adminController.removeUser)
 router.delete('/deletePackage/:id', adminController.deletePackage)
 router.put('/updateDoctorStatus', adminController.updateDoctorStatus)
 //router.get('/getUsers', )
-
 
 
 

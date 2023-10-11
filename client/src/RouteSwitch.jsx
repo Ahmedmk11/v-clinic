@@ -19,9 +19,11 @@ import PatientInfo from './components/PatientInfo/PatientInfo'
 import AdminPatientInfo from './components/AdminComponents/AdminPatientInfo/AdminPatientInfo'
 import AdminDoctorInfo from './components/AdminComponents/AdminDoctorInfo'
 import AddAdminForm from './components/AdminComponents/AddAdminForm/AddAdminForm'
+import AdminPackageInfo from './components/AdminComponents/AdminPackageInfo'
 import AddPackageForm from './components/AdminComponents/AddPackageForm'
 import AdminViewAdmins from './pages/AdminPages/AdminViewAdmins'
 import AdminViewRequests from './pages/AdminPages/AdminViewRequests'
+import AdminViewPackages from './pages/AdminPages/AdminViewPackages'
 import DoctorAppointments from './components/DoctorAppointments/DoctorAppointments'
 import AdminProfile from './components/AdminComponents/AdminProfile'
 import PatientViewPrescription from './pages/PatientViewPrescription/PatientViewPrescription'
@@ -74,9 +76,10 @@ const RouteSwitch = () => {
                 <Route path='add-admin/' element={<AddAdminForm />} />
                 <Route path='add-package/' element={<AddPackageForm />} />
                 <Route path='patient/:id' element={<AdminPatientInfo />} />
+                <Route path='package/:id' element={<AdminPackageInfo />} />
                 <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='view-requests' element={<AdminViewRequests />} />
-                {/* <Route path='view-packages' element={<AdminViewPackages />} /> */}
+                <Route path='view-packages' element={<AdminViewPackages />} /> 
                 <Route path='*' element={<Redirect />} />
             </Route>
 
