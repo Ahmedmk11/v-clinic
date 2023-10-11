@@ -66,10 +66,16 @@ async function getPatientsByDoctorID(req, res) {
         const patientIds = appointments.map(
             (appointment) => appointment.patient_id
         )
-        let patients = await PatientModel.find({ _id: { $in: patientIds } })
+        let patients = await PatientModel.find({
+            _id: { $in: patientIds },
+        })
+            .populate('prescriptions')
+            .populate('medicalHistory')
         patients = patients.map((patient) => {
             return {
                 ...patient._doc,
+                prescriptions: patient.prescriptions,
+                medicalHistory: patient.medicalHistory,
                 nextAppointment: getPatientNextAppointment(
                     patient.id,
                     appointments

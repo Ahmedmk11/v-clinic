@@ -25,6 +25,9 @@ const PrescriptionInfo = () => {
                     <strong>No. of Medications: </strong>
                     {SelectedPrescription.medications.length}
                 </p>
+                <p>
+                    <strong>Notes: </strong>{SelectedPrescription.notes|| "No notes"}
+                </p>
             </div>
             <div className='patient-info'>
                 <h3>Medications</h3>

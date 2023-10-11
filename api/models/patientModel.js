@@ -149,6 +149,12 @@ patientModel.virtual('familymembers', {
     localField: '_id',
 })
 
+patientModel.virtual('medicalHistory', {
+    ref: 'MedicalHistory',
+    foreignField: 'patient_id',
+    localField: '_id',
+})
+
 const PatientModel = mongoose.model('Patient', patientModel)
 
 export default PatientModel

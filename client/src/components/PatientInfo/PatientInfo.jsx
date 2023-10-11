@@ -5,13 +5,15 @@ import axios from 'axios'
 import DoctorContext from '../../context/Doctor'
 import calcAge from '../../utils/calcAge'
 import PdfViewer from '../PdfViewer/PdfViewer'
+import PastPrescriptions from './PastPrescriptions'
+import MedicalHistory from './MedicalHistory'
 
 const PatientInfo = () => {
     const { SelectedPatient } = useContext(DoctorContext)
     const [buttonClicked, setButtonClicked] = useState(false)
     const [displayPdf, setDisplayPdf] = useState('none')
     const { id } = useParams()
-
+    console.log(SelectedPatient)
     const viewHealthRecords = () => {
         setButtonClicked(true)
         setDisplayPdf('block')
@@ -68,7 +70,7 @@ const PatientInfo = () => {
                         </a>
                     </li>
                 </ul>
-                <div className='edit-buttons'>
+                {/* <div className='edit-buttons'>
                     <button
                         className='button '
                         disabled={buttonClicked}
@@ -81,7 +83,7 @@ const PatientInfo = () => {
                         onClick={handleClose}>
                         Close
                     </button>
-                </div>
+                </div> */}
             </>
         )
     }
@@ -96,12 +98,34 @@ const PatientInfo = () => {
                 </h2>
             </div>
             <div className='patient-info'>
+                <h2>General Info</h2>
                 {getPatientInfo()}
-                <div
+                {/* <div
                     className='patient-pdf-viewer'
                     style={{ display: displayPdf }}>
                     <PdfViewer pdfUrl={SelectedPatient.health_records}/>
-                </div>
+                </div> */}
+            </div>
+            <div className='patient-info'>
+                {SelectedPatient?.medicalHistory?.length > 0 ? (
+                    <MedicalHistory
+                        medicalHistory={SelectedPatient.medicalHistory[0]}
+                    />
+                ) : (
+                    <p>No medical history</p>
+                )}
+            </div>
+            <div className='patient-info'>
+                <h2>Past Prescriptions</h2>
+                {SelectedPatient?.prescriptions?.length > 0 ? (
+                    <PastPrescriptions
+                        prescriptions={SelectedPatient.prescriptions.sort(
+                            (a, b) => new Date(b.date) - new Date(a.date)
+                        )}
+                    />
+                ) : (
+                    <p>No past prescriptions</p>
+                )}
             </div>
         </div>
     )
