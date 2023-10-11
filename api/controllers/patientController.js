@@ -186,6 +186,27 @@ async function populateFamilyMembers(req, res) {
     }
 }
 
+async function getPatientDiscount(req, res) {
+    try {
+        let patient = await PatientModel.findById(req.params.id)
+        if (patient) {
+            patient = await patient.populate('package')
+            res.json(patient.package)
+        } else res.status(404).json({ message: 'Patient not found' })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function testingAddPackage(req, res) {
+    // for adding a package to patient to test the discounted session price, change in next sprint
+    try {
+        await PatientModel.findByIdAndUpdate(req.params.id, {
+            package: '652299326ad7a764de83a2aa',
+        })
+    } catch (error) {}
+}
+
 export {
     createPatient,
     getPatients,
@@ -195,4 +216,6 @@ export {
     getPatientPrescription,
     getFamilyMembers,
     populateFamilyMembers,
+    getPatientDiscount,
+    testingAddPackage,
 }

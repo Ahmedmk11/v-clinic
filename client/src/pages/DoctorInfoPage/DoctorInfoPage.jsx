@@ -2,10 +2,12 @@ import './doctorInfoPage.css'
 
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 
 const DoctorInfoPage = () => {
     // REQ 41 | View all doctor details, DONE
+    const location = useLocation()
+    const discount = location.state.discount
     const { id } = useParams()
     const [doctor, setDoctor] = useState({})
 
@@ -31,10 +33,25 @@ const DoctorInfoPage = () => {
             </div>
             <div className='patient-info'>
                 <h3>Dr. {doctor.name}</h3>
-                <p><strong>Speciality: </strong>{doctor.speciality}</p>
-                <p><strong>Education: </strong>{doctor.education}</p>
-                <p><strong>Affiliation: </strong>{doctor.affiliation}</p>
-                <p><strong>Hourly Rate: </strong>{doctor.hourly_rate}</p>
+                <p>
+                    <strong>Speciality: </strong>
+                    {doctor.speciality}
+                </p>
+                <p>
+                    <strong>Education: </strong>
+                    {doctor.education}
+                </p>
+                <p>
+                    <strong>Affiliation: </strong>
+                    {doctor.affiliation}
+                </p>
+                <p>
+                    <strong>Session Price: </strong>
+                    {((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
+                        0
+                    )}{' '}
+                    EGP
+                </p>
             </div>
         </div>
     )
