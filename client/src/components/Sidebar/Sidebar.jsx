@@ -40,6 +40,20 @@ const Sidebar = () => {
                     <HomeOutlined />
                     {isExpanded ? 'Home' : ''}
                 </p>
+                {userType === 'patient' && ( // to be changed when adding more patient pages
+                    <p
+                        className={
+                            page === 'view-prescriptions'
+                                ? 'sidebar-item selected-sidebar-item'
+                                : 'sidebar-item'
+                        }
+                        onClick={() => {
+                            navigate('view-prescriptions')
+                        }}>
+                       <strong>VP</strong>
+                        {isExpanded ? 'Prescriptions' : ''}
+                    </p>
+                )}
                 {userType === 'doctor' && ( // to be changed when adding more patient pages
                     <p
                         className={

@@ -7,7 +7,7 @@ import Search from '../Search/Search'
 const PatientList = ({ patients }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
-    const [filteredPatients, setFilteredPatients] = useState(patients)
+    const [filteredPatients, setFilteredPatients] = useState([])
     const [showUpcomingAppointments, setShowUpcomingAppointments] =
         useState(false)
     const patientsPerPage = 8

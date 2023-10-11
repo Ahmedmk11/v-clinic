@@ -1,14 +1,17 @@
-import { Routes, Route, useNavigate, Outlet } from 'react-router-dom'
+import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../Layout/Layout'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { Provider } from '../../context/Prescription'
 
 const PatientHome = () => {
     const navigate = useNavigate()
     const [currUser, setCurrUser] = useState(null)
-    
+
     return (
         <Layout>
-            <Outlet />
+            <Provider>
+                <Outlet />
+            </Provider>
         </Layout>
     )
 }
