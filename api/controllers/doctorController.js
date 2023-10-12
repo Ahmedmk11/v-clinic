@@ -48,6 +48,18 @@ const getDoctors = async (req, res) => {
     }
 }
 
+// @desc    Get all active doctors
+// @route   GET /api/doctor/get-active-doctors
+// @access  Public
+const getActiveDoctors = async (req, res) => {
+    try {
+        const doctors = await DoctorModel.find({ status: 'Active' })
+        res.json(doctors)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
 // @desc    Get a doctor by id
 // @route   GET /api/doctor/get-doctor/:id
 // @access  Public
@@ -122,4 +134,5 @@ export {
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
+    getActiveDoctors
 }

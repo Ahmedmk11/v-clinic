@@ -5,12 +5,14 @@ import {
     getDoctorById,
     updateDoctor,
     getAppointmentsByDoctorId,
-    getAppointmentsWithNamesByDoctorId
+    getAppointmentsWithNamesByDoctorId,
+    getActiveDoctors
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
 router.post('/create-doctor', createDoctor)
 router.get('/get-doctors', getDoctors)
+router.get('/get-active-doctors', getActiveDoctors)
 router.get('/get-doctor/:id', getDoctorById)
 router.put('/update-doctor', updateDoctor)
 router.get('/get-appointments/:id', getAppointmentsByDoctorId)
