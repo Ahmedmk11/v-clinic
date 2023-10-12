@@ -7,6 +7,9 @@ const Login = () => {
         event.preventDefault()
         navigate(`/${Username}`)
     }
+    const handleRegister = () => {
+        navigate('/register')
+    }
     return (
         <div style={{ height: '100px', textAlign: 'center', fontSize: '4rem' }}>
             <form onSubmit={handleLogin}>
@@ -20,6 +23,9 @@ const Login = () => {
                     Login
                 </button>
             </form>
+            <button style={{ fontSize: '2rem' }} onClick={handleRegister}>
+                Register
+            </button>
         </div>
     )
 }
