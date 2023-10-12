@@ -1,0 +1,16 @@
+#doctors-filters {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 150px;
+
+    .ant-select {
+        width: 300px;
+    }
+
+    .ant-picker {
+        width: 300px;
+    }
+}

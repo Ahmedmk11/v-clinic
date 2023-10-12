@@ -1,0 +1,116 @@
+.doctor-name-img {
+    display: flex;
+    align-items: center;
+    background-color: var(--accent-background-color);
+    padding: 20px;
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    margin: 20px;
+    font-size: 1.1rem;
+    flex-wrap: wrap;
+    & h2 {
+        font-size: 24px;
+        margin-bottom: 0px;
+    }
+
+    & p {
+        margin: 0px;
+    }
+    & img {
+        margin-right: 20px;
+        box-shadow:
+            var(--color-shadow) 0px 0px 0px 2px,
+            var(--color-shadow) 0px 4px 6px -1px,
+            rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    }
+}
+
+.doctor-info-container {
+    background-color: var(--accent-background-color);
+    padding: 30px;
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    margin: 20px;
+    font-size: 1.1rem;
+
+    & .button {
+        margin: 10px 0px;
+        font-size: 1rem;
+    }
+
+    & input[type='text'],
+     input[type='email'] {
+        width: 100%;
+        padding: 4px;
+        font-size: 1.1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    & input[type='number'] {
+        max-width: 100px;
+        font-size: 1.1rem;
+        padding: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        
+    }
+}
+
+.doctor-info-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.doctor-info-container ul li {
+    font-size: 1.2rem;
+    margin: 10px 0px;
+
+    & strong {
+        font-size: 1.4rem;
+    }
+
+    & a {
+        color: var(--main-green);
+        text-decoration: none;
+    }
+}
+
+span.Pending {
+    color: var(--complementary-yellow);
+}
+
+span.Active {
+    color: var(--main-green);
+}
+
+span.Rejected {
+    color: var(--complementary-red);
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px;
+}
+
+.cancel-button{
+    background-color: var(--complementary-gray);
+
+    &:hover {
+        background-color: var(--complementary-red);
+    }
+
+    &:active {
+        background-color: var(--complementary-red);
+    }
+}
+
+.message.canceled{
+    opacity: 1;
+    background-color: var(--complementary-gray);
+    color: #ffffff;
+    border: 1px solid var(--complementary-gray);
+}
