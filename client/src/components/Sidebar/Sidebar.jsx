@@ -110,7 +110,7 @@ const Sidebar = () => {
                         </p>
                         <p
                             className={
-                                ((showPackageSublist && isExpanded) || (page === 'add-package' || page === 'view-patients'))
+                                ((showPackageSublist && isExpanded) || (page === 'add-package' || page === 'view-packages'))
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
