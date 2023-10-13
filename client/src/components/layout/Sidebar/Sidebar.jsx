@@ -8,7 +8,7 @@ import {
     EyeOutlined,
     FileSyncOutlined,
     FilePptOutlined,
-    PlusOutlined
+    PlusOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
 
@@ -50,7 +50,7 @@ const Sidebar = () => {
                         onClick={() => {
                             navigate('view-prescriptions')
                         }}>
-                       <strong>VP</strong>
+                        <strong>VP</strong>
                         {isExpanded ? 'Prescriptions' : ''}
                     </p>
                 )}
@@ -105,22 +105,24 @@ const Sidebar = () => {
                             onClick={() => {
                                 navigate('view-requests')
                             }}>
-                           <FileSyncOutlined />
+                            <FileSyncOutlined />
                             {isExpanded ? 'View Requests' : ''}
                         </p>
                         <p
                             className={
-                                ((showPackageSublist && isExpanded) || (page === 'add-package' || page === 'view-packages'))
+                                (showPackageSublist && isExpanded) ||
+                                page === 'add-package' ||
+                                page === 'view-packages'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
                             onClick={() =>
                                 setShowPackageSublist(!showPackageSublist)
                             }>
-                             <FilePptOutlined />
+                            <FilePptOutlined />
                             {isExpanded ? 'Packages' : ''}
                         </p>
-                        {(showPackageSublist && isExpanded) && (
+                        {showPackageSublist && isExpanded && (
                             <div className='sublist'>
                                 <p
                                     className={
@@ -143,14 +145,17 @@ const Sidebar = () => {
                                     onClick={() => {
                                         navigate('view-packages')
                                     }}>
-                                   <strong>VD</strong>
+                                    <strong>VD</strong>
                                     {isExpanded ? 'View & Delete' : ''}
                                 </p>
                             </div>
                         )}
                         <p
                             className={
-                              ((showAdminSublist && isExpanded )|| (page === 'view-admins' || page === 'view-patients' || page === 'view-doctors'))
+                                (showAdminSublist && isExpanded) ||
+                                page === 'view-admins' ||
+                                page === 'view-patients' ||
+                                page === 'view-doctors'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
@@ -160,7 +165,7 @@ const Sidebar = () => {
                             <EyeOutlined />
                             {isExpanded ? 'View & Delete' : ''}
                         </p>
-                        {(showAdminSublist && isExpanded) && (
+                        {showAdminSublist && isExpanded && (
                             <div className='sublist'>
                                 <p
                                     className={
@@ -183,7 +188,7 @@ const Sidebar = () => {
                                     onClick={() => {
                                         navigate('view-patients')
                                     }}>
-                                   <strong>P</strong>
+                                    <strong>P</strong>
                                     {isExpanded ? 'View Patients' : ''}
                                 </p>
                                 <p

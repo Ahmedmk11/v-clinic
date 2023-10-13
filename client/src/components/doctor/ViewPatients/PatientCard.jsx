@@ -1,11 +1,10 @@
-import './patientCard.css'
 import { useNavigate } from 'react-router-dom'
-import calcAge from '../../utils/calcAge'
-import DoctorContext from '../../context/Doctor'
+import calcAge from '../../../utils/calcAge'
 import { useContext } from 'react'
+import SelectedPatientContext from '../../../contexts/SelectedPatient'
 
 const PatientCard = ({ patient }) => {
-    const { setSelectedPatient } = useContext(DoctorContext)
+    const { setSelectedPatient } = useContext(SelectedPatientContext)
     const navigate = useNavigate()
     const handlePatientSelect = () => {
         setSelectedPatient(patient)

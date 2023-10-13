@@ -2,13 +2,11 @@ import './familyMemberCard.css'
 
 const FamilyMemberCard = ({ member }) => {
     return (
-        <div className='member-card'>
+        <div className='card'>
             <div>
+                <h3>{member.relation}</h3>
                 <div>
                     <strong>Name: </strong> {member.name}
-                </div>
-                <div>
-                    <strong>Relation: </strong> {member.relation}
                 </div>
                 <div>
                     <strong>National ID: </strong> {member.national_id}

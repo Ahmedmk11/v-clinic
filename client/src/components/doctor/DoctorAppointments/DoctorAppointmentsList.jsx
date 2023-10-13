@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { DatePicker, Select } from 'antd'
-import Pagination from '../../../components/general/Pagination/Pagination'
+import Pagination from '../../reusable/Pagination/Pagination'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
+
 dayjs.extend(utc)
 const DoctorAppointmentsList = ({ Appointments }) => {
     const [displayedAppointments, setDisplayedAppointments] =
@@ -68,7 +69,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
     }
 
     return (
-        <div className='patient-list-conatiner'>
+        <div className='primary-container'>
             <h2>My Appointments</h2>
             <label style={{margin:0}}>Pick a date to filter on: </label>
             <br></br>
@@ -96,7 +97,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                     { label: 'Rescheduled', value: 'rescheduled' },
                 ]}
             />
-            <div className='patient-list'>
+            <div className='card-list'>
                 {getCurrentAppointments()}
             </div>
             <Pagination

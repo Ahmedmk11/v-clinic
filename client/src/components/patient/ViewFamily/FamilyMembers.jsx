@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Modal, Form, Input, Select, Button, message } from 'antd'
 import './familyMembers.css'
-import FamilyMemberCard from '../FamilyMemberCard/FamilyMemberCard'
+import FamilyMemberCard from './FamilyMemberCard'
 
 const { Option } = Select
 
@@ -31,6 +31,7 @@ const FamilyMembers = ({ id }) => {
     const [hasErrors, setHasErrors] = useState(false)
 
     useEffect(() => {
+        if(!id)return
         axios
             .get(
                 `http://localhost:3000/api/patient/get-patient-family-members/${id}`
@@ -41,7 +42,7 @@ const FamilyMembers = ({ id }) => {
             .catch((err) => {
                 console.log(err)
             })
-    }, [])
+    }, [id])
 
     useEffect(() => {
         setHasErrors(validateForm())
@@ -167,10 +168,10 @@ const FamilyMembers = ({ id }) => {
     }
 
     return (
-        <div id='family-members-container'>
+        <div className='primary-container'>
             <h2>Family Members</h2>
             <Button onClick={showModal}>Add New Family Member</Button>
-            <div id='family-members-content'>
+            <div className='card-list'>
                 {familyMembers.map((member) => (
                     <FamilyMemberCard member={member} />
                 ))}

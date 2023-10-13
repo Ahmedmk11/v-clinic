@@ -1,10 +1,8 @@
-import './doctorInfoPage.css'
-
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 
-const DoctorInfoPage = () => {
+const DoctorInfo = () => {
     // REQ 41 | View all doctor details, DONE
     const location = useLocation()
     const discount = location.state.discount
@@ -23,16 +21,16 @@ const DoctorInfoPage = () => {
     }, [])
 
     return (
-        <div className='patient-info-container'>
+        <div className='page'>
+        <div className='primary-container'>
             <h2>Selected Doctor</h2>
             <div className='patient-name'>
                 <h2>
-                    {doctor.name}
+                   Dr. {doctor.name}
                     {"'s Information"}
                 </h2>
             </div>
-            <div className='patient-info'>
-                <h3>Dr. {doctor.name}</h3>
+            <div className='sub-container'>
                 <p>
                     <strong>Speciality: </strong>
                     {doctor.speciality}
@@ -49,12 +47,13 @@ const DoctorInfoPage = () => {
                     <strong>Session Price: </strong>
                     {((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
                         0
-                    )}{' '}
+                        )}{' '}
                     EGP
                 </p>
             </div>
         </div>
+                        </div>
     )
 }
 
-export default DoctorInfoPage
+export default DoctorInfo

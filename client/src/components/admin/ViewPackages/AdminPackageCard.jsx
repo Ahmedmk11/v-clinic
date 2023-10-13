@@ -6,7 +6,7 @@ const navigate = useNavigate()
         navigate(`/admin/package/${Package._id}`)
     }
     return (
-        <div className='patient-card' onClick={handleSubmit}>
+        <div className='card' onClick={handleSubmit}>
             <h3>{Package.name}</h3>
             <p><strong>Price: </strong> {Package.price} L.E.</p>
             <p><strong>Session Discount: </strong>{Package.sessionDiscount}%</p>

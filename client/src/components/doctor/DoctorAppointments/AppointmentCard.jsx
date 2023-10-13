@@ -1,22 +1,22 @@
-import { formatDateRange } from '../../utils/convertDateToString.js'
+import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 const AppointmentCard = ({ Appointment }) => {
     return (
-        <div className='patient-card'>
+        <div className='card'>
             <h3>Patient: {Appointment.patient_id.name}</h3>
             <p>
-                <strong className={'status' + Appointment.status}>
-                    Status:{' '}
-                </strong>
-                {Appointment.status}
+                <strong>Status: </strong>
+                <span className={'status ' + Appointment.status}>
+                    {Appointment.status}
+                </span>
             </p>
             <p>
-            <strong>
-                                    {formatDateRange(
-                                        Appointment.start_time,
-                                        Appointment.end_time
-                                    )}
-                                </strong>
+                <strong>
+                    {formatDateRange(
+                        Appointment.start_time,
+                        Appointment.end_time
+                    )}
+                </strong>
             </p>
         </div>
     )

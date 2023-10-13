@@ -35,9 +35,7 @@ const AdminPackageInfo = () => {
         height: '30px'
     }
 
-    const cancelStyle = {
-        marginLeft:'900px'
-    }
+  
     const messageStyle = {
         opacity: '1',
         backgroundColor: '#9e9e9e',
@@ -151,7 +149,7 @@ const AdminPackageInfo = () => {
                             Edit
                         </Button></>
                 ):
-                <div className='edit-buttons'><Button type='primary' onClick={cancelEdit} danger style={cancelStyle}>
+                <div className='edit-buttons'><Button type='primary' onClick={cancelEdit} danger >
                 Cancel
             </Button><Button type='primary' style={btnStyle} onClick={saveFunc}>
                     Save
@@ -204,7 +202,9 @@ const AdminPackageInfo = () => {
     }
 
     return (
-        <div className='patient-info-container'>
+        <div className='page'>
+
+        <div className='primary-container'>
             <h2>Selected Package</h2>
             <div className='patient-name'>
                 <h2>
@@ -212,16 +212,17 @@ const AdminPackageInfo = () => {
                 </h2>
             </div>
 
-            <div className='patient-info'>
+            <div className='sub-container patient-info'>
                {editMessage ? 
                      <div style={messageStyle}>
                      {editMessage}
                  </div>:
                 null    
-                }
+            }
             {getPatientInfo()}
             </div>
         </div>
+            </div>
     )
 }
 

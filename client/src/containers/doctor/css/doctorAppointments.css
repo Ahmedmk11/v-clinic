@@ -6,6 +6,10 @@
     margin: 5px 0px;
 }
 
+.status{
+    text-transform: capitalize;
+}
+
 .status.upcoming {
     color: #f0ad4e;
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState } from 'react'
-import './addAdminForm.css'
+import './css/addAdminForm.css'
 
 const addAdminForm = () => {
     const [Username, setUsername] = useState('')
@@ -31,8 +31,8 @@ const addAdminForm = () => {
     }
 
     return (
-        <div className='admin-page'>
-            <div className='admin-form-container'>
+        <div className='page'>
+            <div className='primary-container'>
                     <h2>Add a new Admin</h2>
                 <form className='adminForm' onSubmit={handleSubmit}>
                     <label>

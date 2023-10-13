@@ -1,7 +1,7 @@
 import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import { useState } from 'react'
-import { Provider } from '../../context/Prescription'
+import { Provider } from '../../contexts/SelectedPrescription'
 
 const PatientHome = () => {
     const navigate = useNavigate()

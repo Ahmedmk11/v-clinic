@@ -1,14 +1,13 @@
-import './viewPatients.css'
 import PatientList from '../../components/doctor/ViewPatients/PatientList'
 import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
-import DoctorContext from '../../context/Doctor'
+import CurrUserContext from '../../contexts/CurrUser'
 const ViewPatients = () => {
-    const { Doctor } = useContext(DoctorContext)
+    const { currUser: Doctor } = useContext(CurrUserContext)
     const [Patients, setPatients] = useState([])
     useEffect(() => {
         {
-            Doctor._id && fetchPatients()
+            Doctor && fetchPatients()
         }
     }, [Doctor])
     const fetchPatients = () => {
@@ -20,7 +19,7 @@ const ViewPatients = () => {
             .catch((err) => console.log(err))
     }
     return (
-        <div className='viewPatients-page'>
+        <div className='page'>
             <PatientList patients={Patients} />
         </div>
     )

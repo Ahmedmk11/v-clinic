@@ -53,7 +53,7 @@ const AdminCard = ({ admin, onDelete }) => {
     }
 
     return (
-        <div className='patient-card'>
+        <div className='card'>
             <h3>{admin.Username}</h3>
             <p>
                 <strong>Created at: </strong>

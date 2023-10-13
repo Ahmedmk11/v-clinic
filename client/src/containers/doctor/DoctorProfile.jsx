@@ -1,11 +1,13 @@
-import './doctorProfile.css'
+import './css/doctorProfile.css'
 import doctorImg from '../../assets/imgs/doctorProfile.png'
-import { useEffect, useState, useContext } from 'react'
+import { useState, useContext,useEffect } from 'react'
 import axios from 'axios'
-import DoctorContext from '../../context/Doctor'
+import CurrUserContext from '../../contexts/CurrUser'
+import { use } from 'react'
 const DoctorProfile = () => {
-    const { Doctor, setDoctor } = useContext(DoctorContext)
-    const [DoctorInfo, setDoctorInfo] = useState(Doctor)
+    const { currUser: Doctor, setCurrUser: setDoctor } =
+        useContext(CurrUserContext)
+    const [DoctorInfo, setDoctorInfo] = useState({})
     const [EditMessage, setEditMessage] = useState('')
     const [EditMode, setEditMode] = useState(false)
     const [SaveButtonClicked, setSaveButtonClicked] = useState(false)
@@ -14,10 +16,13 @@ const DoctorProfile = () => {
         setDoctorInfo({ ...DoctorInfo, [changedField]: e.target.value })
     }
 
+    useEffect(() => {
+        setDoctorInfo(Doctor)
+    }, [Doctor])
+
     const getDoctorData = (key, fieldType, representativeKey) => {
         return (
-            <li>
-                {' '}
+          Doctor &&  <li>
                 <strong>{representativeKey}: </strong>
                 {EditMode && key !== 'education' ? (
                     <input
@@ -43,6 +48,7 @@ const DoctorProfile = () => {
                     className='button cancel-button'
                     onClick={() => {
                         setEditMode(false)
+                        setDoctorInfo(Doctor)
                         setEditMessage('canceled')
                         setTimeout(() => setEditMessage(''), 5000)
                     }}>
@@ -111,18 +117,23 @@ const DoctorProfile = () => {
     }
 
     return (
-        <div className='doctor-profile-container'>
-            <div className='doctor-name-img'>
-                <img src={doctorImg} alt='Profile Image' />
-                <section>
-                    <h2>Dr. {Doctor.name}</h2>
-                    <p>
-                        <strong>Status: </strong>
-                        <span className={Doctor.status}> {Doctor.status} </span>
-                    </p>
-                </section>
+        <div className='page'>
+            <div className='primary-container'>
+                <div className='doctor-name-img'>
+                    <img src={doctorImg} alt='Profile Image' />
+                    <section>
+                        <h2>Dr. {Doctor?.name}</h2>
+                        <p>
+                            <strong>Status: </strong>
+                            <span className={Doctor?.status}>
+                                {' '}
+                                {Doctor?.status}{' '}
+                            </span>
+                        </p>
+                    </section>
+                </div>
+                <div className='doctor-info-container'>{getDoctorInfo()}</div>
             </div>
-            <div className='doctor-info-container'>{getDoctorInfo()}</div>
         </div>
     )
 }

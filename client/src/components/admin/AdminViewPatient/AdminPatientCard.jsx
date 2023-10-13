@@ -5,7 +5,7 @@ const navigate = useNavigate()
         navigate(`/admin/patient/${patient._id}`)
     }
     return (
-        <div className='patient-card' onClick={handleSubmit}>
+        <div className='card' onClick={handleSubmit}>
             <h3>{patient.username}</h3>
             <p><strong>ID: </strong>{patient._id}</p>
             <p><strong>Name: </strong>{patient.name}</p>

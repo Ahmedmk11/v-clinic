@@ -19,7 +19,7 @@ const PatientViewPrescription = () => {
     }, [])
 
     return (
-        <div className='viewPatients-page'>
+        <div className='page'>
             <ViewPrescriptionsList prescriptions={prescriptions} />
         </div>
     )

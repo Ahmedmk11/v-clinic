@@ -1,5 +1,4 @@
-import './requestsTable.css'
-import Search from '../../../../components/general/Search/Search.jsx'
+import Search from "../../reusable/Search/Search";
 import AntTable from './Table'
 import { useState, useEffect } from 'react'
 
@@ -14,7 +13,7 @@ const RequestsTable = ({ requests, setRequests }) => {
     }, [searchTerm, requests])
     return (
         <>
-            <div className='sub-container requests-table-container'>
+            <div className='primary-container requests-table-container'>
                 <h2>Doctor Pending Requests</h2>
                 <Search onSearch={setSearchTerm} placeholder={'username'} />
                 <h4>Click + to show docs submitted with the request!</h4>

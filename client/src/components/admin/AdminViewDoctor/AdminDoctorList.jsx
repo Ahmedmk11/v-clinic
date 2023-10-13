@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminDoctorCard from "./AdminDoctorCard"; 
-import Pagination from "../../../../components/general/Pagination/Pagination";
-import Search from "../../../../components/general/Search/Search";
+import Pagination from "../../reusable/Pagination/Pagination";
+import Search from "../../reusable/Search/Search";
 
 const AdminDoctorList = ({ doctors }) => {
     
@@ -37,10 +37,10 @@ const AdminDoctorList = ({ doctors }) => {
   };
 
   return (
-    <section className="patient-list-conatiner">
+    <section className="primary-container">
       <h2>Doctors</h2>
       <Search onSearch={onSearch} placeholder={"username"} />
-      <div className="patient-list">{getCurrentdoctors()}</div>
+      <div className="card-list">{getCurrentdoctors()}</div>
       <Pagination
         itemsPerPage={doctorsPerPage}
         totalItems={filtereddoctors.length}

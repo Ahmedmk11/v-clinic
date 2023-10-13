@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Space, Table, Button } from 'antd'
 import PopMessage from './PopMessage'
 import { message } from 'antd'
-import ImageGallery from '../../../../components/general/ImageGallery/ImageGallery'
+import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 const AntTable = ({ requests, setRequests }) => {
     const columns = [
         {

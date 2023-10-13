@@ -1,5 +1,5 @@
 const MedicationCard = ({ medication}) => {
-    return <div className='patient-card' >
+    return <div className='history-card' >
         <h3>{medication.name}</h3>
         <p>
             <strong>Dosage: </strong>

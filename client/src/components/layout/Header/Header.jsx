@@ -4,8 +4,8 @@ import { React, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Avatar } from 'antd'
 
-import moonIcn from '../../assets/icons/moon.svg'
-import sunIcn from '../../assets/icons/sun.svg'
+import moonIcn from '../../../assets/icons/moon.svg'
+import sunIcn from '../../../assets/icons/sun.svg'
 import { UserOutlined } from '@ant-design/icons'
 const SunIcon = () => <img style={{ width: 20, height: 20 }} src={sunIcn} />
 const MoonIcon = () => <img style={{ width: 20, height: 20 }} src={moonIcn} />

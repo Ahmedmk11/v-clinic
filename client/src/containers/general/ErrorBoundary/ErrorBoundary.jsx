@@ -1,6 +1,6 @@
 import { Component } from "react";
 import './errorBoundary.css';
-import maintenance from '../../assets//imgs/maintenance.png';
+import maintenance from '../../../assets/imgs/maintenance.png';
 
 export default class ErrorBoundary extends Component {
     constructor(props) {

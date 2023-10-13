@@ -40,8 +40,8 @@ const AddPackageForm = () => {
 
     return (
 
-        <div className="admin-page">
-       <div className="admin-form-container">
+        <div className="page">
+       <div className="primary-container">
             <h2>Add a new Package</h2>
        <form className="adminForm" onSubmit={handleSubmit}>
 

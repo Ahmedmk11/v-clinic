@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { DatePicker, Select } from 'antd'
-import Pagination from '../../../components/general/Pagination/Pagination'
+import Pagination from '../../reusable/Pagination/Pagination'
 import PrescriptionCard from './PrescriptionCard'
 const ViewPrescriptionsList = ({ prescriptions }) => {
     const [displayedPrescriptions, setDisplayedPrescriptions] = useState([])
@@ -88,7 +88,7 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
         setDateRange(dates)
     }
     return (
-        <div className='patient-list-conatiner'>
+        <div className='primary-container'>
             <h2>My Prescriptions</h2>
             <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
@@ -125,7 +125,7 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
                 onChange={handleDoctorChange}
                 options={Doctors}
             />
-            <div className='patient-list'>{getCurrentPrescriptions()}</div>
+            <div className='card-list'>{getCurrentPrescriptions()}</div>
             <Pagination
                 itemsPerPage={PrescriptionsPerPage}
                 totalItems={displayedPrescriptions.length}

@@ -111,15 +111,19 @@ const AdminPatientInfo = () => {
     }
 
     return (
-        <div className='patient-info-container'>
-            <h2>Selected Patient</h2>
-            <div className='patient-name'>
-                <h2>
-                    {SelectedPatient.name}
-                    {"'s Information"}
-                </h2>
+        <div className='page'>
+            <div className='primary-container'>
+                <h2>Selected Patient</h2>
+                <div className='patient-name'>
+                    <h2>
+                        {SelectedPatient.name}
+                        {"'s Information"}
+                    </h2>
+                </div>
+                <div className='sub-container patient-info'>
+                    {getPatientInfo()}
+                </div>
             </div>
-            <div className='patient-info'>{getPatientInfo()}</div>
         </div>
     )
 }

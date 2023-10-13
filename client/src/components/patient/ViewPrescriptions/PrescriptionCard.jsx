@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
-import PrescriptionContext from "../../context/Prescription"
+import PrescriptionContext from "../../../contexts/SelectedPrescription"
 const PrescriptionCard = ({ prescription }) => {
     const { setSelectedPrescription } = useContext(PrescriptionContext)
     const navigate = useNavigate()
@@ -9,7 +9,7 @@ const PrescriptionCard = ({ prescription }) => {
         navigate('/patient/prescription-info')
     }
     return (
-        <div className='patient-card' onClick={handleSelect}>
+        <div className='card' onClick={handleSelect}>
             <h3>{prescription.name}</h3>
             <p>
                 <strong>Doctor: </strong>

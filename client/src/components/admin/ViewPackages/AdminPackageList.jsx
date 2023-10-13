@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import AdminPackageCard from "./AdminPackageCard"; 
-import Pagination from "../../../../components/general/Pagination/Pagination";
-import Search from "../../../../components/general/Search/Search";
+import Pagination from "../../reusable/Pagination/Pagination";
+import Search from "../../reusable/Search/Search";
+
 
 const AdminPackageList = ({ Packages }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,10 +37,10 @@ const AdminPackageList = ({ Packages }) => {
   };
 
   return (
-    <section className="patient-list-conatiner">
+    <section className="primary-container">
       <h2>Packages</h2>
       <Search onSearch={onSearch} placeholder={"Package name"} />
-      <div className="patient-list">{getCurrentPackages()}</div>
+      <div className="card-list">{getCurrentPackages()}</div>
       <Pagination
         itemsPerPage={PackagesPerPage}
         totalItems={filteredPackages.length}

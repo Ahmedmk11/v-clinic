@@ -111,8 +111,9 @@ const AdminDoctorInfo = () => {
             })
     }
 
-    return (
-        <div className='patient-info-container'>
+    return (<div className='page'>
+
+        <div className='primary-container'>
             <h2>Selected Doctor</h2>
             <div className='patient-name'>
                 <h2>
@@ -120,8 +121,9 @@ const AdminDoctorInfo = () => {
                     {"'s Information"}
                 </h2>
             </div>
-            <div className='patient-info'>{getPatientInfo()}</div>
+            <div className='sub-container patient-info'>{getPatientInfo()}</div>
         </div>
+    </div>
     )
 }
 

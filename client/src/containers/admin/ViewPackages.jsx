@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import AdminPackageList from '../../components/admin/ViewPackages/AdminPackageList'
 
-const AdminViewPackages = () => {
+const ViewPackages = () => {
     const [Packages, setPackages] = useState(null)
     useEffect(() => {
         fetchPatients()
@@ -18,7 +18,7 @@ const AdminViewPackages = () => {
         }
     }
     return (
-        <div className='viewPatients-page'>
+        <div className='page'>
             {Packages ? (
                 <AdminPackageList Packages={Packages}  />
             ) : null}
@@ -26,4 +26,4 @@ const AdminViewPackages = () => {
     )
 }
 
-export default AdminViewPackages
+export default ViewPackages

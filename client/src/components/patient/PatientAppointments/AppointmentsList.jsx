@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { DatePicker, Select } from 'antd'
 import axios from 'axios'
 
-import { formatDateRange } from '../../utils/convertDateToString.js'
+import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -96,9 +96,10 @@ const AppointmentsList = () => {
     }
 
     return (
-        <div className='patient-list-conatiner'>
+        <div className='primary-container'>
             <h2>My Appointments</h2>
-            <label>Pick a date to filter on: </label>
+            <label style={{margin:0}}>Pick a date to filter on: </label>
+            <br></br>
             <DatePicker
                 disabled={isLoading}
                 className='DatePicker'
@@ -106,7 +107,8 @@ const AppointmentsList = () => {
                 onChange={handleDateChange}
             />
             <br></br>
-            <label>Pick a status to filter on: </label>
+            <label style={{margin:0}}>Pick a status to filter on: </label>
+            <br></br>
             <Select
                 disabled={isLoading}
                 className='Select'
@@ -124,12 +126,12 @@ const AppointmentsList = () => {
                     { label: 'Rescheduled', value: 'rescheduled' },
                 ]}
             />
-            <div className='patient-list'>
+            <div className='card-list'>
                 {displayedAppointments.map(
                     (appointment) => (
                         getDoctor(appointment.doctor_id),
                         (
-                            <div className='patient-card' key={appointment.id}>
+                            <div className='card' key={appointment.id}>
                                 <h3>Dr. {tempDoctorName}</h3>
                                 <strong>
                                     {formatDateRange(

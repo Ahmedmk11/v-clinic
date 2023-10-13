@@ -17,7 +17,7 @@ const AdminViewDoctors = () => {
         }
     } 
     return (
-        <div className="viewPatients-page" >
+        <div className="page" >
             {doctors ? <AdminDoctorList doctors={doctors}/> : null}
         </div>
     )

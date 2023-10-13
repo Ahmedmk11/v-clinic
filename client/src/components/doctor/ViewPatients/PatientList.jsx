@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './patientList.css'
 import PatientCard from './PatientCard'
-import Pagination from '../../general/Pagination/Pagination'
-import Search from '../../general/Search/Search'
+import Search from '../../reusable/Search/Search'
+import Pagination from '../../reusable/Pagination/Pagination'
 
 const PatientList = ({ patients }) => {
     const [searchTerm, setSearchTerm] = useState('')
@@ -48,7 +48,7 @@ const PatientList = ({ patients }) => {
     }
 
     return (
-        <section className='sub-container patient-list-container'>
+        <section className='primary-container patient-list-container'>
             <h2>My Patients</h2>
             <Search onSearch={onSearch} />
             <label>

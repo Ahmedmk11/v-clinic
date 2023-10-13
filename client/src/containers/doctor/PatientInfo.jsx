@@ -1,15 +1,15 @@
 import { useEffect, useState, useContext } from 'react'
-import './patientInfo.css'
+import './css/patientInfo.css'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import DoctorContext from '../../context/Doctor'
 import calcAge from '../../utils/calcAge'
-import PdfViewer from '../../../components/general/PdfViewer/PdfViewer'
+import PdfViewer from '../../components/reusable/PdfViewer/PdfViewer'
 import PastPrescriptions from '../../components/doctor/PatientInfo/PastPrescriptions'
 import MedicalHistory from '../../components/doctor/PatientInfo/MedicalHistory'
+import SelectedPatientContext from '../../contexts/SelectedPatient'
 
 const PatientInfo = () => {
-    const { SelectedPatient } = useContext(DoctorContext)
+    const { SelectedPatient } =useContext(SelectedPatientContext)
     const [buttonClicked, setButtonClicked] = useState(false)
     const [displayPdf, setDisplayPdf] = useState('none')
     const { id } = useParams()
@@ -89,7 +89,8 @@ const PatientInfo = () => {
     }
 
     return (
-        <div className='patient-info-container'>
+        <div className='page'>
+        <div className='primary-container'>
             <h2>Selected Patient</h2>
             <div className='patient-name'>
                 <h2>
@@ -97,7 +98,7 @@ const PatientInfo = () => {
                     {"'s Information"}
                 </h2>
             </div>
-            <div className='patient-info'>
+            <div className='sub-container patient-info'>
                 <h2>General Info</h2>
                 {getPatientInfo()}
                 {/* <div
@@ -106,28 +107,29 @@ const PatientInfo = () => {
                     <PdfViewer pdfUrl={SelectedPatient.health_records}/>
                 </div> */}
             </div>
-            <div className='patient-info'>
+            <div className='sub-container patient-info'>
                 {SelectedPatient?.medicalHistory?.length > 0 ? (
                     <MedicalHistory
-                        medicalHistory={SelectedPatient.medicalHistory[0]}
+                    medicalHistory={SelectedPatient.medicalHistory[0]}
                     />
-                ) : (
-                    <p>No medical history</p>
-                )}
+                    ) : (
+                        <p>No medical history</p>
+                        )}
             </div>
-            <div className='patient-info'>
+            <div className='sub-container patient-info'>
                 <h2>Past Prescriptions</h2>
                 {SelectedPatient?.prescriptions?.length > 0 ? (
                     <PastPrescriptions
-                        prescriptions={SelectedPatient.prescriptions.sort(
-                            (a, b) => new Date(b.date) - new Date(a.date)
+                    prescriptions={SelectedPatient.prescriptions.sort(
+                        (a, b) => new Date(b.date) - new Date(a.date)
                         )}
-                    />
-                ) : (
-                    <p>No past prescriptions</p>
-                )}
+                        />
+                        ) : (
+                            <p>No past prescriptions</p>
+                            )}
             </div>
         </div>
+                            </div>
     )
 }
 

@@ -18,7 +18,7 @@ const AdminViewAdmins = () => {
         }
     }
     return (
-        <div className='viewPatients-page'>
+        <div className='page'>
             {Admins ? (
                 <AdminList Admins={Admins} setAdmins={setAdmins} />
             ) : null}

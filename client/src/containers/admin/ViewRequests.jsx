@@ -1,7 +1,8 @@
 import RequestsTable from '../../components/admin/ViewDoctorRequests/RequestsTable.jsx'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-const AdminViewRequests = () => {
+import './css/ViewRequests.css'
+const ViewRequests = () => {
     const [requests, setRequests] = useState([])
     useEffect(() => {
         axios
@@ -15,10 +16,10 @@ const AdminViewRequests = () => {
     }, [])
 
     return (
-        <div className='requests-table-page'>
+        <div className='page'>
             <RequestsTable requests={requests} setRequests={setRequests} />
         </div>
     )
 }
 
-export default AdminViewRequests
+export default ViewRequests

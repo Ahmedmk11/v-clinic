@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import Search from '../../../components/general/Search/Search'
-import Pagination from '../../../components/general/Pagination/Pagination'
+import Search from '../../components/reusable/Search/Search'
+import Pagination from '../../components/reusable/Pagination/Pagination'
 import { DatePicker, Select } from 'antd'
 
 import { findIntersection } from '../../utils/intersectionForSearch'
-
-import './patientHome.css'
-import DoctorCard from '../../../old/components/DoctorCard/DoctorCard'
+import DoctorCard from '../../components/patient/ViewDoctors/DoctorCard'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -262,12 +260,14 @@ const PatientHome = () => {
     }
 
     return (
-        <div className='viewPatients-page'>
-            <section className='doctor-list-conatiner'>
+        <div className='page'>
+            <section className='primary-container'>
                 <h2>Doctors</h2>
                 <Search disabled={isLoading} onSearch={onSearch} />
-                <div id='doctors-filters'>
+                <label style={{ margin: 0 }}>Pick a date to filter on: </label>
+            <br></br>
                     <DatePicker
+                    className='DatePicker'
                         disabled={isLoading}
                         showTime={{
                             format: 'hh:mm a',
@@ -275,7 +275,11 @@ const PatientHome = () => {
                         format='YYYY-MM-DD hh:mm a'
                         onChange={handleDateChange}
                     />
-                    <Select
+                    <br></br>
+                    <label style={{ margin: 0 }}>Pick a speciality to filter on: </label>
+            <br></br>
+            <Select
+                className='Select'
                         disabled={isLoading}
                         mode='multiple'
                         allowClear
@@ -283,8 +287,8 @@ const PatientHome = () => {
                         onChange={handleChange}
                         options={specialties}
                     />
-                </div>
-                <div className='doctor-list'>{getDoctors()}</div>
+            
+                <div className='card-list'>{getDoctors()}</div>
                 <Pagination
                     itemsPerPage={doctorsPerPage}
                     totalItems={displayedDoctors?.length}
