@@ -70,7 +70,6 @@ const AdminPackageInfo = () => {
         setSelectedPackage(editedPackage)
         setEditMode(false)
         } catch (error) {
-        console.log(error.response.data.error)
         setEditMessage(error.response.data.error)    
         }finally{
             setTimeout(() => {
@@ -174,9 +173,6 @@ const AdminPackageInfo = () => {
             onOk() {
                 handleDelete()
             },
-            onCancel() {
-                console.log('Cancel')
-            },
         })
     }
     const success = () => {
@@ -199,7 +195,6 @@ const AdminPackageInfo = () => {
             .delete(`http://localhost:3000/api/admin/deletePackage/${id}`)
             .then((res) => success())
             .catch((err) => {
-                console.log(err)
                 error()
             })
     }
