@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { use } from 'react';
 const CurrUserContext = createContext()
 const Provider = ({ children }) => {
-    const userType = window.location.pathname.split('/')[1]
+   const [userType, setUserType] = useState(window.location.pathname.split('/')[1]) 
     const [currUser, setCurrUser] = useState(null)
     const patientUrl = `http://localhost:3000/api/patient/get-patient-by-id/652185cdf27b074cbbae82bc`
     const drUrl =
@@ -21,9 +22,9 @@ const Provider = ({ children }) => {
                 setCurrUser(res.data)
             })
             .catch((err) => console.log(err))
-    }, [url])
+    },[userType])
     return (
-        <CurrUserContext.Provider value={{ currUser,setCurrUser }}>
+        <CurrUserContext.Provider value={{ currUser,setCurrUser,setUserType }}>
             {children}
         </CurrUserContext.Provider>
     )

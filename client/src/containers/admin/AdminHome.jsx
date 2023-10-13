@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 
 const AdminHome = () => {
     return (
-        <div className='viewPatients-page'>
-            <div className='patient-list-conatiner'>
+        <div className='page'>
+            <div className='primary-container'>
                 <Link to='/admin/add-admin'>
                     <h2>Add Adminstrator</h2>
                 </Link>

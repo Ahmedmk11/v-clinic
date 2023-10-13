@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useContext } from 'react'
+import CurrUserContext from '../../../contexts/CurrUser'
 const Login = () => {
+    const {setUserType} = useContext(CurrUserContext)
     const navigate = useNavigate()
     const [Username, setUsername] = useState('')
     const handleLogin = (event) => {
         event.preventDefault()
+        setUserType(Username)
         navigate(`/${Username}`)
     }
     const handleRegister = () => {
