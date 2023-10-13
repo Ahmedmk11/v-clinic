@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import calcAge from '../../utils/calcAge'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal, Input } from 'antd'
 const { confirm } = Modal
@@ -151,11 +150,11 @@ const AdminPackageInfo = () => {
                             Edit
                         </Button></>
                 ):
-                <><Button type='primary' onClick={cancelEdit} danger style={cancelStyle}>
+                <div className='edit-buttons'><Button type='primary' onClick={cancelEdit} danger style={cancelStyle}>
                 Cancel
             </Button><Button type='primary' style={btnStyle} onClick={saveFunc}>
                     Save
-                </Button></>
+                </Button></div>
                 }
 
             </>
