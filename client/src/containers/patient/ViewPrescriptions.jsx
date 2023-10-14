@@ -6,6 +6,7 @@ const PatientViewPrescription = () => {
     const { currUser } = useContext(CurrUserContext)
     const [prescriptions, setPrescriptions] = useState([])
     useEffect(() => {
+        if (!currUser) return
         axios
             .get('http://localhost:3000/api/patient/get-patient-prescription/'+currUser?._id)
             .then((res) => {
