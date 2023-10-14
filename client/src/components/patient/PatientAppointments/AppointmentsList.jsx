@@ -20,7 +20,7 @@ const AppointmentsList = () => {
     const [dateRange, setDateRange] = useState(null)
 
     const [currUser, setCurrUser] = useState({
-        _id: '652185ccf27b074cbbae82b6', // TBA in next sprints
+        _id: '652185cdf27b074cbbae82bc',
     })
 
     function getDoctor(id) {
@@ -98,7 +98,7 @@ const AppointmentsList = () => {
     return (
         <div className='primary-container'>
             <h2>My Appointments</h2>
-            <label style={{margin:0}}>Pick a date to filter on: </label>
+            <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
             <DatePicker
                 disabled={isLoading}
@@ -107,7 +107,7 @@ const AppointmentsList = () => {
                 onChange={handleDateChange}
             />
             <br></br>
-            <label style={{margin:0}}>Pick a status to filter on: </label>
+            <label style={{ margin: 0 }}>Pick a status to filter on: </label>
             <br></br>
             <Select
                 disabled={isLoading}

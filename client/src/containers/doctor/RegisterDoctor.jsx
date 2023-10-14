@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 function DoctorRegistration() {
-
-    const [message, setMessage] = useState(null);
+    const [message, setMessage] = useState(null)
     const [formData, setFormData] = useState({
         username: '',
         name: '',
@@ -14,30 +13,32 @@ function DoctorRegistration() {
         education: '',
         status: '',
         speciality: '',
-    });
-
+    })
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
-        }));
-    };
+        }))
+    }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
         try {
-            const response = await fetch('http://localhost:3000/api/doctor/create-doctor', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-            const data = await response.json();
-            if(response.ok) {
-                setMessage('Registration Successful');
+            const response = await fetch(
+                'http://localhost:3000/api/doctor/create-doctor',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                }
+            )
+            const data = await response.json()
+            if (response.ok) {
+                setMessage('Registration Successful')
                 setFormData({
                     username: '',
                     name: '',
@@ -49,14 +50,14 @@ function DoctorRegistration() {
                     education: '',
                     status: '',
                     speciality: '',
-                });
+                })
             } else {
-                setMessage(data.message);
+                setMessage(data.message)
             }
         } catch (error) {
-            setMessage(error.message);
+            setMessage(error.message)
         }
-    };
+    }
 
     return (
         <>
@@ -64,8 +65,8 @@ function DoctorRegistration() {
                 <label>
                     Username:
                     <input
-                        type="text"
-                        name="username"
+                        type='text'
+                        name='username'
                         value={formData.username}
                         onChange={handleInputChange}
                     />
@@ -74,8 +75,8 @@ function DoctorRegistration() {
                 <label>
                     Name:
                     <input
-                        type="text"
-                        name="name"
+                        type='text'
+                        name='name'
                         value={formData.name}
                         onChange={handleInputChange}
                     />
@@ -84,8 +85,8 @@ function DoctorRegistration() {
                 <label>
                     Email:
                     <input
-                        type="email"
-                        name="email"
+                        type='email'
+                        name='email'
                         value={formData.email}
                         onChange={handleInputChange}
                     />
@@ -94,8 +95,8 @@ function DoctorRegistration() {
                 <label>
                     Password:
                     <input
-                        type="password"
-                        name="password"
+                        type='password'
+                        name='password'
                         value={formData.password}
                         onChange={handleInputChange}
                     />
@@ -104,8 +105,8 @@ function DoctorRegistration() {
                 <label>
                     Date of Birth:
                     <input
-                        type="date"
-                        name="dob"
+                        type='date'
+                        name='dob'
                         value={formData.dob}
                         onChange={handleInputChange}
                     />
@@ -114,8 +115,8 @@ function DoctorRegistration() {
                 <label>
                     Hourly Rate:
                     <input
-                        type="text"
-                        name="hourly_rate"
+                        type='text'
+                        name='hourly_rate'
                         value={formData.hourly_rate}
                         onChange={handleInputChange}
                     />
@@ -124,8 +125,8 @@ function DoctorRegistration() {
                 <label>
                     Affiliation:
                     <input
-                        type="text"
-                        name="affiliation"
+                        type='text'
+                        name='affiliation'
                         value={formData.affiliation}
                         onChange={handleInputChange}
                     />
@@ -134,8 +135,8 @@ function DoctorRegistration() {
                 <label>
                     Educational Background:
                     <input
-                        type="text"
-                        name="education"
+                        type='text'
+                        name='education'
                         value={formData.education}
                         onChange={handleInputChange}
                     />
@@ -144,18 +145,18 @@ function DoctorRegistration() {
                 <label>
                     Speciality:
                     <input
-                        type="text"
-                        name="speciality"
+                        type='text'
+                        name='speciality'
                         value={formData.speciality}
                         onChange={handleInputChange}
                     />
                 </label>
                 <br />
-                <button type="submit">Register</button>
+                <button type='submit'>Register</button>
                 {message && <p>{message}</p>}
             </form>
         </>
-    );
+    )
 }
 
-export default DoctorRegistration;
+export default DoctorRegistration

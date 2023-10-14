@@ -7,6 +7,7 @@ import { DatePicker, Select } from 'antd'
 import { findIntersection } from '../../utils/intersectionForSearch'
 import DoctorCard from '../../components/patient/ViewDoctors/DoctorCard'
 
+import { disabledDate } from '../../utils/disabledDates'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -21,7 +22,6 @@ const PatientHome = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [displayedDoctors, setDisplayedDoctors] = useState(null)
-    const [filteredDoctors, setFilteredDoctors] = useState(null)
     const [specialties, setSpecialties] = useState([])
     const [appointments, setAppointments] = useState([])
     const [selectedSpecialities, setSelectedSpecialities] = useState([])
@@ -35,7 +35,7 @@ const PatientHome = () => {
     useEffect(() => {
         const fetchAppointments = async () => {
             const doctorsToAdd = []
-            const promises = displayedDoctors.map(async (doctor) => {
+            const promises = doctors.map(async (doctor) => {
                 try {
                     const response = await axios.get(
                         `http://localhost:3000/api/doctor/get-appointments/${doctor._id}`
@@ -54,14 +54,10 @@ const PatientHome = () => {
             setAppointments(doctorsToAdd)
         }
 
-        if (displayedDoctors) {
+        if (doctors) {
             fetchAppointments()
         }
-    }, [displayedDoctors])
-
-    useEffect(() => {
-        console.log('apps', appointments)
-    }, [appointments])
+    }, [doctors])
 
     useEffect(() => {
         if (doctors) {
@@ -70,7 +66,7 @@ const PatientHome = () => {
     }, [doctors])
 
     const searchByNameOrSpeciality = () => {
-        return filteredDoctors?.filter(
+        return doctors?.filter(
             (doctor) =>
                 findIntersection(
                     searchTerm.split(' '),
@@ -99,6 +95,7 @@ const PatientHome = () => {
     const filterByAvailability = () => {
         const doctorsToAdd = []
         if (doctors) {
+            console.log('dateRange4444', dateRange)
             if (dateRange) {
                 doctors.forEach((doctor) => {
                     const doctorAppointments = appointments.find(
@@ -107,24 +104,30 @@ const PatientHome = () => {
                             app.appointments.length > 0
                     )
 
-                    console.log('doctorAppointments', doctorAppointments)
-
                     if (!doctorAppointments) {
-                        console.log(`no appointments for ${doctor.name}`)
                         doctorsToAdd.push(doctor)
                     } else {
-                        console.log(`else for ${doctor.name}`)
-                        const isBusy = doctorAppointments.appointments.every(
+                        // const isBusy = doctorAppointments.appointments.every(
+                        //     (appointment) => {
+                        //         const selectedDateTime = dateRange
+
+                        //         return (
+                        //             selectedDateTime >=
+                        //                 dayjs.utc(appointment.start_time) &&
+                        //             selectedDateTime <=
+                        //                 dayjs.utc(appointment.end_time)
+                        //         )
+                        //     }
+                        // )
+
+                        const isBusy = doctorAppointments.appointments.some(
                             (appointment) => {
                                 const selectedDateTime = dateRange
-
                                 return (
                                     selectedDateTime >=
                                         dayjs.utc(appointment.start_time) &&
                                     selectedDateTime <=
-                                        dayjs.utc(appointment.end_time) &&
-                                    appointment.status !== 'cancelled' &&
-                                    appointment.status !== 'completed'
+                                        dayjs.utc(appointment.end_time)
                                 )
                             }
                         )
@@ -147,8 +150,8 @@ const PatientHome = () => {
 
     useEffect(() => {
         let options = []
-        if (doctors?.length > 0) {
-            doctors.forEach((doctor) => {
+        if (displayedDoctors?.length > 0) {
+            displayedDoctors.forEach((doctor) => {
                 if (!options.some((obj) => obj.value === doctor.speciality)) {
                     options.push({
                         label: doctor.speciality,
@@ -200,7 +203,6 @@ const PatientHome = () => {
                 )
                 .then((res) => {
                     setDiscount(1 - res.data.sessionDiscount / 100)
-                    console.log(res.data)
                 })
                 .catch((err) => console.log(err))
         }
@@ -210,32 +212,22 @@ const PatientHome = () => {
         if (doctors) {
             const filteredSpecialities = filterBySpecialities()
             const filteredAvailability = filterByAvailability()
+            const searched = searchByNameOrSpeciality()
 
             console.log('filteredSpecialities', filteredSpecialities)
             console.log('filteredAvailability', filteredAvailability)
-            console.log(dateRange)
+            console.log('searched', searched)
 
-            const filtered = intersection(
-                filteredSpecialities,
-                filteredAvailability
+            const filtered = doctors?.filter(
+                (doctor) =>
+                    filteredAvailability.includes(doctor) &&
+                    filteredSpecialities.includes(doctor) &&
+                    searched.includes(doctor)
             )
-            setFilteredDoctors(filtered)
-        }
-    }, [doctors, selectedSpecialities, dateRange])
-
-    useEffect(() => {
-        if (doctors) {
-            const today = new Date()
-            today.setHours(0, 0, 0, 0)
-
-            const searched = searchByNameOrSpeciality()
-
-            const filtered = intersection(filteredDoctors, searched)
-
             setDisplayedDoctors(filtered)
             setCurrentPage(1)
         }
-    }, [searchTerm, doctors, filteredDoctors])
+    }, [doctors, selectedSpecialities, dateRange, searchTerm])
 
     const getDoctors = () => {
         const indexOfLastDoctor = currentPage * doctorsPerPage
@@ -265,29 +257,32 @@ const PatientHome = () => {
                 <h2>Doctors</h2>
                 <Search disabled={isLoading} onSearch={onSearch} />
                 <label style={{ margin: 0 }}>Pick a date to filter on: </label>
-            <br></br>
-                    <DatePicker
+                <br></br>
+                <DatePicker
                     className='DatePicker'
-                        disabled={isLoading}
-                        showTime={{
-                            format: 'hh:mm a',
-                        }}
-                        format='YYYY-MM-DD hh:mm a'
-                        onChange={handleDateChange}
-                    />
-                    <br></br>
-                    <label style={{ margin: 0 }}>Pick a speciality to filter on: </label>
-            <br></br>
-            <Select
-                className='Select'
-                        disabled={isLoading}
-                        mode='multiple'
-                        allowClear
-                        placeholder='Select specialities'
-                        onChange={handleChange}
-                        options={specialties}
-                    />
-            
+                    disabled={isLoading}
+                    disabledDate={disabledDate}
+                    showTime={{
+                        format: 'hh:mm a',
+                    }}
+                    format='YYYY-MM-DD hh:mm a'
+                    onChange={handleDateChange}
+                />
+                <br></br>
+                <label style={{ margin: 0 }}>
+                    Pick a speciality to filter on:{' '}
+                </label>
+                <br></br>
+                <Select
+                    className='Select'
+                    disabled={isLoading}
+                    mode='multiple'
+                    allowClear
+                    placeholder='Select specialities'
+                    onChange={handleChange}
+                    options={specialties}
+                />
+
                 <div className='card-list'>{getDoctors()}</div>
                 <Pagination
                     itemsPerPage={doctorsPerPage}

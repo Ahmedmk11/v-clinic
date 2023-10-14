@@ -10,7 +10,7 @@ const PatientProfile = () => {
             <div className='primary-container'>
                 <h2>Patient Profile</h2>
                 <div className='patient-name'>
-                <h2>{patient?.name}</h2>
+                    <h2>{patient?.name}</h2>
                 </div>
                 <div className='sub-container'>
                     <p>
