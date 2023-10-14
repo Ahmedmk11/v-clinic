@@ -107,7 +107,7 @@ const DoctorProfile = () => {
                 <ul>
                     {getDoctorData('education', 'text', 'Education')}
                     {getDoctorData('email', 'email', 'Email')}
-                    {getDoctorData('hourly_rate', 'number', 'HourlyRate')}
+                    {getDoctorData('hourly_rate', 'number', 'Hourly Rate')}
                     {getDoctorData('affiliation', 'text', 'Affiliation')}
                     {getDoctorData('speciality', 'text', 'Speciality')}
                 </ul>
