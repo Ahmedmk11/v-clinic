@@ -1,7 +1,8 @@
 import PatientModel from '../models/patientModel.js'
 import AppointmentModel from '../models/appointmentsModel.js'
 import FamilyMemberModel from '../models/familyMemberModel.js'
-
+import PrescriptionModel from '../models/prescriptionsModel.js'
+import MedicalHistoryModel from '../models/medicalHistoryModel.js'
 async function createPatient(req, res) {
     try {
         const {
