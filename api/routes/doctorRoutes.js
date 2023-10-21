@@ -6,7 +6,9 @@ import {
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
-    getActiveDoctors
+    getActiveDoctors,
+    saveDoctorfiles,
+    uploadDoctorFiles,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -16,5 +18,10 @@ router.get('/get-active-doctors', getActiveDoctors)
 router.get('/get-doctor/:id', getDoctorById)
 router.put('/update-doctor', updateDoctor)
 router.get('/get-appointments/:id', getAppointmentsByDoctorId)
-router.get('/get-appointments-with-names/:id', getAppointmentsWithNamesByDoctorId)
+router.get(
+    '/get-appointments-with-names/:id',
+    getAppointmentsWithNamesByDoctorId
+)
+router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
+
 export default router
