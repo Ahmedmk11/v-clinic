@@ -8,7 +8,7 @@ const Provider = ({ children }) => {
     const [currUser, setCurrUser] = useState(null)
     const patientUrl = `http://localhost:3000/api/patient/get-patient-by-id/652185cdf27b074cbbae82bc`
     const drUrl =
-        'http://localhost:3000/api/doctor/get-doctor/65219089f27b074cbbae82c0'
+        'http://localhost:3000/api/doctor/get-doctor/65219089f27b074cbbae82c4'
     const url =
         userType === 'patient'
             ? patientUrl

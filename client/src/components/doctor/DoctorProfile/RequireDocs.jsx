@@ -12,7 +12,7 @@ const RequireDocs = ({ docs,status,uploaded_documents }) => {
 
     return (
         <>
-            {docs?.length < 1 && show && (
+            {docs?.length < 3 && status?.toLowerCase()=="pending" && show && (
             <div className='sub-container doctor-reminder'>
                 <div
                     className='close'
@@ -24,7 +24,7 @@ const RequireDocs = ({ docs,status,uploaded_documents }) => {
                 <p>
                     Thank you for registering with our platform. We appreciate
                     your interest in joining our community. To complete your
-                    registration process, we kindly request you to submit the
+                    registration process, we kindly request you to submit
                     some documents
                 </p>
             </div>

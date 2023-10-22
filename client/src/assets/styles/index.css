@@ -100,6 +100,11 @@ input:focus {
     box-shadow: 0px 0px 20px 0px var(--color-shadow);
     background-color: var(--accent-background-color);
     margin: 2%;
+
+    & a{
+        color: var(--main-green);
+        text-decoration: none;
+    }
 }
 
 .card-list {
