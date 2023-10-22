@@ -30,6 +30,7 @@ import AdminDoctorInfo from './containers/admin/AdminDoctorInfo'
 import ViewRequests from './containers/admin/ViewRequests'
 import ViewPackages from './containers/admin/ViewPackages'
 import NotFound , { Redirect } from './containers/general/NotFound/NotFound'
+import UploadDocs from './containers/doctor/UploadDocs'
 
 
 const RouteSwitch = () => {
@@ -50,6 +51,7 @@ const RouteSwitch = () => {
                 <Route path='patients' element={<ViewPatients />} />
                 <Route path='patient/info' element={<PatientInfo />} />
                 <Route path='appointments' element={<DoctorAppointments />} />
+                <Route path='uploadDocuments' element={<UploadDocs />} />
                 <Route path='*' element={<Redirect />} />
             </Route>
 

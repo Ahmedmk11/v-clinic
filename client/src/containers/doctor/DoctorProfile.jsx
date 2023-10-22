@@ -3,7 +3,7 @@ import doctorImg from '../../assets/imgs/doctorProfile.png'
 import { useState, useContext,useEffect } from 'react'
 import axios from 'axios'
 import CurrUserContext from '../../contexts/CurrUser'
-import { use } from 'react'
+import RequireDocs from '../../components/doctor/DoctorProfile/RequireDocs'
 const DoctorProfile = () => {
     const { currUser: Doctor, setCurrUser: setDoctor } =
         useContext(CurrUserContext)
@@ -97,6 +97,7 @@ const DoctorProfile = () => {
     const getDoctorInfo = () => {
         return (
             <>
+            <h2>My Info</h2>
                 <div className={`message ${EditMessage}`}>
                     {EditMessage === 'success'
                         ? 'Saved successfully!'
@@ -132,6 +133,7 @@ const DoctorProfile = () => {
                         </p>
                     </section>
                 </div>
+                <RequireDocs docs={Doctor?.uploaded_documents} status={Doctor?.status}  uploaded_documents={Doctor?.uploaded_documents}/>
                 <div className='doctor-info-container'>{getDoctorInfo()}</div>
             </div>
         </div>

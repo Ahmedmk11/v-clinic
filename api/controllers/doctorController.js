@@ -165,7 +165,7 @@ const uploadDoctorFiles = async (req, res) => {
             doctor.uploaded_documents =
                 doctor.uploaded_documents.concat(newFilePaths)
             doctor.save()
-            res.json('Files uploaded successfully')
+            res.json({message: 'Files uploaded successfully', uploaded_documents: doctor.uploaded_documents})
         } else {
             res.status(404).json({ message: 'Doctor not found' })
         }
