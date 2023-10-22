@@ -8,7 +8,7 @@ import crypto from 'crypto'
 // --------------------------------------------------
 const doctorStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './doctorUploads')
+        cb(null, './uploads/doctorUploads')
     },
     filename: (req, file, cb) => {
         const fileName = crypto.randomBytes(16).toString('hex')

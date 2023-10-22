@@ -39,7 +39,7 @@ app.use(cors(corsOptions))
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
-app.use('/api/doctorUploads', express.static('doctorUploads'));
+app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads'));
 
 
 
