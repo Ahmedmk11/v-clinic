@@ -15,6 +15,7 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
+    color: var(--text-color);
 
     .ant-btn {
         height: 45px;
@@ -34,9 +35,15 @@
     }
 
     .ant-avatar {
-        cursor: pointer;
-        color: var(--text-color);
+        cursor: pointer; 
     }
+
+    .ant-wallet {
+        cursor: pointer;
+    }
+ 
+   
+    
 }
 
 .logo {

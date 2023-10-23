@@ -26,7 +26,7 @@ const Provider = ({ children }) => {
     }, [userType])
     return (
         <CurrUserContext.Provider
-            value={{ currUser, setCurrUser, setUserType }}>
+            value={{ currUser, setCurrUser, setUserType,userType }}>
             {children}
         </CurrUserContext.Provider>
     )
