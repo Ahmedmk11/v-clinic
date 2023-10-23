@@ -1,0 +1,33 @@
+.DatePicker {
+    width: 30%;
+}
+.Select {
+    width: 30%;
+    margin: 5px 0px;
+}
+
+.status{
+    text-transform: capitalize;
+}
+
+.status.upcoming {
+    color: #f0ad4e;
+}
+.status.completed {
+    color: #5cb85c;
+}
+.status.cancelled {
+    color: #d9534f;
+}
+.status.rescheduled {
+    color: #5bc0de;
+}
+
+@media screen and (max-width: 768px) {
+    .DatePicker {
+        width: 100%;
+    }
+    .Select {
+        width: 100%;
+    }
+}

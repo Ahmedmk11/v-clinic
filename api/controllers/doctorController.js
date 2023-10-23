@@ -1,5 +1,23 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
+import multer from 'multer'
+import crypto from 'crypto'
+
+// --------------------------------------------------
+// Multer
+// --------------------------------------------------
+const doctorStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads/doctorUploads')
+    },
+    filename: (req, file, cb) => {
+        const fileName = crypto.randomBytes(16).toString('hex')
+        const extension = file.mimetype.split('/')[1]
+        cb(null, `${fileName}.${extension}`)
+    },
+})
+
+const doctorUpload = multer({ storage: doctorStorage })
 
 // @desc    Create a doctor
 // @route   POST /api/doctor/create-doctor
@@ -42,6 +60,18 @@ const createDoctor = async (req, res) => {
 const getDoctors = async (req, res) => {
     try {
         const doctors = await DoctorModel.find({})
+        res.json(doctors)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
+// @desc    Get all active doctors
+// @route   GET /api/doctor/get-active-doctors
+// @access  Public
+const getActiveDoctors = async (req, res) => {
+    try {
+        const doctors = await DoctorModel.find({ status: 'Active' })
         res.json(doctors)
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -115,6 +145,35 @@ const getAppointmentsWithNamesByDoctorId = async (req, res) => {
     }
 }
 
+//@desc   save doctor files
+//@route  POST /api/doctor/upload
+//@access Public
+const saveDoctorfiles = doctorUpload.array('files')
+
+// @desc    Upload a doctor image
+// @route   POST /api/doctor/upload
+// @access  Public
+const uploadDoctorFiles = async (req, res) => {
+    try {
+        const id = req.body.id
+        const files = req.files
+        if (!files?.length)
+            return res.status(400).json({ message: 'No files uploaded' })
+        const doctor = await DoctorModel.findById(id)
+        if (doctor) {
+            const newFilePaths = files.map((file) => file.path)
+            doctor.uploaded_documents =
+                doctor.uploaded_documents.concat(newFilePaths)
+            doctor.save()
+            res.json({message: 'Files uploaded successfully', uploaded_documents: doctor.uploaded_documents})
+        } else {
+            res.status(404).json({ message: 'Doctor not found' })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createDoctor,
     getDoctors,
@@ -122,4 +181,7 @@ export {
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
+    getActiveDoctors,
+    saveDoctorfiles,
+    uploadDoctorFiles,
 }

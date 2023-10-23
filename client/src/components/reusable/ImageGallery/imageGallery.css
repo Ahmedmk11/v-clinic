@@ -1,0 +1,40 @@
+/* src/components/ImageGallery.css */
+.image-gallery-container {
+    padding: 20px;
+    display: flex;
+    flex-wrap:nowrap;
+    overflow-x: auto;
+    gap: 20px;
+}
+
+.gallery-image {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+.gallery-image:hover {
+    transform: scale(1.1);
+}
+
+.enlarged-image {
+    width: 100%;
+    height: auto;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8); 
+    z-index: 1;
+}
+
+

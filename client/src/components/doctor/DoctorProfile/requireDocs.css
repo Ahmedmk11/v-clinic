@@ -1,0 +1,18 @@
+.doctor-reminder {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: var(--complementary-yellow);
+        font-weight: bold;
+        font-size: 1.rem;
+       padding: 2%;
+       padding-top: 0;
+       padding-bottom: 1%;
+     
+
+       & .close{
+              margin-top: 10px;
+              align-self: flex-end;
+              cursor: pointer;
+       }
+}

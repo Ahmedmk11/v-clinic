@@ -1,0 +1,8 @@
+.patient-list-container input[type='checkbox'] {
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            accent-color: var(--main-green);
+}
+

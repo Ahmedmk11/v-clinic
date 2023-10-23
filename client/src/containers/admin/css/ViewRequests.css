@@ -1,0 +1,12 @@
+.requests-table-container{
+    & a {
+        color: var(--main-green);
+    }
+    & h4{
+        background-color: var(--complementary-yellow);
+        color: aliceblue;
+        padding: 5px;
+        border-radius: 8px;
+        width: fit-content;
+    }
+}
