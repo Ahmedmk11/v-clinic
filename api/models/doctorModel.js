@@ -54,6 +54,10 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please enter your education'],
         },
+        wallet: {
+            type: Number,
+            default: 0
+        },
         status: {
             type: String,
             enum: ['Active', 'Pending','Rejected'],

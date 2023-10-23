@@ -57,6 +57,10 @@ const patientModel = new mongoose.Schema(
                 },
             ],
         },
+        wallet: {
+            type: Number,
+            default: 0
+        },
         birthdate: {
             type: Date,
             required: [true, 'Please enter your birthdate.'],
