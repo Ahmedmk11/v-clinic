@@ -165,12 +165,34 @@ const uploadDoctorFiles = async (req, res) => {
             doctor.uploaded_documents =
                 doctor.uploaded_documents.concat(newFilePaths)
             doctor.save()
-            res.json({message: 'Files uploaded successfully', uploaded_documents: doctor.uploaded_documents})
+            res.json({
+                message: 'Files uploaded successfully',
+                uploaded_documents: doctor.uploaded_documents,
+            })
         } else {
             res.status(404).json({ message: 'Doctor not found' })
         }
     } catch (error) {
         res.status(500).json({ message: error.message })
+    }
+}
+
+// @desc    Update a doctor contract acceptance
+// @route   PUT /api/doctor/update-contract
+// @access  Public
+const updateContract = async (req, res) => {
+    try {
+        const doctor = await DoctorModel.findById(req.body.id)
+        if (doctor) {
+            doctor.contract_acceptance = req.body.contract_acceptance
+            const updatedDoctor = await doctor.save()
+            res.json({
+                message: 'Contract updated successfully',
+                contract_acceptance: updatedDoctor.contract_acceptance,
+            })
+        } else res.status(404).json({ message: 'Doctor not found' })
+    } catch (error) {
+        res.status(404).json({ message: error.message })
     }
 }
 
@@ -184,4 +206,5 @@ export {
     getActiveDoctors,
     saveDoctorfiles,
     uploadDoctorFiles,
+    updateContract,
 }

@@ -9,6 +9,7 @@ import {
     getActiveDoctors,
     saveDoctorfiles,
     uploadDoctorFiles,
+    updateContract
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -23,5 +24,6 @@ router.get(
     getAppointmentsWithNamesByDoctorId
 )
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
+router.put('/update-contract', updateContract)
 
 export default router
