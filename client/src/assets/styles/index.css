@@ -53,10 +53,29 @@ h1 {
         background-color: #3e8e41;
         color: white;
     }
-    &:active {
+    &:active,
+    &:focus & {
         background-color: var(--accent-green);
         color: white;
     }
+}
+
+#green-button {
+    background-color: #389e0d; /* Darker green on hover/focus */
+    border-color: #389e0d;
+    color: #ffffff; /* Text color (white) */
+}
+
+#green-button:hover,
+#green-button:focus {
+    background-color: #52c41a; /* Green color */
+    border-color: #52c41a; /* Border color */
+}
+
+#red-button:hover,
+#red-button:focus {
+    color: #d9363e;
+    border-color: #d9363e;
 }
 
 input:focus {
@@ -101,7 +120,7 @@ input:focus {
     background-color: var(--accent-background-color);
     margin: 2%;
 
-    & a{
+    & a {
         color: var(--main-green);
         text-decoration: none;
     }
@@ -136,5 +155,3 @@ input:focus {
         margin-bottom: 8px;
     }
 }
-
-

@@ -1,0 +1,22 @@
+.contract-header {
+    background-color:var(--main-green); /* Dark background color for the header */
+    color: #fff; /* White text color for contrast */
+    padding: 20px; /* Adjust padding according to your design */
+    text-align: center; /* Center-align the text */
+  }
+
+.contract-content {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .signature {
+    margin-top: 40px;
+    font-weight: bold;
+    & p{
+        margin:5px 0;
+    }
+  }
+
+

@@ -59,6 +59,11 @@ const doctorSchema = new mongoose.Schema(
             enum: ['Active', 'Pending','Rejected'],
             default: 'Pending',
         },
+        contract_acceptance: {
+            type: String,
+            enum: ['Accepted', 'Pending', 'Rejected'],
+            default: 'Pending',
+        },
         speciality: {
             type: String,
             required: [true, 'Please enter your speciality'],
