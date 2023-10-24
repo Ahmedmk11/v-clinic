@@ -4,10 +4,6 @@ const medicalHistorySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
     chronicConditions: [
         {
             name: {
@@ -67,7 +63,7 @@ const medicalHistorySchema = new mongoose.Schema({
         exerciseFrequency: String,
         diet: String,
     }
-});
+},{ timestamps: true } );
 
 const MedicalHistoryModel = mongoose.model('MedicalHistory', medicalHistorySchema);
 

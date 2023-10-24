@@ -34,7 +34,7 @@ const PatientList = ({ patients }) => {
         )
         return currentPatients.length
             ? currentPatients.map((patient) => (
-                  <PatientCard key={patient.id + '0'} patient={patient} />
+                  <PatientCard key={patient._id +"0" } patient={patient} />
               ))
             : 'No patients to show'
     }

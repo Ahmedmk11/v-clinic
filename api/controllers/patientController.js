@@ -30,6 +30,10 @@ async function createPatient(req, res) {
         })
 
         await newPatient.save()
+        const MedicalHistory = new MedicalHistoryModel({
+            patient_id: newPatient._id,
+        })
+        await MedicalHistory.save()
         res.status(201).json(newPatient)
     } catch (err) {
         console.error('Error creating patient:', err)
@@ -50,9 +54,10 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
-        let patient = await PatientModel.findById(id)  .populate('prescriptions')
-        .populate('medicalHistory')
-        patient={
+        let patient = await PatientModel.findById(id)
+            .populate('prescriptions')
+            .populate('medicalHistory')
+        patient = {
             ...patient._doc,
             prescriptions: patient.prescriptions,
             medicalHistory: patient.medicalHistory,
@@ -214,6 +219,45 @@ async function testingAddPackage(req, res) {
     } catch (error) {}
 }
 
+//@ desc add medical history to patient
+//@route POST /api/patients/add-medical-history
+const addMedicalHistory = async (req, res) => {
+    try {
+        const {medicalHistory} = req.body
+        console.log(medicalHistory)
+        const newMedicalHistory = new MedicalHistoryModel(medicalHistory)
+
+        await newMedicalHistory.save()
+        res.status(201).json(newMedicalHistory)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+//@ desc update medical history to patient
+//@route PUT /api/patients/update-medical-history/:id
+const updateMedicalHistory = async (req, res) => {
+    try {
+        const { id } = req.params
+        const {medicalHistory} = req.body
+
+        const updatedMedicalHistory =
+            await MedicalHistoryModel.findOneAndUpdate(
+                { patient_id: id },
+                medicalHistory,
+                { new: true }
+            )
+                
+        console.log(updatedMedicalHistory)    
+
+        res.status(201).json(updatedMedicalHistory)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -225,4 +269,6 @@ export {
     populateFamilyMembers,
     getPatientDiscount,
     testingAddPackage,
+    addMedicalHistory,
+    updateMedicalHistory,
 }

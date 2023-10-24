@@ -78,6 +78,12 @@ h1 {
     border-color: #d9363e;
 }
 
+#cancel-button:hover,
+#cancel-button:focus {
+    color: black;
+    border-color: #ccc;
+}
+
 input:focus {
     outline: var(--main-green) auto 1px;
     border-color: var(--main-green);
@@ -124,6 +130,13 @@ input:focus {
         color: var(--main-green);
         text-decoration: none;
     }
+}
+
+.flex-contianer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .card-list {
