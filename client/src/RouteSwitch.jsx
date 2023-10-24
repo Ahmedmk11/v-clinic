@@ -49,7 +49,7 @@ const RouteSwitch = () => {
                 <Route index element={<DoctorHome />} />
                 <Route path='profile/:id' element={<DoctorProfile />} />
                 <Route path='patients' element={<ViewPatients />} />
-                <Route path='patient/info' element={<PatientInfo />} />
+                <Route path='patient/info/:id' element={<PatientInfo />} />
                 <Route path='appointments' element={<DoctorAppointments />} />
                 <Route path='uploadDocuments' element={<UploadDocs />} />
                 <Route path='*' element={<Redirect />} />

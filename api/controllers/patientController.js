@@ -50,7 +50,13 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
-        const patient = await PatientModel.findById(id)
+        let patient = await PatientModel.findById(id)  .populate('prescriptions')
+        .populate('medicalHistory')
+        patient={
+            ...patient._doc,
+            prescriptions: patient.prescriptions,
+            medicalHistory: patient.medicalHistory,
+        }
         res.status(200).json(patient)
     } catch (err) {
         console.error('Error fetching patient:', err)

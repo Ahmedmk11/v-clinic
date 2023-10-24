@@ -11,9 +11,7 @@ import './medicalHistory.css';
 
 const MedicalHistory = ({ medicalHistory }) => {
     return (<>
-            <h2>Medical History</h2>
         <div className="medical-history-view">
-           
                     <Card className="history-card" bordered={false} cover={<SmileOutlined style={{ fontSize: '48px', color: '#1890ff' }} />} hoverable>
                         <h3>Chronic Conditions</h3>
                         {medicalHistory.chronicConditions.map((condition, index) => (
