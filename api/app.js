@@ -4,19 +4,22 @@
 
 import express from 'express'
 import cors from 'cors'
+import authRoutes from './routes/authRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import patientRoutes from './routes/patientRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
 import { connectToDatabase } from './database.js'
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path'
+import { fileURLToPath } from 'url'
+import cookieParser from 'cookie-parser'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // --------------------------------------------------
 // Initialization and CORS configuration
 // --------------------------------------------------
+
 const app = express()
 const port = process.env.PORT || 3000
 const corsOptions = {
@@ -25,23 +28,28 @@ const corsOptions = {
     credentials: true,
 }
 
+// --------------------------------------------------
+// Middleware
+// --------------------------------------------------
 
-// --------------------------------------------------
-//Middleware
-// --------------------------------------------------
 app.use(express.json())
 app.use(cors(corsOptions))
+app.use(cookieParser())
 
+app.use((req, res, next) => {
+    console.log('Cookies: ', req.cookies)
+    next()
+})
 
 // --------------------------------------------------
 // Routes
 // --------------------------------------------------
+
+app.use('/api/auth', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
-app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads'));
-
-
+app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads'))
 
 // --------------------------------------------------
 // Server

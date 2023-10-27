@@ -59,7 +59,7 @@ const patientModel = new mongoose.Schema(
         },
         wallet: {
             type: Number,
-            default: 0
+            default: 0,
         },
         birthdate: {
             type: Date,
@@ -141,6 +141,7 @@ patientModel.virtual('appointments', {
     foreignField: 'patient_id',
     localField: '_id',
 })
+
 patientModel.virtual('prescriptions', {
     ref: 'Prescription',
     foreignField: 'patient_id',

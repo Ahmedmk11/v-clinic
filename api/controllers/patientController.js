@@ -3,6 +3,7 @@ import AppointmentModel from '../models/appointmentsModel.js'
 import FamilyMemberModel from '../models/familyMemberModel.js'
 import PrescriptionModel from '../models/prescriptionsModel.js'
 import MedicalHistoryModel from '../models/medicalHistoryModel.js'
+
 async function createPatient(req, res) {
     try {
         const {
@@ -50,9 +51,10 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
-        let patient = await PatientModel.findById(id)  .populate('prescriptions')
-        .populate('medicalHistory')
-        patient={
+        let patient = await PatientModel.findById(id)
+            .populate('prescriptions')
+            .populate('medicalHistory')
+        patient = {
             ...patient._doc,
             prescriptions: patient.prescriptions,
             medicalHistory: patient.medicalHistory,

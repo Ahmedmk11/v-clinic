@@ -11,13 +11,12 @@ import { disabledDate } from '../../utils/disabledDates'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
+import CurrUserContext from '../../contexts/CurrUser'
+import { useContext } from 'react'
+
 dayjs.extend(utc)
 
 const PatientHome = () => {
-    // REQ 37 | View all doctors, DONE
-    // REQ 38 | search by name or speciality, DONE
-    // REQ 39 | filter by speciality and or availability, DONE (FIX BUG WHEN FILTERING BY AVAILABILITY AND SPECIALITY)
-    // REQ 40 | navigate to selected doctor DONE
     const [doctors, setDoctors] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
@@ -28,7 +27,7 @@ const PatientHome = () => {
     const [dateRange, setDateRange] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [discount, setDiscount] = useState(1)
-    const [currUser, setCurrUser] = useState(null)
+    const { currUser } = useContext(CurrUserContext)
 
     const doctorsPerPage = 8
 
@@ -107,19 +106,6 @@ const PatientHome = () => {
                     if (!doctorAppointments) {
                         doctorsToAdd.push(doctor)
                     } else {
-                        // const isBusy = doctorAppointments.appointments.every(
-                        //     (appointment) => {
-                        //         const selectedDateTime = dateRange
-
-                        //         return (
-                        //             selectedDateTime >=
-                        //                 dayjs.utc(appointment.start_time) &&
-                        //             selectedDateTime <=
-                        //                 dayjs.utc(appointment.end_time)
-                        //         )
-                        //     }
-                        // )
-
                         const isBusy = doctorAppointments.appointments.some(
                             (appointment) => {
                                 const selectedDateTime = dateRange
@@ -176,15 +162,6 @@ const PatientHome = () => {
             .get(`http://localhost:3000/api/doctor/get-active-doctors`)
             .then((res) => {
                 setDoctors(res.data)
-            })
-            .catch((err) => console.log(err))
-
-        axios
-            .get(
-                `http://localhost:3000/api/patient/get-patient-by-id/652185cdf27b074cbbae82bc`
-            )
-            .then((res) => {
-                setCurrUser(res.data)
             })
             .catch((err) => console.log(err))
     }, [])
