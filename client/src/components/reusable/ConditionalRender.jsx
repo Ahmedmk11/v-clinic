@@ -1,7 +1,7 @@
-const ConditionalRender = ({ condition, children, elseComponent=null }) => {
+const ConditionalRender = ({ condition, children, elseComponent = null }) => {
     if (!condition) {
-      return <>{elseComponent}</>
+        return <>{elseComponent}</>
     }
     return <>{children}</>
-  }
-export default ConditionalRender  
+}
+export default ConditionalRender

@@ -6,9 +6,13 @@ const doctorSchema = new mongoose.Schema(
     {
         username: {
             type: String,
-            required: [true, 'Please enter your username'],
-            unique: true,
+            required: [true, 'Please enter your username.'],
+            unique: [true, 'Username is taken.'],
             lowercase: true,
+            validate: [
+                validator.isAlphanumeric,
+                'Please enter a valid username.',
+            ],
             minlength: [
                 4,
                 'Please enter a username that is 4 characters or longer',
@@ -20,23 +24,38 @@ const doctorSchema = new mongoose.Schema(
         },
         name: {
             type: String,
-            required: true,
-        },
-        password: {
-            type: String,
-            required: [true, 'Please enter a password'],
-            minlength: [
-                6,
-                'Please enter a password that is 6 characters or longer',
+            required: [true, 'Please enter your name.'],
+            validate: [
+                {
+                    validator: function (value) {
+                        return /^[A-Za-z\s]+$/.test(value)
+                    },
+                    message: 'Name must contain only letters and spaces.',
+                },
             ],
-            select: false,
         },
         email: {
             type: String,
-            required: [true, 'Please enter your email'],
-            unique: true,
+            required: [true, 'Please enter your email.'],
+            unique: [true, 'Email is taken.'],
             lowercase: true,
-            validate: [validator.isEmail, 'Please enter a valid email'],
+            validate: [
+                validator.isEmail,
+                'Please enter a valid email address.',
+            ],
+        },
+        password: {
+            type: String,
+            required: [true, 'Please enter your password.'],
+            validate: [
+                {
+                    validator: function (value) {
+                        return /^[A-Za-z0-9]{8,}$/.test(value)
+                    },
+                    message:
+                        'Password must be at least 8 characters long and contain at least one letter.',
+                },
+            ],
         },
         dob: {
             type: Date,
@@ -56,11 +75,11 @@ const doctorSchema = new mongoose.Schema(
         },
         wallet: {
             type: Number,
-            default: 0
+            default: 0,
         },
         status: {
             type: String,
-            enum: ['Active', 'Pending','Rejected'],
+            enum: ['Active', 'Pending', 'Rejected'],
             default: 'Pending',
         },
         contract_acceptance: {
@@ -103,5 +122,5 @@ doctorSchema.virtual('appointments', {
     localField: '_id',
 })
 
-const DoctorModel=mongoose.model('Doctor', doctorSchema)
+const DoctorModel = mongoose.model('Doctor', doctorSchema)
 export default DoctorModel

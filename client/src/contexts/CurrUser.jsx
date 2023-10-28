@@ -32,7 +32,7 @@ const Provider = ({ children }) => {
             } else if (role === 'doctor') {
                 url += 'get-doctor/'
             } else if (role === 'admin') {
-                url += 'get-admin/'
+                url += 'getUser/'
             }
             url += userID
 

@@ -1,6 +1,4 @@
 import './notFound.css'
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 
 const NotFound = () => {
     return (
@@ -17,11 +15,5 @@ const NotFound = () => {
         </div>
     )
 }
-export const Redirect = () => {
-    const navigate = useNavigate()
-    useEffect(() => {
-        navigate('/NotFound')
-    }, [])
-    return null
-}
+
 export default NotFound

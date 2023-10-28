@@ -22,6 +22,8 @@ const addAdmin = async (req, res) => {
         const newAdmin = new adminModel({
             username: req.body.Username,
             password: req.body.Password,
+            email: req.body.email,
+            name: req.body.name,
         })
         const result = await newAdmin.save()
         return res.status(201).json(result)

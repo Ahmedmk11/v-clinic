@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+
 import Login from './containers/general/Login/Login'
 import PatientRegistration from './containers/patient/Register'
 import DoctorRegistration from './containers/doctor/RegisterDoctor'
@@ -29,7 +30,7 @@ import AdminPackageInfo from './containers/admin/AdminPackageInfo'
 import AdminDoctorInfo from './containers/admin/AdminDoctorInfo'
 import ViewRequests from './containers/admin/ViewRequests'
 import ViewPackages from './containers/admin/ViewPackages'
-import NotFound, { Redirect } from './containers/general/NotFound/NotFound'
+import NotFound from './containers/general/NotFound/NotFound'
 import UploadDocs from './containers/doctor/UploadDocs'
 
 const RouteSwitch = () => {
@@ -43,7 +44,7 @@ const RouteSwitch = () => {
         <Routes>
             <Route path='/' element={<Login />} />
             <Route path='/register' element={<PatientRegistration />} />
-            <Route path='/register/doctor' element={<DoctorRegistration />} />
+            <Route path='/register-doctor' element={<DoctorRegistration />} />
             <Route path='/doctor' element={<DoctorMain />}>
                 <Route index element={<DoctorHome />} />
                 <Route path='profile/:id' element={<DoctorProfile />} />
@@ -51,7 +52,6 @@ const RouteSwitch = () => {
                 <Route path='patient/info/:id' element={<PatientInfo />} />
                 <Route path='appointments' element={<DoctorAppointments />} />
                 <Route path='uploadDocuments' element={<UploadDocs />} />
-                <Route path='*' element={<Redirect />} />
             </Route>
 
             <Route path='/patient' element={<PatientMain />}>
@@ -67,7 +67,6 @@ const RouteSwitch = () => {
                     path='prescription-info'
                     element={<PrescriptionInfo />}
                 />
-                <Route path='*' element={<Redirect />} />
             </Route>
 
             <Route path='/admin' element={<AdminMain />}>
@@ -83,11 +82,9 @@ const RouteSwitch = () => {
                 <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='view-requests' element={<ViewRequests />} />
                 <Route path='view-packages' element={<ViewPackages />} />
-                <Route path='*' element={<Redirect />} />
             </Route>
 
-            <Route path='/NotFound' element={<NotFound />} />
-            <Route path='*' element={<Redirect />} />
+            <Route path='*' element={<NotFound />} />
         </Routes>
     )
 }

@@ -16,7 +16,7 @@ const Header = () => {
     const [theme, setTheme] = useState(
         document.body.classList.contains('light-mode') ? 'light' : 'dark'
     )
-    const { currUser, userType } = useContext(CurrUser)
+    const { currUser, role } = useContext(CurrUser)
 
     const handleTheme = () => {
         if (document.body.classList.contains('light-mode')) {
@@ -35,7 +35,7 @@ const Header = () => {
             <div
                 className='logo'
                 onClick={() => {
-                    navigate(`/${userType}`)
+                    navigate(`/${role}`)
                 }}>
                 <span>V-</span>Clinic
             </div>
@@ -46,7 +46,7 @@ const Header = () => {
                     icon={theme === 'light' ? <SunIcon /> : <MoonIcon />}>
                     {theme === 'light' ? <p>Light</p> : <p>Dark</p>}
                 </Button>
-                <ConditionalRender condition={userType != 'admin'}>
+                <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
                     <span>{currUser?.wallet} EGP</span>
                 </ConditionalRender>

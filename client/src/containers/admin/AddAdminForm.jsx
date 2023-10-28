@@ -22,12 +22,16 @@ const addAdminForm = () => {
             await axios.post('http://localhost:3000/api/admin/addAdmin', {
                 Username,
                 Password,
+                email,
+                name,
             })
             setSuccess('User added succesfully')
             setError(null)
             console.log(success)
             setUsername('')
             setPassword('')
+            setEmail('')
+            setName('')
         } catch (error) {
             setError(error.response.data.message)
             setSuccess(null)
@@ -56,6 +60,22 @@ const addAdminForm = () => {
                         type='text'
                         onChange={(e) => setPassword(e.target.value)}
                         value={Password}
+                    />
+                    <label>
+                        <strong>Email:</strong>
+                    </label>
+                    <input
+                        type='text'
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                    />
+                    <label>
+                        <strong>Name:</strong>
+                    </label>
+                    <input
+                        type='text'
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
                     />
 
                     <button className='button' type='submit'>
