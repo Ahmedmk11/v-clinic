@@ -4,7 +4,7 @@ import './css/patientInfo.css'
 import PastPrescriptions from '../../components/doctor/PatientInfo/PastPrescriptions'
 import MedicalHistory from '../../components/doctor/PatientInfo/MedicalHistory'
 import PatientInfoCard from '../../components/doctor/PatientInfo/PatientInfoCard'
-import ConditionalRender from '../../components/reusable/ConditionalRender'
+import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
 import axios from 'axios'
 const PatientInfo = () => {
     const { id } = useParams()

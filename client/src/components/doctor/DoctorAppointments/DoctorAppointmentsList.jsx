@@ -7,9 +7,8 @@ import AppointmentCard from './AppointmentCard'
 
 dayjs.extend(utc)
 const DoctorAppointmentsList = ({ Appointments }) => {
-    const [displayedAppointments, setDisplayedAppointments] =
-        useState([])
-        const [currentPage, setCurrentPage] = useState(1)
+    const [displayedAppointments, setDisplayedAppointments] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
     const AppointmentsPerPage = 8
@@ -53,7 +52,8 @@ const DoctorAppointmentsList = ({ Appointments }) => {
     }
     const getCurrentAppointments = () => {
         const indexOfLastAppointment = currentPage * AppointmentsPerPage
-        const indexOfFirstAppointment = indexOfLastAppointment - AppointmentsPerPage
+        const indexOfFirstAppointment =
+            indexOfLastAppointment - AppointmentsPerPage
         const currentAppointments = displayedAppointments.slice(
             indexOfFirstAppointment,
             indexOfLastAppointment
@@ -71,7 +71,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
     return (
         <div className='primary-container'>
             <h2>My Appointments</h2>
-            <label style={{margin:0}}>Pick a date to filter on: </label>
+            <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
             <DatePicker
                 className='DatePicker'
@@ -79,7 +79,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                 onChange={handleDateChange}
             />
             <br></br>
-            <label style={{margin:0}}>Pick a status to filter on: </label>
+            <label style={{ margin: 0 }}>Pick a status to filter on: </label>
             <br></br>
             <Select
                 className='Select'
@@ -97,9 +97,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                     { label: 'Rescheduled', value: 'rescheduled' },
                 ]}
             />
-            <div className='card-list'>
-                {getCurrentAppointments()}
-            </div>
+            <div className='card-list'>{getCurrentAppointments()}</div>
             <Pagination
                 itemsPerPage={AppointmentsPerPage}
                 totalItems={displayedAppointments.length}

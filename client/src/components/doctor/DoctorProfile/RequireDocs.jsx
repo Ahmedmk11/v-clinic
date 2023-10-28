@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CloseOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 const RequireDocs = ({ docs, status, uploaded_documents }) => {
     const [show, setShow] = useState(true)
     const navigate = useNavigate()

@@ -1,6 +1,7 @@
-import Header from '../../components/layout/Header/Header'
-import Footer from '../../components/layout/Footer/Footer'
-import Sidebar from '../../components/layout/Sidebar/Sidebar'
+import Header from '../Header/Header'
+import Footer from '../Footer/Footer'
+import Sidebar from '../Sidebar/Sidebar'
+
 const Layout = ({ children }) => {
     return (
         <>

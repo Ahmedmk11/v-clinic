@@ -142,7 +142,11 @@ const AntTable = ({ requests, setRequests }) => {
     const expandable = {
         expandedRowRender: (record) =>
             record.uploaded_documents.length > 0 ? (
-                <ImageGallery images={record?.uploaded_documents?.map(url=>"http://localhost:3000/api/"+url)} />
+                <ImageGallery
+                    images={record?.uploaded_documents?.map(
+                        (url) => 'http://localhost:3000/api/' + url
+                    )}
+                />
             ) : (
                 <p>No Documents Uploaded</p>
             ),

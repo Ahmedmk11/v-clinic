@@ -7,7 +7,7 @@ import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
 import { UserOutlined, WalletOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 
 const SunIcon = () => <img style={{ width: 20, height: 20 }} src={sunIcn} />
 const MoonIcon = () => <img style={{ width: 20, height: 20 }} src={moonIcn} />

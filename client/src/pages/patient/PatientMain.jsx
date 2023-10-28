@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import Layout from '../Layout/Layout'
+import Layout from '../../components/layout/Layout/Layout'
 import { Provider } from '../../contexts/SelectedPrescription'
 
 const PatientHome = () => {

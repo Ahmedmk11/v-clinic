@@ -1,4 +1,4 @@
-import Search from "../../reusable/Search/Search";
+import Search from '../../reusable/Search/Search'
 import AntTable from './Table'
 import { useState, useEffect } from 'react'
 

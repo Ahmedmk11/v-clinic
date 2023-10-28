@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import AdminCard from './AdminCard'
-import Pagination from "../../reusable/Pagination/Pagination";
-import Search from "../../reusable/Search/Search";
-
+import Pagination from '../../reusable/Pagination/Pagination'
+import Search from '../../reusable/Search/Search'
 
 const AdminList = ({ Admins, setAdmins }) => {
     // console.log(Admins)
@@ -50,7 +49,7 @@ const AdminList = ({ Admins, setAdmins }) => {
     return (
         <section className='primary-container'>
             <h2>Admins</h2>
-            <Search onSearch={onSearch} placeholder={"username"}/>
+            <Search onSearch={onSearch} placeholder={'username'} />
             <div className='card-list'>{getCurrentAdmins()}</div>
             <Pagination
                 itemsPerPage={AdminsPerPage}

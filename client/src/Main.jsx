@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './assets/styles/index.css'
-import { BrowserRouter, Route } from 'react-router-dom'
+import './styles/index.css'
+import { BrowserRouter } from 'react-router-dom'
 import RouteSwitch from './RouteSwitch'
-import ErrorBoundary from './containers/general/ErrorBoundary/ErrorBoundary'
+import ErrorBoundary from './pages/general/ErrorBoundary/ErrorBoundary'
 import { Provider } from './contexts/CurrUser'
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

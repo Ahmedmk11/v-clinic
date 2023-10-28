@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import Contract from './Contract'
 
 const StatusMessages = ({ Doctor }) => {
@@ -59,7 +59,13 @@ const StatusMessages = ({ Doctor }) => {
                         View Contract
                     </button>
                 </div>
-                <Contract visible={contractVisible} name={Doctor?.name}  onCancel={()=>{setContractVisible(false)}}/>
+                <Contract
+                    visible={contractVisible}
+                    name={Doctor?.name}
+                    onCancel={() => {
+                        setContractVisible(false)
+                    }}
+                />
             </ConditionalRender>
         </>
     )
