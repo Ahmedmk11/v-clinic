@@ -1,40 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState, useContext } from 'react'
 import CurrUserContext from '../../contexts/CurrUser'
-import { useContext } from 'react'
-import axios from 'axios'
 import ViewFamily from './ViewFamily'
 const PatientProfile = () => {
     const [packageObject, setPackageObject] = useState(null)
 
-    const [patientID, setPatientID] = useState(null)
-    const [patient, setPatient] = useState(null)
-
-    useEffect(() => {
-        axios
-            .get('http://localhost:3000/api/auth/get-curr-user', {
-                withCredentials: true,
-            })
-            .then((res) => {
-                console.log('res.data:', res.data)
-                setPatientID(res.data.userId)
-            })
-            .catch((err) => console.log(err))
-    }, [])
-
-    useEffect(() => {
-        if (patientID) {
-            axios
-                .get(
-                    `http://localhost:3000/api/patient/get-patient-by-id/${patientID}`,
-                    { withCredentials: true }
-                )
-                .then((res) => {
-                    console.log('res.data:', res.data)
-                    setPatient(res.data)
-                })
-                .catch((err) => console.log(err))
-        }
-    }, [patientID])
+    const { currUser: patient } = useContext(CurrUserContext)
 
     return (
         <div id='patient-profile-body' className='page'>

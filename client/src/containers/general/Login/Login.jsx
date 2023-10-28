@@ -6,22 +6,22 @@ import axios from 'axios'
 
 const Login = () => {
     const navigate = useNavigate()
-    const [patientData, setPatientData] = useState({
+    const [userData, setUserData] = useState({
         username: '',
         password: '',
-        remember: false,
+        remember: true,
         role: 'patient',
     })
 
     const onFinish = (values) => {
         axios
-            .post(`http://localhost:3000/api/auth/login`, patientData, {
+            .post(`http://localhost:3000/api/auth/login`, userData, {
                 withCredentials: true,
                 credintials: 'include',
             })
             .then((response) => {
                 console.log('Response from server:', response.data)
-                navigate('/patient')
+                navigate(`/${userData.role}`)
             })
             .catch((error) => {
                 console.error('Error:', error)
@@ -53,7 +53,7 @@ const Login = () => {
             <Form.Item
                 label='Role'
                 name='role'
-                initialValue={patientData.role}
+                initialValue={userData.role}
                 rules={[
                     {
                         required: true,
@@ -68,8 +68,8 @@ const Login = () => {
                             width: 120,
                         }}
                         onChange={(value) => {
-                            setPatientData({
-                                ...patientData,
+                            setUserData({
+                                ...userData,
                                 role: value,
                             })
                         }}
@@ -101,12 +101,12 @@ const Login = () => {
                 ]}>
                 <Input
                     onChange={(e) => {
-                        setPatientData({
-                            ...patientData,
+                        setUserData({
+                            ...userData,
                             username: e.target.value,
                         })
                     }}
-                    value={patientData.username}
+                    value={userData.username}
                     placeholder='Username'
                 />
             </Form.Item>
@@ -122,12 +122,12 @@ const Login = () => {
                 ]}>
                 <Input.Password
                     onChange={(e) => {
-                        setPatientData({
-                            ...patientData,
+                        setUserData({
+                            ...userData,
                             password: e.target.value,
                         })
                     }}
-                    value={patientData.password}
+                    value={userData.password}
                     placeholder='Password'
                 />
             </Form.Item>
@@ -141,8 +141,8 @@ const Login = () => {
                 }}>
                 <Checkbox
                     onChange={(e) => {
-                        setPatientData({
-                            ...patientData,
+                        setUserData({
+                            ...userData,
                             remember: e.target.checked,
                         })
                     }}>

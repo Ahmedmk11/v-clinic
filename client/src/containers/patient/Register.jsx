@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 function PatientRegistration() {
-
-    const [message, setMessage] = useState(null);
+    const [message, setMessage] = useState(null)
     const [formData, setFormData] = useState({
         username: '',
         name: '',
@@ -15,30 +14,32 @@ function PatientRegistration() {
         emergencyPhoneNumber: '',
         package: '',
         health_records: '',
-    });
-
+    })
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
-        }));
-    };
+        }))
+    }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
         try {
-            const response = await fetch('http://localhost:3000/api/patient/create-patient', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-            const data = await response.json();
-            if(response.ok) {
-                setMessage('Registration Successful');
+            const response = await fetch(
+                'http://localhost:3000/api/patient/create-patient',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                }
+            )
+            const data = await response.json()
+            if (response.ok) {
+                setMessage('Registration Successful')
                 setFormData({
                     username: '',
                     name: '',
@@ -51,14 +52,14 @@ function PatientRegistration() {
                     emergencyPhoneNumber: '',
                     package: '',
                     health_records: '',
-                });
+                })
             } else {
-                setMessage(data.message);
+                setMessage(data.message)
             }
         } catch (error) {
-            setMessage(error.message);
+            setMessage(error.message)
         }
-    };
+    }
 
     return (
         <>
@@ -66,8 +67,8 @@ function PatientRegistration() {
                 <label>
                     Username:
                     <input
-                        type="text"
-                        name="username"
+                        type='text'
+                        name='username'
                         value={formData.username}
                         onChange={handleInputChange}
                     />
@@ -76,8 +77,8 @@ function PatientRegistration() {
                 <label>
                     Name:
                     <input
-                        type="text"
-                        name="name"
+                        type='text'
+                        name='name'
                         value={formData.name}
                         onChange={handleInputChange}
                     />
@@ -86,8 +87,8 @@ function PatientRegistration() {
                 <label>
                     Email:
                     <input
-                        type="email"
-                        name="email"
+                        type='email'
+                        name='email'
                         value={formData.email}
                         onChange={handleInputChange}
                     />
@@ -96,8 +97,8 @@ function PatientRegistration() {
                 <label>
                     Password:
                     <input
-                        type="password"
-                        name="password"
+                        type='password'
+                        name='password'
                         value={formData.password}
                         onChange={handleInputChange}
                     />
@@ -106,8 +107,8 @@ function PatientRegistration() {
                 <label>
                     Date of Birth:
                     <input
-                        type="date"
-                        name="birthdate"
+                        type='date'
+                        name='birthdate'
                         value={formData.birthdate}
                         onChange={handleInputChange}
                     />
@@ -115,18 +116,21 @@ function PatientRegistration() {
                 <br />
                 <label>
                     Gender:
-                    <select name="gender" value={formData.gender} onChange={handleInputChange}>
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                    <select
+                        name='gender'
+                        value={formData.gender}
+                        onChange={handleInputChange}>
+                        <option value=''>Select Gender</option>
+                        <option value='male'>Male</option>
+                        <option value='female'>Female</option>
                     </select>
                 </label>
                 <br />
                 <label>
                     Phone Number:
                     <input
-                        type="tel"
-                        name="phoneNumber"
+                        type='tel'
+                        name='phoneNumber'
                         value={formData.phoneNumber}
                         onChange={handleInputChange}
                     />
@@ -135,8 +139,8 @@ function PatientRegistration() {
                 <label>
                     Emergency Contact Name:
                     <input
-                        type="text"
-                        name="emergencyName"
+                        type='text'
+                        name='emergencyName'
                         value={formData.emergencyName}
                         onChange={handleInputChange}
                     />
@@ -145,20 +149,20 @@ function PatientRegistration() {
                 <label>
                     Emergency Contact Phone Number:
                     <input
-                        type="text"
-                        name="emergencyPhoneNumber"
+                        type='text'
+                        name='emergencyPhoneNumber'
                         value={formData.emergencyPhoneNumber}
                         onChange={handleInputChange}
                     />
                 </label>
                 <br />
-                <button type="submit">Register</button>
+                <button type='submit'>Register</button>
                 {message && <p>{message}</p>}
             </form>
 
-            <a href="/register/doctor">Want to register as a Doctor ?</a>
+            <a href='/register/doctor'>Want to register as a Doctor ?</a>
         </>
-    );
+    )
 }
 
-export default PatientRegistration;
+export default PatientRegistration

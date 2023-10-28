@@ -1,42 +1,62 @@
 import { createContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom' // Import useLocation
 import axios from 'axios'
+
 const CurrUserContext = createContext()
+
 const Provider = ({ children }) => {
-    const [userType, setUserType] = useState(
-        window.location.pathname.split('/')[1]
-    )
+    const [userID, setUserID] = useState(null)
     const [currUser, setCurrUser] = useState(null)
+    const [role, setRole] = useState(null)
 
-    // const patientUrl = `http://localhost:3000/api/patient/get-patient-by-id/652185cdf27b074cbbae82bc`
-    const patientUrl = 'http://localhost:3000/api/auth/get-curr-user'
-
-    const drUrl =
-        'http://localhost:3000/api/doctor/get-doctor/65219089f27b074cbbae82c0'
-
-    const url =
-        userType === 'patient'
-            ? patientUrl
-            : userType === 'doctor'
-            ? drUrl
-            : null
+    const location = useLocation()
 
     useEffect(() => {
-        if (!url) return
         axios
-            .get(url, { withCredentials: true })
+            .get('http://localhost:3000/api/auth/get-curr-user', {
+                withCredentials: true,
+            })
             .then((res) => {
                 console.log('res.data:', res.data)
-                setCurrUser(res.data.userId)
+                setUserID(res.data.userId)
+                setRole(res.data.role)
             })
             .catch((err) => console.log(err))
-    }, [userType])
+    }, [location])
+
+    useEffect(() => {
+        if (userID) {
+            let url = `http://localhost:3000/api/${role}/`
+            if (role === 'patient') {
+                url += 'get-patient-by-id/'
+            } else if (role === 'doctor') {
+                url += 'get-doctor/'
+            } else if (role === 'admin') {
+                url += 'get-admin/'
+            }
+            url += userID
+
+            if (role === 'admin') {
+                url += '/admin'
+            }
+
+            axios
+                .get(url, { withCredentials: true })
+                .then((res) => {
+                    console.log('res.data:', res.data)
+                    setCurrUser(res.data)
+                })
+                .catch((err) => console.log(err))
+        }
+    }, [userID])
 
     return (
         <CurrUserContext.Provider
-            value={{ currUser, setCurrUser, setUserType, userType }}>
+            value={{ currUser, setCurrUser, setRole, role }}>
             {children}
         </CurrUserContext.Provider>
     )
 }
+
 export { Provider }
 export default CurrUserContext

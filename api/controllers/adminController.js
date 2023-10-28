@@ -8,17 +8,26 @@ import PatientModel from '../models/patientModel.js'
 
 /* -----------------admin funcs------------------------ */
 const addAdmin = async (req, res) => {
-    const fetchedAdmin = await adminModel.find()
-    for (let i = 0; i < fetchedAdmin.length; i++)
-        if (fetchedAdmin.at(i).username === req.body.Username) {
-            res.status(500).send({ message: 'this username is in use' })
-            return
+    try {
+        const existingAdmin = await adminModel.findOne({
+            username: req.body.Username,
+        })
+
+        if (existingAdmin) {
+            return res
+                .status(400)
+                .json({ message: 'Username is already in use' })
         }
-    const newAdmin = new adminModel(req.body)
-    newAdmin
-        .save()
-        .then((result) => res.status(200).send(result))
-        .catch((err) => res.status(500).send(err))
+
+        const newAdmin = new adminModel({
+            username: req.body.Username,
+            password: req.body.Password,
+        })
+        const result = await newAdmin.save()
+        return res.status(201).json(result)
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error' })
+    }
 }
 
 const getAllAdmins = async (req, res) => {
@@ -182,11 +191,9 @@ const updatePackage = async (req, res) => {
             familySubsDiscount < 101
         )
     )
-        return res
-            .status(400)
-            .send({
-                error: 'invalid request, all discounts must be less than 100',
-            })
+        return res.status(400).send({
+            error: 'invalid request, all discounts must be less than 100',
+        })
     try {
         const ret = await packageModel.findByIdAndUpdate(
             id,

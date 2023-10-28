@@ -169,12 +169,6 @@ const PatientHome = () => {
     useEffect(() => {
         if (currUser) {
             axios
-                .post(
-                    `http://localhost:3000/api/patient/add-package-test/${currUser._id}`
-                )
-                .then((res) => {})
-                .catch((err) => console.log(err))
-            axios
                 .get(
                     `http://localhost:3000/api/patient/get-patient-package/${currUser._id}`
                 )

@@ -1,23 +1,28 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './css/addAdminForm.css'
 
 const addAdminForm = () => {
     const [Username, setUsername] = useState('')
     const [Password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [name, setName] = useState('')
+
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+
+    useEffect(() => {
+        console.log('Username:', Username)
+        console.log('Password:', Password)
+    }, [Username, Password])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post(
-                'http://localhost:3000/api/admin/addAdmin',
-                {
-                    Username,
-                    Password,
-                }
-            )
+            await axios.post('http://localhost:3000/api/admin/addAdmin', {
+                Username,
+                Password,
+            })
             setSuccess('User added succesfully')
             setError(null)
             console.log(success)
@@ -33,7 +38,7 @@ const addAdminForm = () => {
     return (
         <div className='page'>
             <div className='primary-container'>
-                    <h2>Add a new Admin</h2>
+                <h2>Add a new Admin</h2>
                 <form className='adminForm' onSubmit={handleSubmit}>
                     <label>
                         <strong>Username:</strong>

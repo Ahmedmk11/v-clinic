@@ -29,9 +29,8 @@ import AdminPackageInfo from './containers/admin/AdminPackageInfo'
 import AdminDoctorInfo from './containers/admin/AdminDoctorInfo'
 import ViewRequests from './containers/admin/ViewRequests'
 import ViewPackages from './containers/admin/ViewPackages'
-import NotFound , { Redirect } from './containers/general/NotFound/NotFound'
+import NotFound, { Redirect } from './containers/general/NotFound/NotFound'
 import UploadDocs from './containers/doctor/UploadDocs'
-
 
 const RouteSwitch = () => {
     const location = useLocation()
@@ -57,7 +56,7 @@ const RouteSwitch = () => {
 
             <Route path='/patient' element={<PatientMain />}>
                 <Route index element={<PatientHome />} />
-                <Route path='profile/:id' element={<PatientProfile />} />
+                <Route path='profile' element={<PatientProfile />} />
                 <Route path='appointments' element={<PatientAppointments />} />
                 <Route path='doctor-info/:id' element={<DoctorInfo />} />
                 <Route
@@ -83,7 +82,7 @@ const RouteSwitch = () => {
                 <Route path='package/:id' element={<AdminPackageInfo />} />
                 <Route path='doctor/:id' element={<AdminDoctorInfo />} />
                 <Route path='view-requests' element={<ViewRequests />} />
-                <Route path='view-packages' element={<ViewPackages />} /> 
+                <Route path='view-packages' element={<ViewPackages />} />
                 <Route path='*' element={<Redirect />} />
             </Route>
 

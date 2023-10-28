@@ -16,7 +16,7 @@ const Header = () => {
     const [theme, setTheme] = useState(
         document.body.classList.contains('light-mode') ? 'light' : 'dark'
     )
-    const { currUser,userType } = useContext(CurrUser)
+    const { currUser, userType } = useContext(CurrUser)
 
     const handleTheme = () => {
         if (document.body.classList.contains('light-mode')) {
@@ -52,7 +52,7 @@ const Header = () => {
                 </ConditionalRender>
                 <Avatar
                     onClick={() => {
-                        navigate(`profile/${currUser?._id}`)
+                        navigate(`profile`)
                     }}>
                     {currUser?.name?.charAt(0) ?? <UserOutlined />}
                 </Avatar>
