@@ -8,6 +8,7 @@
     margin: 2%;
     font-size: 1.1rem;
     flex-wrap: wrap;
+
     & h2 {
         font-size: 24px;
         margin-bottom: 0px;
@@ -16,6 +17,7 @@
     & p {
         margin: 0px;
     }
+
     & img {
         margin-right: 20px;
         box-shadow:
@@ -34,12 +36,12 @@
     font-size: 1.1rem;
 
     & .button {
-        margin: 10px 0px;
+        margin: 10px 5px;
         font-size: 1rem;
     }
 
     & input[type='text'],
-     input[type='email'] {
+    input[type='email'] {
         width: 100%;
         padding: 4px;
         font-size: 1.1rem;
@@ -53,7 +55,7 @@
         padding: 4px;
         border: 1px solid #ccc;
         border-radius: 4px;
-        
+
     }
 }
 
@@ -96,7 +98,7 @@ span.Rejected {
     padding: 10px;
 }
 
-.cancel-button{
+.cancel-button {
     background-color: var(--complementary-gray);
 
     &:hover {
@@ -108,10 +110,9 @@ span.Rejected {
     }
 }
 
-.message.canceled{
+.message.canceled {
     opacity: 1;
     background-color: var(--complementary-gray);
     color: #ffffff;
     border: 1px solid var(--complementary-gray);
 }
-

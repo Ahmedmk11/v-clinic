@@ -47,7 +47,7 @@ const RouteSwitch = () => {
             <Route path='/register-doctor' element={<DoctorRegistration />} />
             <Route path='/doctor' element={<DoctorMain />}>
                 <Route index element={<DoctorHome />} />
-                <Route path='profile/:id' element={<DoctorProfile />} />
+                <Route path='profile' element={<DoctorProfile />} />
                 <Route path='patients' element={<ViewPatients />} />
                 <Route path='patient/info/:id' element={<PatientInfo />} />
                 <Route path='appointments' element={<DoctorAppointments />} />
@@ -71,7 +71,7 @@ const RouteSwitch = () => {
 
             <Route path='/admin' element={<AdminMain />}>
                 <Route index element={<AdminHome />} />
-                <Route path='profile/:id' element={<AdminProfile />} />
+                <Route path='profile' element={<AdminProfile />} />
                 <Route path='view-doctors' element={<AdminViewDoctors />} />
                 <Route path='view-patients' element={<AdminViewPatients />} />
                 <Route path='view-admins' element={<ViewAdmins />} />

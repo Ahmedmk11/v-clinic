@@ -1,22 +1,67 @@
 import './header.css'
 import { React, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Avatar } from 'antd'
+import { Button, Avatar, Dropdown, Space, message } from 'antd'
 import { useContext } from 'react'
 import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
-import { UserOutlined, WalletOutlined } from '@ant-design/icons'
+import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+import axios from 'axios'
 
 const SunIcon = () => <img style={{ width: 20, height: 20 }} src={sunIcn} />
 const MoonIcon = () => <img style={{ width: 20, height: 20 }} src={moonIcn} />
+
 const Header = () => {
     const navigate = useNavigate()
     const [theme, setTheme] = useState(
         document.body.classList.contains('light-mode') ? 'light' : 'dark'
     )
     const { currUser, role } = useContext(CurrUser)
+
+    const items = [
+        {
+            key: '1',
+            label: (
+                <a
+                    onClick={() => {
+                        navigate(`profile`)
+                    }}>
+                    View Profile
+                </a>
+            ),
+            icon: <UserOutlined />,
+        },
+        {
+            key: '2',
+            label: (
+                <a
+                    onClick={() => {
+                        axios
+                            .post(
+                                'http://localhost:3000/api/auth/logout',
+                                {},
+                                {
+                                    withCredentials: true,
+                                }
+                            )
+                            .then(() => {
+                                message.success('Logged out successfully')
+                                navigate('/')
+                            })
+                            .catch((err) => {
+                                message.error('Error logging out')
+                                console.log(err)
+                            })
+                    }}>
+                    Logout
+                </a>
+            ),
+            icon: <LogoutOutlined />,
+            danger: true,
+        },
+    ]
 
     const handleTheme = () => {
         if (document.body.classList.contains('light-mode')) {
@@ -50,12 +95,20 @@ const Header = () => {
                     <WalletOutlined className='ant-wallet' />
                     <span>{currUser?.wallet} EGP</span>
                 </ConditionalRender>
-                <Avatar
-                    onClick={() => {
-                        navigate(`profile`)
+                <Dropdown
+                    menu={{
+                        items,
                     }}>
-                    {currUser?.name?.charAt(0) ?? <UserOutlined />}
-                </Avatar>
+                    <a onClick={(e) => e.preventDefault()}>
+                        <Space>
+                            <Avatar>
+                                {currUser?.name?.charAt(0).toUpperCase() ?? (
+                                    <UserOutlined />
+                                )}
+                            </Avatar>
+                        </Space>
+                    </a>
+                </Dropdown>
             </div>
         </header>
     )

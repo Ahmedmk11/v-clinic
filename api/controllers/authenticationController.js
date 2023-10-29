@@ -59,7 +59,7 @@ async function login(req, res) {
     }
 }
 
-function getCurrUser(req, res) {
+async function getCurrUser(req, res) {
     console.log('reqreq', req.cookies)
     const token = req.cookies.token
 
@@ -77,4 +77,40 @@ function getCurrUser(req, res) {
     }
 }
 
-export { login, getCurrUser }
+async function logout(req, res) {
+    res.clearCookie('token')
+    res.status(200).json({ message: 'Logged out' })
+}
+
+async function changePassword(req, res) {
+    const id = req.body.id
+    const role = req.body.role
+    const oldPassword = req.body.oldPassword
+    const newPassword = req.body.newPassword
+
+    console.log('id', id)
+    console.log('role', role)
+    console.log('oldPassword', oldPassword)
+    console.log('newPassword', newPassword)
+
+    const user =
+        role === 'patient'
+            ? await PatientModel.findById(id)
+            : role === 'doctor'
+            ? await DoctorModel.findById(id)
+            : await adminModel.findById(id)
+
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' })
+    }
+    const isMatch = await user.comparePassword(oldPassword, user.password)
+    if (!isMatch) {
+        return res.status(404).json({ message: 'Invalid password' })
+    }
+
+    user.password = newPassword
+    await user.save()
+    return res.status(200).json({ message: 'Password changed' })
+}
+
+export { login, logout, getCurrUser, changePassword }
