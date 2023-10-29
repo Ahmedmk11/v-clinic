@@ -154,7 +154,7 @@ const Login = () => {
                 <Button
                     type='link'
                     onClick={() => {
-                        navigate('/forgot-password') // implement later
+                        navigate('/forgot-password')
                     }}>
                     Forgot password..?
                 </Button>

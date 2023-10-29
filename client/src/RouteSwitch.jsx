@@ -32,6 +32,7 @@ import ViewRequests from './pages/admin/ViewRequests'
 import ViewPackages from './pages/admin/ViewPackages'
 import NotFound from './pages/general/NotFound/NotFound'
 import UploadDocs from './pages/doctor/UploadDocs'
+import ForgotPassword from './pages/general/ForgotPassword/ForgotPassword'
 
 const RouteSwitch = () => {
     const location = useLocation()
@@ -45,6 +46,9 @@ const RouteSwitch = () => {
             <Route path='/' element={<Login />} />
             <Route path='/register' element={<PatientRegistration />} />
             <Route path='/register-doctor' element={<DoctorRegistration />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='*' element={<NotFound />} />
+
             <Route path='/doctor' element={<DoctorMain />}>
                 <Route index element={<DoctorHome />} />
                 <Route path='profile' element={<DoctorProfile />} />
@@ -83,8 +87,6 @@ const RouteSwitch = () => {
                 <Route path='view-requests' element={<ViewRequests />} />
                 <Route path='view-packages' element={<ViewPackages />} />
             </Route>
-
-            <Route path='*' element={<NotFound />} />
         </Routes>
     )
 }
