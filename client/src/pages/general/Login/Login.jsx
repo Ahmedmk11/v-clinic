@@ -21,6 +21,7 @@ const Login = () => {
             })
             .then((response) => {
                 console.log('Response from server:', response.data)
+                message.success('Logged in successfully')
                 navigate(`/${userData.role}`)
             })
             .catch((error) => {
@@ -168,6 +169,23 @@ const Login = () => {
                 <Button type='primary' htmlType='submit'>
                     Login
                 </Button>
+            </Form.Item>
+
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}>
+                <p style={{ marginRight: 0 }}>
+                    Dont have an account?
+                    <Button
+                        type='link'
+                        onClick={() => {
+                            navigate('/register')
+                        }}>
+                        Register
+                    </Button>
+                </p>
             </Form.Item>
         </Form>
     )

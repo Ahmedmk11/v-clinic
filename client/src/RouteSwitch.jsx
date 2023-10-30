@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import axios from 'axios'
 
 import Login from './pages/general/Login/Login'
 import PatientRegistration from './pages/patient/Register'
@@ -33,23 +34,65 @@ import ViewPackages from './pages/admin/ViewPackages'
 import NotFound from './pages/general/NotFound/NotFound'
 import UploadDocs from './pages/doctor/UploadDocs'
 import ForgotPassword from './pages/general/ForgotPassword/ForgotPassword'
+import ForbiddenAccess from './pages/general/ForbiddenAccess/ForbiddenAccess'
+
+import { LoginGuard, PatientGuard, DoctorGuard, AdminGuard } from './AuthGuard'
 
 const RouteSwitch = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(null)
+    const [role, setRole] = useState('')
     const location = useLocation()
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+        axios
+            .get('http://localhost:3000/api/auth/get-curr-user', {
+                withCredentials: true,
+            })
+            .then((res) => {
+                if (res.data.role) {
+                    setIsAuthenticated(true)
+                    setRole(res.data.role)
+                } else {
+                    setIsAuthenticated(false)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                setIsAuthenticated(false)
+            })
     }, [location])
 
     return (
         <Routes>
-            <Route path='/' element={<Login />} />
+            <Route
+                path='/'
+                element={
+                    <LoginGuard isAuthenticated={isAuthenticated} role={role}>
+                        <Login />
+                    </LoginGuard>
+                }
+            />
+            <Route
+                path='/login'
+                element={
+                    <LoginGuard isAuthenticated={isAuthenticated} role={role}>
+                        <Login />
+                    </LoginGuard>
+                }
+            />
             <Route path='/register' element={<PatientRegistration />} />
             <Route path='/register-doctor' element={<DoctorRegistration />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/forbidden-access' element={<ForbiddenAccess />} />
             <Route path='*' element={<NotFound />} />
 
-            <Route path='/doctor' element={<DoctorMain />}>
+            <Route
+                path='/doctor'
+                element={
+                    <DoctorGuard isAuthenticated={isAuthenticated} role={role}>
+                        <DoctorMain />
+                    </DoctorGuard>
+                }>
                 <Route index element={<DoctorHome />} />
                 <Route path='profile' element={<DoctorProfile />} />
                 <Route path='patients' element={<ViewPatients />} />
@@ -58,7 +101,13 @@ const RouteSwitch = () => {
                 <Route path='uploadDocuments' element={<UploadDocs />} />
             </Route>
 
-            <Route path='/patient' element={<PatientMain />}>
+            <Route
+                path='/patient'
+                element={
+                    <PatientGuard isAuthenticated={isAuthenticated} role={role}>
+                        <PatientMain />
+                    </PatientGuard>
+                }>
                 <Route index element={<PatientHome />} />
                 <Route path='profile' element={<PatientProfile />} />
                 <Route path='appointments' element={<PatientAppointments />} />
@@ -73,7 +122,13 @@ const RouteSwitch = () => {
                 />
             </Route>
 
-            <Route path='/admin' element={<AdminMain />}>
+            <Route
+                path='/admin'
+                element={
+                    <AdminGuard isAuthenticated={isAuthenticated} role={role}>
+                        <AdminMain />
+                    </AdminGuard>
+                }>
                 <Route index element={<AdminHome />} />
                 <Route path='profile' element={<AdminProfile />} />
                 <Route path='view-doctors' element={<AdminViewDoctors />} />

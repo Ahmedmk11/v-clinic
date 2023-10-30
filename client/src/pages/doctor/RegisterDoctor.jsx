@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { Button } from 'antd'
+
+import { useNavigate } from 'react-router-dom'
 
 function DoctorRegistration() {
     const [message, setMessage] = useState(null)
@@ -14,6 +17,8 @@ function DoctorRegistration() {
         status: '',
         speciality: '',
     })
+
+    const navigate = useNavigate()
 
     const handleInputChange = (event) => {
         const { name, value } = event.target
@@ -155,6 +160,14 @@ function DoctorRegistration() {
                 <button type='submit'>Register</button>
                 {message && <p>{message}</p>}
             </form>
+
+            <Button
+                type='link'
+                onClick={() => {
+                    navigate('/register')
+                }}>
+                Want to register as a Patient?
+            </Button>
         </>
     )
 }
