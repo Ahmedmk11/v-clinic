@@ -8,7 +8,7 @@ import {
     ScheduleOutlined,
 } from '@ant-design/icons'
 import './medicalHistory.css'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 
 const MedicalHistory = ({ medicalHistory }) => {
     return (

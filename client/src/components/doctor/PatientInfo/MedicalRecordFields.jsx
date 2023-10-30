@@ -1,5 +1,5 @@
 import { Form, Input, DatePicker, Select } from 'antd'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import {
     medicationOptions,
     conditionsOptions,
@@ -149,9 +149,13 @@ const MedicalRecordFields = ({ medicalRecordType }) => {
                         },
                     ]}>
                     <Select placeholder='Select Aspect'>
-                        <Option  value='smoking'>Smoking</Option>
-                        <Option value='alcoholConsumption'>Alcohol Consumption</Option>
-                        <Option value='exerciseFrequency'>Exercise Frequency</Option>
+                        <Option value='smoking'>Smoking</Option>
+                        <Option value='alcoholConsumption'>
+                            Alcohol Consumption
+                        </Option>
+                        <Option value='exerciseFrequency'>
+                            Exercise Frequency
+                        </Option>
                         <Option value='diet'>Diet</Option>
                     </Select>
                 </Form.Item>

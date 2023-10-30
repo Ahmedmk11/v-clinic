@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Form, Select, Button, message } from 'antd'
-import ConditionalRender from '../../reusable/ConditionalRender'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import medicalRecordOptions from '../../../utils/medicalRecordOptions'
 import MedicalRecordFields from './MedicalRecordFields'
 import axios from 'axios'
@@ -26,7 +26,7 @@ const AddMedicalRecord = ({
     }
 
     const handleCreate = async () => {
-        let newMedicalHistory =SelectedPatient?.medicalHistory[0]
+        let newMedicalHistory = SelectedPatient?.medicalHistory[0]
         try {
             const values = await form.validateFields()
             switch (recordType) {
@@ -49,33 +49,44 @@ const AddMedicalRecord = ({
                             values.conditionName
                         )
                     break
-                case 'lifestyle':{
-                    let lifestyle = { ...newMedicalHistory?.lifestyle }
-                    lifestyle = {
-                        ...lifestyle,
-                        [values.aspect]: values.note,
+                case 'lifestyle':
+                    {
+                        let lifestyle = { ...newMedicalHistory?.lifestyle }
+                        lifestyle = {
+                            ...lifestyle,
+                            [values.aspect]: values.note,
+                        }
+                        newMedicalHistory = { ...newMedicalHistory, lifestyle }
                     }
-                    newMedicalHistory = { ...newMedicalHistory, lifestyle }
-                }
                     break
             }
             console.log(values)
-        updatePatient(newMedicalHistory)
+            updatePatient(newMedicalHistory)
         } catch (error) {
             console.log('Validation failed:', error)
         }
     }
 
     const updatePatient = (newMedicalHistory) => {
-        axios.put(`http://localhost:3000/api/patient/update-medical-history/${SelectedPatient?._id}`, {
-            medicalHistory: newMedicalHistory
-        }).then((res) => {
-            setSelectedPatient({...SelectedPatient, medicalHistory: [res.data]})
-            handleCancel()
-            message.success('Medical Record Added')
-        }).catch((err) => {console.log(err);
-            message.error('Error Adding Medical Record')}
-        )
+        axios
+            .put(
+                `http://localhost:3000/api/patient/update-medical-history/${SelectedPatient?._id}`,
+                {
+                    medicalHistory: newMedicalHistory,
+                }
+            )
+            .then((res) => {
+                setSelectedPatient({
+                    ...SelectedPatient,
+                    medicalHistory: [res.data],
+                })
+                handleCancel()
+                message.success('Medical Record Added')
+            })
+            .catch((err) => {
+                console.log(err)
+                message.error('Error Adding Medical Record')
+            })
     }
 
     const renderOptions = () => {
@@ -88,10 +99,13 @@ const AddMedicalRecord = ({
 
     const Page2Buttons = () => (
         <>
-            <Button key="back-button" id='cancel-button' onClick={() => setPage(1)}>
+            <Button
+                key='back-button'
+                id='cancel-button'
+                onClick={() => setPage(1)}>
                 Back
             </Button>
-            <Button key="add-button" id='green-button' onClick={handleCreate}>
+            <Button key='add-button' id='green-button' onClick={handleCreate}>
                 Add
             </Button>
         </>
@@ -106,11 +120,14 @@ const AddMedicalRecord = ({
                 <ConditionalRender
                     condition={page === 1}
                     elseComponent={<Page2Buttons />}>
-                    <Button  key="cancel-button" id='cancel-button' onClick={handleCancel}>
+                    <Button
+                        key='cancel-button'
+                        id='cancel-button'
+                        onClick={handleCancel}>
                         Cancel
                     </Button>
                     <Button
-                     key="next-button0"
+                        key='next-button0'
                         id='green-button'
                         onClick={() =>
                             form.validateFields().then(() => setPage(2))
