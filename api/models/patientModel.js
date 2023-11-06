@@ -50,7 +50,7 @@ const patientModel = new mongoose.Schema(
             validate: [
                 {
                     validator: function (value) {
-                        return /^[A-Za-z0-9]{8,}$/.test(value)
+                        return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(value)
                     },
                     message:
                         'Password must be at least 8 characters long and contain at least one letter.',
@@ -115,7 +115,8 @@ const patientModel = new mongoose.Schema(
             ref: 'Package',
         },
         health_records: {
-            type: String,
+            type: [String],
+            default: [],
         },
     },
     {

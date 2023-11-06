@@ -24,13 +24,13 @@ const UploadDocs = () => {
         axios
             .post('http://localhost:3000/api/doctor/upload', formData)
             .then((res) => {
-                console.log(res),
-                    setDoctor({
-                        ...Doctor,
-                        uploaded_documents: res.data.uploaded_documents,
-                    }),
-                    setFileList([]),
-                    message.success('Documents Uploaded Successfully')
+                console.log(res)
+                setDoctor({
+                    ...Doctor,
+                    uploaded_documents: res.data.uploaded_documents,
+                })
+                setFileList([])
+                message.success('Documents Uploaded Successfully')
             })
             .catch((err) => {
                 console.log(err), message.error('Failed to upload documents')

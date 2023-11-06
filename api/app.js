@@ -49,7 +49,8 @@ app.use('/api/auth', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
-app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads'))
+app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads')) //move to doctorRoutes
+app.use('/api/uploads/patientUploads', express.static('uploads/patientUploads')) //move to patientRoutes
 
 // --------------------------------------------------
 // Server

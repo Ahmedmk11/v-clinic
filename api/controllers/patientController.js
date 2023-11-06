@@ -3,6 +3,23 @@ import AppointmentModel from '../models/appointmentsModel.js'
 import FamilyMemberModel from '../models/familyMemberModel.js'
 import PrescriptionModel from '../models/prescriptionsModel.js'
 import MedicalHistoryModel from '../models/medicalHistoryModel.js'
+import multer from 'multer'
+import crypto from 'crypto'
+// --------------------------------------------------
+// Multer
+// --------------------------------------------------
+const patientStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads/patientUploads')
+    },
+    filename: (req, file, cb) => {
+        const fileName = crypto.randomBytes(16).toString('hex')
+        const extension = file.mimetype.split('/')[1]
+        cb(null, `${fileName}.${extension}`)
+    },
+})
+
+const patientUpload = multer({ storage: patientStorage })
 
 async function createPatient(req, res) {
     try {
@@ -270,6 +287,33 @@ const addAppointment = async (req, res) => {
     }
 }
 
+const savePatientfiles = patientUpload.array('files')
+
+const uploadPatientFiles = async (req, res) => {
+    try {
+        const { id } = req.body
+        const files = req.files
+        if (!files?.length)
+            return res.status(400).json({ message: 'No files uploaded' })
+        const patient = await PatientModel.findById(id)
+        if (patient) {
+            const newFilePaths = files.map((file) => file.path)
+            patient.health_records = [
+                ...patient.health_records,
+                ...newFilePaths,
+            ]
+            await patient.save()
+            res.status(201).json({
+                message: 'Files uploaded successfully',
+                UploadedMedicalRecords: patient.health_records,
+            })
+        } else res.status(404).json({ message: 'Patient not found' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -283,5 +327,7 @@ export {
     testingAddPackage,
     addMedicalHistory,
     updateMedicalHistory,
-    addAppointment
+    addAppointment,
+    savePatientfiles,
+    uploadPatientFiles,
 }

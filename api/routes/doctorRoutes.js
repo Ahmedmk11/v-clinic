@@ -9,7 +9,7 @@ import {
     getActiveDoctors,
     saveDoctorfiles,
     uploadDoctorFiles,
-    updateContract
+    updateContract,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
