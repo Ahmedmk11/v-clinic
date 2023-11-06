@@ -82,7 +82,7 @@ h1 {
 #cancel-button:focus {
     color: black;
     border-color: #ccc;
-}
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;}
 
 input:focus {
     outline: var(--main-green) auto 1px;

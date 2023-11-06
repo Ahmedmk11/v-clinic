@@ -12,7 +12,8 @@ import {
     getPatientDiscount,
     testingAddPackage,
     addMedicalHistory,
-    updateMedicalHistory
+    updateMedicalHistory,
+    addAppointment
 } from '../controllers/patientController.js'
 
 const router = express.Router()
@@ -29,5 +30,6 @@ router.get('/get-patient-family-members/:id', getFamilyMembers)
 router.get('/get-patient-package/:id', getPatientDiscount)
 router.post('/add-medical-history', addMedicalHistory)
 router.put('/update-medical-history/:id', updateMedicalHistory)
+router.post('/add-appointment', addAppointment)
 
 export default router

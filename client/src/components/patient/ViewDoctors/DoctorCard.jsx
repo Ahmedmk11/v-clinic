@@ -19,7 +19,7 @@ const DoctorCard = ({ doctor, discount }) => {
             </p>
             <p>
                 <strong>Session Price: </strong>
-                {((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
+                {((doctor?.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
                     0
                 )}{' '}
                 EGP

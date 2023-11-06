@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import './css/patientInfo.css'
 import PastPrescriptions from '../../components/doctor/PatientInfo/PastPrescriptions'
@@ -7,11 +7,16 @@ import PatientInfoCard from '../../components/doctor/PatientInfo/PatientInfoCard
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
 import axios from 'axios'
 import AddMedicalRecord from '../../components/doctor/PatientInfo/AddMedicalRecord'
+import CreateFollowUp from '../../components/doctor/PatientInfo/CreateFollowUp'
+import CurrUserContext from '../../contexts/CurrUser'
+import { message } from 'antd'
 const PatientInfo = () => {
     const { id } = useParams()
     const [SelectedPatient, setSelectedPatient] = useState(null)
     const [addMedicalRecordVisible, setAddMedicalRecordVisible] =
         useState(false)
+    const [followUpVisible, setFollowUpVisible] = useState(false)
+    const { currUser: Doctor } = useContext(CurrUserContext)
     useEffect(() => {
         axios
             .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
@@ -30,7 +35,11 @@ const PatientInfo = () => {
                         Add Medical Records
                     </button>
                 </div>
-                <ConditionalRender condition={SelectedPatient?.medicalHistory[0]} elseComponent={<p style={{marginTop:0}}>No medical records</p>}>
+                <ConditionalRender
+                    condition={SelectedPatient?.medicalHistory[0]}
+                    elseComponent={
+                        <p style={{ marginTop: 0 }}>No medical records</p>
+                    }>
                     <MedicalHistory
                         medicalHistory={SelectedPatient?.medicalHistory[0]}
                     />
@@ -61,16 +70,45 @@ const PatientInfo = () => {
             </div>
         )
     }
+    const handleCreateFollowUp = (values) => {
+        console.log(values)
+        axios
+            .post('http://localhost:3000/api/patient/add-appointment', {
+                ...values,
+                patient_id: id,
+                doctor_id: Doctor._id,
+            })
+            .then((res) => {
+                if (res.data) {
+                    message.success('Follow up scheduled successfully!')
+                    setFollowUpVisible(false)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                message.error('Failed to schedule follow up')
+            })
+    }
 
     return (
         <div className='page'>
             <div className='primary-container'>
                 <h2>Selected Patient</h2>
-                <div className='patient-name'>
+                <div className='patient-name followup'>
                     <h2>
                         {SelectedPatient?.name}
                         's Information
                     </h2>
+                    <button
+                        className='button'
+                        onClick={() => setFollowUpVisible(true)}>
+                        Schedule Follow Up
+                    </button>
+                    <CreateFollowUp
+                        visible={followUpVisible}
+                        onCreate={handleCreateFollowUp}
+                        onCancel={() => setFollowUpVisible(false)}
+                    />
                 </div>
                 <PatientInfoCard SelectedPatient={SelectedPatient} />
                 <MedHistory />

@@ -7,6 +7,18 @@
     font-size: 1.1rem;
 }
 
+.patient-name.followup{
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    border-left: 5px solid var(--main-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & .button{
+        font-size: 1.1rem;
+    }
+}
+
 .patient-name h2 {
     font-size: 24px; 
 }

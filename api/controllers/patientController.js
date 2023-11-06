@@ -224,7 +224,7 @@ async function testingAddPackage(req, res) {
 //@route POST /api/patients/add-medical-history
 const addMedicalHistory = async (req, res) => {
     try {
-        const {medicalHistory} = req.body
+        const { medicalHistory } = req.body
         console.log(medicalHistory)
         const newMedicalHistory = new MedicalHistoryModel(medicalHistory)
 
@@ -241,7 +241,7 @@ const addMedicalHistory = async (req, res) => {
 const updateMedicalHistory = async (req, res) => {
     try {
         const { id } = req.params
-        const {medicalHistory} = req.body
+        const { medicalHistory } = req.body
 
         const updatedMedicalHistory =
             await MedicalHistoryModel.findOneAndUpdate(
@@ -249,10 +249,21 @@ const updateMedicalHistory = async (req, res) => {
                 medicalHistory,
                 { new: true }
             )
-                
-        console.log(updatedMedicalHistory)    
 
         res.status(201).json(updatedMedicalHistory)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+//@desc add appointment to patient
+//@route POST /api/patients/add-appointment
+const addAppointment = async (req, res) => {
+    try {
+        const appointment = new AppointmentModel(req.body)
+        await appointment.save()
+        res.status(201).json(appointment)
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
@@ -272,4 +283,5 @@ export {
     testingAddPackage,
     addMedicalHistory,
     updateMedicalHistory,
+    addAppointment
 }

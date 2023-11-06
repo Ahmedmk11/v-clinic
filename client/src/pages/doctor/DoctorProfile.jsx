@@ -116,6 +116,7 @@ const DoctorProfile = () => {
                 </button>
             </div>
         ) : (
+            <div className='edit-buttons'> 
             <button
                 className='button'
                 onClick={() => {
@@ -124,6 +125,10 @@ const DoctorProfile = () => {
                 }}>
                 Edit Profile
             </button>
+             <button className='button' onClick={showModal}>
+             Change Password
+         </button>
+         </div>
         )
     }
 
@@ -151,7 +156,7 @@ const DoctorProfile = () => {
     const getDoctorInfo = () => {
         return (
             <>
-                <h2>My Info</h2>
+                <h2 style={{marginBottom:"0px"}}>My Info</h2>
                 <div className={`message ${EditMessage}`}>
                     {EditMessage === 'success'
                         ? 'Saved successfully!'
@@ -194,9 +199,6 @@ const DoctorProfile = () => {
                 />
                 <div className='doctor-info-container'>
                     {getDoctorInfo()}
-                    <button className='button' onClick={showModal}>
-                        Change Password
-                    </button>
                 </div>
             </div>
             <Modal

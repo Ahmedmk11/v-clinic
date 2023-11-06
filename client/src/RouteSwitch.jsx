@@ -17,6 +17,7 @@ import PatientProfile from './pages/patient/PatientProfile'
 import PatientAppointments from './pages/patient/PatientAppointments'
 import DoctorInfo from './pages/patient/DoctorInfo'
 import ViewPrescriptions from './pages/patient/ViewPrescriptions'
+import HealthRecords from './pages/patient/HealthRecords'
 import PrescriptionInfo from './pages/patient/PrescriptionInfo'
 import AdminMain from './pages/admin/AdminMain'
 import AdminHome from './pages/admin/AdminHome'
@@ -115,6 +116,10 @@ const RouteSwitch = () => {
                 <Route
                     path='view-prescriptions'
                     element={<ViewPrescriptions />}
+                />
+                <Route
+                    path='view-health-records'
+                    element={<HealthRecords />}
                 />
                 <Route
                     path='prescription-info'

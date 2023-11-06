@@ -9,6 +9,7 @@ import {
     FileSyncOutlined,
     FilePptOutlined,
     PlusOutlined,
+    MedicineBoxOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
 
@@ -41,11 +42,24 @@ const Sidebar = () => {
                     {isExpanded ? 'Home' : ''}
                 </p>
                 {userType === 'patient' && ( // to be changed when adding more patient pages
+                <>
+                <p
+                        className={
+                            page === 'view-health-records'
+                            ? 'sidebar-item selected-sidebar-item'
+                            : 'sidebar-item'
+                        }
+                        onClick={() => {
+                            navigate('view-health-records')
+                        }}>
+                       <MedicineBoxOutlined/>
+                        {isExpanded ? 'Health Records' : ''}
+                    </p>
                     <p
                         className={
                             page === 'view-prescriptions'
-                                ? 'sidebar-item selected-sidebar-item'
-                                : 'sidebar-item'
+                            ? 'sidebar-item selected-sidebar-item'
+                            : 'sidebar-item'
                         }
                         onClick={() => {
                             navigate('view-prescriptions')
@@ -53,6 +67,7 @@ const Sidebar = () => {
                         <strong>VP</strong>
                         {isExpanded ? 'Prescriptions' : ''}
                     </p>
+                            </>
                 )}
                 {userType === 'doctor' && ( // to be changed when adding more patient pages
                     <p
