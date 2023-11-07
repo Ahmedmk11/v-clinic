@@ -71,7 +71,7 @@ const getDoctors = async (req, res) => {
 // @access  Public
 const getActiveDoctors = async (req, res) => {
     try {
-        const doctors = await DoctorModel.find({ status: 'Active' })
+        const doctors = await DoctorModel.find({ status: 'Active'  , contract_acceptance: 'Accepted'})
         res.json(doctors)
     } catch (error) {
         res.status(404).json({ message: error.message })
