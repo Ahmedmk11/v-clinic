@@ -5,6 +5,14 @@ import PrescriptionModel from '../models/prescriptionsModel.js'
 import MedicalHistoryModel from '../models/medicalHistoryModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+import path, { dirname } from 'path'
+
+const currentFileUrl = import.meta.url
+const currentFilePath = fileURLToPath(currentFileUrl)
+const __dirname = dirname(currentFilePath)
+
 // --------------------------------------------------
 // Multer
 // --------------------------------------------------
@@ -288,7 +296,8 @@ const addAppointment = async (req, res) => {
 }
 
 const savePatientfiles = patientUpload.array('files')
-
+// @desc upload patient files
+// @route POST /api/patients//upload-health-records
 const uploadPatientFiles = async (req, res) => {
     try {
         const { id } = req.body
@@ -316,6 +325,36 @@ const uploadPatientFiles = async (req, res) => {
     }
 }
 
+// @desc remove uploaded file
+// @route DELETE /api/patients/remove-uploaded-file
+const removeUploadedFile = async (req, res) => {
+    try {
+        const { id } = req.query
+        const patient = await PatientModel.findById(id)
+        if (patient) {
+            const { filePath } = req.query
+            const newHealthRecords = patient.health_records.filter(
+                (file) => file.path !== filePath
+            )
+            patient.health_records = newHealthRecords
+            await patient.save()
+            const filePathToRemove = path.join(__dirname, `../${filePath}`)
+            if (fs.existsSync(filePathToRemove))
+                fs.unlinkSync(filePathToRemove, (err) => {
+                    if (err) throw err
+                })
+                console.log('File removed successfully')
+            res.status(200).json({
+                message: 'File removed successfully',
+                health_records: patient.health_records,
+            })
+        } else res.status(404).json({ message: 'Patient not found' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -332,4 +371,5 @@ export {
     addAppointment,
     savePatientfiles,
     uploadPatientFiles,
+    removeUploadedFile,
 }

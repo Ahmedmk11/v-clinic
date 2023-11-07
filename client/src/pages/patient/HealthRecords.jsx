@@ -5,7 +5,7 @@ import ConditionalRender from "../../components/reusable/ConditionalRender/Condi
 import UploadMedicalRecords from "../../components/patient/HealthRecords/UploadMedicalRecords"
 import ViewUploadedRecords from "../../components/patient/HealthRecords/ViewUploadedRecords"
 const HealthRecords = () => {
-    const { currUser: Patient } = useContext(CurrUserContext)
+    const { currUser: Patient , setCurrUser: setPatient, role} = useContext(CurrUserContext)
     console.log(Patient)
     const MedHistory = () => {
         return (
@@ -25,7 +25,7 @@ const HealthRecords = () => {
     }
     return <div className='page'>
         <UploadMedicalRecords />
-        <ViewUploadedRecords  Patient={Patient}/>
+        <ViewUploadedRecords  Patient={Patient} setPatient={setPatient} role={role}/>
         <MedHistory medicalHistory={Patient?.MedicalHistory} />
     </div>
 }

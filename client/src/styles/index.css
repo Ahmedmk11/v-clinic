@@ -82,7 +82,8 @@ h1 {
 #cancel-button:focus {
     color: black;
     border-color: #ccc;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;}
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 
 input:focus {
     outline: var(--main-green) auto 1px;
@@ -132,7 +133,7 @@ input:focus {
     }
 }
 
-.flex-contianer{
+.flex-contianer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -168,3 +169,40 @@ input:focus {
         margin-bottom: 8px;
     }
 }
+
+.ant-input:hover {
+    border-color: var(--main-green);
+}
+.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(
+        .ant-pagination-size-changer
+    ):hover
+    .ant-select-selector {
+    border-color: var(--main-green);
+}
+.ant-picker-focused {
+    border-color: var(--main-green);
+}
+.ant-picker .ant-picker-input > input:hover {
+    border-color: var(--main-green);
+}
+:where(.css-dev-only-do-not-override-pr0fja).ant-picker:hover,
+:where(.css-dev-only-do-not-override-pr0fja).ant-picker-focused {
+    border-color: var(--main-green);
+}
+
+:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary {
+    background-color: var(--main-green);
+}
+
+:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active, :where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover{
+    background-color: var(--accent-green);
+}
+
+:where(.css-dev-only-do-not-override-pr0fja).ant-input:focus, :where(.css-dev-only-do-not-override-pr0fja).ant-input-focused {
+    border-color: var(--main-green);
+}
+
+:where(.css-dev-only-do-not-override-profja).ant-input:focus, :where(.css-dev-only-do-not-override-profja).ant-input-focused{
+    border-color: var(--main-green);
+}
+

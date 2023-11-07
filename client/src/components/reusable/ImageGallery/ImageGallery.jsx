@@ -1,15 +1,18 @@
 // src/components/ImageGallery.js
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Modal, Button, Spin, Col } from 'antd'
 import './imageGallery.css'
 import noImage from '/src/assets/imgs/noImage.png'
-const ImageGallery = ({ images }) => {
+import CurrUserContext from '../../../contexts/CurrUser'
+import ConditionalRender from '../ConditionalRender/ConditionalRender'
+const ImageGallery = ({ images, onRemoveImage }) => {
     const [visible, setVisible] = useState(false)
     const [selectedImage, setSelectedImage] = useState(null)
     const [imageLoadingStates, setImageLoadingStates] = useState(
         Array(images?.length).fill(true)
     )
-console.log(images)
+    const { role } = useContext(CurrUserContext)
+
     const handleImageClick = (index) => {
         setSelectedImage(index)
         setVisible(true)
@@ -46,7 +49,23 @@ console.log(images)
                     />
                 </Col>
             ))}
-            <Modal open={visible} onCancel={handleClose} footer={null}>
+            <Modal
+                open={visible}
+                onCancel={handleClose}
+                footer={
+                    <ConditionalRender condition={role === 'patient'}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                            }}>
+                            <Button danger type='primary'  onClick={()=>onRemoveImage(images[selectedImage], setVisible)}>
+                                Remove Image
+                            </Button>
+                        </div>
+                    </ConditionalRender>
+                }>
                 {selectedImage !== null && (
                     <img
                         style={{ marginTop: '25px' }}

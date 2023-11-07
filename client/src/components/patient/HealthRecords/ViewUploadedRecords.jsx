@@ -1,12 +1,13 @@
-import { Tabs } from 'antd'
+import { useState } from 'react'
+import { Button, Tabs, message } from 'antd'
 import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import PdfViewer from '../../reusable/PdfViewer/PdfViewer'
 import './viewUploadedRecords.css'
+import axios from 'axios'
 
-const { TabPane } = Tabs
-
-const ViewUploadedRecords = ({ Patient }) => {
+const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
+   
     const images = Patient?.health_records?.filter(
         (healthRecord) => !healthRecord?.path?.toLowerCase().includes('.pdf')
     )
@@ -15,53 +16,117 @@ const ViewUploadedRecords = ({ Patient }) => {
         healthRecord?.path?.toLowerCase().includes('.pdf')
     )
 
+    const onRemoveImage = (imagePath, setVisible) => {
+        imagePath = imagePath.split('http://localhost:3000/api/')[1]
+        axios
+            .delete('http://localhost:3000/api/patient/remove-uploaded-file', {
+                params: { id: Patient._id, filePath: imagePath },
+            })
+            .then((res) => {
+                setPatient({
+                    ...Patient,
+                    health_records: res.data.health_records,
+                })
+                setVisible(false)
+                message.success('Image deleted successfully')
+            })
+            .catch((err) => {
+                message.error('Error deleting image')
+                console.log(err)
+            })
+    }
+
+    const onRemovePdf = (pdfPath) => {
+        axios
+            .delete('http://localhost:3000/api/patient/remove-uploaded-file', {
+                params: { id: Patient._id, filePath: pdfPath },
+            })
+            .then((res) => {
+                setPatient({
+                    ...Patient,
+                    health_records: res.data.health_records,
+                })
+                message.success('PDF deleted successfully')
+            })
+            .catch((err) => {
+                message.error('Error deleting PDF')
+                console.log(err)
+            })
+    }
+
+    const pdfTabItems = pdfs?.map((healthRecord, i) => {
+        return {
+            label: healthRecord?.originalname,
+            key: i,
+            children: (
+                <>
+                    <PdfViewer
+                        pdfUrl={
+                            'http://localhost:3000/api/' + healthRecord?.path
+                        }
+                    />
+                    <ConditionalRender condition={role === 'patient'}>
+                    <div className='remove-pdf-button-container'>
+                        <Button
+                            danger
+                            type='primary'
+                            onClick={() => onRemovePdf(healthRecord?.path)}>
+                            Remove PDF
+                        </Button>
+                    </div>
+                    </ConditionalRender>
+                </>
+            ),
+        }
+    })
+
+    const mainTabItems = [
+        {
+            label: 'Images',
+            key: '1',
+            children: (
+                <ConditionalRender
+                    condition={images?.length > 0}
+                    elseComponent={
+                        <p style={{ paddingLeft: '1%', fontSize: '1rem' }}>
+                            No images uploaded
+                        </p>
+                    }>
+                    <ImageGallery
+                        images={images?.map(
+                            (healthRecord) =>
+                                'http://localhost:3000/api/' +
+                                healthRecord?.path
+                        )}
+                        onRemoveImage={onRemoveImage}
+                    />
+                </ConditionalRender>
+            ),
+        },
+        {
+            label: 'PDFs',
+            key: '2',
+            children: (
+                <ConditionalRender
+                    condition={pdfs?.length > 0}
+                    elseComponent={
+                        <p style={{ paddingLeft: '1%', fontSize: '1rem' }}>
+                            No pdfs uploaded
+                        </p>
+                    }>
+                    <Tabs
+                        defaultActiveKey='1'
+                        tabPosition='left'
+                        items={pdfTabItems}></Tabs>
+                </ConditionalRender>
+            ),
+        },
+    ]
+
     return (
         <div className='sub-container tabbedImagesAndPDF'>
             <h2>Uploaded Medical History</h2>
-            <Tabs defaultActiveKey='1' type='card'>
-                <TabPane tab='Images' key='1'>
-                    <ConditionalRender
-                        condition={images?.length > 0}
-                        elseComponent={
-                            <p style={{ paddingLeft: '1%', fontSize: '1rem' }}>
-                                No images uploaded
-                            </p>
-                        }>
-                        <ImageGallery
-                            images={images?.map(
-                                (healthRecord) =>
-                                    'http://localhost:3000/api/' +
-                                    healthRecord?.path
-                            )}
-                        />
-                    </ConditionalRender>
-                </TabPane>
-                <TabPane tab='PDFs' key='2'>
-                    <ConditionalRender
-                        condition={pdfs?.length > 0}
-                        elseComponent={
-                            <p style={{ paddingLeft: '1%', fontSize: '1rem' }}>
-                                No pdfs uploaded
-                            </p>
-                        }>
-                        <Tabs defaultActiveKey='1' tabPosition='left'>
-                            {pdfs?.map((healthRecord, i) => (
-                                <TabPane
-                                    className='patient-info'
-                                    tab={healthRecord?.originalname}
-                                    key={i + 'healthRecord'}>
-                                    <PdfViewer
-                                        pdfUrl={
-                                            'http://localhost:3000/api/' +
-                                            healthRecord?.path
-                                        }
-                                    />
-                                </TabPane>
-                            ))}
-                        </Tabs>
-                    </ConditionalRender>
-                </TabPane>
-            </Tabs>
+            <Tabs defaultActiveKey='1' type='card' items={mainTabItems} ></Tabs>
         </div>
     )
 }

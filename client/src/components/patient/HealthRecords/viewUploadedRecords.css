@@ -1,0 +1,28 @@
+.remove-pdf-button-container{
+display: flex;
+justify-content: flex-end;
+margin-top: 1rem;
+}
+
+.ant-tabs-tab-btn{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: var(--main-green);
+}
+.ant-tabs .ant-tabs-tab:hover {
+    color: var(--main-green);
+}
+.ant-tabs .ant-tabs-ink-bar {
+    background-color: var(--main-green);
+}
+
+.ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    color: var(--main-green);
+    border-color: var(--main-green);
+}
+
