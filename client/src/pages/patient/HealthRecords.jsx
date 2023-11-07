@@ -3,6 +3,7 @@ import { useContext } from "react"
 import CurrUserContext from "../../contexts/CurrUser"
 import ConditionalRender from "../../components/reusable/ConditionalRender/ConditionalRender"
 import UploadMedicalRecords from "../../components/patient/HealthRecords/UploadMedicalRecords"
+import ViewUploadedRecords from "../../components/patient/HealthRecords/ViewUploadedRecords"
 const HealthRecords = () => {
     const { currUser: Patient } = useContext(CurrUserContext)
     console.log(Patient)
@@ -24,6 +25,7 @@ const HealthRecords = () => {
     }
     return <div className='page'>
         <UploadMedicalRecords />
+        <ViewUploadedRecords  Patient={Patient}/>
         <MedHistory medicalHistory={Patient?.MedicalHistory} />
     </div>
 }

@@ -9,7 +9,7 @@ const ImageGallery = ({ images }) => {
     const [imageLoadingStates, setImageLoadingStates] = useState(
         Array(images?.length).fill(true)
     )
-
+console.log(images)
     const handleImageClick = (index) => {
         setSelectedImage(index)
         setVisible(true)

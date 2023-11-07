@@ -10,6 +10,7 @@ import AddMedicalRecord from '../../components/doctor/PatientInfo/AddMedicalReco
 import CreateFollowUp from '../../components/doctor/PatientInfo/CreateFollowUp'
 import CurrUserContext from '../../contexts/CurrUser'
 import { message } from 'antd'
+import ViewUploadedRecords from '../../components/patient/HealthRecords/ViewUploadedRecords'
 const PatientInfo = () => {
     const { id } = useParams()
     const [SelectedPatient, setSelectedPatient] = useState(null)
@@ -112,6 +113,7 @@ const PatientInfo = () => {
                 </div>
                 <PatientInfoCard SelectedPatient={SelectedPatient} />
                 <MedHistory />
+                <ViewUploadedRecords  Patient={SelectedPatient}/>
                 <PastPres />
             </div>
         </div>

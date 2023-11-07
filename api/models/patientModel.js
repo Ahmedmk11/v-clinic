@@ -115,7 +115,25 @@ const patientModel = new mongoose.Schema(
             ref: 'Package',
         },
         health_records: {
-            type: [String],
+            //array of objects path and original name
+            type: [
+                {
+                    path: {
+                        type: String,
+                        required: [
+                            true,
+                            'Please enter the path of the document.',
+                        ],
+                    },
+                    originalname: {
+                        type: String,
+                        required: [
+                            true,
+                            'Please enter the original name of the document.',
+                        ],
+                    },
+                },
+            ],
             default: [],
         },
     },

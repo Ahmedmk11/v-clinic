@@ -297,7 +297,9 @@ const uploadPatientFiles = async (req, res) => {
             return res.status(400).json({ message: 'No files uploaded' })
         const patient = await PatientModel.findById(id)
         if (patient) {
-            const newFilePaths = files.map((file) => file.path)
+            const newFilePaths = files.map((file) => {
+                return { path: file.path, originalname: file.originalname }
+            })
             patient.health_records = [
                 ...patient.health_records,
                 ...newFilePaths,
