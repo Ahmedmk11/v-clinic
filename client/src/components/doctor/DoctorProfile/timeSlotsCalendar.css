@@ -1,0 +1,30 @@
+.slot-times {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+        width: 2px; /* width of the scrollbar */
+        height: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        width: 0.5px; /* width of the scrollbar */
+        background-color: var(--main-green); /* color of the scrollbar thumb */
+        border-radius: 2px; /* roundness of the scrollbar thumb */
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent/* color of the scrollbar track */
+    }
+}
+
+.slot-item {
+    background-color: var(--light-green);
+    padding: 8px;
+    margin: 4px;
+    text-align: center;
+    cursor: pointer;
+    min-width: 150px;
+}

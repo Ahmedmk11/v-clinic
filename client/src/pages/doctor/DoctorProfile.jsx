@@ -5,6 +5,8 @@ import axios from 'axios'
 import { Button, Modal, Form, Input } from 'antd'
 import CurrUserContext from '../../contexts/CurrUser'
 import RequireDocs from '../../components/doctor/DoctorProfile/RequireDocs'
+import DoctorCalender from '../../components/doctor/DoctorProfile/DoctorCalender'
+import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
 const DoctorProfile = () => {
     const {
         currUser,
@@ -116,19 +118,19 @@ const DoctorProfile = () => {
                 </button>
             </div>
         ) : (
-            <div className='edit-buttons'> 
-            <button
-                className='button'
-                onClick={() => {
-                    setEditMode(true)
-                    setEditMessage('')
-                }}>
-                Edit Profile
-            </button>
-             <button className='button' onClick={showModal}>
-             Change Password
-         </button>
-         </div>
+            <div className='edit-buttons'>
+                <button
+                    className='button'
+                    onClick={() => {
+                        setEditMode(true)
+                        setEditMessage('')
+                    }}>
+                    Edit Profile
+                </button>
+                <button className='button' onClick={showModal}>
+                    Change Password
+                </button>
+            </div>
         )
     }
 
@@ -156,7 +158,7 @@ const DoctorProfile = () => {
     const getDoctorInfo = () => {
         return (
             <>
-                <h2 style={{marginBottom:"0px"}}>My Info</h2>
+                <h2 style={{ marginBottom: '0px' }}>My Info</h2>
                 <div className={`message ${EditMessage}`}>
                     {EditMessage === 'success'
                         ? 'Saved successfully!'
@@ -192,14 +194,16 @@ const DoctorProfile = () => {
                         </p>
                     </section>
                 </div>
+                <div className='doctor-info-container'>{getDoctorInfo()}</div>
+                <ConditionalRender
+                    condition={currUser?.contract_acceptance == 'Accepted'}>
+                    <DoctorCalender />
+                </ConditionalRender>
                 <RequireDocs
                     docs={currUser?.uploaded_documents}
                     status={currUser?.status}
                     uploaded_documents={currUser?.uploaded_documents}
                 />
-                <div className='doctor-info-container'>
-                    {getDoctorInfo()}
-                </div>
             </div>
             <Modal
                 title='Change Password'
