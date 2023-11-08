@@ -1,23 +1,116 @@
-import { useState, useContext, useRef } from 'react'
+import './css/ViewDoctors.css'
+
+import { useState, useContext, useRef, useEffect } from 'react'
 import CurrUserContext from '../../contexts/CurrUser'
 import ViewFamily from './ViewFamily'
-import { Button, Modal, Form, Input } from 'antd'
+import {
+    Button,
+    Modal,
+    Form,
+    Input,
+    Space,
+    Select,
+    Dropdown,
+    Menu,
+    message,
+} from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import axios from 'axios'
 
 const PatientProfile = () => {
-    const [packageObject, setPackageObject] = useState(null)
     const formRef = useRef(null)
 
     const { currUser, role } = useContext(CurrUserContext)
+
+    const [currUserPackageName, setCurrUserPackageName] = useState(null)
+
+    const [allPackages, setAllPackages] = useState([])
 
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
 
     const [open, setOpen] = useState(false)
+    const [packageOpen, setPackageOpen] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
+    const [confirmPackageLoading, setConfirmPackageLoading] = useState(false)
+
+    const [selectedPackage, setSelectedPackage] = useState('-1')
+
+    useEffect(() => {
+        console.log('selectedPackage', selectedPackage)
+    }, [selectedPackage])
+
+    useEffect(() => {
+        const fetchPackage = async () => {
+            try {
+                if (currUser) {
+                    const res = await axios.get(
+                        `http://localhost:3000/api/admin/getPackage/${currUser?.package}`,
+                        {
+                            withCredentials: true,
+                        }
+                    )
+                    setCurrUserPackageName(res.data.name)
+                    setSelectedPackage(
+                        currUser?.package == null ? '-1' : currUser?.package
+                    )
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchPackage()
+    }, [currUser])
+
+    const items = allPackages.map((packageObj) => ({
+        key: packageObj._id,
+        label: (
+            <div className='package-info'>
+                <p>Price: {packageObj.price}</p>
+                <p>Session Discount: {packageObj.sessionDiscount}</p>
+                <p>Pharmacy Discount: {packageObj.medicineDiscount}</p>
+                <p>Family Discount: {packageObj.familySubsDiscount}</p>
+            </div>
+        ),
+    }))
+
+    useEffect(() => {
+        const fetchPackages = async () => {
+            try {
+                const res = await axios.get(
+                    'http://localhost:3000/api/admin/getAllPackages',
+                    {
+                        withCredentials: true,
+                    }
+                )
+                setAllPackages([
+                    {
+                        _id: '-1',
+                        name: 'No Package',
+                        price: 0,
+                        sessionDiscount: 0,
+                        medicineDiscount: 0,
+                        familySubsDiscount: 0,
+                    },
+                    ...res.data,
+                ])
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchPackages()
+    }, [])
+
+    const handleChange = (value) => {
+        setSelectedPackage(value)
+    }
 
     const showModal = () => {
         setOpen(true)
+    }
+
+    const showPackageModal = () => {
+        setPackageOpen(true)
     }
 
     const handleOk = async () => {
@@ -57,6 +150,40 @@ const PatientProfile = () => {
         setConfirmLoading(false)
     }
 
+    const handlePackageOk = async () => {
+        try {
+            setConfirmPackageLoading(true)
+
+            if (selectedPackage) {
+                const response = await axios.post(
+                    `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+                    {
+                        packageID: selectedPackage,
+                    },
+                    {
+                        withCredentials: true,
+                    }
+                )
+
+                console.log('package selected')
+                message.success('Package selected successfully!')
+
+                setCurrUserPackageName(response.data.name)
+            }
+
+            setPackageOpen(false)
+            setConfirmPackageLoading(false)
+        } catch (error) {
+            console.error('Package changing error:', error)
+            setConfirmPackageLoading(false)
+        }
+    }
+
+    const handlePackageCancel = () => {
+        setSelectedPackage(currUser?.package == null ? '-1' : currUser?.package)
+        setPackageOpen(false)
+    }
+
     return (
         <div id='patient-profile-body' className='page'>
             <div className='primary-container'>
@@ -86,14 +213,21 @@ const PatientProfile = () => {
                         <strong>Emergency Phone Number:</strong>{' '}
                         {currUser?.emergencyPhoneNumber}
                     </p>
-                    <p>
-                        <strong>Subscription Package:</strong>{' '}
-                        {packageObject?.name || 'No Package'}
-                    </p>
 
                     <button className='button' onClick={showModal}>
                         Change Password
                     </button>
+                </div>
+                <div className='sub-container'>
+                    <h2>Health Package</h2>
+                    <p>
+                        <strong>Package Name:</strong>{' '}
+                        {currUserPackageName ||
+                            'You are not subscribed to a package'}
+                    </p>
+                    <Button onClick={showPackageModal}>
+                        {currUser?.package ? 'Change Package' : 'Subscribe'}
+                    </Button>
                 </div>
                 <ViewFamily />
             </div>
@@ -176,6 +310,59 @@ const PatientProfile = () => {
                         <Input.Password placeholder='Confirm New Password' />
                     </Form.Item>
                 </Form>
+            </Modal>
+            <Modal
+                title='Health Package'
+                open={packageOpen}
+                onOk={handlePackageOk}
+                okText='Subscribe'
+                confirmLoading={confirmPackageLoading}
+                onCancel={handlePackageCancel}
+                destroyOnClose>
+                <Space wrap>
+                    <Select
+                        style={{ width: 300 }}
+                        defaultValue={selectedPackage}
+                        optionLabelProp='label'
+                        onChange={handleChange}>
+                        {allPackages.map((packageObj) => (
+                            <Select.Option
+                                key={packageObj._id}
+                                value={packageObj._id}
+                                label={packageObj.name}>
+                                <Space
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                    {packageObj.name}
+                                    <Dropdown
+                                        placement='right'
+                                        overlay={
+                                            <Menu>
+                                                {items
+                                                    .filter(
+                                                        (item) =>
+                                                            item.key ===
+                                                            packageObj._id
+                                                    )
+                                                    .map((filteredItem) => (
+                                                        <Menu.Item
+                                                            key={
+                                                                filteredItem.key
+                                                            }>
+                                                            {filteredItem.label}
+                                                        </Menu.Item>
+                                                    ))}
+                                            </Menu>
+                                        }>
+                                        <InfoCircleOutlined />
+                                    </Dropdown>
+                                </Space>
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Space>
             </Modal>
         </div>
     )

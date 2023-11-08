@@ -31,7 +31,7 @@ const FamilyMembers = ({ id }) => {
     const [hasErrors, setHasErrors] = useState(false)
 
     useEffect(() => {
-        if(!id)return
+        if (!id) return
         axios
             .get(
                 `http://localhost:3000/api/patient/get-patient-family-members/${id}`
@@ -168,7 +168,7 @@ const FamilyMembers = ({ id }) => {
     }
 
     return (
-        <div className='primary-container'>
+        <div className='sub-container'>
             <h2>Family Members</h2>
             <Button onClick={showModal}>Add New Family Member</Button>
             <div className='card-list'>

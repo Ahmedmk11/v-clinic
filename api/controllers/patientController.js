@@ -16,6 +16,7 @@ const __dirname = dirname(currentFilePath)
 // --------------------------------------------------
 // Multer
 // --------------------------------------------------
+
 const patientStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './uploads/patientUploads')
@@ -236,13 +237,40 @@ async function getPatientDiscount(req, res) {
     }
 }
 
-async function testingAddPackage(req, res) {
-    // for adding a package to patient to test the discounted session price, change in next sprint
+async function addPackage(req, res) {
     try {
-        await PatientModel.findByIdAndUpdate(req.params.id, {
-            package: '652299326ad7a764de83a2aa',
+        const patientID = req.params.id
+        const packageID = req.body.packageID
+
+        if (packageID !== '-1') {
+            await PatientModel.findByIdAndUpdate(patientID, {
+                package: packageID,
+            })
+        } else {
+            let patient = await PatientModel.findById(patientID)
+
+            if (patient) {
+                patient.package = null
+                await patient.save()
+                console.log('Reference to Package removed.')
+            } else {
+                res.status(404).json({ message: 'Patient not found' })
+                return
+            }
+        }
+
+        const updatedPatient = await PatientModel.findById(patientID).populate(
+            'package',
+            'name'
+        )
+
+        res.status(200).json({
+            message: 'Package updated successfully',
+            name: updatedPatient.package ? updatedPatient.package.name : null,
         })
-    } catch (error) {}
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
 }
 
 //@ desc add medical history to patient
@@ -343,7 +371,7 @@ const removeUploadedFile = async (req, res) => {
                 fs.unlinkSync(filePathToRemove, (err) => {
                     if (err) throw err
                 })
-                console.log('File removed successfully')
+            console.log('File removed successfully')
             res.status(200).json({
                 message: 'File removed successfully',
                 health_records: patient.health_records,
@@ -365,7 +393,7 @@ export {
     getFamilyMembers,
     populateFamilyMembers,
     getPatientDiscount,
-    testingAddPackage,
+    addPackage,
     addMedicalHistory,
     updateMedicalHistory,
     addAppointment,
