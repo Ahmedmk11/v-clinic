@@ -3,6 +3,7 @@ import AppointmentModel from '../models/appointmentsModel.js'
 import FamilyMemberModel from '../models/familyMemberModel.js'
 import PrescriptionModel from '../models/prescriptionsModel.js'
 import MedicalHistoryModel from '../models/medicalHistoryModel.js'
+import packageModel from '../models/packageModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
 import fs from 'fs'
@@ -237,6 +238,26 @@ async function getPatientDiscount(req, res) {
     }
 }
 
+async function buyPackageWallet(req, res){
+    try {
+        const patientID = req.params.id
+        const packageID = req.body.packageID
+
+        const patient = await PatientModel.findById(patientID)
+        const currPackage = await packageModel.findById(packageID)
+
+        patient.wallet -= currPackage.price
+        await patient.save()
+        res.status(200).json({
+            message: 'Package updated successfully',
+            wallet: patient.wallet
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
 async function addPackage(req, res) {
     try {
         const patientID = req.params.id
@@ -400,4 +421,5 @@ export {
     savePatientfiles,
     uploadPatientFiles,
     removeUploadedFile,
+    buyPackageWallet
 }
