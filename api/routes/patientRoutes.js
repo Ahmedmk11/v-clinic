@@ -19,6 +19,7 @@ import {
     removeUploadedFile,
     addToFamily,
     getFamily,
+    buyPackageWallet,
 } from '../controllers/patientController.js'
 
 const router = express.Router()
@@ -26,6 +27,7 @@ const router = express.Router()
 router.post('/create-patient', createPatient)
 router.post('/populate-family-members/:id', populateFamilyMembers)
 router.post('/add-package/:id', addPackage)
+router.post('/buy-package-wallet/:id', buyPackageWallet)
 router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id/:id', getPatientByID)
 router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)

@@ -96,6 +96,35 @@ const doctorSchema = new mongoose.Schema(
             type: [String],
             default: [],
         },
+        timeSlots: {
+            type: [
+                {
+                    day: {
+                        type: String,
+                        enum: [
+                            'Monday',
+                            'Tuesday',
+                            'Wednesday',
+                            'Thursday',
+                            'Friday',
+                            'Saturday',
+                            'Sunday',
+                        ],
+                    },
+                    slots: [
+                        {
+                            startTime: {
+                                type: String,
+                            },
+                            endTime: {
+                                type: String,
+                            },
+                        },
+                    ],
+                },
+            ],
+            default: [],
+        },
     },
     {
         toJSON: { virtuals: true },

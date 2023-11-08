@@ -1,6 +1,7 @@
 import './css/ViewDoctors.css'
 
 import { useState, useContext, useRef, useEffect } from 'react'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 import CurrUserContext from '../../contexts/CurrUser'
 import ViewFamily from './ViewFamily'
 import {
@@ -19,11 +20,12 @@ import { InfoCircleOutlined, LinkOutlined } from '@ant-design/icons'
 import FamilyMemberCard from '../../components/patient/ViewFamily/FamilyMemberCard'
 import axios from 'axios'
 const { Option } = Select
+const { confirm } = Modal
 
 const PatientProfile = () => {
     const formRef = useRef(null)
 
-    const { currUser, role } = useContext(CurrUserContext)
+    const { currUser, role, setCurrUser } = useContext(CurrUserContext)
 
     const [currUserPackageName, setCurrUserPackageName] = useState(null)
 
@@ -47,6 +49,7 @@ const PatientProfile = () => {
 
     const [open, setOpen] = useState(false)
     const [packageOpen, setPackageOpen] = useState(false)
+    const [buyPackage, setBuyPackage] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
     const [confirmPackageLoading, setConfirmPackageLoading] = useState(false)
 
@@ -227,38 +230,119 @@ const PatientProfile = () => {
         setConfirmLoading(false)
     }
 
-    const handlePackageOk = async () => {
-        try {
-            setConfirmPackageLoading(true)
+    const handleBack = () => {
+        setBuyPackage(false)
+        setPackageOpen(true)
+    }
 
-            if (selectedPackage) {
-                const response = await axios.post(
-                    `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
-                    {
-                        packageID: selectedPackage,
-                    },
-                    {
-                        withCredentials: true,
-                    }
-                )
-
-                console.log('package selected')
-                message.success('Package selected successfully!')
-
-                setCurrUserPackageName(response.data.name)
+    const handlePayWithWallet = async () => {
+        let pack = null
+        for (let i = 0; i < allPackages.length; i++)
+            if (allPackages[i]._id === selectedPackage) {
+                pack = allPackages[i]
+                break
             }
-
-            setPackageOpen(false)
-            setConfirmPackageLoading(false)
-        } catch (error) {
-            console.error('Package changing error:', error)
-            setConfirmPackageLoading(false)
+        if (currUserPackageName === pack.name) {
+            message.error('Already Subscribed to this package!')
+            return
         }
+
+        if (currUser?.wallet < pack.price) {
+            message.error('Insufficient Funds!')
+        } else {
+            try {
+                setConfirmPackageLoading(true)
+
+                if (selectedPackage) {
+                    const response = await axios.post(
+                        `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+                        {
+                            packageID: selectedPackage,
+                        },
+                        {
+                            withCredentials: true,
+                        }
+                    )
+
+                    console.log('package selected')
+                    message.success('Package selected successfully!')
+                    const res1 = await axios.post(
+                        `http://localhost:3000/api/patient/buy-package-wallet/${currUser?._id}`,
+                        {
+                            packageID: selectedPackage,
+                        },
+                        {
+                            withCredentials: true,
+                        }
+                    )
+                    setCurrUserPackageName(response.data.name)
+                    setCurrUser({ ...currUser, wallet: res1.data.wallet })
+                }
+                console.log('done')
+
+                setPackageOpen(false)
+                setConfirmPackageLoading(false)
+                setBuyPackage(false)
+            } catch (error) {
+                console.error('Package changing error:', error)
+                setConfirmPackageLoading(false)
+            }
+        }
+    }
+    const handlePackageOk = async () => {
+        if (selectedPackage != -1) {
+            setBuyPackage(true)
+            // console.log(selectedPackage)
+        } else setBuyPackage(false)
+        setPackageOpen(false)
+        // try {
+        //     setConfirmPackageLoading(true)
+
+        //     if (selectedPackage) {
+        //         const response = await axios.post(
+        //             `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+        //             {
+        //                 packageID: selectedPackage,
+        //             },
+        //             {
+        //                 withCredentials: true,
+        //             }
+        //         )
+
+        //         console.log('package selected')
+        //         message.success('Package selected successfully!')
+
+        //         setCurrUserPackageName(response.data.name)
+        //     }
+
+        //     setPackageOpen(false)
+        //     setConfirmPackageLoading(false)
+        // } catch (error) {
+        //     console.error('Package changing error:', error)
+        //     setConfirmPackageLoading(false)
+        // }
     }
 
     const handlePackageCancel = () => {
+        setBuyPackage(false)
         setSelectedPackage(currUser?.package == null ? '-1' : currUser?.package)
         setPackageOpen(false)
+    }
+
+    const showPayConfirm = () => {
+        confirm({
+            title: `Confirm Purchasing Package With Wallet`,
+            icon: <ExclamationCircleFilled />,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                handlePayWithWallet()
+            },
+            onCancel() {
+                console.log('Cancel')
+            },
+        })
     }
 
     return (
@@ -425,7 +509,7 @@ const PatientProfile = () => {
                                     {packageObj.name}
                                     <Dropdown
                                         placement='right'
-                                        overlay={
+                                        menu={
                                             <Menu>
                                                 {items
                                                     .filter(
@@ -450,6 +534,56 @@ const PatientProfile = () => {
                         ))}
                     </Select>
                 </Space>
+            </Modal>
+            <Modal
+                title='Health Package'
+                open={buyPackage}
+                confirmLoading={confirmPackageLoading}
+                onCancel={handlePackageCancel}
+                destroyOnClose
+                footer={[
+                    <Button key='back' onClick={handleBack}>
+                        Return
+                    </Button>,
+                    <Button
+                        key='submit1'
+                        type='primary'
+                        loading={confirmPackageLoading}
+                        onClick={handleBack}>
+                        Pay With Card
+                    </Button>,
+                    <Button
+                        key='submit2'
+                        type='primary'
+                        loading={confirmPackageLoading}
+                        onClick={showPayConfirm}>
+                        Pay With Wallet
+                    </Button>,
+                ]}>
+                {allPackages
+                    .filter((currPackage) => currPackage._id == selectedPackage)
+                    .map((currPackage) => (
+                        <div key={currPackage._id}>
+                            <p>
+                                <strong>Name: </strong> {currPackage.name}
+                            </p>
+                            <p>
+                                <strong>Session Discount: </strong>{' '}
+                                {currPackage.sessionDiscount}%
+                            </p>
+                            <p>
+                                <strong>Pharmacy Discount: </strong>{' '}
+                                {currPackage.medicineDiscount}%
+                            </p>
+                            <p>
+                                <strong>Family Discount: </strong>{' '}
+                                {currPackage.familySubsDiscount}%
+                            </p>
+                            <p>
+                                <strong>Price: </strong> {currPackage.price} EGP
+                            </p>
+                        </div>
+                    ))}
             </Modal>
             <Modal
                 width={900}

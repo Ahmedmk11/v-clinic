@@ -196,6 +196,25 @@ const updateContract = async (req, res) => {
     }
 }
 
+//@desc  get doctor files
+//@route post /api/doctor/updateTimeSlots
+//@access public
+const updateTimeSlots = async (req, res) => {
+    try {
+        const doctor = await DoctorModel.findById(req.body.id)
+        if (doctor) {
+            doctor.timeSlots = req.body.newTimeSlots
+            const updatedDoctor = await doctor.save()
+            res.json({
+                message: 'Time Slots updated successfully',
+                newTimeSlots: updatedDoctor.timeSlots,
+            })
+        } else res.status(404).json({ message: 'Doctor not found' })
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
 export {
     createDoctor,
     getDoctors,
@@ -207,4 +226,5 @@ export {
     saveDoctorfiles,
     uploadDoctorFiles,
     updateContract,
+    updateTimeSlots
 }
