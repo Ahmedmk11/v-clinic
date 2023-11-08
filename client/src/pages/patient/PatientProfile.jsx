@@ -14,7 +14,9 @@ import {
     Menu,
     message,
 } from 'antd'
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined, LinkOutlined } from '@ant-design/icons'
+import FamilyMemberCard from '../../components/patient/ViewFamily/FamilyMemberCard'
+
 import axios from 'axios'
 
 const PatientProfile = () => {
@@ -227,6 +229,16 @@ const PatientProfile = () => {
                     </p>
                     <Button onClick={showPackageModal}>
                         {currUser?.package ? 'Change Package' : 'Subscribe'}
+                    </Button>
+                </div>
+                <div className='sub-container'>
+                    <h2>My Family Members</h2>
+                    {currUser?.family.map((member) => (
+                        <FamilyMemberCard member={member} mode={'2'} />
+                    ))}
+                    <Button onClick={showPackageModal}>
+                        <LinkOutlined />
+                        Link Family Member
                     </Button>
                 </div>
                 <ViewFamily />

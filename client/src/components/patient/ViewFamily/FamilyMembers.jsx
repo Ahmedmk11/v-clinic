@@ -173,7 +173,7 @@ const FamilyMembers = ({ id }) => {
             <Button onClick={showModal}>Add New Family Member</Button>
             <div className='card-list'>
                 {familyMembers.map((member) => (
-                    <FamilyMemberCard member={member} />
+                    <FamilyMemberCard member={member} mode={'1'} />
                 ))}
             </div>
 
