@@ -5,18 +5,30 @@ import axios from 'axios'
 
 const FamilyMemberCard = ({ member, mode }) => {
     const [currMember, setCurrMember] = useState({})
+    const [relation, setRelation] = useState('')
+    const [packageName, setPackageName] = useState(null)
 
     useEffect(() => {
         if (mode == '2') {
             const fetchCurrMember = async () => {
                 try {
                     const res = await axios.get(
-                        `http://localhost:3000/api/patient/get-patient-by-id/${member}`,
+                        `http://localhost:3000/api/patient/get-patient-by-id/${member.id}`,
                         {
                             withCredentials: true,
                         }
                     )
                     setCurrMember(res.data)
+                    setRelation(member.relation)
+                    if (res.data.package) {
+                        const res2 = await axios.get(
+                            `http://localhost:3000/api/admin/getPackage/${res.data.package}`,
+                            {
+                                withCredentials: true,
+                            }
+                        )
+                        setPackageName(res2.data.name)
+                    }
                 } catch (error) {
                     console.error(error)
                 }
@@ -46,7 +58,10 @@ const FamilyMemberCard = ({ member, mode }) => {
                     </>
                 ) : (
                     <>
-                        <h3>{currMember.relation}</h3>
+                        <h3>
+                            {relation.charAt(0).toUpperCase() +
+                                relation.slice(1)}
+                        </h3>
                         <div>
                             <strong>Name: </strong> {currMember.name}
                         </div>
@@ -58,7 +73,8 @@ const FamilyMemberCard = ({ member, mode }) => {
                             {currMember.phoneNumber}
                         </div>
                         <div>
-                            <strong>Package: </strong> {currMember.package}
+                            <strong>Package: </strong>{' '}
+                            {packageName ?? 'Not subscribed to a package'}
                         </div>
                     </>
                 )}

@@ -36,6 +36,7 @@ body.dark-mode {
     flex-direction: column;
     min-height: 100dvh;
 }
+
 h1 {
     font-size: 3.2em;
     line-height: 1.1;
@@ -49,10 +50,12 @@ h1 {
     cursor: pointer;
     transition: background-color 0.5s ease-in-out;
     border-radius: 10px;
+
     &:hover {
         background-color: #3e8e41;
         color: white;
     }
+
     &:active,
     &:focus & {
         background-color: var(--accent-green);
@@ -61,15 +64,19 @@ h1 {
 }
 
 #green-button {
-    background-color: #389e0d; /* Darker green on hover/focus */
+    background-color: #389e0d;
+    /* Darker green on hover/focus */
     border-color: #389e0d;
-    color: #ffffff; /* Text color (white) */
+    color: #ffffff;
+    /* Text color (white) */
 }
 
 #green-button:hover,
 #green-button:focus {
-    background-color: #52c41a; /* Green color */
-    border-color: #52c41a; /* Border color */
+    background-color: #52c41a;
+    /* Green color */
+    border-color: #52c41a;
+    /* Border color */
 }
 
 #red-button:hover,
@@ -106,10 +113,12 @@ input:focus {
     padding: 2%;
     border-radius: 8px;
     box-shadow: 0px 0px 20px 0px var(--color-shadow);
+
     & label {
         font-size: 1.2rem;
         font-weight: 500;
         margin-left: 10px;
+
         & input[type='checkbox'] {
             width: 15px;
             height: 15px;
@@ -154,6 +163,7 @@ input:focus {
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
     background-color: var(--accent-background-color);
+    margin: 22px;
 
     &:hover {
         transform: scale(1.05);
@@ -173,18 +183,19 @@ input:focus {
 .ant-input:hover {
     border-color: var(--main-green);
 }
-.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(
-        .ant-pagination-size-changer
-    ):hover
-    .ant-select-selector {
+
+.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
     border-color: var(--main-green);
 }
+
 .ant-picker-focused {
     border-color: var(--main-green);
 }
-.ant-picker .ant-picker-input > input:hover {
+
+.ant-picker .ant-picker-input>input:hover {
     border-color: var(--main-green);
 }
+
 :where(.css-dev-only-do-not-override-pr0fja).ant-picker:hover,
 :where(.css-dev-only-do-not-override-pr0fja).ant-picker-focused {
     border-color: var(--main-green);
@@ -194,15 +205,17 @@ input:focus {
     background-color: var(--main-green);
 }
 
-:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active, :where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover{
+:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active,
+:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: var(--accent-green);
 }
 
-:where(.css-dev-only-do-not-override-pr0fja).ant-input:focus, :where(.css-dev-only-do-not-override-pr0fja).ant-input-focused {
+:where(.css-dev-only-do-not-override-pr0fja).ant-input:focus,
+:where(.css-dev-only-do-not-override-pr0fja).ant-input-focused {
     border-color: var(--main-green);
 }
 
-:where(.css-dev-only-do-not-override-profja).ant-input:focus, :where(.css-dev-only-do-not-override-profja).ant-input-focused{
+:where(.css-dev-only-do-not-override-profja).ant-input:focus,
+:where(.css-dev-only-do-not-override-profja).ant-input-focused {
     border-color: var(--main-green);
 }
-

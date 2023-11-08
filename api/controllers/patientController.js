@@ -8,6 +8,7 @@ import crypto from 'crypto'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
+import FamilyModel from '../models/familyModel.js'
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
@@ -383,6 +384,75 @@ const removeUploadedFile = async (req, res) => {
     }
 }
 
+const addToFamily = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { email, phoneNumber, linkingCode, relation, gender } = req.body
+        const valid = await PatientModel.findOne({
+            $and: [
+                {
+                    $or: [{ email }, { phoneNumber }],
+                },
+                { linkingCode },
+            ],
+        })
+
+        if (!valid) {
+            return res.status(403).json("You can't add this member")
+        }
+
+        let family = await FamilyModel.findOne({ 'member.id': id })
+
+        if (!family) {
+            family = new FamilyModel({
+                member: [
+                    {
+                        id,
+                        relation:
+                            relation === 'wife'
+                                ? 'husband'
+                                : relation === 'husband'
+                                ? 'wife'
+                                : gender === 'male'
+                                ? 'husband'
+                                : 'wife',
+                    },
+                    { id: valid._id, relation },
+                ],
+            })
+        } else {
+            const isAlreadyMember = family.member.some((member) =>
+                member.id.equals(valid._id)
+            )
+            if (isAlreadyMember) {
+                return res
+                    .status(400)
+                    .json('This member is already part of the family')
+            }
+
+            family.member.push({ id: valid._id, relation })
+        }
+
+        await family.save()
+        res.status(201).json(family)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function getFamily(req, res) {
+    try {
+        const { id } = req.params
+        let family = await FamilyModel.findOne({ 'member.id': id })
+        if (family) {
+            res.json(family.member)
+        } else res.status(404).json({ message: 'Patient not found' })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -400,4 +470,6 @@ export {
     savePatientfiles,
     uploadPatientFiles,
     removeUploadedFile,
+    addToFamily,
+    getFamily,
 }

@@ -136,6 +136,11 @@ const patientModel = new mongoose.Schema(
             ],
             default: [],
         },
+        linkingCode: {
+            type: String,
+            required: true,
+            unique: true,
+        },
     },
     {
         toJSON: { virtuals: true },

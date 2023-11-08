@@ -13,11 +13,12 @@ import {
     Dropdown,
     Menu,
     message,
+    Checkbox,
 } from 'antd'
 import { InfoCircleOutlined, LinkOutlined } from '@ant-design/icons'
 import FamilyMemberCard from '../../components/patient/ViewFamily/FamilyMemberCard'
-
 import axios from 'axios'
+const { Option } = Select
 
 const PatientProfile = () => {
     const formRef = useRef(null)
@@ -26,10 +27,23 @@ const PatientProfile = () => {
 
     const [currUserPackageName, setCurrUserPackageName] = useState(null)
 
+    const [openFamilyModal, setOpenFamilyModal] = useState(false)
+    const [confirmFamilyLoading, setConfirmFamilyLoading] = useState(false)
+
+    const [familyMemberEmail, setFamilyMemberEmail] = useState('')
+    const [familyMemberPhone, setFamilyMemberPhone] = useState('')
+    const [familyMemberRelation, setFamilyMemberRelation] = useState('')
+    const [familyLinkingCode, setFamilyLinkingCode] = useState('')
+    const [useEmail, setUseEmail] = useState(true)
+
+    const [formFamilyRef] = Form.useForm()
+
     const [allPackages, setAllPackages] = useState([])
 
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
+
+    const [family, setFamily] = useState([])
 
     const [open, setOpen] = useState(false)
     const [packageOpen, setPackageOpen] = useState(false)
@@ -39,8 +53,48 @@ const PatientProfile = () => {
     const [selectedPackage, setSelectedPackage] = useState('-1')
 
     useEffect(() => {
-        console.log('selectedPackage', selectedPackage)
-    }, [selectedPackage])
+        console.log('familyyy', family)
+    }, [family])
+
+    const handleFamilyOk = async () => {
+        try {
+            setConfirmFamilyLoading(true)
+
+            if (formFamilyRef.current) {
+                await formFamilyRef.current.validateFields()
+
+                await axios.post(
+                    `http://localhost:3000/api/patient/add-to-family/${currUser?._id}`,
+                    {
+                        gender: currUser?.gender,
+                        email: useEmail ? familyMemberEmail : '',
+                        phoneNumber: useEmail ? '' : familyMemberPhone,
+                        relation: familyMemberRelation,
+                        linkingCode: familyLinkingCode,
+                    },
+                    {
+                        withCredentials: true,
+                    }
+                )
+                console.log('added to family')
+            }
+
+            setOpenFamilyModal(false)
+            setConfirmFamilyLoading(false)
+        } catch (error) {
+            console.error('add to family error:', error)
+            setConfirmFamilyLoading(false)
+        }
+    }
+
+    const handleFamilyCancel = () => {
+        setOpenFamilyModal(false)
+        setFamilyMemberEmail('')
+        setFamilyMemberPhone('')
+        setFamilyMemberRelation('')
+        setFamilyLinkingCode('')
+        setUseEmail(true)
+    }
 
     useEffect(() => {
         const fetchPackage = async () => {
@@ -62,6 +116,23 @@ const PatientProfile = () => {
             }
         }
         fetchPackage()
+        const fetchFamily = async () => {
+            try {
+                if (currUser) {
+                    console.log('currUser', currUser._id)
+                    const res = await axios.get(
+                        `http://localhost:3000/api/patient/get-family/${currUser?._id}`,
+                        {
+                            withCredentials: true,
+                        }
+                    )
+                    setFamily(res.data)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchFamily()
     }, [currUser])
 
     const items = allPackages.map((packageObj) => ({
@@ -113,6 +184,10 @@ const PatientProfile = () => {
 
     const showPackageModal = () => {
         setPackageOpen(true)
+    }
+
+    const showFamilyModal = () => {
+        setOpenFamilyModal(true)
     }
 
     const handleOk = async () => {
@@ -232,11 +307,11 @@ const PatientProfile = () => {
                     </Button>
                 </div>
                 <div className='sub-container'>
-                    <h2>My Family Members</h2>
-                    {currUser?.family.map((member) => (
+                    <h2>My Family</h2>
+                    {family?.map((member) => (
                         <FamilyMemberCard member={member} mode={'2'} />
                     ))}
-                    <Button onClick={showPackageModal}>
+                    <Button onClick={showFamilyModal}>
                         <LinkOutlined />
                         Link Family Member
                     </Button>
@@ -375,6 +450,107 @@ const PatientProfile = () => {
                         ))}
                     </Select>
                 </Space>
+            </Modal>
+            <Modal
+                width={900}
+                title='Link Family Member'
+                open={openFamilyModal}
+                onOk={handleFamilyOk}
+                okText='Link'
+                confirmLoading={confirmFamilyLoading}
+                onCancel={handleFamilyCancel}
+                destroyOnClose>
+                <Form
+                    ref={formFamilyRef}
+                    name='add-family-member-form'
+                    onFinish={handleFamilyOk}
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}>
+                    <Form.Item
+                        label='Relation'
+                        name='relation'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Please enter your relation with the family member!',
+                            },
+                        ]}>
+                        <Select
+                            defaultValue={'Relation'}
+                            onChange={(value) => {
+                                setFamilyMemberRelation(value)
+                            }}
+                            placeholder='Select relation'>
+                            <Option value='Wife'>Wife</Option>
+                            <Option value='Husband'>Husband</Option>
+                            <Option value='Child'>Child</Option>
+                        </Select>
+                    </Form.Item>
+                    {useEmail ? (
+                        <Form.Item
+                            label={`Family Member's Email`}
+                            name='familyMemberEmail'
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Please enter the email of the patient you want to link with!',
+                                },
+                            ]}>
+                            <Input
+                                value={familyMemberEmail}
+                                placeholder='Email'
+                                onChange={(e) => {
+                                    setFamilyMemberEmail(e.target.value)
+                                }}
+                            />
+                        </Form.Item>
+                    ) : (
+                        <Form.Item
+                            label={`Family Member's Phone Number`}
+                            name='familyMemberNumber'
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Please enter the phone number of the patient you want to link with!',
+                                },
+                            ]}>
+                            <Input
+                                value={familyMemberPhone}
+                                placeholder='Phone Number'
+                                onChange={(e) => {
+                                    setFamilyMemberPhone(e.target.value)
+                                }}
+                            />
+                        </Form.Item>
+                    )}
+                    <Form.Item
+                        label={`Family Member's Linking Code`}
+                        name='linkingCode'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Please enter the linking code of the patient you want to link with, ask them to share it with you!',
+                            },
+                        ]}>
+                        <Input
+                            value={familyLinkingCode}
+                            placeholder='Linking Code'
+                            onChange={(e) => {
+                                setFamilyLinkingCode(e.target.value)
+                            }}
+                        />
+                    </Form.Item>
+                    <Checkbox
+                        onChange={(e) => {
+                            setUseEmail(!e.target.checked)
+                        }}>
+                        Use their phone number instead?
+                    </Checkbox>
+                </Form>
             </Modal>
         </div>
     )

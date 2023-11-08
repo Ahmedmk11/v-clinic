@@ -17,6 +17,8 @@ import {
     savePatientfiles,
     uploadPatientFiles,
     removeUploadedFile,
+    addToFamily,
+    getFamily,
 } from '../controllers/patientController.js'
 
 const router = express.Router()
@@ -36,5 +38,7 @@ router.put('/update-medical-history/:id', updateMedicalHistory)
 router.post('/add-appointment', addAppointment)
 router.post('/upload-health-records', savePatientfiles, uploadPatientFiles)
 router.delete('/remove-uploaded-file', removeUploadedFile)
+router.post('/add-to-family/:id', addToFamily)
+router.get('/get-family/:id', getFamily)
 
 export default router
