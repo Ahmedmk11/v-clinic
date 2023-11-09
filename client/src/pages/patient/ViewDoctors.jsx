@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import Search from '../../components/reusable/Search/Search'
 import Pagination from '../../components/reusable/Pagination/Pagination'
 import { DatePicker, Select } from 'antd'
@@ -13,6 +12,7 @@ import utc from 'dayjs/plugin/utc'
 
 import CurrUserContext from '../../contexts/CurrUser'
 import { useContext } from 'react'
+import axiosApi from '../../utils/axiosApi'
 
 dayjs.extend(utc)
 
@@ -36,8 +36,8 @@ const PatientHome = () => {
             const doctorsToAdd = []
             const promises = doctors.map(async (doctor) => {
                 try {
-                    const response = await axios.get(
-                        `http://localhost:3000/api/doctor/get-appointments/${doctor._id}`
+                    const response = await axiosApi.get(
+                        `/doctor/get-appointments/${doctor._id}`
                     )
                     doctorsToAdd.push({
                         did: doctor._id,
@@ -158,8 +158,8 @@ const PatientHome = () => {
     }
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/doctor/get-active-doctors`)
+        axiosApi
+            .get(`/doctor/get-active-doctors`)
             .then((res) => {
                 setDoctors(res.data)
             })
@@ -168,9 +168,9 @@ const PatientHome = () => {
 
     useEffect(() => {
         if (currUser) {
-            axios
+            axiosApi
                 .get(
-                    `http://localhost:3000/api/patient/get-patient-package/${currUser._id}`
+                    `/patient/get-patient-package/${currUser._id}`
                 )
                 .then((res) => {
                     if (res.data.sessionDiscount)

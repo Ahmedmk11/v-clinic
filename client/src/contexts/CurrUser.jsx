@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom' // Import useLocation
-import axios from 'axios'
+import axiosApi, { baseURL } from '../utils/axiosApi'
 
 const CurrUserContext = createContext()
 
@@ -12,8 +12,8 @@ const Provider = ({ children }) => {
     const location = useLocation()
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3000/api/auth/get-curr-user', {
+        axiosApi
+            .get('/auth/get-curr-user', {
                 withCredentials: true,
             })
             .then((res) => {
@@ -26,7 +26,7 @@ const Provider = ({ children }) => {
 
     useEffect(() => {
         if (userID) {
-            let url = `http://localhost:3000/api/${role}/`
+            let url = baseURL+role+'/'
             if (role === 'patient') {
                 url += 'get-patient-by-id/'
             } else if (role === 'doctor') {
@@ -40,8 +40,8 @@ const Provider = ({ children }) => {
                 url += '/admin'
             }
 
-            axios
-                .get(url, { withCredentials: true })
+            axiosApi
+                .get(url)
                 .then((res) => {
                     console.log('res.data:', res.data)
                     setCurrUser(res.data)

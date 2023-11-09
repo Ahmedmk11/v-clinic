@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button } from 'antd'
 
 import { useNavigate } from 'react-router-dom'
+import axiosApi from '../../utils/axiosApi'
 
 function DoctorRegistration() {
     const [message, setMessage] = useState(null)
@@ -31,16 +32,7 @@ function DoctorRegistration() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            const response = await fetch(
-                'http://localhost:3000/api/doctor/create-doctor',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                }
-            )
+            const response = await axiosApi.post('/doctor/create-doctor', formData)
             const data = await response.json()
             if (response.ok) {
                 setMessage('Registration Successful')

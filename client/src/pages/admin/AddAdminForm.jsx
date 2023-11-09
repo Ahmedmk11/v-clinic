@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import './css/addAdminForm.css'
+import axiosApi from '../../utils/axiosApi'
 
 const addAdminForm = () => {
     const [Username, setUsername] = useState('')
@@ -19,7 +19,7 @@ const addAdminForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            await axios.post('http://localhost:3000/api/admin/addAdmin', {
+            await axiosApi.post('/admin/addAdmin', {
                 Username,
                 Password,
                 email,

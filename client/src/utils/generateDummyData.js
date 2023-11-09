@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { faker } from '@faker-js/faker'
+import axiosApi from './axiosApi'
 
 export const generateDummyData = async (count = 1, mode = 'doctor') => {
     const generatePatientData = () => {
@@ -69,8 +69,8 @@ export const generateDummyData = async (count = 1, mode = 'doctor') => {
 
     const createPatient = async (data) => {
         try {
-            const response = await axios.post(
-                'http://localhost:3000/api/patient/create-patient',
+            const response = await axiosApi.post(
+                '/patient/create-patient',
                 data
             )
             console.log('Patient created successfully:', response.data)
@@ -80,8 +80,8 @@ export const generateDummyData = async (count = 1, mode = 'doctor') => {
     }
     const createDoctor = async (data) => {
         try {
-            const response = await axios.post(
-                'http://localhost:3000/api/doctor/create-doctor',
+            const response = await axiosApi.post(
+                '/doctor/create-doctor',
                 data
             )
             console.log('Doctor created successfully:', response.data)

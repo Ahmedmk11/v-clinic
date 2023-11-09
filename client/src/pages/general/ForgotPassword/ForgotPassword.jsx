@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import React from 'react'
 import { Button, Checkbox, Form, Input, message, Space, Select } from 'antd'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -21,8 +21,8 @@ const Login = () => {
             if (formRef.current) {
                 await formRef.current.validateFields()
 
-                await axios.put(
-                    `http://localhost:3000/api/auth/change-password`,
+                await axiosApi.put(
+                    `/auth/change-password`,
                     {
                         email: email,
                         role: role,
@@ -43,9 +43,9 @@ const Login = () => {
     }
 
     const onEmailFinish = async () => {
-        axios
+        axiosApi
             .post(
-                `http://localhost:3000/api/auth/generate-send-otp`,
+                `/auth/generate-send-otp`,
                 { email },
                 {
                     withCredentials: true,
@@ -63,9 +63,9 @@ const Login = () => {
     }
 
     const onOTPFinish = async () => {
-        axios
+        axiosApi
             .post(
-                `http://localhost:3000/api/auth/validate-otp`,
+                `/auth/validate-otp`,
                 { otp, secret },
                 {
                     withCredentials: true,

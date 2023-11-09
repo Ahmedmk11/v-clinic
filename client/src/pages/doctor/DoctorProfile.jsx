@@ -1,12 +1,12 @@
 import './css/doctorProfile.css'
 import doctorImg from '../../assets/imgs/doctorProfile.png'
 import { useState, useContext, useEffect, useRef } from 'react'
-import axios from 'axios'
 import { Button, Modal, Form, Input } from 'antd'
 import CurrUserContext from '../../contexts/CurrUser'
 import RequireDocs from '../../components/doctor/DoctorProfile/RequireDocs'
 import DoctorCalender from '../../components/doctor/DoctorProfile/DoctorCalender'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
+import axiosApi from '../../utils/axiosApi'
 const DoctorProfile = () => {
     const {
         currUser,
@@ -36,16 +36,13 @@ const DoctorProfile = () => {
             if (formRef.current) {
                 await formRef.current.validateFields()
 
-                await axios.put(
-                    `http://localhost:3000/api/auth/change-password`,
+                await axiosApi.put(
+                    `/auth/change-password`,
                     {
                         id: currUser._id,
                         role: role,
                         oldPassword,
                         newPassword,
-                    },
-                    {
-                        withCredentials: true,
                     }
                 )
                 console.log('Form submitted')
@@ -137,8 +134,8 @@ const DoctorProfile = () => {
     const handleSave = async () => {
         setSaveButtonClicked(true)
         try {
-            await axios.put(
-                `http://localhost:3000/api/doctor/update-doctor`,
+            await axiosApi.put(
+                `/doctor/update-doctor`,
                 DoctorInfo
             )
             setDoctor(DoctorInfo)

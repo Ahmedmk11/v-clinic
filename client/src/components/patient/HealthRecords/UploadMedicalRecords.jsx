@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { UploadOutlined } from '@ant-design/icons'
 import { Button, Upload, Form, message } from 'antd'
-import axios from 'axios'
 import './uploadMedicalRecords.css'
 import CurrUserContext from '../../../contexts/CurrUser'
+import axiosApi from '../../../utils/axiosApi'
 
 const UploadMedicalRecords = () => {
     const [fileList, setFileList] = useState([])
@@ -19,9 +19,9 @@ const UploadMedicalRecords = () => {
         }
         console.log(formData)
         formData.append('id', Patient._id)
-        axios
+        axiosApi
             .post(
-                'http://localhost:3000/api/patient/upload-health-records',
+                '/patient/upload-health-records',
                 formData
             )
             .then((res) => {

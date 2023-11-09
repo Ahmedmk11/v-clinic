@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import AdminPackageList from '../../components/admin/ViewPackages/AdminPackageList'
+import axiosApi from '../../utils/axiosApi'
 
 const ViewPackages = () => {
     const [Packages, setPackages] = useState(null)
@@ -9,8 +9,8 @@ const ViewPackages = () => {
     }, [])
     const fetchPatients = async () => {
         try {
-            let res = await axios.get(
-                'http://localhost:3000/api/admin/getAllPackages'
+            let res = await axiosApi.get(
+                '/admin/getAllPackages'
             )
             if (res.length !== 0) setPackages(res.data)
         } catch (error) {

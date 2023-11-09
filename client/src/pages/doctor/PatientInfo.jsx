@@ -5,12 +5,12 @@ import PastPrescriptions from '../../components/doctor/PatientInfo/PastPrescript
 import MedicalHistory from '../../components/doctor/PatientInfo/MedicalHistory'
 import PatientInfoCard from '../../components/doctor/PatientInfo/PatientInfoCard'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
-import axios from 'axios'
 import AddMedicalRecord from '../../components/doctor/PatientInfo/AddMedicalRecord'
 import CreateFollowUp from '../../components/doctor/PatientInfo/CreateFollowUp'
 import CurrUserContext from '../../contexts/CurrUser'
 import { message } from 'antd'
 import ViewUploadedRecords from '../../components/patient/HealthRecords/ViewUploadedRecords'
+import axiosApi from '../../utils/axiosApi'
 const PatientInfo = () => {
     const { id } = useParams()
     const [SelectedPatient, setSelectedPatient] = useState(null)
@@ -19,8 +19,8 @@ const PatientInfo = () => {
     const [followUpVisible, setFollowUpVisible] = useState(false)
     const { currUser: Doctor } = useContext(CurrUserContext)
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
+        axiosApi
+            .get(`/patient/get-patient-by-id/${id}`)
             .then((res) => setSelectedPatient(res.data))
             .catch((err) => console.log(err))
     }, [])
@@ -73,8 +73,8 @@ const PatientInfo = () => {
     }
     const handleCreateFollowUp = (values) => {
         console.log(values)
-        axios
-            .post('http://localhost:3000/api/patient/add-appointment', {
+        axiosApi
+            .post('/patient/add-appointment', {
                 ...values,
                 patient_id: id,
                 doctor_id: Doctor._id,

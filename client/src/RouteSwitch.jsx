@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import axios from 'axios'
+import axiosApi from './utils/axiosApi'
 
 import Login from './pages/general/Login/Login'
 import PatientRegistration from './pages/patient/Register'
@@ -45,10 +45,8 @@ const RouteSwitch = () => {
     const location = useLocation()
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3000/api/auth/get-curr-user', {
-                withCredentials: true,
-            })
+        axiosApi
+            .get('/auth/get-curr-user')
             .then((res) => {
                 if (res.data.role) {
                     setIsAuthenticated(true)

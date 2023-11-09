@@ -1,7 +1,7 @@
 import PatientList from '../../components/doctor/ViewPatients/PatientList'
 import { useEffect, useState, useContext } from 'react'
-import axios from 'axios'
 import CurrUserContext from '../../contexts/CurrUser'
+import axiosApi from '../../utils/axiosApi'
 const ViewPatients = () => {
     const { currUser: Doctor } = useContext(CurrUserContext)
     const [Patients, setPatients] = useState([])
@@ -11,9 +11,9 @@ const ViewPatients = () => {
         }
     }, [Doctor])
     const fetchPatients = () => {
-        axios
+        axiosApi
             .get(
-                `http://localhost:3000/api/patient/get-patients-by-doctor-id/${Doctor._id}`
+                `/patient/get-patients-by-doctor-id/${Doctor._id}`
             )
             .then((res) => setPatients(res.data))
             .catch((err) => console.log(err))

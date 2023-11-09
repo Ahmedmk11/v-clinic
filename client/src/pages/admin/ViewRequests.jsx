@@ -1,12 +1,12 @@
 import RequestsTable from '../../components/admin/ViewDoctorRequests/RequestsTable.jsx'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import './css/ViewRequests.css'
+import axiosApi from '../../utils/axiosApi.js'
 const ViewRequests = () => {
     const [requests, setRequests] = useState([])
     useEffect(() => {
-        axios
-            .get('http://localhost:3000/api/admin/getAllDoctorRequest')
+        axiosApi
+            .get('/admin/getAllDoctorRequest')
             .then((res) => {
                 setRequests(res.data)
             })

@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
+import axiosApi from '../../utils/axiosApi'
 
 const DoctorInfo = () => {
     const location = useLocation()
@@ -9,8 +9,8 @@ const DoctorInfo = () => {
     const [doctor, setDoctor] = useState({})
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/doctor/get-doctor/${id}`)
+        axiosApi
+            .get(`/doctor/get-doctor/${id}`)
             .then((res) => {
                 setDoctor(res.data)
             })

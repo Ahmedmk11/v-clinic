@@ -18,7 +18,7 @@ import {
 } from 'antd'
 import { InfoCircleOutlined, LinkOutlined } from '@ant-design/icons'
 import FamilyMemberCard from '../../components/patient/ViewFamily/FamilyMemberCard'
-import axios from 'axios'
+import axiosApi from '../../utils/axiosApi'
 const { Option } = Select
 const { confirm } = Modal
 
@@ -71,17 +71,14 @@ const PatientProfile = () => {
             if (formFamilyRef.current) {
                 await formFamilyRef.current.validateFields()
 
-                await axios.post(
-                    `http://localhost:3000/api/patient/add-to-family/${currUser?._id}`,
+                await axiosApi.post(
+                    `/patient/add-to-family/${currUser?._id}`,
                     {
                         gender: currUser?.gender,
                         email: useEmail ? familyMemberEmail : '',
                         phoneNumber: useEmail ? '' : familyMemberPhone,
                         relation: familyMemberRelation,
                         linkingCode: familyLinkingCode,
-                    },
-                    {
-                        withCredentials: true,
                     }
                 )
                 console.log('added to family')
@@ -109,11 +106,8 @@ const PatientProfile = () => {
             try {
                 if (currUser) {
                     console.log('currUser', currUser._id)
-                    const res = await axios.get(
-                        `http://localhost:3000/api/patient/get-family/${currUser?._id}`,
-                        {
-                            withCredentials: true,
-                        }
+                    const res = await axiosApi.get(
+                        `/patient/get-family/${currUser?._id}`,
                     )
                     setFamily(res.data.familyMembers)
                     setNames(res.data.names)
@@ -140,11 +134,8 @@ const PatientProfile = () => {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const res = await axios.get(
-                    'http://localhost:3000/api/admin/getAllPackages',
-                    {
-                        withCredentials: true,
-                    }
+                const res = await axiosApi.get(
+                    '/admin/getAllPackages'
                 )
                 setAllPackages([
                     {
@@ -183,16 +174,13 @@ const PatientProfile = () => {
             if (formRef.current) {
                 await formRef.current.validateFields()
 
-                await axios.put(
-                    `http://localhost:3000/api/auth/change-password`,
+                await axiosApi.put(
+                    `/auth/change-password`,
                     {
                         id: currUser._id,
                         role: role,
                         oldPassword,
                         newPassword,
-                    },
-                    {
-                        withCredentials: true,
                     }
                 )
                 console.log('Form submitted')
@@ -243,25 +231,19 @@ const PatientProfile = () => {
                     (modalMode === 'current' && selectedPackage) ||
                     (modalMode === 'family' && familySelectedPackage)
                 ) {
-                    const response = await axios.post(
-                        `http://localhost:3000/api/patient/add-package/${targetUserId}`,
+                    const response = await axiosApi.post(
+                        `/patient/add-package/${targetUserId}`,
                         {
                             packageID: selectedPackage,
-                        },
-                        {
-                            withCredentials: true,
                         }
                     )
 
                     console.log('package selected')
                     message.success('Package selected successfully!')
-                    const res1 = await axios.post(
-                        `http://localhost:3000/api/patient/buy-package-wallet/${targetUserId}`,
+                    const res1 = await axiosApi.post(
+                        `/patient/buy-package-wallet/${targetUserId}`,
                         {
                             packageID: selectedPackage,
-                        },
-                        {
-                            withCredentials: true,
                         }
                     )
                     setCurrUserPackageName(response.data.name)
@@ -289,13 +271,10 @@ const PatientProfile = () => {
                 setConfirmPackageLoading(true)
 
                 if (selectedPackage) {
-                    const response = await axios.post(
-                        `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+                    const response = await axiosApi.post(
+                        `/patient/add-package/${currUser?._id}`,
                         {
                             packageID: selectedPackage,
-                        },
-                        {
-                            withCredentials: true,
                         }
                     )
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal, Input } from 'antd'
+import axiosApi from '../../utils/axiosApi'
 const { confirm } = Modal
 
 const AdminPackageInfo = () => {
@@ -14,8 +14,8 @@ const AdminPackageInfo = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/admin/getPackage/${id}`)
+        axiosApi
+            .get(`/admin/getPackage/${id}`)
             .then((res) => {
                 setSelectedPackage(res.data)
             })
@@ -61,7 +61,7 @@ const AdminPackageInfo = () => {
 
     const saveFunc = async () => {
         try {
-            const ret = await axios.put(`http://localhost:3000/api/admin/updatePackage/${id}`,
+            const ret = await axiosApi.put(`/admin/updatePackage/${id}`,
         editedPackage)
         setEditMessage('change saved successfully')
         setSelectedPackage(editedPackage)
@@ -188,8 +188,8 @@ const AdminPackageInfo = () => {
         })
     }
     const handleDelete = () => {
-        axios
-            .delete(`http://localhost:3000/api/admin/deletePackage/${id}`)
+        axiosApi
+            .delete(`/admin/deletePackage/${id}`)
             .then((res) => success())
             .catch((err) => {
                 error()

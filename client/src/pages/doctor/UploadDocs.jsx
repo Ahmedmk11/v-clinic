@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react'
 import CurrUserContext from '../../contexts/CurrUser'
-import axios from 'axios'
 import { Upload, Modal, Button, message, Form } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import getBase64 from '../../utils/getBase64'
 import ImageGallery from '../../components/reusable/ImageGallery/ImageGallery'
+import axiosApi, { baseURL } from '../../utils/axiosApi'
 const UploadDocs = () => {
     const { currUser: Doctor, setCurrUser: setDoctor } =
         useContext(CurrUserContext)
@@ -21,8 +21,8 @@ const UploadDocs = () => {
         }
         console.log(formData)
         formData.append('id', Doctor._id)
-        axios
-            .post('http://localhost:3000/api/doctor/upload', formData)
+        axiosApi
+            .post('/doctor/upload', formData)
             .then((res) => {
                 console.log(res)
                 setDoctor({
@@ -137,7 +137,7 @@ const UploadDocs = () => {
                     {Doctor?.uploaded_documents.length > 0 ? (
                         <ImageGallery
                             images={Doctor?.uploaded_documents?.map(
-                                (url) => 'http://localhost:3000/api/' + url
+                                (url) => baseURL + url
                             )}
                         />
                     ) : (

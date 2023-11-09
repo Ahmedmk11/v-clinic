@@ -3,7 +3,7 @@ import { Modal, Form, Select, Button, message } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import medicalRecordOptions from '../../../utils/medicalRecordOptions'
 import MedicalRecordFields from './MedicalRecordFields'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 const { Option } = Select
 
 const AddMedicalRecord = ({
@@ -68,9 +68,9 @@ const AddMedicalRecord = ({
     }
 
     const updatePatient = (newMedicalHistory) => {
-        axios
+        axiosApi
             .put(
-                `http://localhost:3000/api/patient/update-medical-history/${SelectedPatient?._id}`,
+                `/patient/update-medical-history/${SelectedPatient?._id}`,
                 {
                     medicalHistory: newMedicalHistory,
                 }

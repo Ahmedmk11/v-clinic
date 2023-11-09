@@ -4,7 +4,7 @@ import TimeSlotsCalendar from './TimeSlotsCalendar'
 import AddTimeSlot from './AddTimeSlot'
 import { Divider } from 'antd'
 import CurrUserContext from '../../../contexts/CurrUser'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const DoctorCalender = () => {
     const { currUser: Doctor, setCurrUser: setDoctor } =
@@ -20,8 +20,8 @@ const DoctorCalender = () => {
         console.log(newTimeSlots)
         newTimeSlots = [...newTimeSlots, ...timeSlots]
         console.log(newTimeSlots)
-        axios
-            .post('http://localhost:3000/api/doctor/updateTimeSlots', {
+        axiosApi
+            .post('/doctor/updateTimeSlots', {
                 newTimeSlots,
                 id: Doctor._id,
             })

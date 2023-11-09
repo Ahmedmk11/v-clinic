@@ -1,7 +1,7 @@
 import { useState, useContext, useRef } from 'react'
 import CurrUserContext from '../../contexts/CurrUser'
 import { Button, Modal, Form, Input } from 'antd'
-import axios from 'axios'
+import axiosApi from '../../utils/axiosApi'
 
 const AdminProfile = () => {
     const { currUser, role } = useContext(CurrUserContext)
@@ -24,8 +24,8 @@ const AdminProfile = () => {
             if (formRef.current) {
                 await formRef.current.validateFields()
 
-                await axios.put(
-                    `http://localhost:3000/api/auth/change-password`,
+                await axiosApi.put(
+                    `/auth/change-password`,
                     {
                         id: currUser._id,
                         role: role,

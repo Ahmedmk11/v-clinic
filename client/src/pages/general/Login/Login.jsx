@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import React from 'react'
 import { Button, Checkbox, Form, Input, message, Space, Select } from 'antd'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -14,8 +14,8 @@ const Login = () => {
     })
 
     const onFinish = (values) => {
-        axios
-            .post(`http://localhost:3000/api/auth/login`, userData, {
+        axiosApi
+            .post(`/auth/login`, userData, {
                 withCredentials: true,
                 credintials: 'include',
             })
