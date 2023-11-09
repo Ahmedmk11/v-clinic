@@ -500,10 +500,14 @@ async function getFamily(req, res) {
                     }
                 })
             )
-
+           const familyMemberProfiles=[]
+            for(let i=0;i<family.member.length;i++){
+              familyMemberProfiles.push(await PatientModel.findById(family.member[i].id).populate('package'))
+            }
             res.json({
                 familyMembers: family.member,
                 names: names,
+                familyMemberProfiles:familyMemberProfiles
             })
         } else {
             res.json(null)
