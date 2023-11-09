@@ -42,7 +42,6 @@ const FamilyMemberCard = ({ member, mode }) => {
             <div>
                 {mode === '1' ? (
                     <>
-                        <h3>{member.relation}</h3>
                         <div>
                             <strong>Name: </strong> {member.name}
                         </div>
@@ -58,10 +57,6 @@ const FamilyMemberCard = ({ member, mode }) => {
                     </>
                 ) : (
                     <>
-                        <h3>
-                            {relation.charAt(0).toUpperCase() +
-                                relation.slice(1)}
-                        </h3>
                         <div>
                             <strong>Name: </strong> {currMember.name}
                         </div>

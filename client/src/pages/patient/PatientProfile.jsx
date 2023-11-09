@@ -38,14 +38,18 @@ const PatientProfile = () => {
     const [familyLinkingCode, setFamilyLinkingCode] = useState('')
     const [useEmail, setUseEmail] = useState(true)
 
+    const [modalMode, setModalMode] = useState('')
+
     const [formFamilyRef] = Form.useForm()
 
     const [allPackages, setAllPackages] = useState([])
+    const [names, setNames] = useState([])
 
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
 
     const [family, setFamily] = useState([])
+    const [selectedFamilyMemberId, setSelectedFamilyMemberId] = useState('')
 
     const [open, setOpen] = useState(false)
     const [packageOpen, setPackageOpen] = useState(false)
@@ -54,12 +58,11 @@ const PatientProfile = () => {
     const [confirmPackageLoading, setConfirmPackageLoading] = useState(false)
 
     const [selectedPackage, setSelectedPackage] = useState('-1')
-
-    let once = false
+    const [familySelectedPackage, setFamilySelectedPackage] = useState('-1')
 
     useEffect(() => {
-        console.log('selectedPackage', selectedPackage)
-    }, [selectedPackage])
+        console.log('selectedPfffffffffffackage', selectedFamilyMemberId)
+    }, [selectedFamilyMemberId])
 
     const handleFamilyOk = async () => {
         try {
@@ -112,7 +115,8 @@ const PatientProfile = () => {
                             withCredentials: true,
                         }
                     )
-                    setFamily(res.data)
+                    setFamily(res.data.familyMembers)
+                    setNames(res.data.names)
                 }
             } catch (error) {
                 console.error(error)
@@ -231,10 +235,16 @@ const PatientProfile = () => {
         } else {
             try {
                 setConfirmPackageLoading(true)
-
-                if (selectedPackage) {
+                let targetUserId = currUser?._id
+                if (modalMode === 'family') {
+                    targetUserId = selectedFamilyMemberId
+                }
+                if (
+                    (modalMode === 'current' && selectedPackage) ||
+                    (modalMode === 'family' && familySelectedPackage)
+                ) {
                     const response = await axios.post(
-                        `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+                        `http://localhost:3000/api/patient/add-package/${targetUserId}`,
                         {
                             packageID: selectedPackage,
                         },
@@ -246,7 +256,7 @@ const PatientProfile = () => {
                     console.log('package selected')
                     message.success('Package selected successfully!')
                     const res1 = await axios.post(
-                        `http://localhost:3000/api/patient/buy-package-wallet/${currUser?._id}`,
+                        `http://localhost:3000/api/patient/buy-package-wallet/${targetUserId}`,
                         {
                             packageID: selectedPackage,
                         },
@@ -260,6 +270,7 @@ const PatientProfile = () => {
                 console.log('done')
 
                 setPackageOpen(false)
+                setModalMode('')
                 setConfirmPackageLoading(false)
                 setBuyPackage(false)
             } catch (error) {
@@ -268,6 +279,7 @@ const PatientProfile = () => {
             }
         }
     }
+
     const handlePackageOk = async () => {
         if (selectedPackage !== '-1') {
             setBuyPackage(true)
@@ -294,6 +306,7 @@ const PatientProfile = () => {
                 }
 
                 setPackageOpen(false)
+                setModalMode('')
                 setConfirmPackageLoading(false)
             } catch (error) {
                 console.error('Package changing error:', error)
@@ -301,12 +314,14 @@ const PatientProfile = () => {
             }
         }
         setPackageOpen(false)
+        setModalMode('')
     }
 
     const handlePackageCancel = () => {
         setBuyPackage(false)
         setSelectedPackage(currUser?.package == null ? '-1' : currUser?.package)
         setPackageOpen(false)
+        setModalMode('')
     }
 
     const showPayConfirm = () => {
@@ -366,7 +381,11 @@ const PatientProfile = () => {
                         {currUserPackageName ||
                             'You are not subscribed to a package'}
                     </p>
-                    <Button onClick={showPackageModal}>
+                    <Button
+                        onClick={() => {
+                            setModalMode('current')
+                            showPackageModal()
+                        }}>
                         {currUser?.package ? 'Change Package' : 'Subscribe'}
                     </Button>
                 </div>
@@ -375,10 +394,24 @@ const PatientProfile = () => {
                     {family?.map((member) => (
                         <FamilyMemberCard member={member} mode={'2'} />
                     ))}
-                    <Button onClick={showFamilyModal}>
-                        <LinkOutlined />
-                        Link Family Member
-                    </Button>
+                    <div
+                        style={{
+                            width: '45%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                        <Button onClick={showFamilyModal}>
+                            <LinkOutlined />
+                            Link Family Member
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setModalMode('family')
+                                showPackageModal()
+                            }}>
+                            Change Package of Family Member
+                        </Button>
+                    </div>
                 </div>
                 <ViewFamily />
             </div>
@@ -467,57 +500,130 @@ const PatientProfile = () => {
                 key='selectModal'
                 title='Health Package'
                 open={packageOpen}
-                onOk={handlePackageOk}
+                onOk={handlePackageOk} // change this
                 okText='Next'
                 confirmLoading={confirmPackageLoading}
                 onCancel={handlePackageCancel}
                 destroyOnClose>
-                <Space wrap>
-                    <Select
-                        style={{ width: 300 }}
-                        defaultValue={selectedPackage}
-                        optionLabelProp='label'
-                        onChange={(value) => {
-                            setSelectedPackage(value)
-                        }}>
-                        {allPackages.map((packageObj) => (
-                            <Select.Option
-                                key={packageObj._id}
-                                value={packageObj._id}
-                                label={packageObj.name}>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                    <span>{packageObj.name}</span>
-                                    <Dropdown
-                                        placement='right'
-                                        overlay={
-                                            <Menu>
-                                                {items
-                                                    .filter(
-                                                        (item) =>
-                                                            item.key ===
-                                                            packageObj._id
-                                                    )
-                                                    .map((filteredItem) => (
-                                                        <Menu.Item
-                                                            key={
-                                                                filteredItem.key
-                                                            }>
-                                                            {filteredItem.label}
-                                                        </Menu.Item>
-                                                    ))}
-                                            </Menu>
-                                        }>
-                                        <InfoCircleOutlined />
-                                    </Dropdown>
-                                </div>
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Space>
+                {modalMode === 'family' ? (
+                    <div>
+                        <Select
+                            style={{ width: 300 }}
+                            defaultValue={familySelectedPackage}
+                            optionLabelProp='label'
+                            onChange={(value) => {
+                                setFamilySelectedPackage(value)
+                            }}>
+                            {allPackages.map((packageObj) => (
+                                <Select.Option
+                                    key={packageObj._id}
+                                    value={packageObj._id}
+                                    label={packageObj.name}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                        <span>{packageObj.name}</span>
+                                        <Dropdown
+                                            placement='right'
+                                            overlay={
+                                                <Menu>
+                                                    {items
+                                                        .filter(
+                                                            (item) =>
+                                                                item.key ===
+                                                                packageObj._id
+                                                        )
+                                                        .map((filteredItem) => (
+                                                            <Menu.Item
+                                                                key={
+                                                                    filteredItem.key
+                                                                }>
+                                                                {
+                                                                    filteredItem.label
+                                                                }
+                                                            </Menu.Item>
+                                                        ))}
+                                                </Menu>
+                                            }>
+                                            <InfoCircleOutlined />
+                                        </Dropdown>
+                                    </div>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                        <Select
+                            onChange={(value) => {
+                                setSelectedFamilyMemberId(value)
+                            }}
+                            placeholder='Select a family member'>
+                            {family.map((member, i) => (
+                                <Select.Option
+                                    key={member.id}
+                                    value={member.id}
+                                    label={names[i]}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                        <span>{names[i]}</span>
+                                    </div>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                ) : (
+                    <Space wrap>
+                        <Select
+                            style={{ width: 300 }}
+                            defaultValue={selectedPackage}
+                            optionLabelProp='label'
+                            onChange={(value) => {
+                                setSelectedPackage(value)
+                            }}>
+                            {allPackages.map((packageObj) => (
+                                <Select.Option
+                                    key={packageObj._id}
+                                    value={packageObj._id}
+                                    label={packageObj.name}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                        <span>{packageObj.name}</span>
+                                        <Dropdown
+                                            placement='right'
+                                            overlay={
+                                                <Menu>
+                                                    {items
+                                                        .filter(
+                                                            (item) =>
+                                                                item.key ===
+                                                                packageObj._id
+                                                        )
+                                                        .map((filteredItem) => (
+                                                            <Menu.Item
+                                                                key={
+                                                                    filteredItem.key
+                                                                }>
+                                                                {
+                                                                    filteredItem.label
+                                                                }
+                                                            </Menu.Item>
+                                                        ))}
+                                                </Menu>
+                                            }>
+                                            <InfoCircleOutlined />
+                                        </Dropdown>
+                                    </div>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Space>
+                )}
             </Modal>
             <Modal
                 key='payModal'
