@@ -13,8 +13,8 @@ const SubscribeHealthPackage = ({
     setOpen,
     allPackages,
     targetSubscriberType,
-    familyNames,
-    familyMembers,
+    familyMemberProfiles,
+    setFamilyMemberProfiles,
 }) => {
     const [selectedPackageId, setSelectedPackageId] = useState(null)
     const [confirmPackageLoading, setConfirmPackageLoading] = useState(false)
@@ -30,18 +30,16 @@ const SubscribeHealthPackage = ({
     const handlePayWithCard = () => {}
 
     const handlePayWithWallet = async () => {
-        const targetSubscriberId = targetSubscriberType=="family"? subscriber?.id : currUser?._id;
         const selectedPackage = allPackages?.find(
             (currPackage) => currPackage._id == selectedPackageId
         )
-
         if (currUser?.wallet < selectedPackage?.price)
             message.error('Insufficient Funds!')
         else {
             try {
                 setConfirmPackageLoading(true)
                 const response = await axiosApi.post(
-                    `/patient/add-package/${targetSubscriberId}`,
+                    `/patient/add-package/${subscriber._id}`,
                     { packageID: selectedPackageId }
                 )
                 const res1 = await axiosApi.post(
@@ -54,6 +52,23 @@ const SubscribeHealthPackage = ({
                         wallet: res1.data.wallet,
                         package: response.data.package,
                     })
+                else if (targetSubscriberType === 'family') {
+                    setCurrUser({
+                        ...currUser,
+                        wallet: res1.data.wallet,
+                    })
+                    setFamilyMemberProfiles(
+                        familyMemberProfiles.map((member) => {
+                            if (member._id == subscriber._id) {
+                                return {
+                                    ...member,
+                                    package: response.data.package,
+                                }
+                            }
+                            return member
+                        })
+                    )
+                }
                 onCancelModal()
                 message.success('Package selected successfully!')
             } catch (error) {
@@ -94,7 +109,7 @@ const SubscribeHealthPackage = ({
 
     const goToPaymentChoices = async () => {
         setConfirmPackageLoading(true)
-    console.log('subscriber', subscriber)
+        console.log('subscriber', subscriber)
         if (targetSubscriberType == 'family') {
             try {
                 const res = await axiosApi.get(
@@ -273,26 +288,28 @@ const SubscribeHealthPackage = ({
                                     },
                                 ]}>
                                 <Select
+                                    style={{ width: 300 }}
                                     onChange={(value) => {
+                                        console.log('value', value)
                                         setSubscriber(
-                                            familyMembers.find(
-                                                (member) => member.id == value
+                                            familyMemberProfiles.find(
+                                                (member) => member._id == value
                                             )
                                         )
                                     }}
                                     placeholder='Select a family member'>
-                                    {familyMembers?.map((member, i) => (
+                                    {familyMemberProfiles?.map((member, i) => (
                                         <Select.Option
-                                            key={member.id}
-                                            value={member.id}
-                                            label={familyNames[i]}>
+                                            key={member._id}
+                                            value={member._id}
+                                            label={member.name}>
                                             <div
                                                 style={{
                                                     display: 'flex',
                                                     justifyContent:
                                                         'space-between',
                                                 }}>
-                                                <span>{familyNames[i]}</span>
+                                                <span>{member.name}</span>
                                             </div>
                                         </Select.Option>
                                     ))}
