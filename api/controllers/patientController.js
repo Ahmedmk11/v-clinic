@@ -555,7 +555,7 @@ async function packagePayCard(req, res) {
                 },
                 quantity: 1
             }],
-            success_url: "https://localhost:3000/patient/buy-package-success/:id",
+            success_url: "https://localhost:5174/patient/buy-package-success/:patientID/:packageID",
             cancel_url: "https://localhost:5174/patient/profile/fail",
         })
         res.status(200).json({ret : session.url})
