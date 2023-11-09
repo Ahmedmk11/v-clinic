@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
 import AdminDoctorList from "../../components/admin/AdminViewDoctor/AdminDoctorList"
+import axiosApi from "../../utils/axiosApi"
 
 const AdminViewDoctors = () => {
     const [doctors, setDoctors] = useState(null)
@@ -9,7 +9,7 @@ const AdminViewDoctors = () => {
     }, [])
     const fetchPatients = async () => {
         try {
-            let res = await axios.get('http://localhost:3000/api/admin/getAllDoctors')
+            let res = await axiosApi.get('/admin/getAllDoctors')
             if (res.length !== 0)
                 setDoctors(res.data)
         } catch (error) {

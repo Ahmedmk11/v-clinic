@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import axiosApi, { baseURL } from '../../../utils/axiosApi'
 import { Space, Table, Button } from 'antd'
 import PopMessage from './PopMessage'
 import { message } from 'antd'
@@ -121,8 +121,8 @@ const AntTable = ({ requests, setRequests }) => {
         const { key, ...doctor } = record
         doctor.status = newStatus
         try {
-            await axios.put(
-                `http://localhost:3000/api/admin/updateDoctorStatus`,
+            await axiosApi.put(
+                `/admin/updateDoctorStatus`,
                 { id: doctor._id, status: newStatus }
             )
             newStatus === 'Active'
@@ -144,7 +144,7 @@ const AntTable = ({ requests, setRequests }) => {
             record.uploaded_documents.length > 0 ? (
                 <ImageGallery
                     images={record?.uploaded_documents?.map(
-                        (url) => 'http://localhost:3000/api/' + url
+                        (url) => baseURL+ url
                     )}
                 />
             ) : (

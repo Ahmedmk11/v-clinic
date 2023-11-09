@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosApi from "../../utils/axiosApi"
 import { useState } from "react"
 
 const AddPackageForm = () => {
@@ -13,7 +13,7 @@ const AddPackageForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post("http://localhost:3000/api/admin/addPackage", { 
+            const response = await axiosApi.post("/admin/addPackage", { 
                 name,
                 price,
                 sessionDiscount,

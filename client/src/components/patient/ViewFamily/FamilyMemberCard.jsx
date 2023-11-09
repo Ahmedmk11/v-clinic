@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import './familyMemberCard.css'
-
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const FamilyMemberCard = ({ member, mode }) => {
     const [currMember, setCurrMember] = useState({})
@@ -12,20 +11,14 @@ const FamilyMemberCard = ({ member, mode }) => {
         if (mode == '2') {
             const fetchCurrMember = async () => {
                 try {
-                    const res = await axios.get(
-                        `http://localhost:3000/api/patient/get-patient-by-id/${member.id}`,
-                        {
-                            withCredentials: true,
-                        }
+                    const res = await axiosApi.get(
+                        `/patient/get-patient-by-id/${member.id}`
                     )
                     setCurrMember(res.data)
                     setRelation(member.relation)
                     if (res.data.package) {
-                        const res2 = await axios.get(
-                            `http://localhost:3000/api/admin/getPackage/${res.data.package}`,
-                            {
-                                withCredentials: true,
-                            }
+                        const res2 = await axiosApi.get(
+                            `/admin/getPackage/${res.data.package}`
                         )
                         setPackageName(res2.data.name)
                     }
@@ -42,7 +35,6 @@ const FamilyMemberCard = ({ member, mode }) => {
             <div>
                 {mode === '1' ? (
                     <>
-                        <h3>{member.relation}</h3>
                         <div>
                             <strong>Name: </strong> {member.name}
                         </div>
@@ -58,10 +50,6 @@ const FamilyMemberCard = ({ member, mode }) => {
                     </>
                 ) : (
                     <>
-                        <h3>
-                            {relation.charAt(0).toUpperCase() +
-                                relation.slice(1)}
-                        </h3>
                         <div>
                             <strong>Name: </strong> {currMember.name}
                         </div>

@@ -1,7 +1,7 @@
 import { Button, Modal } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 const { confirm } = Modal
 
 const AdminCard = ({ admin, onDelete }) => {
@@ -39,8 +39,8 @@ const AdminCard = ({ admin, onDelete }) => {
         })
     }
     const handleDelete = () => {
-        axios
-            .delete(`http://localhost:3000/api/admin/deleteUser/${id}`, {
+        axiosApi
+            .delete(`/admin/deleteUser/${id}`, {
                 data: { type: 'admin' },
             })
             .then((res) => {

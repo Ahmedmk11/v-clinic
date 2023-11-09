@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { DatePicker, Select } from 'antd'
-import axios from 'axios'
 
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import axiosApi from '../../../utils/axiosApi.js'
 
 dayjs.extend(utc)
 
@@ -24,8 +24,8 @@ const AppointmentsList = () => {
     })
 
     function getDoctor(id) {
-        axios
-            .get(`http://localhost:3000/api/doctor/get-doctor/${id}`)
+        axiosApi
+            .get(`/doctor/get-doctor/${id}`)
             .then((res) => {
                 setTempDoctorName(res.data.name)
             })
@@ -74,9 +74,9 @@ const AppointmentsList = () => {
     }, [appointmentsList])
 
     useEffect(() => {
-        axios
+        axiosApi
             .get(
-                `http://localhost:3000/api/patient/get-patient-appointments/${currUser._id}`
+                `/patient/get-patient-appointments/${currUser._id}`
             )
             .then((res) => {
                 setAppointmentsList(res.data)

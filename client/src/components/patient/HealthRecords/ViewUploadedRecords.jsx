@@ -4,7 +4,7 @@ import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import PdfViewer from '../../reusable/PdfViewer/PdfViewer'
 import './viewUploadedRecords.css'
-import axios from 'axios'
+import axiosApi, { baseURL } from '../../../utils/axiosApi'
 
 const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
    
@@ -17,9 +17,9 @@ const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
     )
 
     const onRemoveImage = (imagePath, setVisible) => {
-        imagePath = imagePath.split('http://localhost:3000/api/')[1]
-        axios
-            .delete('http://localhost:3000/api/patient/remove-uploaded-file', {
+        imagePath = imagePath.split(baseURL)[1]
+        axiosApi
+            .delete('/patient/remove-uploaded-file', {
                 params: { id: Patient._id, filePath: imagePath },
             })
             .then((res) => {
@@ -37,8 +37,8 @@ const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
     }
 
     const onRemovePdf = (pdfPath) => {
-        axios
-            .delete('http://localhost:3000/api/patient/remove-uploaded-file', {
+        axiosApi
+            .delete('/patient/remove-uploaded-file', {
                 params: { id: Patient._id, filePath: pdfPath },
             })
             .then((res) => {
@@ -62,7 +62,7 @@ const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
                 <>
                     <PdfViewer
                         pdfUrl={
-                            'http://localhost:3000/api/' + healthRecord?.path
+                            baseURL + healthRecord?.path
                         }
                     />
                     <ConditionalRender condition={role === 'patient'}>
@@ -95,7 +95,7 @@ const ViewUploadedRecords = ({ Patient, setPatient, role }) => {
                     <ImageGallery
                         images={images?.map(
                             (healthRecord) =>
-                                'http://localhost:3000/api/' +
+                               baseURL+
                                 healthRecord?.path
                         )}
                         onRemoveImage={onRemoveImage}

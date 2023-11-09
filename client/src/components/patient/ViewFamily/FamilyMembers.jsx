@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 import { Modal, Form, Input, Select, Button, message } from 'antd'
 import './familyMembers.css'
 import FamilyMemberCard from './FamilyMemberCard'
@@ -32,9 +32,9 @@ const FamilyMembers = ({ id }) => {
 
     useEffect(() => {
         if (!id) return
-        axios
+        axiosApi
             .get(
-                `http://localhost:3000/api/patient/get-patient-family-members/${id}`
+                `/patient/get-patient-family-members/${id}`
             )
             .then((res) => {
                 setFamilyMembers(res.data)
@@ -149,9 +149,9 @@ const FamilyMembers = ({ id }) => {
     }
 
     const handleAddFamilyMember = () => {
-        axios
+        axiosApi
             .post(
-                `http://localhost:3000/api/patient/populate-family-members/${id}`,
+                `/patient/populate-family-members/${id}`,
                 {
                     name: fmName,
                     patient_id: id,

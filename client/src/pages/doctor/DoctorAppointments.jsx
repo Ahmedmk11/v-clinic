@@ -3,15 +3,15 @@ import DoctorAppointmentsList from '../../components/doctor/DoctorAppointments/D
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import CurrUserContext from '../../contexts/CurrUser'
-
+import axiosApi from '../../utils/axiosApi'
 const DoctorAppointments = () => {
     const { currUser: Doctor } = useContext(CurrUserContext)
     const [Appointments, setAppointments] = useState([])
     useEffect(() => {
         if (!Doctor) return
-        axios
+        axiosApi
             .get(
-                'http://localhost:3000/api/doctor/get-appointments-with-names/' +
+                '/doctor/get-appointments-with-names/' +
                     Doctor._id
             )
             .then((res) => {

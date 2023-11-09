@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import { Modal, Button, message } from 'antd'
 import ContractContent from './ContractContent'
 import CurrUserContext from '../../../contexts/CurrUser'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const Contract = ({ visible, onCancel }) => {
     const { currUser: Doctor, setCurrUser: setDoctor } =
@@ -11,8 +11,8 @@ const Contract = ({ visible, onCancel }) => {
     const [isRejectModalVisible, setIsRejectModalVisible] = useState(false)
 
     const onReject = () => {
-        axios
-            .put(`http://localhost:3000/api/doctor/update-contract`, {
+        axiosApi
+            .put(`/doctor/update-contract`, {
                 id: Doctor._id,
                 contract_acceptance: 'Rejected',
             })
@@ -31,8 +31,8 @@ const Contract = ({ visible, onCancel }) => {
             })
     }
     const onAccept = () => {
-        axios
-            .put(`http://localhost:3000/api/doctor/update-contract`, {
+        axiosApi
+            .put(`/doctor/update-contract`, {
                 id: Doctor._id,
                 contract_acceptance: 'Accepted',
             })

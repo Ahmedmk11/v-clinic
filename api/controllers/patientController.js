@@ -46,6 +46,12 @@ async function createPatient(req, res) {
             emergencyPhoneNumber,
         } = req.body
 
+        let linkingCode
+
+        do {
+            linkingCode = crypto.randomBytes(16).toString('hex')
+        } while (await PatientModel.findOne({ linkingCode }))
+
         const newPatient = new PatientModel({
             username,
             name,
@@ -56,6 +62,7 @@ async function createPatient(req, res) {
             phoneNumber,
             emergencyName,
             emergencyPhoneNumber,
+            linkingCode,
         })
 
         await newPatient.save()
@@ -426,6 +433,10 @@ const addToFamily = async (req, res) => {
         let family = await FamilyModel.findOne({ 'member.id': id })
 
         if (!family) {
+            family = await FamilyModel.findOne({ 'member.id': valid._id })
+        }
+
+        if (!family) {
             family = new FamilyModel({
                 member: [
                     {
@@ -443,16 +454,27 @@ const addToFamily = async (req, res) => {
                 ],
             })
         } else {
-            const isAlreadyMember = family.member.some((member) =>
+            const isAlreadyMember1 = family.member.some((member) =>
                 member.id.equals(valid._id)
             )
-            if (isAlreadyMember) {
-                return res
-                    .status(400)
-                    .json('This member is already part of the family')
+            const isAlreadyMember2 = family.member.some((member) =>
+                member.id.equals(id)
+            )
+
+            if (!isAlreadyMember1) {
+                family.member.push({ id: valid._id, relation })
             }
 
-            family.member.push({ id: valid._id, relation })
+            if (!isAlreadyMember2) {
+                family.member.push({
+                    id: id,
+                    relation: gender === 'male' ? 'husband' : 'wife',
+                })
+            }
+
+            if (isAlreadyMember1 && isAlreadyMember2) {
+                return res.status(403).json('This member already exists')
+            }
         }
 
         await family.save()
@@ -467,9 +489,31 @@ async function getFamily(req, res) {
     try {
         const { id } = req.params
         let family = await FamilyModel.findOne({ 'member.id': id })
+
         if (family) {
-            res.json(family.member)
-        } else res.status(404).json({ message: 'Patient not found' })
+            let names = []
+
+            // eslint-disable-next-line no-undef
+            await Promise.all(
+                family.member.map(async (p) => {
+                    let tmp = await PatientModel.findById(p.id)
+                    if (tmp) {
+                        names.push(tmp.name)
+                    } else {
+                        res.status(404).json({ message: 'no name found' })
+                    }
+                })
+            )
+
+            console.log('names', names)
+
+            res.json({
+                familyMembers: family.member,
+                names: names,
+            })
+        } else {
+            res.json(null)
+        }
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

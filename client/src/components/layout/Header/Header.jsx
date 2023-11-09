@@ -8,7 +8,7 @@ import sunIcn from '../../../assets/icons/sun.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
-import axios from 'axios'
+import axiosApi from '../../../utils/axiosApi'
 
 const SunIcon = () => <img style={{ width: 20, height: 20 }} src={sunIcn} />
 const MoonIcon = () => <img style={{ width: 20, height: 20 }} src={moonIcn} />
@@ -38,13 +38,9 @@ const Header = () => {
             label: (
                 <a
                     onClick={() => {
-                        axios
+                        axiosApi
                             .post(
-                                'http://localhost:3000/api/auth/logout',
-                                {},
-                                {
-                                    withCredentials: true,
-                                }
+                                '/auth/logout',
                             )
                             .then(() => {
                                 message.success('Logged out successfully')

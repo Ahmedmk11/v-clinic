@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import calcAge from '../../utils/calcAge'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
+import axiosApi from '../../utils/axiosApi'
 const { confirm } = Modal
 
 const AdminPatientInfo = () => {
@@ -12,8 +12,8 @@ const AdminPatientInfo = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/patient/get-patient-by-id/${id}`)
+        axiosApi
+            .get(`/patient/get-patient-by-id/${id}`)
             .then((res) => {
                 setSelectedPatient(res.data)
             })
@@ -99,8 +99,8 @@ const AdminPatientInfo = () => {
         })
     }
     const handleDelete = () => {
-        axios
-            .delete(`http://localhost:3000/api/admin/deleteUser/${id}`, {
+        axiosApi
+            .delete(`/admin/deleteUser/${id}`, {
                 data: { type: 'patient' },
             })
             .then((res) => success())

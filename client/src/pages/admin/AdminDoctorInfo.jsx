@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axiosApi from '../../utils/axiosApi'
 import calcAge from '../../utils/calcAge'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
@@ -12,8 +12,8 @@ const AdminDoctorInfo = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/admin/getUser/${id}/doctor`)
+        axiosApi
+            .get(`/admin/getUser/${id}/doctor`)
             .then((res) => {
                 setSelectedDoctor(res.data)
             })
@@ -100,8 +100,8 @@ const AdminDoctorInfo = () => {
         })
     }
     const handleDelete = () => {
-        axios
-            .delete(`http://localhost:3000/api/admin/deleteUser/${id}`, {
+        axiosApi
+            .delete(`/admin/deleteUser/${id}`, {
                 data: { type: 'doctor' },
             })
             .then((res) => success())

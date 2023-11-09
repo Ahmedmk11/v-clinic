@@ -4,6 +4,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+import { baseURL } from '../../../utils/axiosApi'
 const RequireDocs = ({ docs, status, uploaded_documents }) => {
     const [show, setShow] = useState(true)
     const navigate = useNavigate()
@@ -53,7 +54,7 @@ const RequireDocs = ({ docs, status, uploaded_documents }) => {
                     <h2>Uploaded Documents</h2>
                     <ImageGallery
                         images={uploaded_documents?.map(
-                            (url) => 'http://localhost:3000/api/' + url
+                            (url) => baseURL + url
                         )}
                     />
                 </div>
