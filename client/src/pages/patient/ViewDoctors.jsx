@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Search from '../../components/reusable/Search/Search'
 import Pagination from '../../components/reusable/Pagination/Pagination'
 import { DatePicker, Select } from 'antd'
-
+import './css/ViewDoctors.css'
 import { findIntersection } from '../../utils/intersectionForSearch'
 import DoctorCard from '../../components/patient/ViewDoctors/DoctorCard'
 

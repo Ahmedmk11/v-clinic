@@ -183,7 +183,7 @@ const FamilyMembers = ({ id }) => {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 destroyOnClose>
-                <Form>
+                <Form  layout='vertical'>
                     <Form.Item label='Name'>
                         <Input
                             value={fmName}
