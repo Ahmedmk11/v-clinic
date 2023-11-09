@@ -46,6 +46,12 @@ async function createPatient(req, res) {
             emergencyPhoneNumber,
         } = req.body
 
+        let linkingCode
+
+        do {
+            linkingCode = crypto.randomBytes(16).toString('hex')
+        } while (await PatientModel.findOne({ linkingCode }))
+
         const newPatient = new PatientModel({
             username,
             name,
@@ -56,6 +62,7 @@ async function createPatient(req, res) {
             phoneNumber,
             emergencyName,
             emergencyPhoneNumber,
+            linkingCode,
         })
 
         await newPatient.save()
@@ -467,7 +474,7 @@ async function getFamily(req, res) {
         let family = await FamilyModel.findOne({ 'member.id': id })
         if (family) {
             res.json(family.member)
-        } else res.status(404).json({ message: 'Patient not found' })
+        } else res.json(null)
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

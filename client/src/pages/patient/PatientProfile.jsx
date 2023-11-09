@@ -55,9 +55,11 @@ const PatientProfile = () => {
 
     const [selectedPackage, setSelectedPackage] = useState('-1')
 
+    let once = false
+
     useEffect(() => {
-        console.log('familyyy', family)
-    }, [family])
+        console.log('selectedPackage', selectedPackage)
+    }, [selectedPackage])
 
     const handleFamilyOk = async () => {
         try {
@@ -100,25 +102,6 @@ const PatientProfile = () => {
     }
 
     useEffect(() => {
-        const fetchPackage = async () => {
-            try {
-                if (currUser) {
-                    const res = await axios.get(
-                        `http://localhost:3000/api/admin/getPackage/${currUser?.package}`,
-                        {
-                            withCredentials: true,
-                        }
-                    )
-                    setCurrUserPackageName(res.data.name)
-                    setSelectedPackage(
-                        currUser?.package == null ? '-1' : currUser?.package
-                    )
-                }
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchPackage()
         const fetchFamily = async () => {
             try {
                 if (currUser) {
@@ -176,10 +159,6 @@ const PatientProfile = () => {
         }
         fetchPackages()
     }, [])
-
-    const handleChange = (value) => {
-        setSelectedPackage(value)
-    }
 
     const showModal = () => {
         setOpen(true)
@@ -290,37 +269,38 @@ const PatientProfile = () => {
         }
     }
     const handlePackageOk = async () => {
-        if (selectedPackage != -1) {
+        if (selectedPackage !== '-1') {
             setBuyPackage(true)
-            // console.log(selectedPackage)
-        } else setBuyPackage(false)
+        } else {
+            setBuyPackage(false)
+            try {
+                setConfirmPackageLoading(true)
+
+                if (selectedPackage) {
+                    const response = await axios.post(
+                        `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
+                        {
+                            packageID: selectedPackage,
+                        },
+                        {
+                            withCredentials: true,
+                        }
+                    )
+
+                    console.log('package selected')
+                    message.success('Package selected successfully!')
+
+                    setCurrUserPackageName(response.data.name)
+                }
+
+                setPackageOpen(false)
+                setConfirmPackageLoading(false)
+            } catch (error) {
+                console.error('Package changing error:', error)
+                setConfirmPackageLoading(false)
+            }
+        }
         setPackageOpen(false)
-        // try {
-        //     setConfirmPackageLoading(true)
-
-        //     if (selectedPackage) {
-        //         const response = await axios.post(
-        //             `http://localhost:3000/api/patient/add-package/${currUser?._id}`,
-        //             {
-        //                 packageID: selectedPackage,
-        //             },
-        //             {
-        //                 withCredentials: true,
-        //             }
-        //         )
-
-        //         console.log('package selected')
-        //         message.success('Package selected successfully!')
-
-        //         setCurrUserPackageName(response.data.name)
-        //     }
-
-        //     setPackageOpen(false)
-        //     setConfirmPackageLoading(false)
-        // } catch (error) {
-        //     console.error('Package changing error:', error)
-        //     setConfirmPackageLoading(false)
-        // }
     }
 
     const handlePackageCancel = () => {
@@ -403,6 +383,7 @@ const PatientProfile = () => {
                 <ViewFamily />
             </div>
             <Modal
+                key='passwordModal'
                 title='Change Password'
                 open={open}
                 onOk={handleOk}
@@ -483,10 +464,11 @@ const PatientProfile = () => {
                 </Form>
             </Modal>
             <Modal
+                key='selectModal'
                 title='Health Package'
                 open={packageOpen}
                 onOk={handlePackageOk}
-                okText='Subscribe'
+                okText='Next'
                 confirmLoading={confirmPackageLoading}
                 onCancel={handlePackageCancel}
                 destroyOnClose>
@@ -495,21 +477,23 @@ const PatientProfile = () => {
                         style={{ width: 300 }}
                         defaultValue={selectedPackage}
                         optionLabelProp='label'
-                        onChange={handleChange}>
+                        onChange={(value) => {
+                            setSelectedPackage(value)
+                        }}>
                         {allPackages.map((packageObj) => (
                             <Select.Option
                                 key={packageObj._id}
                                 value={packageObj._id}
                                 label={packageObj.name}>
-                                <Space
+                                <div
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                     }}>
-                                    {packageObj.name}
+                                    <span>{packageObj.name}</span>
                                     <Dropdown
                                         placement='right'
-                                        menu={
+                                        overlay={
                                             <Menu>
                                                 {items
                                                     .filter(
@@ -529,13 +513,14 @@ const PatientProfile = () => {
                                         }>
                                         <InfoCircleOutlined />
                                     </Dropdown>
-                                </Space>
+                                </div>
                             </Select.Option>
                         ))}
                     </Select>
                 </Space>
             </Modal>
             <Modal
+                key='payModal'
                 title='Health Package'
                 open={buyPackage}
                 confirmLoading={confirmPackageLoading}
@@ -555,7 +540,6 @@ const PatientProfile = () => {
                     <Button
                         key='submit2'
                         type='primary'
-                        loading={confirmPackageLoading}
                         onClick={showPayConfirm}>
                         Pay With Wallet
                     </Button>,
