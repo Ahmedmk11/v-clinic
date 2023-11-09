@@ -247,7 +247,9 @@ async function buyPackageWallet(req, res) {
         const patient = await PatientModel.findById(patientID)
         const currPackage = await packageModel.findById(packageID)
 
+        console.log(patient.wallet)
         patient.wallet -= currPackage.price
+        console.log(patient.wallet)
         await patient.save()
         res.status(200).json({
             message: 'Package updated successfully',

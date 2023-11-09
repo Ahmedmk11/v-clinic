@@ -275,8 +275,10 @@ const PatientProfile = () => {
                             withCredentials: true,
                         }
                     )
+                    console.log(currUser.wallet)
                     setCurrUserPackageName(response.data.name)
                     setCurrUser({ ...currUser, wallet: res1.data.wallet })
+                    console.log(currUser.wallet)
                 }
                 console.log('done')
 
