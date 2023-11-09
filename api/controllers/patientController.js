@@ -102,6 +102,7 @@ async function getPatientByID(req, res) {
         let patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
+            .populate('package')
         patient = {
             ...patient._doc,
             prescriptions: patient.prescriptions,
@@ -287,7 +288,6 @@ async function addPackage(req, res) {
             })
         } else {
             let patient = await PatientModel.findById(patientID)
-
             if (patient) {
                 patient.package = null
                 await patient.save()
@@ -298,14 +298,13 @@ async function addPackage(req, res) {
             }
         }
 
-        const updatedPatient = await PatientModel.findById(patientID).populate(
-            'package',
-            'name'
-        )
+        const updatedPatient =
+            await PatientModel.findById(patientID).populate('package')
 
         res.status(200).json({
             message: 'Package updated successfully',
             name: updatedPatient.package ? updatedPatient.package.name : null,
+            package: updatedPatient.package,
         })
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -498,13 +497,12 @@ async function getFamily(req, res) {
     try {
         const { id } = req.params
         let family = await FamilyModel.findOne({ 'member.id': id })
-
+        family.member=family.member.filter((p)=>p.id!=id)
         if (family) {
             let names = []
-
             // eslint-disable-next-line no-undef
             await Promise.all(
-                family.member.map(async (p) => {
+                family.member.filter((p)=>p.id!=id).map(async (p) => {
                     let tmp = await PatientModel.findById(p.id)
                     if (tmp) {
                         names.push(tmp.name)
@@ -513,8 +511,6 @@ async function getFamily(req, res) {
                     }
                 })
             )
-
-            console.log('names', names)
 
             res.json({
                 familyMembers: family.member,

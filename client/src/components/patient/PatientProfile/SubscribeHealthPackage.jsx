@@ -1,0 +1,308 @@
+import React, { useState, useContext, useEffect } from 'react'
+import { Modal, Button, Select, message, Dropdown, Menu, Form } from 'antd'
+import { ExclamationCircleFilled, InfoCircleOutlined } from '@ant-design/icons'
+import PackageInfo from './PackageInfo'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+import CurrUserContext from '../../../contexts/CurrUser'
+import axiosApi from '../../../utils/axiosApi'
+const { Option } = Select
+const { confirm } = Modal
+
+const SubscribeHealthPackage = ({
+    open,
+    setOpen,
+    allPackages,
+    targetSubscriberType,
+    familyNames,
+    familyMembers,
+}) => {
+    const [selectedPackageId, setSelectedPackageId] = useState(null)
+    const [confirmPackageLoading, setConfirmPackageLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [subscriber, setSubscriber] = useState(null)
+    const { currUser, setCurrUser } = useContext(CurrUserContext)
+    const [form] = Form.useForm()
+
+    useEffect(() => {
+        if (targetSubscriberType === 'patient') setSubscriber(currUser)
+    }, [targetSubscriberType, currUser])
+
+    const handlePayWithCard = () => {}
+
+    const handlePayWithWallet = async () => {
+        const targetSubscriberId = targetSubscriberType=="family"? subscriber?.id : currUser?._id;
+        const selectedPackage = allPackages?.find(
+            (currPackage) => currPackage._id == selectedPackageId
+        )
+
+        if (currUser?.wallet < selectedPackage?.price)
+            message.error('Insufficient Funds!')
+        else {
+            try {
+                setConfirmPackageLoading(true)
+                const response = await axiosApi.post(
+                    `/patient/add-package/${targetSubscriberId}`,
+                    { packageID: selectedPackageId }
+                )
+                const res1 = await axiosApi.post(
+                    `/patient/buy-package-wallet/${currUser?._id}`,
+                    { packageID: selectedPackageId }
+                )
+                if (targetSubscriberType === 'patient')
+                    setCurrUser({
+                        ...currUser,
+                        wallet: res1.data.wallet,
+                        package: response.data.package,
+                    })
+                onCancelModal()
+                message.success('Package selected successfully!')
+            } catch (error) {
+                console.error('Package changing error:', error)
+                message.error('Error changing package!')
+            } finally {
+                setConfirmPackageLoading(false)
+            }
+        }
+    }
+
+    const onCancelModal = () => {
+        setOpen(false)
+        setPage(1)
+        setSelectedPackageId(null)
+        form.resetFields()
+    }
+    const showPayConfirm = (type) => {
+        confirm({
+            title: `Confirm Purchasing Package With Wallet`,
+            icon: <ExclamationCircleFilled />,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk: () => {
+                if (type === 'wallet') {
+                    handlePayWithWallet()
+                }
+                if (type === 'card') {
+                    handlePayWithCard()
+                }
+            },
+            onCancel() {
+                console.log('Cancel')
+            },
+        })
+    }
+
+    const goToPaymentChoices = async () => {
+        setConfirmPackageLoading(true)
+    console.log('subscriber', subscriber)
+        if (targetSubscriberType == 'family') {
+            try {
+                const res = await axiosApi.get(
+                    `/patient/get-patient-by-id/${subscriber.id}`
+                )
+                console.log('res.data', res.data)
+                if (res.data?.package?._id == selectedPackageId) {
+                    message.error('Already subscribed to this package')
+                    setConfirmPackageLoading(false)
+                    return
+                }
+            } catch (error) {
+                console.error('get family member error:', error)
+                message.error('Error getting family member!')
+            }
+        }
+        if (selectedPackageId && selectedPackageId == subscriber?.package?._id)
+            message.error('Already subscribed to this package')
+        else form.validateFields().then(() => setPage(2))
+        setConfirmPackageLoading(false)
+    }
+
+    const items = allPackages?.map((packageObj) => ({
+        key: packageObj._id,
+        label: (
+            <div className='package-info'>
+                <p>Price: {packageObj.price}</p>
+                <p>Session Discount: {packageObj.sessionDiscount}</p>
+                <p>Pharmacy Discount: {packageObj.medicineDiscount}</p>
+                <p>Family Discount: {packageObj.familySubsDiscount}</p>
+            </div>
+        ),
+    }))
+
+    const Page2Buttons = () => {
+        return (
+            <>
+                <Button
+                    key='back'
+                    onClick={() => {
+                        setPage(1)
+                        setSelectedPackageId(null)
+                        form.resetFields()
+                    }}>
+                    Return
+                </Button>
+                <Button
+                    key='submit1'
+                    type='primary'
+                    loading={confirmPackageLoading}
+                    onClick={() => showPayConfirm('card')}>
+                    Pay With Card
+                </Button>
+                <Button
+                    key='submit2'
+                    type='primary'
+                    onClick={() => showPayConfirm('wallet')}>
+                    Pay With Wallet
+                </Button>
+            </>
+        )
+    }
+
+    const Page2Content = () => {
+        return allPackages
+            ?.filter((currPackage) => currPackage._id == selectedPackageId)
+            .map((currPackage) => (
+                <PackageInfo
+                    key={currPackage._id + 'packid'}
+                    healthPackage={currPackage}
+                />
+            ))
+    }
+
+    return (
+        <>
+            <Modal
+                key='payModal'
+                title='Health Package'
+                open={open}
+                confirmLoading={confirmPackageLoading}
+                onCancel={onCancelModal}
+                destroyOnClose
+                footer={[
+                    <ConditionalRender
+                        condition={page === 1}
+                        elseComponent={<Page2Buttons />}>
+                        <Button
+                            key='cancel-button0'
+                            id='cancel-button'
+                            onClick={onCancelModal}>
+                            Cancel
+                        </Button>
+                        <Button
+                            key='next-button0'
+                            id='green-button'
+                            onClick={goToPaymentChoices}>
+                            Next
+                        </Button>
+                    </ConditionalRender>,
+                ]}>
+                <ConditionalRender
+                    condition={page === 1}
+                    elseComponent={<Page2Content />}>
+                    <Form form={form} layout='vertical'>
+                        <Form.Item
+                            name='package'
+                            label='Select a package'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please select a package!',
+                                },
+                            ]}>
+                            <Select
+                                placeholder='Select a package'
+                                style={{ width: 300 }}
+                                optionLabelProp='label'
+                                onChange={(value) => {
+                                    setSelectedPackageId(value)
+                                }}>
+                                {allPackages?.map((currPackage) => (
+                                    <Option
+                                        key={currPackage._id}
+                                        value={currPackage._id}
+                                        label={currPackage.name}>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                            }}>
+                                            <span>{currPackage.name}</span>
+                                            <Dropdown
+                                                placement='right'
+                                                overlay={
+                                                    <Menu>
+                                                        {items
+                                                            .filter(
+                                                                (item) =>
+                                                                    item.key ===
+                                                                    currPackage._id
+                                                            )
+                                                            .map(
+                                                                (
+                                                                    filteredItem
+                                                                ) => (
+                                                                    <Menu.Item
+                                                                        key={
+                                                                            filteredItem.key
+                                                                        }>
+                                                                        {
+                                                                            filteredItem.label
+                                                                        }
+                                                                    </Menu.Item>
+                                                                )
+                                                            )}
+                                                    </Menu>
+                                                }>
+                                                <InfoCircleOutlined />
+                                            </Dropdown>
+                                        </div>
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <ConditionalRender
+                            condition={targetSubscriberType == 'family'}>
+                            <Form.Item
+                                name={'familyMember'}
+                                label='Select a family member'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Please select a family member!',
+                                    },
+                                ]}>
+                                <Select
+                                    onChange={(value) => {
+                                        setSubscriber(
+                                            familyMembers.find(
+                                                (member) => member.id == value
+                                            )
+                                        )
+                                    }}
+                                    placeholder='Select a family member'>
+                                    {familyMembers?.map((member, i) => (
+                                        <Select.Option
+                                            key={member.id}
+                                            value={member.id}
+                                            label={familyNames[i]}>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent:
+                                                        'space-between',
+                                                }}>
+                                                <span>{familyNames[i]}</span>
+                                            </div>
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </ConditionalRender>
+                    </Form>
+                </ConditionalRender>
+            </Modal>
+        </>
+    )
+}
+export default SubscribeHealthPackage

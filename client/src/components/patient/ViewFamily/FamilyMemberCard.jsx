@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './familyMemberCard.css'
 import axiosApi from '../../../utils/axiosApi'
 
+
 const FamilyMemberCard = ({ member, mode }) => {
     const [currMember, setCurrMember] = useState({})
     const [relation, setRelation] = useState('')
@@ -16,12 +17,6 @@ const FamilyMemberCard = ({ member, mode }) => {
                     )
                     setCurrMember(res.data)
                     setRelation(member.relation)
-                    if (res.data.package) {
-                        const res2 = await axiosApi.get(
-                            `/admin/getPackage/${res.data.package}`
-                        )
-                        setPackageName(res2.data.name)
-                    }
                 } catch (error) {
                     console.error(error)
                 }
@@ -61,8 +56,11 @@ const FamilyMemberCard = ({ member, mode }) => {
                             {currMember.phoneNumber}
                         </div>
                         <div>
+                            <strong>Relation: </strong> {relation}
+                        </div>
+                        <div>
                             <strong>Package: </strong>{' '}
-                            {packageName ?? 'Not subscribed to a package'}
+                            {currMember?.package?.name ?? 'Not subscribed to a package'}
                         </div>
                     </>
                 )}
