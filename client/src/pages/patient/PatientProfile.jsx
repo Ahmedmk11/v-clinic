@@ -223,6 +223,7 @@ const PatientProfile = () => {
         } else {
             try {
                 setConfirmPackageLoading(true)
+                console.log(modalMode)
                 let targetUserId = currUser?._id
                 if (modalMode === 'family') {
                     targetUserId = selectedFamilyMemberId
@@ -231,6 +232,7 @@ const PatientProfile = () => {
                     (modalMode === 'current' && selectedPackage) ||
                     (modalMode === 'family' && familySelectedPackage)
                 ) {
+                    
                     const response = await axiosApi.post(
                         `/patient/add-package/${targetUserId}`,
                         {
@@ -365,6 +367,7 @@ const PatientProfile = () => {
                     <Button
                         onClick={() => {
                             setModalMode('current')
+                            console.log(modalMode, 'aaa')
                             showPackageModal()
                         }}>
                         {currUser?.package ? 'Change Package' : 'Subscribe'}

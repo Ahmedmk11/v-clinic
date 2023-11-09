@@ -22,6 +22,7 @@ const currentDir = dirname(currentFilePath)
 
 dotenv.config({ path: path.join(currentDir, '.env') })
 
+
 async function login(req, res) {
     try {
         const username = req.body.username

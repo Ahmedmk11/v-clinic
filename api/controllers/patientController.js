@@ -10,10 +10,19 @@ import fs from 'fs'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 import FamilyModel from '../models/familyModel.js'
+import stripe from "stripe";
+import dotenv from 'dotenv'
+
+
+
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
 const __dirname = dirname(currentFilePath)
+dotenv.config({ path: path.join(__dirname, '.env') })
+
+
+
 
 // --------------------------------------------------
 // Multer
@@ -519,6 +528,42 @@ async function getFamily(req, res) {
     }
 }
 
+
+
+async function packagePayCard(req, res) {
+    try {
+        const { id } = req.params
+        const packageInfo = await packageModel.findById(req.body.id)
+        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
+        const patient = await PatientModel.findById(id)
+        
+        const session = await stripeInstance.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "subscription",
+            line_items: [{
+                price_data: {
+                    currency: "egp",
+                    product_data: {
+                        name: packageInfo.name + " Package",
+                        description: `The ${packageInfo.name} Package provides you with a ${packageInfo.sessionDiscount}% discount on sessions, ${packageInfo.medicineDiscount}% discount on medicine and ${packageInfo.familySubsDiscount}% discount on family members subscriptions`
+                    },
+                    unit_amount: (packageInfo.price * 100),
+                    recurring: {
+                        interval: 'month',
+                        interval_count: 3
+                    }
+                },
+                quantity: 1
+            }],
+            success_url: "https://localhost:3000/patient/buy-package-success/:id",
+            cancel_url: "https://localhost:5174/patient/profile/fail",
+        })
+        res.status(200).json({ret : session.url})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+} 
+
 export {
     createPatient,
     getPatients,
@@ -539,4 +584,5 @@ export {
     addToFamily,
     getFamily,
     buyPackageWallet,
+    packagePayCard
 }
