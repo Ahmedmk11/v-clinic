@@ -499,25 +499,13 @@ async function getFamily(req, res) {
         let family = await FamilyModel.findOne({ 'member.id': id })
         family.member=family.member.filter((p)=>p.id!=id)
         if (family) {
-            let names = []
-            // eslint-disable-next-line no-undef
-            await Promise.all(
-                family.member.filter((p)=>p.id!=id).map(async (p) => {
-                    let tmp = await PatientModel.findById(p.id)
-                    if (tmp) {
-                        names.push(tmp.name)
-                    } else {
-                        res.status(404).json({ message: 'no name found' })
-                    }
-                })
-            )
+           
            const familyMemberProfiles=[]
             for(let i=0;i<family.member.length;i++){
               familyMemberProfiles.push(await PatientModel.findById(family.member[i].id).populate('package'))
             }
             res.json({
                 familyMembers: family.member,
-                names: names,
                 familyMemberProfiles:familyMemberProfiles
             })
         } else {

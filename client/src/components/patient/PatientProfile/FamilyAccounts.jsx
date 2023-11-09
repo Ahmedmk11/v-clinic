@@ -7,9 +7,9 @@ import LinkFamily from './LinkFamily'
 import SubscribeHealthPackage from './SubscribeHealthPackage'
 const FamilyAccounts = ({ currUser, allPackages }) => {
     const [family, setFamily] = useState([])
-    const [names, setNames] = useState([])
     const [linkFamilyModalOpen, setLinkFamilyModalOpen] = useState(false)
     const [subscribeModalOpen, setSubscribeModalOpen] = useState(false)
+    const [familyMemberProfiles, setFamilyMemberProfiles] = useState([])
 
     useEffect(() => {
         const fetchFamily = async () => {
@@ -20,7 +20,7 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                         `/patient/get-family/${currUser?._id}`
                     )
                     setFamily(res.data.familyMembers)
-                    setNames(res.data.names)
+                    setFamilyMemberProfiles(res.data.familyMemberProfiles)
                 }
             } catch (error) {
                 console.error(error)
@@ -32,16 +32,20 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
     return (
         <div className='sub-container'>
             <h2>My Family Accounts</h2>
-            {family?.map((member,i) => (
-                <FamilyMemberCard key={i+"fammem"} member={member} mode={'2'} />
+            {familyMemberProfiles?.map((member,i) => (
+                <FamilyMemberCard key={i+"fammem"} member={member} relation={family.find((p)=>member._id==p.id)?.relation} mode={'2'} />
             ))}
-            <div
+            <div className='edit-buttons'
                 style={{
-                    width: '45%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                    // width: '45%',
+                    // display: 'flex',
+                    // justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '10px',
+                    
                 }}>
                 <Button
+                    type='primary'
                     onClick={() => {
                         setLinkFamilyModalOpen(true)
                     }}>
@@ -49,6 +53,7 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                     Link Family Member
                 </Button>
                 <Button
+                type='primary'
                     onClick={() => {
                         setSubscribeModalOpen(true)
                     }}>
@@ -65,8 +70,8 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                 setOpen={setSubscribeModalOpen}
                 allPackages={allPackages}
                 targetSubscriberType={'family'}
-                familyNames={names}
-                familyMembers={family}
+                familyMemberProfiles={familyMemberProfiles}
+                setFamilyMemberProfiles={setFamilyMemberProfiles}
             />
         </div>
     )

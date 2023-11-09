@@ -2,29 +2,7 @@ import { useEffect, useState } from 'react'
 import './familyMemberCard.css'
 import axiosApi from '../../../utils/axiosApi'
 
-
-const FamilyMemberCard = ({ member, mode }) => {
-    const [currMember, setCurrMember] = useState({})
-    const [relation, setRelation] = useState('')
-    const [packageName, setPackageName] = useState(null)
-
-    useEffect(() => {
-        if (mode == '2') {
-            const fetchCurrMember = async () => {
-                try {
-                    const res = await axiosApi.get(
-                        `/patient/get-patient-by-id/${member.id}`
-                    )
-                    setCurrMember(res.data)
-                    setRelation(member.relation)
-                } catch (error) {
-                    console.error(error)
-                }
-            }
-            fetchCurrMember()
-        }
-    }, [])
-
+const FamilyMemberCard = ({ member, mode, relation }) => {
     return (
         <div className='card'>
             <div>
@@ -46,21 +24,21 @@ const FamilyMemberCard = ({ member, mode }) => {
                 ) : (
                     <>
                         <div>
-                            <strong>Name: </strong> {currMember.name}
+                            <strong>Name: </strong> {member.name}
                         </div>
                         <div>
-                            <strong>Email: </strong> {currMember.email}
+                            <strong>Email: </strong> {member.email}
                         </div>
                         <div>
-                            <strong>Phone Number: </strong>{' '}
-                            {currMember.phoneNumber}
+                            <strong>Phone Number: </strong> {member.phoneNumber}
                         </div>
                         <div>
                             <strong>Relation: </strong> {relation}
                         </div>
                         <div>
                             <strong>Package: </strong>{' '}
-                            {currMember?.package?.name ?? 'Not subscribed to a package'}
+                            {member?.package?.name ??
+                                'Not subscribed to a package'}
                         </div>
                     </>
                 )}
