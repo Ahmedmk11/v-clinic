@@ -27,6 +27,7 @@
         "notp": "^2.0.3",
         "prettier": "^3.0.3",
         "speakeasy": "^2.0.0",
+        "stripe": "^14.3.0",
         "thirty-two": "^1.0.2",
         "validator": "^13.11.0"
     },

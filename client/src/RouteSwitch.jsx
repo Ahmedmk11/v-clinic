@@ -38,6 +38,7 @@ import ForgotPassword from './pages/general/ForgotPassword/ForgotPassword'
 import ForbiddenAccess from './pages/general/ForbiddenAccess/ForbiddenAccess'
 
 import { LoginGuard, PatientGuard, DoctorGuard, AdminGuard } from './AuthGuard'
+import PatientPackageSuccess from './pages/patient/PatientPackageSuccess'
 
 const RouteSwitch = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -109,6 +110,7 @@ const RouteSwitch = () => {
                 }>
                 <Route index element={<PatientHome />} />
                 <Route path='profile' element={<PatientProfile />} />
+                <Route path='buy-package-success/:id' element={<PatientPackageSuccess />} />
                 <Route path='appointments' element={<PatientAppointments />} />
                 <Route path='doctor-info/:id' element={<DoctorInfo />} />
                 <Route
