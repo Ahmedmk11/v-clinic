@@ -11,11 +11,14 @@ const ReserveAppointment = ({
     date,
     doctor,
     discount,
+    setTimeSlots,
+    timeSlots,
 }) => {
-    const { currUser } = useContext(CurrUserContext)
+    const { currUser, setCurrUser} = useContext(CurrUserContext)
     const [form] = Form.useForm()
     const [familyMemberProfiles, setFamilyMemberProfiles] = useState([])
     const [selectedFamilyMember, setSelectedFamilyMember] = useState(null)
+    const [loading ,setLoading]=useState(false)
 
     //fetch family members
     useEffect(() => {
@@ -38,15 +41,50 @@ const ReserveAppointment = ({
         fetchFamilyMembers()
     }, [currUser])
 
-    const payWithWallet = () => {
+    const payWithWallet = async () => {
         form.validateFields()
+        const appointmentPrice = ((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(0)
+        const doctorID = doctor._id
         if (!selectedFamilyMember) return
-        //check if wallet has enough money
+        
+        if (currUser?.wallet < appointmentPrice){
+            message.error('Insufficient Funds!')
+            return
+        }
+        try {
+            const ret = await axiosApi.post(`/patient/pay-appointment-wallet/${currUser?._id}`, 
+                {deduction: appointmentPrice, 
+                    doctorID
+                }
+            )
+            setCurrUser({...currUser, wallet: ret.data.wallet})
+            reserveAppointment()
+        } catch (error) {
+            message.error('Something went wrong')
+            console.log(error)
+        } 
     }
 
-    const payWithCard = () => {
+    const payWithCard = async () => {
         form.validateFields()
+        const appointmentPrice = ((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(0)
+        const doctorID = doctor._id
+        const startTime = new Date(date)
+        const endTime = new Date(
+            new Date(date).toDateString() + ' ' + timeSlot.endTime
+        )
         if (!selectedFamilyMember) return
+
+        try {
+            const ret = await axiosApi.post(`/patient/pay-appointment-card/${selectedFamilyMember._id}`, 
+                {price: appointmentPrice, date, startTime, endTime, doctorID}
+            )
+            window.location = ret.data.ret
+        } catch (error) {
+            message.error('error')
+            console.log(error)
+        }
+
     }
 
     //reserve appointment
@@ -56,6 +94,7 @@ const ReserveAppointment = ({
             new Date(date).toDateString() + ' ' + timeSlot.endTime
         )
         console.log(startTime.toTimeString(), endTime.toTimeString())
+        setLoading(true)
         axiosApi
             .post('/patient//add-appointment', {
                 doctor_id: doctor._id,
@@ -65,19 +104,38 @@ const ReserveAppointment = ({
                 end_time: endTime,
             })
             .then((res) => {
+                const day = startTime.toLocaleString('default', {
+                    weekday: 'long',
+                })
+                timeSlots
+                    .find((slot) => slot.day == day)
+                    .slots.map((slot) => {
+                        if (
+                            slot.startTime == timeSlot.startTime &&
+                            slot.endTime == timeSlot.endTime
+                        )
+                            slot.isFree = false
+
+                        return slot
+                    })
+                setTimeSlots(timeSlots)
                 setOpen(false)
                 form.resetFields()
+                setSelectedFamilyMember(null);
                 message.success('Appointment reserved successfully')
             })
             .catch((err) => {
                 message.error('Something went wrong')
                 console.error(err)
+            }).finally(()=>{
+                setLoading(false)
             })
     }
     return (
         <Modal
             title='Reserve Appointment'
             open={open}
+            confirmLoading={loading}
             onCancel={() => {
                 setOpen(false)
                 form.resetFields()
@@ -100,12 +158,14 @@ const ReserveAppointment = ({
                     <Button
                         type='primary'
                         key='pay with card'
+                        loading={loading}
                         onClick={payWithCard}>
                         Pay with card
                     </Button>
                     <Button
                         type='primary'
                         key='pay with wallet'
+                        loading={loading}
                         onClick={payWithWallet}>
                         Pay with wallet
                     </Button>

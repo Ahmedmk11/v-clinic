@@ -127,6 +127,7 @@ const DoctorFreeAppointments = ({ doctor,discount }) => {
                 useTimeSlots
                 doctor={doctor}
                 discount={discount}
+                setTimeSlots={setTimeSlots}
             />
         </div>
     )

@@ -3,6 +3,7 @@ import AppointmentModel from '../models/appointmentsModel.js'
 import FamilyMemberModel from '../models/familyMemberModel.js'
 import PrescriptionModel from '../models/prescriptionsModel.js'
 import MedicalHistoryModel from '../models/medicalHistoryModel.js'
+import DoctorModel from '../models/doctorModel.js'
 import packageModel from '../models/packageModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
@@ -256,6 +257,25 @@ async function getPatientDiscount(req, res) {
         } else res.status(404).json({ message: 'Patient not found' })
     } catch (error) {
         res.status(500).json({ message: error.message })
+    }
+}
+
+async function payAppointmentWallet(req, res) {
+    try {
+        const patientID = req.params.id
+        const deduction = req.body.deduction
+        const doctorID = req.body.doctorID
+        console.log(patientID, doctorID, deduction)
+        const ret = await PatientModel.findByIdAndUpdate(patientID, 
+            {$inc: {wallet: -deduction }},
+            { new: true }            
+        )
+        await DoctorModel.findByIdAndUpdate(doctorID, 
+            { $inc: { wallet: deduction * 0.9 } },  //-10% V-Clinic fees :)
+        )
+        res.status(200).json({wallet: ret.wallet})
+    } catch (error) {
+        res.status(500).json(error.message)
     }
 }
 
@@ -524,23 +544,93 @@ async function stripeWebhook(request, response) {
     const event = request.body;
   
     const metadata = event.data.object.metadata;
-    switch (event.type) {
-        case 'checkout.session.completed':
-               try {
-                    const ret = await PatientModel.findById(metadata.patientID)
-                    ret.package = metadata.packageID
-                    await ret.save()
-               } catch (error) {
-                    console.log(error)
-               }
-            break;
-      default:
+    if (event.type == 'checkout.session.completed'){
+        if (metadata.webhook === 0){
+            try {
+                const ret = await PatientModel.findById(metadata.patientID)
+                ret.package = metadata.packageID
+                await ret.save()
+           } catch (error) {
+                console.log(error)
+           }
+        }
+        else {
+            try {
+                const newAppointment={
+                    patient_id:metadata.patient_id,
+                    doctor_id:metadata.doctor_id,
+                    date:  metadata.start_time,
+                    start_time: metadata.start_time,
+                    end_time:metadata.end_time
+                }
+                console.log("new app",newAppointment)
+                const appointment = new AppointmentModel(newAppointment)
+                await appointment.save()
+                await DoctorModel.findByIdAndUpdate(metadata.doctor_id, 
+                    { $inc: { wallet: metadata.deduction * 0.9 } },  //-10% V-Clinic fees :)
+                )
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
+    // switch (event.type) {
+    //     case 'checkout.session.completed':
+    //            try {
+    //                 const ret = await PatientModel.findById(metadata.patientID)
+    //                 ret.package = metadata.packageID
+    //                 await ret.save()
+    //            } catch (error) {
+    //                 console.log(error)
+    //            }
+    //         break;
+    //   default:
+    // }
   
     response.json({received: true});
   };
 
 
+async function payAppointmentCard(req, res) { 
+    try {
+        const { id } = req.params
+        const price = req.body.price
+        const date = req.body.date
+        const startTime = req.body.startTime
+        const endTime = req.body.endTime
+        const doctorInfo = await DoctorModel.findById(req.body.doctorID)
+        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
+        
+        const session = await stripeInstance.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: [{
+                price_data: {
+                    currency: "egp",
+                    product_data: {
+                        name: `Appointment with Dr. ${doctorInfo.name}`,
+                        description: `Reserve an appointment with Dr. ${doctorInfo.name}, ${doctorInfo.speciality} on ${date}`
+                    },
+                    unit_amount: (price * 100),
+                },
+                quantity: 1
+            }],
+            success_url: `http://localhost:5174/patient/doctor-info/${doctorInfo._id}`,
+            cancel_url: `http://localhost:5174/patient/doctor-info/${doctorInfo._id}`,
+            metadata: {
+                patient_id: id, 
+                doctor_id : req.body.doctorID,
+                start_time: startTime,
+                end_time: endTime,
+                deduction:price,
+                webhook: 1
+            }
+        })
+        res.status(200).json({ret : session.url})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+}
 async function packagePayCard(req, res) {
     try {
         const { id } = req.params
@@ -569,7 +659,8 @@ async function packagePayCard(req, res) {
             cancel_url: "http://localhost:5174/patient/profile",
             metadata: {
                 patientID: id, 
-                packageID: req.body.id 
+                packageID: req.body.id ,
+                webhook: 0
             }
         })
         res.status(200).json({ret : session.url})
@@ -599,5 +690,7 @@ export {
     getFamily,
     buyPackageWallet,
     packagePayCard,
-    stripeWebhook
+    stripeWebhook,
+    payAppointmentWallet,
+    payAppointmentCard
 }

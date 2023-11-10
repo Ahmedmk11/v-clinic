@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useEffect, useState,useContext } from 'react'
+import { useParams} from 'react-router-dom'
 import axiosApi from '../../utils/axiosApi'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
-import DoctorFreeAppointments from '../../components/patient/DoctorInfo.jsx/DoctorFreeAppointments'
+import DoctorFreeAppointments from '../../components/patient/DoctorInfo/DoctorFreeAppointments'
+import CurrUserContext from '../../contexts/CurrUser'
 const DoctorInfo = () => {
-    const location = useLocation()
-    const discount = location.state.discount
-    const { id } = useParams()
+    const {currUser}=useContext(CurrUserContext)
+    const id = window.location.href.split('/').pop()
     const [doctor, setDoctor] = useState({})
 
     useEffect(() => {
@@ -45,18 +45,18 @@ const DoctorInfo = () => {
                     </p>
                     <p>
                         <strong>Session Price: </strong>
-                        <ConditionalRender condition={discount!=1}>
+                        <ConditionalRender condition={currUser?.package!=null}>
                         <span style={{ textDecoration: 'line-through' }}>
                             {doctor?.hourly_rate?.toFixed(0)} 
                         </span>{" "}
                         </ConditionalRender>
                         {(
-                            (doctor.hourly_rate * 1.1).toFixed(0) * discount
+                            (doctor.hourly_rate * 1.1).toFixed(0) * (1-currUser?.package.sessionDiscount/100)
                         ).toFixed(0)}{' '}
                         EGP
                     </p>
                 </div>
-                <DoctorFreeAppointments doctor={doctor} discount={discount} />
+                <DoctorFreeAppointments doctor={doctor} discount={1-currUser?.package.sessionDiscount/100} />
             </div>
         </div>
     )
