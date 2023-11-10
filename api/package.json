@@ -25,6 +25,7 @@
         "mongoose": "^7.5.4",
         "multer": "^1.4.4",
         "nodemailer": "^6.9.7",
+        "nodemon": "^3.0.1",
         "notp": "^2.0.3",
         "prettier": "^3.0.3",
         "raw-body": "^2.5.2",

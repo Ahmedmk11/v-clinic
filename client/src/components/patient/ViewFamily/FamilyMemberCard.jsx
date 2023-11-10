@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './familyMemberCard.css'
 import axiosApi from '../../../utils/axiosApi'
+import { Button } from 'antd'       
 
 const FamilyMemberCard = ({ member, mode, relation }) => {
 
