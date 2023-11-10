@@ -16,12 +16,15 @@ import dotenv from 'dotenv'
 
 
 
+
+
+
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
 const __dirname = dirname(currentFilePath)
 dotenv.config({ path: path.join(__dirname, '.env') })
 
-
+let packagePaymentDone = false
 
 
 // --------------------------------------------------
@@ -517,33 +520,24 @@ async function getFamily(req, res) {
 }
 
 
-async function stripeWebhook(req, res) {
-    const payload = req.body;
-    const sig = req.headers['stripe-signature'];
+async function stripeWebhook(request, response) {
+    const event = request.body;
   
-    let event;
-  
-    try {
-      event = stripe.webhooks.constructEvent(payload, sig, 'your_stripe_endpoint_secret');
-    } catch (err) {
-      console.error('Webhook error:', err.message);
-      return res.status(400).end();
-    }
-  
-    // Handle the event
+    const metadata = event.data.object.metadata;
     switch (event.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object;
-        console.log('PaymentIntent was successful:', paymentIntent.id);
-        // Add your logic here to update your system based on payment success
-        break;
-      // Handle other event types as needed
-  
+        case 'checkout.session.completed':
+               try {
+                    const ret = await PatientModel.findById(metadata.patientID)
+                    ret.package = metadata.packageID
+                    await ret.save()
+               } catch (error) {
+                    console.log(error)
+               }
+            break;
       default:
-        console.log(`Unhandled event type: ${event.type}`);
     }
   
-    res.json({ received: true });
+    response.json({received: true});
   };
 
 
@@ -552,7 +546,6 @@ async function packagePayCard(req, res) {
         const { id } = req.params
         const packageInfo = await packageModel.findById(req.body.id, )
         const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
-        const patient = await PatientModel.findById(id)
         
         const session = await stripeInstance.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -572,8 +565,12 @@ async function packagePayCard(req, res) {
                 },
                 quantity: 1
             }],
-            success_url: `http://localhost:5174/patient/buy-package-success/${id}/${req.body.id}`,
+            success_url: `http://localhost:5174/patient/profile`,
             cancel_url: "http://localhost:5174/patient/profile",
+            metadata: {
+                patientID: id, 
+                packageID: req.body.id 
+            }
         })
         res.status(200).json({ret : session.url})
     } catch (error) {
@@ -601,5 +598,6 @@ export {
     addToFamily,
     getFamily,
     buyPackageWallet,
-    packagePayCard
+    packagePayCard,
+    stripeWebhook
 }

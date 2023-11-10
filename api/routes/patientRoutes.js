@@ -1,4 +1,5 @@
 import express from 'express'
+import bodyParser from 'body-parser';
 
 import {
     createPatient,
@@ -21,8 +22,10 @@ import {
     getFamily,
     buyPackageWallet,
     packagePayCard,
+    stripeWebhook,
 } from '../controllers/patientController.js'
 
+let packagePaymentDone = false
 const router = express.Router()
 
 router.post('/create-patient', createPatient)
@@ -30,6 +33,7 @@ router.post('/populate-family-members/:id', populateFamilyMembers)
 router.post('/add-package/:id', addPackage)
 router.post('/buy-package-wallet/:id', buyPackageWallet)
 router.post('/buy-package-card/:id', packagePayCard)
+
 router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id/:id', getPatientByID)
 router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
@@ -44,5 +48,7 @@ router.post('/upload-health-records', savePatientfiles, uploadPatientFiles)
 router.delete('/remove-uploaded-file', removeUploadedFile)
 router.post('/add-to-family/:id', addToFamily)
 router.get('/get-family/:id', getFamily)
+router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), stripeWebhook)
+
 
 export default router
