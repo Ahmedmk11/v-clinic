@@ -3,20 +3,12 @@ import { Divider } from 'antd'
 import './timeSlotsCalendar.css'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 
-const TimeSlotsCalendar = ({ timeSlots }) => {
-    const daysOfWeek = [
-        'Saturday',
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-    ]
+const FreeTimeSlots = ({ timeSlots }) => {
+  
 
     const renderTimeSlots = (day) => {
         let timeSlotsOfDay = []
-        timeSlotsOfDay = timeSlots?.filter((timeSlot) => timeSlot.day === day) || []
+        timeSlotsOfDay = timeSlots?.filter((timeSlot) => timeSlot.day === day) ||[]
         return (
             <ConditionalRender
                 condition={timeSlotsOfDay?.length > 0}
@@ -34,14 +26,14 @@ const TimeSlotsCalendar = ({ timeSlots }) => {
 
     return (
         <div>
-            {daysOfWeek.map((day, index) => (
+            {timeSlots.map((slot, index) => (
                 <div key={index}>
-                    <Divider orientation='left'>{day}</Divider>
-                    {renderTimeSlots(day)}
+                    <Divider orientation='left'>{slot.day}</Divider>
+                    {renderTimeSlots(slot.day)}
                 </div>
             ))}
         </div>
     )
 }
 
-export default TimeSlotsCalendar
+export default FreeTimeSlots

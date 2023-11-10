@@ -1,0 +1,22 @@
+.slot-item.reserved {
+    background-color: #e62929 !important;
+    color: white;
+}
+button.slot-item{
+    box-shadow: 0 0 10px var(--color-shadow);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: transform 0.3s ease-in-out;
+    -moz-transition: transform 0.3s ease-in-out;
+    -ms-transition: transform 0.3s ease-in-out;
+    -o-transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.2);
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        -o-transform: scale(1.05);
+    }
+}

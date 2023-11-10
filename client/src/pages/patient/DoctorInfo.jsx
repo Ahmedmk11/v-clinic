@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import axiosApi from '../../utils/axiosApi'
-
+import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
+import DoctorFreeAppointments from '../../components/patient/DoctorInfo.jsx/DoctorFreeAppointments'
 const DoctorInfo = () => {
     const location = useLocation()
     const discount = location.state.discount
@@ -44,12 +45,18 @@ const DoctorInfo = () => {
                     </p>
                     <p>
                         <strong>Session Price: </strong>
+                        <ConditionalRender condition={discount!=1}>
+                        <span style={{ textDecoration: 'line-through' }}>
+                            {doctor?.hourly_rate?.toFixed(0)} 
+                        </span>{" "}
+                        </ConditionalRender>
                         {(
                             (doctor.hourly_rate * 1.1).toFixed(0) * discount
                         ).toFixed(0)}{' '}
                         EGP
                     </p>
                 </div>
+                <DoctorFreeAppointments doctor={doctor} discount={discount} />
             </div>
         </div>
     )

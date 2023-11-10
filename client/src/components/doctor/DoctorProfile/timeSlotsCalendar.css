@@ -4,13 +4,13 @@
     gap: 10px;
     flex-wrap: nowrap;
     overflow-x: auto;
+    padding-bottom: 10px;
     &::-webkit-scrollbar {
-        width: 2px; /* width of the scrollbar */
-        height: 2px;
+        height: 2px; /* width of the scrollbar */
     }
 
     &::-webkit-scrollbar-thumb {
-        width: 0.5px; /* width of the scrollbar */
+        height: 0.5px; /* width of the scrollbar */
         background-color: var(--main-green); /* color of the scrollbar thumb */
         border-radius: 2px; /* roundness of the scrollbar thumb */
     }

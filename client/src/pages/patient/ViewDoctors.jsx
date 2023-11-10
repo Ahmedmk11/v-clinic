@@ -262,12 +262,7 @@ const PatientHome = () => {
                     paginate={(pageNumber) => setCurrentPage(pageNumber)}
                     currentPage={currentPage}
                 />
-                {/* <button
-                    onClick={() => {
-                        generateDummyData(10, 'doctor')
-                    }}>
-                    Add Data
-                </button> */}
+                
             </section>
         </div>
     )
