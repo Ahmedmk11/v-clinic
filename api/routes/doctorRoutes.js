@@ -6,6 +6,7 @@ import {
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
+    getAppointmentsByDoctorIdArray,
     getActiveDoctors,
     saveDoctorfiles,
     uploadDoctorFiles,
@@ -24,6 +25,8 @@ router.get(
     '/get-appointments-with-names/:id',
     getAppointmentsWithNamesByDoctorId
 )
+
+router.get('/get-appointmentstimes/:id',getAppointmentsByDoctorIdArray)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
 router.put('/update-contract', updateContract)
 router.post('/updateTimeSlots', updateTimeSlots)
