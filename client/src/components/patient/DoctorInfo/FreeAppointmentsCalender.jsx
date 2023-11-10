@@ -3,7 +3,7 @@ import { Divider, message } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import './FreeAppointmentCalender.css'
 import ReserveAppointment from './ReserveAppointment'
-const FreeAppointmentCalender = ({ timeSlots ,doctor,discount}) => {
+const FreeAppointmentCalender = ({ timeSlots ,doctor,discount, setTimeSlots}) => {
     const [open, setOpen] = useState(false)
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null)
     const [selectedDate,setSelectedDate]=useState(null)
@@ -46,7 +46,7 @@ const FreeAppointmentCalender = ({ timeSlots ,doctor,discount}) => {
                     {renderTimeSlots(slot.day)}
                 </div>
             ))}
-            <ReserveAppointment open={open} setOpen={setOpen} timeSlot={selectedTimeSlot}  date={selectedDate} doctor={doctor} discount={discount}/>
+            <ReserveAppointment open={open} setOpen={setOpen} timeSlot={selectedTimeSlot}  date={selectedDate} doctor={doctor} discount={discount} setTimeSlots={setTimeSlots} timeSlots={timeSlots}/>
         </div>
     )
 }
