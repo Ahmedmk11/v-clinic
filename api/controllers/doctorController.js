@@ -124,6 +124,23 @@ const getAppointmentsByDoctorId = async (req, res) => {
     }
 }
 
+const getAppointmentsByDoctorIdArray = async (req, res) => {
+    try {
+        let doctor = await DoctorModel.findById(req.params.id)
+        if (doctor) {
+            // Populate appointments and convert to array
+            await doctor.populate('appointments').execPopulate();
+            const appointmentsArray = doctor.appointments.map(appointment => appointment.toObject());
+            res.json(appointmentsArray);
+        } else {
+            res.status(404).json({ message: 'Doctor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 // @desc    Get all appointments by doctor id with patient names
 //@route    GET /api/doctor/get-appointments-with-names/:id
 //@access   Public
@@ -226,5 +243,6 @@ export {
     saveDoctorfiles,
     uploadDoctorFiles,
     updateContract,
-    updateTimeSlots
+    updateTimeSlots,
+    getAppointmentsByDoctorIdArray
 }
