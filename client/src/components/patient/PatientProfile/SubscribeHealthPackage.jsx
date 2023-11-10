@@ -5,6 +5,7 @@ import PackageInfo from './PackageInfo'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import CurrUserContext from '../../../contexts/CurrUser'
 import axiosApi from '../../../utils/axiosApi'
+import { useNavigate } from 'react-router-dom'
 const { Option } = Select
 const { confirm } = Modal
 
@@ -22,12 +23,24 @@ const SubscribeHealthPackage = ({
     const [subscriber, setSubscriber] = useState(null)
     const { currUser, setCurrUser } = useContext(CurrUserContext)
     const [form] = Form.useForm()
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (targetSubscriberType === 'patient') setSubscriber(currUser)
     }, [targetSubscriberType, currUser])
 
-    const handlePayWithCard = () => {}
+    const handlePayWithCard = async () => {
+        try {
+            console.log(subscriber._id, selectedPackageId)
+            const res = await axiosApi.post(`patient/buy-package-card/${subscriber._id}`, 
+                {id: selectedPackageId}
+            )
+            window.location = res.data.ret
+        } catch (error) {
+            console.log(error)
+            message.error('Service Unavailable')
+        }
+    }
 
     const handlePayWithWallet = async () => {
         const selectedPackage = allPackages?.find(
@@ -88,16 +101,16 @@ const SubscribeHealthPackage = ({
     }
     const showPayConfirm = (type) => {
         confirm({
-            title: `Confirm Purchasing Package With Wallet`,
+            title: `Confirm Purchasing Package With ${type}`,
             icon: <ExclamationCircleFilled />,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'Cancel',
             onOk: () => {
-                if (type === 'wallet') {
+                if (type === 'Wallet') {
                     handlePayWithWallet()
                 }
-                if (type === 'card') {
+                if (type === 'Card') {
                     handlePayWithCard()
                 }
             },
@@ -160,13 +173,13 @@ const SubscribeHealthPackage = ({
                     key='submit1'
                     type='primary'
                     loading={confirmPackageLoading}
-                    onClick={() => showPayConfirm('card')}>
+                    onClick={() => showPayConfirm('Card')}>
                     Pay With Card
                 </Button>
                 <Button
                     key='submit2'
                     type='primary'
-                    onClick={() => showPayConfirm('wallet')}>
+                    onClick={() => showPayConfirm('Wallet')}>
                     Pay With Wallet
                 </Button>
             </>

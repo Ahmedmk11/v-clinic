@@ -517,11 +517,40 @@ async function getFamily(req, res) {
 }
 
 
+async function stripeWebhook(req, res) {
+    const payload = req.body;
+    const sig = req.headers['stripe-signature'];
+  
+    let event;
+  
+    try {
+      event = stripe.webhooks.constructEvent(payload, sig, 'your_stripe_endpoint_secret');
+    } catch (err) {
+      console.error('Webhook error:', err.message);
+      return res.status(400).end();
+    }
+  
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object;
+        console.log('PaymentIntent was successful:', paymentIntent.id);
+        // Add your logic here to update your system based on payment success
+        break;
+      // Handle other event types as needed
+  
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+  
+    res.json({ received: true });
+  };
+
 
 async function packagePayCard(req, res) {
     try {
         const { id } = req.params
-        const packageInfo = await packageModel.findById(req.body.id)
+        const packageInfo = await packageModel.findById(req.body.id, )
         const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
         const patient = await PatientModel.findById(id)
         
@@ -543,8 +572,8 @@ async function packagePayCard(req, res) {
                 },
                 quantity: 1
             }],
-            success_url: "https://localhost:5174/patient/buy-package-success/:patientID/:packageID",
-            cancel_url: "https://localhost:5174/patient/profile/fail",
+            success_url: `http://localhost:5174/patient/buy-package-success/${id}/${req.body.id}`,
+            cancel_url: "http://localhost:5174/patient/profile",
         })
         res.status(200).json({ret : session.url})
     } catch (error) {

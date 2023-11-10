@@ -1,17 +1,17 @@
 import axios from "axios"
-import { baseURLclient } from "../../utils/axiosApi"
+import axiosApi, { baseURLclient } from "../../utils/axiosApi"
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
  const PatientPackageSuccess = () => {
     const { patientID, packageID } = useParams()
-    useEffect (async () => {
-        try {
-            const res = await axios.post(`/patient/add-package/${patientID}`, {
+    useEffect (() => {
+        axiosApi.post(`/patient/add-package/${patientID}`, {
                 packageID
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err) => console.log(err))
     }, []) 
 
 
