@@ -3,6 +3,17 @@ import './familyMemberCard.css'
 import axiosApi from '../../../utils/axiosApi'
 
 const FamilyMemberCard = ({ member, mode, relation }) => {
+
+    const handleCancelSubscirption = () => {
+        axiosApi.post(`/patient/add-package/${member?.id}`, {
+            packageID: '-1'
+    })
+    .then((res) => {
+        console.log(res)
+    })
+    .catch((err) => console.log(err))
+    }
+
     return (
         <div className='card'>
             <div>
@@ -40,6 +51,9 @@ const FamilyMemberCard = ({ member, mode, relation }) => {
                             {member?.package?.name ??
                                 'Not subscribed to a package'}
                         </div>
+                        <Button danger onClick={handleCancelSubscirption}>
+                    Cancel Subscription
+                </Button>
                     </>
                 )}
             </div>

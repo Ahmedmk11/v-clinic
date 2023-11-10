@@ -10,6 +10,16 @@ const HealthPackage = ({allPackages}) => {
         useContext(CurrUserContext)
     const [open, setOpen] = useState(false)
 
+    const handleCancelSubscirption = () => {
+        axiosApi.post(`/patient/add-package/${patient?._id}`, {
+            packageID: '-1'
+    })
+    .then((res) => {
+        console.log(res)
+    })
+    .catch((err) => console.log(err))
+    }
+
     return (
         <div className='sub-container'>
             <h2>Health Package</h2>
@@ -24,6 +34,9 @@ const HealthPackage = ({allPackages}) => {
                 <Button type='primary' onClick={() => setOpen(true)}>
                     {patient?.package ? 'Change Package' : 'Subscribe'}
                 </Button>
+                <Button danger onClick={handleCancelSubscirption}>
+                    Cancel Subscription
+                </Button>
             </div>
             <SubscribeHealthPackage
                 open={open}
@@ -34,4 +47,5 @@ const HealthPackage = ({allPackages}) => {
         </div>
     )
 }
+
 export default HealthPackage

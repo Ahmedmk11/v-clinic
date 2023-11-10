@@ -29,6 +29,8 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
         fetchFamily()
     }, [currUser])
 
+  
+
     return (
         <div className='sub-container'>
             <h2>My Family Accounts</h2>
@@ -59,6 +61,7 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                     }}>
                     Change Package of Family Member
                 </Button>
+                
             </div>
             <LinkFamily
                 currUser={currUser}
