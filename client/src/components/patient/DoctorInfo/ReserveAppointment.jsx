@@ -138,6 +138,7 @@ const ReserveAppointment = ({
             confirmLoading={loading}
             onCancel={() => {
                 setOpen(false)
+                setSelectedFamilyMember(null)
                 form.resetFields()
             }}
             // onOk={reserveAppointment}
@@ -151,6 +152,7 @@ const ReserveAppointment = ({
                         key='cancel'
                         onClick={() => {
                             setOpen(false)
+                            setSelectedFamilyMember(null)
                             form.resetFields()
                         }}>
                         Cancel
