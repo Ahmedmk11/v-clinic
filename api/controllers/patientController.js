@@ -545,7 +545,7 @@ async function stripeWebhook(request, response) {
   
     const metadata = event.data.object.metadata;
     if (event.type == 'checkout.session.completed'){
-        if (metadata.webhook === 0){
+        if (metadata.webhook === '0'){
             try {
                 const ret = await PatientModel.findById(metadata.patientID)
                 ret.package = metadata.packageID
