@@ -163,7 +163,7 @@ input:focus {
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
     background-color: var(--accent-background-color);
-    margin: 22px;
+
 
     &:hover {
         transform: scale(1.05);

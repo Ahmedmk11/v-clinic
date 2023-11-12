@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import CurrUserContext from '../../../contexts/CurrUser'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import PackageInfo from './PackageInfo'
 import SubscribeHealthPackage from './SubscribeHealthPackage'
@@ -15,9 +15,13 @@ const HealthPackage = ({allPackages}) => {
             packageID: '-1'
     })
     .then((res) => {
+        setPatient({ ...patient, package: res.data.package })
+        message.success('Package cancelled successfully')
         console.log(res)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+        message.error('Something went wrong')        
+        console.log(err)})
     }
 
     return (
@@ -31,11 +35,11 @@ const HealthPackage = ({allPackages}) => {
                 <PackageInfo healthPackage={patient?.package} />
             </ConditionalRender>
             <div className='edit-buttons'>
-                <Button type='primary' onClick={() => setOpen(true)}>
-                    {patient?.package ? 'Change Package' : 'Subscribe'}
-                </Button>
                 <Button danger onClick={handleCancelSubscirption}>
                     Cancel Subscription
+                </Button>
+                <Button type='primary' onClick={() => setOpen(true)}>
+                    {patient?.package ? 'Change Package' : 'Subscribe'}
                 </Button>
             </div>
             <SubscribeHealthPackage
