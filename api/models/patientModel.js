@@ -10,9 +10,15 @@ const patientModel = new mongoose.Schema(
             unique: [true, 'Username is taken.'],
             lowercase: true,
             validate: [
-                validator.isAlphanumeric,
-                'Please enter a valid username.',
+                {
+                    validator: function (value) {
+                        return /^[A-Za-z0-9_\.]+$/.test(value)
+                    },
+                    message:
+                        'Please enter a valid username. It should contain only numbers, alphabets, underscores, or periods.',
+                },
             ],
+
             minlength: [
                 4,
                 'Please enter a username that is 4 characters or longer',

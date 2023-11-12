@@ -11,6 +11,7 @@ function PatientRegistration() {
         name: '',
         email: '',
         password: '',
+        nid: '',
         birthdate: '',
         gender: '',
         phoneNumber: '',
@@ -33,7 +34,10 @@ function PatientRegistration() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            const response = await axiosApi.post('/patient/create-patient', formData)
+            const response = await axiosApi.post(
+                '/patient/create-patient',
+                formData
+            )
             const data = await response.json()
             if (response.ok) {
                 setMessage('Registration Successful')
@@ -42,6 +46,7 @@ function PatientRegistration() {
                     name: '',
                     email: '',
                     password: '',
+                    nid: '',
                     birthdate: '',
                     gender: '',
                     phoneNumber: '',
@@ -97,6 +102,16 @@ function PatientRegistration() {
                         type='password'
                         name='password'
                         value={formData.password}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <br />
+                <label>
+                    National ID:
+                    <input
+                        type='nid'
+                        name='nid'
+                        value={formData.nid}
                         onChange={handleInputChange}
                     />
                 </label>

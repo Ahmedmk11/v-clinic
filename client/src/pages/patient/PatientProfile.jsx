@@ -3,7 +3,6 @@ import axiosApi from '../../utils/axiosApi'
 import CurrUserContext from '../../contexts/CurrUser'
 import PatientInfo from '../../components/patient/PatientProfile/PatientInfo'
 import HealthPackage from '../../components/patient/PatientProfile/HealthPackage'
-import AddFamily from './AddFamily'
 import FamilyAccounts from '../../components/patient/PatientProfile/FamilyAccounts'
 
 const PatientProfile = () => {
@@ -27,7 +26,6 @@ const PatientProfile = () => {
                 <PatientInfo patient={currUser} />
                 <HealthPackage allPackages={allPackages} />
                 <FamilyAccounts currUser={currUser} allPackages={allPackages} />
-                <AddFamily />
             </div>
         </div>
     )
