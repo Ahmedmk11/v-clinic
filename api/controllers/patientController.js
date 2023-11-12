@@ -181,7 +181,13 @@ async function getPatientAppointments(req, res) {
     try {
         let patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            patient = await patient.populate('appointments')
+            patient = await patient.populate({
+                path: 'appointments',
+                populate: {
+                    path: 'doctor_id',
+                    model: 'Doctor',
+                },
+            })
             res.json(patient.appointments)
         } else res.status(404).json({ message: 'Patient not found' })
     } catch (error) {
@@ -198,6 +204,7 @@ async function getPatientPrescription(req, res) {
                 populate: {
                     path: 'doctor_id',
                     model: 'Doctor',
+
                 },
             })
             let prescriptions = populatedPatient.prescriptions.map(
