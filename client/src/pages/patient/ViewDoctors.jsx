@@ -209,7 +209,7 @@ const PatientHome = () => {
             axiosApi
                 .get(`/patient/get-patient-package/${currUser._id}`)
                 .then((res) => {
-                    if (res.data.sessionDiscount)
+                    if (res?.data?.sessionDiscount)
                         setDiscount(1 - res.data.sessionDiscount / 100)
                 })
                 .catch((err) => console.log(err))
