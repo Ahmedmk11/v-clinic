@@ -64,6 +64,8 @@ const SubscribeHealthPackage = ({
                         ...currUser,
                         wallet: res1.data.wallet,
                         package: response.data.package,
+                        packageStatus: 'Active',
+                        packageRenewalDate:response.data.renewalDate
                     })
                 else if (targetSubscriberType === 'family') {
                     setCurrUser({

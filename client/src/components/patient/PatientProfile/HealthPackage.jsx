@@ -17,6 +17,7 @@ const HealthPackage = ({ allPackages }) => {
             .then((res) => {
                 setPatient({ ...patient, package: res.data.package })
                 message.success('Package cancelled successfully')
+                setPatient({ ...patient, packageStatus: 'Inactive' })
                 console.log(res)
             })
             .catch((err) => {
@@ -24,7 +25,7 @@ const HealthPackage = ({ allPackages }) => {
                 console.log(err)
             })
     }
-
+console.log(patient)
     return (
         <div className='sub-container'>
             <h2>Health Package</h2>
@@ -36,7 +37,7 @@ const HealthPackage = ({ allPackages }) => {
                 <PackageInfo renewalDate={patient?.packageRenewalDate} healthPackage={patient?.package} />
             </ConditionalRender>
             <ConditionalRender condition={patient?.package && patient?.packageStatus == 'Inactive'}>
-                <p>Your subscribtion will expire on {patient?.packageRenewalDate}</p>
+                <p>Your subscribtion will expire on {new Date(patient?.packageRenewalDate).toDateString()}</p>
             </ConditionalRender>
             <div className='edit-buttons'>
                 <Button danger onClick={handleCancelSubscirption}>

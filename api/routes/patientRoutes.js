@@ -1,5 +1,5 @@
 import express from 'express'
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser'
 
 import {
     createPatient,
@@ -24,7 +24,8 @@ import {
     packagePayCard,
     stripeWebhook,
     payAppointmentWallet,
-    payAppointmentCard
+    payAppointmentCard,
+    cancelAutoRenewal,
 } from '../controllers/patientController.js'
 
 let packagePaymentDone = false
@@ -51,9 +52,12 @@ router.post('/upload-health-records', savePatientfiles, uploadPatientFiles)
 router.delete('/remove-uploaded-file', removeUploadedFile)
 router.post('/add-to-family/:id', addToFamily)
 router.get('/get-family/:id', getFamily)
-router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), stripeWebhook)
+router.post(
+    '/stripe-webhook',
+    bodyParser.raw({ type: 'application/json' }),
+    stripeWebhook
+)
+router.patch('/cancelAutoRenewal', cancelAutoRenewal)
 //router.post('/stripe-webhook-appointment', bodyParser.raw({ type: 'application/json' }), stripeWebhookAppointment)
-
-
 
 export default router

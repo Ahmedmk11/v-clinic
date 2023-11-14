@@ -96,12 +96,15 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
-        const date = new Date();
-        date.setHours(0, 0, 0, 0);
+        const date = new Date()
+        date.setHours(0, 0, 0, 0)
         let patient = await PatientModel.findById(id)
         if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
-            if (patient.status == "Inactive")
+            if (patient.packageStatus == 'Inactive') {
                 patient.package = null
+                await patient.save()
+            }
+
         patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
@@ -208,7 +211,6 @@ async function getPatientPrescription(req, res) {
                 populate: {
                     path: 'doctor_id',
                     model: 'Doctor',
-
                 },
             })
             let prescriptions = populatedPatient.prescriptions.map(
@@ -308,30 +310,30 @@ async function buyPackageWallet(req, res) {
     }
 }
 
-
-
-
-
 async function addPackage(req, res) {
     try {
         const patientID = req.params.id
         const packageID = req.body.packageID
-        const date = new Date();
-        date.setMonth(date.getMonth()+12);
+        const date = new Date()
+        date.setMonth(date.getMonth() + 12)
+        date.setHours(0, 0, 0, 0)
         if (packageID !== '-1') {
             await PatientModel.findByIdAndUpdate(patientID, {
                 package: packageID,
                 packageRenewalDate: date,
-                packageStatus: "Active"
+                packageStatus: 'Active',
             })
         } else {
             let patient = await PatientModel.findById(patientID)
             if (patient) {
-                patient.status = "Inactive"
-                await patient.save()
+                patient.packageStatus = 'Inactive'
                 console.log('Reference to Package removed.')
-                if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
+                if (
+                    new Date().setHours(0, 0, 0, 0) >=
+                    new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0)
+                )
                     patient.package = null
+                await patient.save()
             } else {
                 res.status(404).json({ message: 'Patient not found' })
                 return
@@ -343,9 +345,8 @@ async function addPackage(req, res) {
             message: 'Package updated successfully',
             name: updatedPatient.package ? updatedPatient.package.name : null,
             package: updatedPatient.package,
+            renewalDate: updatedPatient.packageRenewalDate,
         })
-        setInterval(myController, interval);
-
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -493,10 +494,10 @@ const addToFamily = async (req, res) => {
                             relation === 'wife'
                                 ? 'husband'
                                 : relation === 'husband'
-                                    ? 'wife'
-                                    : gender === 'male'
-                                        ? 'husband'
-                                        : 'wife',
+                                ? 'wife'
+                                : gender === 'male'
+                                ? 'husband'
+                                : 'wife',
                     },
                     { id: valid._id, relation },
                 ],
@@ -668,7 +669,7 @@ async function packagePayCard(req, res) {
                             name: packageInfo.name + ' Package',
                             description: `The ${packageInfo.name} Package provides you with a ${packageInfo.sessionDiscount}% discount on sessions, ${packageInfo.medicineDiscount}% discount on medicine and ${packageInfo.familySubsDiscount}% discount on family members subscriptions`,
                         },
-                        unit_amount: packageInfo.price * 100
+                        unit_amount: packageInfo.price * 100,
                     },
                     quantity: 1,
                 },
@@ -684,6 +685,18 @@ async function packagePayCard(req, res) {
         res.status(200).json({ ret: session.url })
     } catch (error) {
         res.status(500).json({ error: error.message })
+    }
+}
+
+async function cancelAutoRenewal(req, res) {
+    try {
+        const { patient_id } = req.body
+        const patient = await PatientModel.findById(patient_id)
+        patient.isAutoRenewalBlocked = false
+        await patient.save()
+        res.status(200).json({ message: 'Auto Renewal Canceled Successfully' })
+    } catch {
+        res.status(500).json({ message: 'Internal Server Error' })
     }
 }
 
@@ -711,4 +724,5 @@ export {
     stripeWebhook,
     payAppointmentWallet,
     payAppointmentCard,
+    cancelAutoRenewal,
 }
