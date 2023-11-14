@@ -568,7 +568,12 @@ async function stripeWebhook(request, response) {
         if (metadata.webhook === '0') {
             try {
                 const ret = await PatientModel.findById(metadata.patientID)
+                const date = new Date()
+                date.setMonth(date.getMonth() + 12)
+                date.setHours(0, 0, 0, 0)
                 ret.package = metadata.packageID
+                ret.packageRenewalDate =  date
+                ret. packageStatus = 'Active'
                 await ret.save()
             } catch (error) {
                 console.log(error)
