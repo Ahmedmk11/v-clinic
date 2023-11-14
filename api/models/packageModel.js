@@ -28,7 +28,9 @@ const packageSchema = new mongoose.Schema({
         min: [0, 'enter a positive number at max 100'],
         max: [100, 'enter a positive number at max 100'],
         required: true,
-    },
+    }
 })
+
+ 
 
 export default mongoose.model('Package', packageSchema)

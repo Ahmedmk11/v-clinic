@@ -146,7 +146,22 @@ const patientModel = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-        },
+        },  
+    packageRenewalDate:{
+        type: Date,
+        default:null,
+        require:true,
+    },
+    packageStatus:{
+        type:String,
+        enum:['Active','Inactive'],
+        default:"Inactive"
+    },
+    isAutoRenewalBlocked:
+    {
+        type:Boolean,
+        default:false
+    },
     },
     {
         toJSON: { virtuals: true },
@@ -191,5 +206,15 @@ patientModel.virtual('medicalHistory', {
 })
 
 const PatientModel = mongoose.model('Patient', patientModel)
+
+
+const updatePackageRenewal = async () => {
+    const currentTime = new Date();
+   
+    console.log('Packages renewal updated.');
+};
+
+
+setInterval(updatePackageRenewal, 3600000); // 60000 milliseconds = 1 minute
 
 export default PatientModel

@@ -44,7 +44,7 @@ const AppointmentModel = mongoose.model('Appointment', appointmentsSchema)
 // Check for upcoming appointments and update status
 const updateAppointmentStatus = async () => {
     const currentTime = new Date();
-    await AppointmentModel.updateOne(
+    await AppointmentModel.updateMany(
         { end_time: { $lt: currentTime }, status: 'upcoming' },
         { $set: { status: 'completed' } }
     );

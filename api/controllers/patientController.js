@@ -19,8 +19,6 @@ const currentFilePath = fileURLToPath(currentFileUrl)
 const __dirname = dirname(currentFilePath)
 dotenv.config({ path: path.join(__dirname, '.env') })
 
-let packagePaymentDone = false
-
 // --------------------------------------------------
 // Multer
 // --------------------------------------------------
@@ -98,7 +96,13 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
         let patient = await PatientModel.findById(id)
+        if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
+            if (patient.status == "Inactive")
+                patient.package = null
+        patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
             .populate('package')
@@ -304,35 +308,44 @@ async function buyPackageWallet(req, res) {
     }
 }
 
+
+
+
+
 async function addPackage(req, res) {
     try {
         const patientID = req.params.id
         const packageID = req.body.packageID
-
+        const date = new Date();
+        date.setMonth(date.getMonth()+12);
         if (packageID !== '-1') {
             await PatientModel.findByIdAndUpdate(patientID, {
                 package: packageID,
+                packageRenewalDate: date,
+                packageStatus: "Active"
             })
         } else {
             let patient = await PatientModel.findById(patientID)
             if (patient) {
-                patient.package = null
+                patient.status = "Inactive"
                 await patient.save()
                 console.log('Reference to Package removed.')
+                if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
+                    patient.package = null
             } else {
                 res.status(404).json({ message: 'Patient not found' })
                 return
             }
         }
-
         const updatedPatient =
             await PatientModel.findById(patientID).populate('package')
-
         res.status(200).json({
             message: 'Package updated successfully',
             name: updatedPatient.package ? updatedPatient.package.name : null,
             package: updatedPatient.package,
         })
+        setInterval(myController, interval);
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -480,10 +493,10 @@ const addToFamily = async (req, res) => {
                             relation === 'wife'
                                 ? 'husband'
                                 : relation === 'husband'
-                                ? 'wife'
-                                : gender === 'male'
-                                ? 'husband'
-                                : 'wife',
+                                    ? 'wife'
+                                    : gender === 'male'
+                                        ? 'husband'
+                                        : 'wife',
                     },
                     { id: valid._id, relation },
                 ],
@@ -646,7 +659,7 @@ async function packagePayCard(req, res) {
 
         const session = await stripeInstance.checkout.sessions.create({
             payment_method_types: ['card'],
-            mode: 'subscription',
+            mode: 'payment',
             line_items: [
                 {
                     price_data: {
@@ -655,11 +668,7 @@ async function packagePayCard(req, res) {
                             name: packageInfo.name + ' Package',
                             description: `The ${packageInfo.name} Package provides you with a ${packageInfo.sessionDiscount}% discount on sessions, ${packageInfo.medicineDiscount}% discount on medicine and ${packageInfo.familySubsDiscount}% discount on family members subscriptions`,
                         },
-                        unit_amount: packageInfo.price * 100,
-                        recurring: {
-                            interval: 'month',
-                            interval_count: 3,
-                        },
+                        unit_amount: packageInfo.price * 100
                     },
                     quantity: 1,
                 },
