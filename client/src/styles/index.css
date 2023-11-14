@@ -163,7 +163,7 @@ input:focus {
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
     background-color: var(--accent-background-color);
-    margin: 22px;
+
 
     &:hover {
         transform: scale(1.05);
@@ -207,7 +207,7 @@ input:focus {
 
 :where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active,
 :where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-    background-color: var(--accent-green);
+    background-color: var(--lighter-green);
 }
 
 :where(.css-dev-only-do-not-override-pr0fja).ant-input:focus,

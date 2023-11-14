@@ -8,6 +8,7 @@ const DoctorInfo = () => {
     const {currUser}=useContext(CurrUserContext)
     const id = window.location.href.split('/').pop()
     const [doctor, setDoctor] = useState({})
+    const [discount,setDiscount]=useState(1)
 
     useEffect(() => {
         axiosApi
@@ -19,6 +20,12 @@ const DoctorInfo = () => {
                 console.error(error)
             })
     }, [])
+
+    useEffect(() => {
+        if(currUser?.package)
+       setDiscount(1-currUser?.package.sessionDiscount/100)
+    }
+    , [currUser])
 
     return (
         <div className='page'>
@@ -51,12 +58,12 @@ const DoctorInfo = () => {
                         </span>{" "}
                         </ConditionalRender>
                         {(
-                            (doctor.hourly_rate * 1.1).toFixed(0) * (1-currUser?.package.sessionDiscount/100)
+                            (doctor.hourly_rate * 1.1).toFixed(0) * (discount)
                         ).toFixed(0)}{' '}
                         EGP
                     </p>
                 </div>
-                <DoctorFreeAppointments doctor={doctor} discount={1-currUser?.package.sessionDiscount/100} />
+                <DoctorFreeAppointments doctor={doctor} discount={discount} />
             </div>
         </div>
     )

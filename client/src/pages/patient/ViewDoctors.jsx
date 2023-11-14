@@ -92,7 +92,7 @@ const PatientHome = () => {
     }
 
     const filterByAvailability = () => {
-        const doctorsToAdd = []
+        let doctorsToAdd = []
         if (doctors) {
             console.log('dateRange4444', dateRange)
             if (dateRange) {
@@ -122,6 +122,44 @@ const PatientHome = () => {
                             doctorsToAdd.push(doctor)
                         }
                     }
+                })
+                doctorsToAdd = doctorsToAdd.filter((doctor) => {
+                    const selectedDateTime = dateRange
+                    const days = doctor.timeSlots
+
+                    if (!days || days.length === 0) {
+                        console.log('false', false)
+                        return false
+                    }
+
+                    const dayStrings = days.map((dayObject) => dayObject.day)
+
+                    if (!dayStrings.includes(selectedDateTime.format('dddd'))) {
+                        console.log('false', false)
+                        return false
+                    }
+
+                    return days.some((day) => {
+                        if (dayStrings.includes(day.day)) {
+                            console.log('im here')
+                            const timeSlot = day.slots
+                            return timeSlot.some((slot) => {
+                                const startTime = dayjs.utc(slot.startTime)
+                                const endTime = dayjs.utc(slot.endTime)
+                                if (
+                                    selectedDateTime >= startTime &&
+                                    selectedDateTime <= endTime
+                                ) {
+                                    console.log('false', false)
+                                    return false
+                                } else {
+                                    console.log('true', true)
+                                    return true
+                                }
+                            })
+                        }
+                        return false
+                    })
                 })
             } else {
                 return doctors
@@ -169,11 +207,9 @@ const PatientHome = () => {
     useEffect(() => {
         if (currUser) {
             axiosApi
-                .get(
-                    `/patient/get-patient-package/${currUser._id}`
-                )
+                .get(`/patient/get-patient-package/${currUser._id}`)
                 .then((res) => {
-                    if (res.data.sessionDiscount)
+                    if (res?.data?.sessionDiscount)
                         setDiscount(1 - res.data.sessionDiscount / 100)
                 })
                 .catch((err) => console.log(err))
@@ -262,7 +298,6 @@ const PatientHome = () => {
                     paginate={(pageNumber) => setCurrentPage(pageNumber)}
                     currentPage={currentPage}
                 />
-                
             </section>
         </div>
     )

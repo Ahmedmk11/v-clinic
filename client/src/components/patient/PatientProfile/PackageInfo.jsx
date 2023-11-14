@@ -1,6 +1,7 @@
-const PackageInfo = ({ healthPackage }) => {
+const PackageInfo = ({ healthPackage, renewalDate }) => {
     return (
         <div key={healthPackage._id}>
+            <p>Packages renew automatically using wallet</p> 
             <p>
                 <strong>Package Name: </strong>
                 {healthPackage?.name}
@@ -20,6 +21,10 @@ const PackageInfo = ({ healthPackage }) => {
             <p>
                 <strong>Family Package Subscribtion Discount: </strong>
                 {healthPackage?.familySubsDiscount} %
+            </p>
+            <p>
+                <strong>Auto Renewal:</strong>
+                {new Date(renewalDate).toDateString()}
             </p>
         </div>
     )

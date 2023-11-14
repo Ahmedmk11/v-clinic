@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { DatePicker, Select } from 'antd'
 
 import { formatDateRange } from '../../../utils/convertDateToString.js'
@@ -6,33 +6,17 @@ import { formatDateRange } from '../../../utils/convertDateToString.js'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import axiosApi from '../../../utils/axiosApi.js'
+import CurrUserContext from '../../../contexts/CurrUser.jsx'
 
 dayjs.extend(utc)
 
 const AppointmentsList = () => {
     const [appointmentsList, setAppointmentsList] = useState([])
     const [displayedAppointments, setDisplayedAppointments] = useState([])
-    const [tempDoctorName, setTempDoctorName] = useState('')
-
     const [isLoading, setIsLoading] = useState(true)
-
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
-
-    const [currUser, setCurrUser] = useState({
-        _id: '652185cdf27b074cbbae82bc',
-    })
-
-    function getDoctor(id) {
-        axiosApi
-            .get(`/doctor/get-doctor/${id}`)
-            .then((res) => {
-                setTempDoctorName(res.data.name)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
+    const { currUser } = useContext(CurrUserContext)
 
     const applyFilters = () => {
         let filtered = appointmentsList
@@ -74,10 +58,11 @@ const AppointmentsList = () => {
     }, [appointmentsList])
 
     useEffect(() => {
+        if (!currUser) {
+            return
+        }
         axiosApi
-            .get(
-                `/patient/get-patient-appointments/${currUser._id}`
-            )
+            .get(`/patient/get-patient-appointments/${currUser._id}`)
             .then((res) => {
                 setAppointmentsList(res.data)
                 setDisplayedAppointments(res.data)
@@ -127,26 +112,21 @@ const AppointmentsList = () => {
                 ]}
             />
             <div className='card-list'>
-                {displayedAppointments.map(
-                    (appointment) => (
-                        getDoctor(appointment.doctor_id),
-                        (
-                            <div className='card' key={appointment.id}>
-                                <h3>Dr. {tempDoctorName}</h3>
-                                <strong>
-                                    {formatDateRange(
-                                        appointment.start_time,
-                                        appointment.end_time
-                                    )}
-                                </strong>
-                                <p>
-                                    <strong>Status: </strong>
-                                    {appointment.status}
-                                </p>
-                            </div>
-                        )
-                    )
-                )}
+                {displayedAppointments.map((appointment) => (
+                    <div className='card' key={appointment.id}>
+                        <h3>Dr. {appointment?.doctor_id.name}</h3>
+                        <strong>
+                            {formatDateRange(
+                                appointment.start_time,
+                                appointment.end_time
+                            )}
+                        </strong>
+                        <p>
+                            <strong>Status: </strong>
+                            {appointment.status}
+                        </p>
+                    </div>
+                ))}
             </div>
         </div>
     )

@@ -11,22 +11,13 @@ import fs from 'fs'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 import FamilyModel from '../models/familyModel.js'
-import stripe from "stripe";
+import stripe from 'stripe'
 import dotenv from 'dotenv'
-
-
-
-
-
-
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
 const __dirname = dirname(currentFilePath)
 dotenv.config({ path: path.join(__dirname, '.env') })
-
-let packagePaymentDone = false
-
 
 // --------------------------------------------------
 // Multer
@@ -52,6 +43,7 @@ async function createPatient(req, res) {
             name,
             email,
             password,
+            nid,
             birthdate,
             gender,
             phoneNumber,
@@ -70,6 +62,7 @@ async function createPatient(req, res) {
             name,
             email,
             password,
+            nid,
             birthdate,
             gender,
             phoneNumber,
@@ -86,7 +79,7 @@ async function createPatient(req, res) {
         res.status(201).json(newPatient)
     } catch (err) {
         console.error('Error creating patient:', err)
-        res.status(500).json({ error: 'Internal Server Error' })
+        res.status(500).json(err)
     }
 }
 
@@ -103,7 +96,13 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
         let patient = await PatientModel.findById(id)
+        if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
+            if (patient.status == "Inactive")
+                patient.package = null
+        patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
             .populate('package')
@@ -186,7 +185,13 @@ async function getPatientAppointments(req, res) {
     try {
         let patient = await PatientModel.findById(req.params.id)
         if (patient) {
-            patient = await patient.populate('appointments')
+            patient = await patient.populate({
+                path: 'appointments',
+                populate: {
+                    path: 'doctor_id',
+                    model: 'Doctor',
+                },
+            })
             res.json(patient.appointments)
         } else res.status(404).json({ message: 'Patient not found' })
     } catch (error) {
@@ -203,6 +208,7 @@ async function getPatientPrescription(req, res) {
                 populate: {
                     path: 'doctor_id',
                     model: 'Doctor',
+
                 },
             })
             let prescriptions = populatedPatient.prescriptions.map(
@@ -266,14 +272,16 @@ async function payAppointmentWallet(req, res) {
         const deduction = req.body.deduction
         const doctorID = req.body.doctorID
         console.log(patientID, doctorID, deduction)
-        const ret = await PatientModel.findByIdAndUpdate(patientID, 
-            {$inc: {wallet: -deduction }},
-            { new: true }            
+        const ret = await PatientModel.findByIdAndUpdate(
+            patientID,
+            { $inc: { wallet: -deduction } },
+            { new: true }
         )
-        await DoctorModel.findByIdAndUpdate(doctorID, 
-            { $inc: { wallet: deduction * 0.9 } },  //-10% V-Clinic fees :)
+        await DoctorModel.findByIdAndUpdate(
+            doctorID,
+            { $inc: { wallet: deduction * 0.9 } } //-10% V-Clinic fees :)
         )
-        res.status(200).json({wallet: ret.wallet})
+        res.status(200).json({ wallet: ret.wallet })
     } catch (error) {
         res.status(500).json(error.message)
     }
@@ -300,35 +308,44 @@ async function buyPackageWallet(req, res) {
     }
 }
 
+
+
+
+
 async function addPackage(req, res) {
     try {
         const patientID = req.params.id
         const packageID = req.body.packageID
-
+        const date = new Date();
+        date.setMonth(date.getMonth()+12);
         if (packageID !== '-1') {
             await PatientModel.findByIdAndUpdate(patientID, {
                 package: packageID,
+                packageRenewalDate: date,
+                packageStatus: "Active"
             })
         } else {
             let patient = await PatientModel.findById(patientID)
             if (patient) {
-                patient.package = null
+                patient.status = "Inactive"
                 await patient.save()
                 console.log('Reference to Package removed.')
+                if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
+                    patient.package = null
             } else {
                 res.status(404).json({ message: 'Patient not found' })
                 return
             }
         }
-
         const updatedPatient =
             await PatientModel.findById(patientID).populate('package')
-
         res.status(200).json({
             message: 'Package updated successfully',
             name: updatedPatient.package ? updatedPatient.package.name : null,
             package: updatedPatient.package,
         })
+        setInterval(myController, interval);
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -476,10 +493,10 @@ const addToFamily = async (req, res) => {
                             relation === 'wife'
                                 ? 'husband'
                                 : relation === 'husband'
-                                ? 'wife'
-                                : gender === 'male'
-                                ? 'husband'
-                                : 'wife',
+                                    ? 'wife'
+                                    : gender === 'male'
+                                        ? 'husband'
+                                        : 'wife',
                     },
                     { id: valid._id, relation },
                 ],
@@ -520,16 +537,19 @@ async function getFamily(req, res) {
     try {
         const { id } = req.params
         let family = await FamilyModel.findOne({ 'member.id': id })
-        family.member=family.member.filter((p)=>p.id!=id)
+        family.member = family.member.filter((p) => p.id != id)
         if (family) {
-           
-           const familyMemberProfiles=[]
-            for(let i=0;i<family.member.length;i++){
-              familyMemberProfiles.push(await PatientModel.findById(family.member[i].id).populate('package'))
+            const familyMemberProfiles = []
+            for (let i = 0; i < family.member.length; i++) {
+                familyMemberProfiles.push(
+                    await PatientModel.findById(family.member[i].id).populate(
+                        'package'
+                    )
+                )
             }
             res.json({
                 familyMembers: family.member,
-                familyMemberProfiles:familyMemberProfiles
+                familyMemberProfiles: familyMemberProfiles,
             })
         } else {
             res.json(null)
@@ -539,35 +559,34 @@ async function getFamily(req, res) {
     }
 }
 
-
 async function stripeWebhook(request, response) {
-    
-    const event = request.body;
-    const metadata = event.data.object.metadata;
-    if (event.type == 'checkout.session.completed'){
-        if (metadata.webhook === '0'){
+    const event = request.body
+
+    const metadata = event.data.object.metadata
+    if (event.type == 'checkout.session.completed') {
+        if (metadata.webhook === '0') {
             try {
                 const ret = await PatientModel.findById(metadata.patientID)
                 ret.package = metadata.packageID
                 await ret.save()
-           } catch (error) {
+            } catch (error) {
                 console.log(error)
-           }
-        }
-        else {
+            }
+        } else {
             try {
-                const newAppointment={
-                    patient_id:metadata.patient_id,
-                    doctor_id:metadata.doctor_id,
-                    date:  metadata.start_time,
+                const newAppointment = {
+                    patient_id: metadata.patient_id,
+                    doctor_id: metadata.doctor_id,
+                    date: metadata.start_time,
                     start_time: metadata.start_time,
-                    end_time:metadata.end_time
+                    end_time: metadata.end_time,
                 }
-                console.log("new app",newAppointment)
+                console.log('new app', newAppointment)
                 const appointment = new AppointmentModel(newAppointment)
                 await appointment.save()
-                await DoctorModel.findByIdAndUpdate(metadata.doctor_id, 
-                    { $inc: { wallet: metadata.deduction * 0.9 } },  //-10% V-Clinic fees :)
+                await DoctorModel.findByIdAndUpdate(
+                    metadata.doctor_id,
+                    { $inc: { wallet: metadata.deduction * 0.9 } } //-10% V-Clinic fees :)
                 )
             } catch (error) {
                 console.log(error)
@@ -586,12 +605,11 @@ async function stripeWebhook(request, response) {
     //         break;
     //   default:
     // }
-  
-    response.json({received: true});
-  };
 
+    response.json({ received: true })
+}
 
-async function payAppointmentCard(req, res) { 
+async function payAppointmentCard(req, res) {
     try {
         const { id } = req.params
         const price = req.body.price
@@ -599,75 +617,75 @@ async function payAppointmentCard(req, res) {
         const startTime = req.body.startTime
         const endTime = req.body.endTime
         const doctorInfo = await DoctorModel.findById(req.body.doctorID)
-        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
-        
+        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY)
+
         const session = await stripeInstance.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            line_items: [{
-                price_data: {
-                    currency: "egp",
-                    product_data: {
-                        name: `Appointment with Dr. ${doctorInfo.name}`,
-                        description: `Reserve an appointment with Dr. ${doctorInfo.name}, ${doctorInfo.speciality} on ${date}`
+            payment_method_types: ['card'],
+            mode: 'payment',
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'egp',
+                        product_data: {
+                            name: `Appointment with Dr. ${doctorInfo.name}`,
+                            description: `Reserve an appointment with Dr. ${doctorInfo.name}, ${doctorInfo.speciality} on ${date}`,
+                        },
+                        unit_amount: price * 100,
                     },
-                    unit_amount: (price * 100),
+                    quantity: 1,
                 },
-                quantity: 1
-            }],
+            ],
             success_url: `http://localhost:5174/patient/doctor-info/${doctorInfo._id}`,
             cancel_url: `http://localhost:5174/patient/doctor-info/${doctorInfo._id}`,
             metadata: {
-                patient_id: id, 
-                doctor_id : req.body.doctorID,
+                patient_id: id,
+                doctor_id: req.body.doctorID,
                 start_time: startTime,
                 end_time: endTime,
-                deduction:price,
-                webhook: 1
-            }
+                deduction: price,
+                webhook: 1,
+            },
         })
-        res.status(200).json({ret : session.url})
+        res.status(200).json({ ret: session.url })
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message })
     }
 }
 async function packagePayCard(req, res) {
     try {
         const { id } = req.params
-        const packageInfo = await packageModel.findById(req.body.id, )
-        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
-        
+        const packageInfo = await packageModel.findById(req.body.id)
+        const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY)
+
         const session = await stripeInstance.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "subscription",
-            line_items: [{
-                price_data: {
-                    currency: "egp",
-                    product_data: {
-                        name: packageInfo.name + " Package",
-                        description: `The ${packageInfo.name} Package provides you with a ${packageInfo.sessionDiscount}% discount on sessions, ${packageInfo.medicineDiscount}% discount on medicine and ${packageInfo.familySubsDiscount}% discount on family members subscriptions`
+            payment_method_types: ['card'],
+            mode: 'payment',
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'egp',
+                        product_data: {
+                            name: packageInfo.name + ' Package',
+                            description: `The ${packageInfo.name} Package provides you with a ${packageInfo.sessionDiscount}% discount on sessions, ${packageInfo.medicineDiscount}% discount on medicine and ${packageInfo.familySubsDiscount}% discount on family members subscriptions`,
+                        },
+                        unit_amount: packageInfo.price * 100
                     },
-                    unit_amount: (packageInfo.price * 100),
-                    recurring: {
-                        interval: 'month',
-                        interval_count: 3
-                    }
+                    quantity: 1,
                 },
-                quantity: 1
-            }],
+            ],
             success_url: `http://localhost:5174/patient/profile`,
-            cancel_url: "http://localhost:5174/patient/profile",
+            cancel_url: 'http://localhost:5174/patient/profile',
             metadata: {
-                patientID: id, 
-                packageID: req.body.id ,
-                webhook: 0
-            }
+                patientID: id,
+                packageID: req.body.id,
+                webhook: 0,
+            },
         })
-        res.status(200).json({ret : session.url})
+        res.status(200).json({ ret: session.url })
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message })
     }
-} 
+}
 
 export {
     createPatient,
@@ -692,5 +710,5 @@ export {
     packagePayCard,
     stripeWebhook,
     payAppointmentWallet,
-    payAppointmentCard
+    payAppointmentCard,
 }

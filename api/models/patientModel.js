@@ -10,9 +10,15 @@ const patientModel = new mongoose.Schema(
             unique: [true, 'Username is taken.'],
             lowercase: true,
             validate: [
-                validator.isAlphanumeric,
-                'Please enter a valid username.',
+                {
+                    validator: function (value) {
+                        return /^[A-Za-z0-9_\.]+$/.test(value)
+                    },
+                    message:
+                        'Please enter a valid username. It should contain only numbers, alphabets, underscores, or periods.',
+                },
             ],
+
             minlength: [
                 4,
                 'Please enter a username that is 4 characters or longer',
@@ -140,7 +146,22 @@ const patientModel = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-        },
+        },  
+    packageRenewalDate:{
+        type: Date,
+        default:null,
+        require:true,
+    },
+    packageStatus:{
+        type:String,
+        enum:['Active','Inactive'],
+        default:"Inactive"
+    },
+    isAutoRenewalBlocked:
+    {
+        type:Boolean,
+        default:false
+    },
     },
     {
         toJSON: { virtuals: true },
@@ -185,5 +206,15 @@ patientModel.virtual('medicalHistory', {
 })
 
 const PatientModel = mongoose.model('Patient', patientModel)
+
+
+const updatePackageRenewal = async () => {
+    const currentTime = new Date();
+   
+    console.log('Packages renewal updated.');
+};
+
+
+setInterval(updatePackageRenewal, 3600000); // 60000 milliseconds = 1 minute
 
 export default PatientModel

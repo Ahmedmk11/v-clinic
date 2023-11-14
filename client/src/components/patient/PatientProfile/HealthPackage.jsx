@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import CurrUserContext from '../../../contexts/CurrUser'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import PackageInfo from './PackageInfo'
 import SubscribeHealthPackage from './SubscribeHealthPackage'
 import axiosApi from '../../../utils/axiosApi'
-const HealthPackage = ({allPackages}) => {
+const HealthPackage = ({ allPackages }) => {
     const { currUser: patient, setCurrUser: setPatient } =
         useContext(CurrUserContext)
     const [open, setOpen] = useState(false)
@@ -13,11 +13,16 @@ const HealthPackage = ({allPackages}) => {
     const handleCancelSubscirption = () => {
         axiosApi.post(`/patient/add-package/${patient?._id}`, {
             packageID: '-1'
-    })
-    .then((res) => {
-        console.log(res)
-    })
-    .catch((err) => console.log(err))
+        })
+            .then((res) => {
+                setPatient({ ...patient, package: res.data.package })
+                message.success('Package cancelled successfully')
+                console.log(res)
+            })
+            .catch((err) => {
+                message.error('Something went wrong')
+                console.log(err)
+            })
     }
 
     return (
@@ -28,14 +33,17 @@ const HealthPackage = ({allPackages}) => {
                 elseComponent={
                     <p>You are not subscribed to any packages yet</p>
                 }>
-                <PackageInfo healthPackage={patient?.package} />
+                <PackageInfo renewalDate={patient?.packageRenewalDate} healthPackage={patient?.package} />
+            </ConditionalRender>
+            <ConditionalRender condition={patient?.package && patient?.packageStatus == 'Inactive'}>
+                <p>Your subscribtion will expire on {patient?.packageRenewalDate}</p>
             </ConditionalRender>
             <div className='edit-buttons'>
-                <Button type='primary' onClick={() => setOpen(true)}>
-                    {patient?.package ? 'Change Package' : 'Subscribe'}
-                </Button>
                 <Button danger onClick={handleCancelSubscirption}>
                     Cancel Subscription
+                </Button>
+                <Button type='primary' onClick={() => setOpen(true)}>
+                    {patient?.package ? 'Change Package' : 'Subscribe'}
                 </Button>
             </div>
             <SubscribeHealthPackage
