@@ -541,8 +541,8 @@ async function getFamily(req, res) {
 
 
 async function stripeWebhook(request, response) {
+    
     const event = request.body;
-  
     const metadata = event.data.object.metadata;
     if (event.type == 'checkout.session.completed'){
         if (metadata.webhook === '0'){
