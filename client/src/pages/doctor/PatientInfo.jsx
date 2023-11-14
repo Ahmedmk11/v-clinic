@@ -72,7 +72,7 @@ const PatientInfo = () => {
         )
     }
     const handleCreateFollowUp = (values) => {
-        console.log(values)
+        console.log("followw uppp",values)
         axiosApi
             .post('/patient/add-appointment', {
                 ...values,

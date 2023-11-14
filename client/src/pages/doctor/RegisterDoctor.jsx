@@ -33,8 +33,8 @@ function DoctorRegistration() {
         event.preventDefault()
         try {
             const response = await axiosApi.post('/doctor/create-doctor', formData)
-            const data = await response.json()
-            if (response.ok) {
+            const data = response.data
+            if (response) {
                 setMessage('Registration Successful')
                 setFormData({
                     username: '',

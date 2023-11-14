@@ -33,13 +33,15 @@ function PatientRegistration() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        console.log('formData:', formData)
         try {
             const response = await axiosApi.post(
                 '/patient/create-patient',
                 formData
             )
-            const data = await response.json()
-            if (response.ok) {
+            const data = response.data
+            console.log(response)
+            if (response) {
                 setMessage('Registration Successful')
                 setFormData({
                     username: '',

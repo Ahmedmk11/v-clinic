@@ -89,7 +89,7 @@ const Header = () => {
                 </Button>
                 <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
-                    <span>{currUser?.wallet.toFixed(0)} EGP</span>
+                    <span>{currUser?.wallet?.toFixed(0)} EGP</span>
                 </ConditionalRender>
                 <Dropdown
                     menu={{
