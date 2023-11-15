@@ -34,10 +34,10 @@ console.log(patient)
                 elseComponent={
                     <p>You are not subscribed to any packages yet</p>
                 }>
-                <PackageInfo renewalDate={patient?.packageRenewalDate} healthPackage={patient?.package} />
+                <PackageInfo renewalDate={patient?.packageRenewalDate} healthPackage={patient?.package} status={patient?.packageStatus}/>
             </ConditionalRender>
             <ConditionalRender condition={patient?.package && patient?.packageStatus == 'Inactive'}>
-                <p>Your subscribtion will expire on {new Date(patient?.packageRenewalDate).toDateString()}</p>
+                <p>Your subscribtion cancelled and will expire on {new Date(patient?.packageRenewalDate).toDateString()}</p>
             </ConditionalRender>
             <div className='edit-buttons'>
                 <Button danger onClick={handleCancelSubscirption}>

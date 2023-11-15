@@ -122,6 +122,8 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                         relation={
                             family.find((p) => member?._id == p.id)?.relation
                         }
+                        family={familyMemberProfiles}
+                        setFamily={setFamilyMemberProfiles}
                     />
                 ))}
                 <div

@@ -97,15 +97,7 @@ async function getPatientByID(req, res) {
     try {
         const { id } = req.params
         const date = new Date()
-        date.setHours(0, 0, 0, 0)
         let patient = await PatientModel.findById(id)
-        if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
-            if (patient.packageStatus == 'Inactive') {
-                patient.package = null
-                await patient.save()
-            }
-
-        patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
             .populate('package')
@@ -572,8 +564,8 @@ async function stripeWebhook(request, response) {
                 date.setMonth(date.getMonth() + 12)
                 date.setHours(0, 0, 0, 0)
                 ret.package = metadata.packageID
-                ret.packageRenewalDate =  date
-                ret. packageStatus = 'Active'
+                ret.packageRenewalDate = date
+                ret.packageStatus = 'Active'
                 await ret.save()
             } catch (error) {
                 console.log(error)

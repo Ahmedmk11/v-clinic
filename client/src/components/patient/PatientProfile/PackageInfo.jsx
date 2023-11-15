@@ -1,5 +1,5 @@
 import ConditionalRender from "../../reusable/ConditionalRender/ConditionalRender"
-const PackageInfo = ({ healthPackage, renewalDate=null }) => {
+const PackageInfo = ({ healthPackage, renewalDate=null ,status=null}) => {
     return (
         <div key={healthPackage._id}>
             <p>Packages renew automatically using wallet</p> 
@@ -23,7 +23,7 @@ const PackageInfo = ({ healthPackage, renewalDate=null }) => {
                 <strong>Family Package Subscribtion Discount: </strong>
                 {healthPackage?.familySubsDiscount} %
             </p>
-            <ConditionalRender condition={renewalDate!=null}>
+            <ConditionalRender condition={renewalDate!=null && status!="Inactive"}>
             <p>
                 <strong>Auto Renewal: </strong>
                 {new Date(renewalDate).toDateString()}

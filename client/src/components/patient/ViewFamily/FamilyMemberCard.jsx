@@ -11,9 +11,9 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                 packageID: '-1',
             })
             .then((res) => {
-                const updatedFamily = family.map((familyMember) => {
+                const updatedFamily = family?.map((familyMember) => {
                     if (familyMember._id === familyMember._id) {
-                        return { ...familyMember, package: res.data.package }
+                        return { ...familyMember, package: res.data.package, packageStatus: 'Inactive' }
                     }
                     return familyMember
                 })
@@ -26,6 +26,7 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                 console.log(err)
             })
     }
+    console.log(member)
 
     return (
         <div className='member-card'>
@@ -85,6 +86,17 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                         <InfoCircleOutlined />
                     </Dropdown>
                 </ConditionalRender>
+            </div>
+            <ConditionalRender condition={member.packageRenewalDate!=null && member?.packageStatus != 'Inactive'}>
+            <div>
+                <strong>Auto Renewal: </strong>
+                {new Date(member.packageRenewalDate).toDateString()}
+            </div>
+            </ConditionalRender>
+            <div>
+            <ConditionalRender condition={member.packageRenewalDate!=null&& member?.package && member?.packageStatus == 'Inactive'}>
+                <p>Subscribtion cancelled and will expire on {new Date(member?.packageRenewalDate).toDateString()}</p>
+            </ConditionalRender>
             </div>
             <div className='edit-buttons'>
                 <Button danger onClick={handleCancelSubscirption}>
