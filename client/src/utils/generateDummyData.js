@@ -73,7 +73,6 @@ export const generateDummyData = async (count = 1, mode = 'doctor') => {
                 '/patient/create-patient',
                 data
             )
-            console.log('Patient created successfully:', response.data)
         } catch (error) {
             console.error('Error creating patient:', error)
         }
@@ -84,7 +83,6 @@ export const generateDummyData = async (count = 1, mode = 'doctor') => {
                 '/doctor/create-doctor',
                 data
             )
-            console.log('Doctor created successfully:', response.data)
         } catch (error) {
             console.error('Error creating doctor:', error)
         }

@@ -6,7 +6,6 @@ import UploadMedicalRecords from "../../components/patient/HealthRecords/UploadM
 import ViewUploadedRecords from "../../components/patient/HealthRecords/ViewUploadedRecords"
 const HealthRecords = () => {
     const { currUser: Patient , setCurrUser: setPatient, role} = useContext(CurrUserContext)
-    console.log(Patient)
     const MedHistory = () => {
         return (
             <div className='sub-container patient-info'>

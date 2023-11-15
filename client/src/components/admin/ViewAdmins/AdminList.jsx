@@ -4,7 +4,6 @@ import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
 
 const AdminList = ({ Admins, setAdmins }) => {
-    // console.log(Admins)
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredAdmins, setFilteredAdmins] = useState(Admins)

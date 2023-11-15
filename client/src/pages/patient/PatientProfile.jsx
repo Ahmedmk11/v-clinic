@@ -33,9 +33,6 @@ const PatientProfile = () => {
     const handleCancelAutoRenewal = () => {
         setShow(false)
         axiosApi.patch('/patient/cancelAutoRenewal', { patient_id: currUser._id }).then(
-            (response) => {
-                console.log(response)
-            }
         ).catch((error) => {
             console.log(error)
         })

@@ -265,7 +265,6 @@ async function payAppointmentWallet(req, res) {
         const patientID = req.params.id
         const deduction = req.body.deduction
         const doctorID = req.body.doctorID
-        console.log(patientID, doctorID, deduction)
         const ret = await PatientModel.findByIdAndUpdate(
             patientID,
             { $inc: { wallet: -deduction } },
@@ -289,9 +288,7 @@ async function buyPackageWallet(req, res) {
         const patient = await PatientModel.findById(patientID)
         const currPackage = await packageModel.findById(packageID)
 
-        console.log(patient.wallet)
         patient.wallet -= currPackage.price
-        console.log(patient.wallet)
         await patient.save()
         res.status(200).json({
             message: 'Package updated successfully',
@@ -319,7 +316,6 @@ async function addPackage(req, res) {
             let patient = await PatientModel.findById(patientID)
             if (patient) {
                 patient.packageStatus = 'Inactive'
-                console.log('Reference to Package removed.')
                 if (
                     new Date().setHours(0, 0, 0, 0) >=
                     new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0)
@@ -349,7 +345,6 @@ async function addPackage(req, res) {
 const addMedicalHistory = async (req, res) => {
     try {
         const { medicalHistory } = req.body
-        console.log(medicalHistory)
         const newMedicalHistory = new MedicalHistoryModel(medicalHistory)
 
         await newMedicalHistory.save()
@@ -442,7 +437,6 @@ const removeUploadedFile = async (req, res) => {
                 fs.unlinkSync(filePathToRemove, (err) => {
                     if (err) throw err
                 })
-            console.log('File removed successfully')
             res.status(200).json({
                 message: 'File removed successfully',
                 health_records: patient.health_records,
@@ -579,7 +573,6 @@ async function stripeWebhook(request, response) {
                     start_time: metadata.start_time,
                     end_time: metadata.end_time,
                 }
-                console.log('new app', newAppointment)
                 const appointment = new AppointmentModel(newAppointment)
                 await appointment.save()
                 await DoctorModel.findByIdAndUpdate(

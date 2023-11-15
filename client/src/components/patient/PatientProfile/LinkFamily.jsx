@@ -29,7 +29,6 @@ const LinkFamilyMember = ({currUser,openFamilyModal,setOpenFamilyModal}) => {
                         linkingCode: familyLinkingCode,
                     }
                 )
-                console.log('added to family')
             }
 
             setOpenFamilyModal(false)

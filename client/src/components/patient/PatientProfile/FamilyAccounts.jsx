@@ -38,7 +38,6 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
         const fetchFamily = async () => {
             try {
                 if (currUser) {
-                    console.log('currUser', currUser._id)
                     const res = await axiosApi.get(
                         `/patient/get-family/${currUser?._id}`
                     )

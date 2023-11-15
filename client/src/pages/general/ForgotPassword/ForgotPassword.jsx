@@ -33,7 +33,6 @@ const Login = () => {
                         withCredentials: true,
                     }
                 )
-                console.log('Form submitted')
                 message.success('Password changed successfully!')
                 navigate('/')
             }
@@ -53,7 +52,6 @@ const Login = () => {
                 }
             )
             .then((response) => {
-                console.log('Response from server:', response.data)
                 setStage(2)
                 setSecret(response.data.secret)
             })
@@ -73,7 +71,6 @@ const Login = () => {
                 }
             )
             .then((response) => {
-                console.log('Response from server:', response.data)
                 setStage(3)
             })
             .catch((error) => {

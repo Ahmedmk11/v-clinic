@@ -11,10 +11,6 @@ const addAdminForm = () => {
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
 
-    useEffect(() => {
-        console.log('Username:', Username)
-        console.log('Password:', Password)
-    }, [Username, Password])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -27,7 +23,6 @@ const addAdminForm = () => {
             })
             setSuccess('User added succesfully')
             setError(null)
-            console.log(success)
             setUsername('')
             setPassword('')
             setEmail('')

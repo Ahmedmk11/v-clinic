@@ -19,14 +19,12 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                 })
                 setFamily(updatedFamily)
                 message.success('Package cancelled successfully')
-                console.log(res)
             })
             .catch((err) => {
                 message.error('Something went wrong')
                 console.log(err)
             })
     }
-    console.log(member)
 
     return (
         <div className='member-card'>

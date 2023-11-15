@@ -25,7 +25,6 @@ const ReserveAppointment = ({
         async function fetchFamilyMembers() {
             try {
                 if (currUser) {
-                    console.log('currUser', currUser._id)
                     const res = await axiosApi.get(
                         `/patient/get-family/${currUser?._id}`
                     )
@@ -93,7 +92,6 @@ const ReserveAppointment = ({
         const endTime = new Date(
             new Date(date).toDateString() + ' ' + timeSlot.endTime
         )
-        console.log(startTime.toTimeString(), endTime.toTimeString())
         setLoading(true)
         axiosApi
             .post('/patient//add-appointment', {

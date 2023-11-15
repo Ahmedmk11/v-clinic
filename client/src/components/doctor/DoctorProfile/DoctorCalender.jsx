@@ -17,9 +17,7 @@ const DoctorCalender = () => {
             newTimeSlots = newTimeSlots.filter(
                 (slot) => slot.day !== timeSlots[i].day
             )
-        console.log(newTimeSlots)
         newTimeSlots = [...newTimeSlots, ...timeSlots]
-        console.log(newTimeSlots)
         axiosApi
             .post('/doctor/updateTimeSlots', {
                 newTimeSlots,

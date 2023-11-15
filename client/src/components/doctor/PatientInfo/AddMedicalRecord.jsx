@@ -60,7 +60,6 @@ const AddMedicalRecord = ({
                     }
                     break
             }
-            console.log(values)
             updatePatient(newMedicalHistory)
         } catch (error) {
             console.log('Validation failed:', error)

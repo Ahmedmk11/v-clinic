@@ -18,14 +18,12 @@ const HealthPackage = ({ allPackages }) => {
                 setPatient({ ...patient, package: res.data.package })
                 message.success('Package cancelled successfully')
                 setPatient({ ...patient, packageStatus: 'Inactive' })
-                console.log(res)
             })
             .catch((err) => {
                 message.error('Something went wrong')
                 console.log(err)
             })
     }
-console.log(patient)
     return (
         <div className='sub-container'>
             <h2>Health Package</h2>

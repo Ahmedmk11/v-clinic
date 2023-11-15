@@ -45,7 +45,6 @@ const DoctorProfile = () => {
                         newPassword,
                     }
                 )
-                console.log('Form submitted')
             }
 
             setOpen(false)

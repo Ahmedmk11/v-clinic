@@ -4,14 +4,11 @@ import axiosApi from '../../../utils/axiosApi'
 const PatientInfoCard = ({ SelectedPatient, id }) => {
     const [nextAppointment, setNextAppointment] = useState(null)
     const [lastVisit, setLastVisit] = useState(null)
-
-    console.log(SelectedPatient)
     useEffect(() => {
         if (!SelectedPatient) return
         axiosApi
             .get(`/patient/get-patients-by-doctor-id/${id}`)
             .then((res) => {
-                console.log(res.data)
                 let patient = res.data?.find(
                     (patient) => patient?._id === SelectedPatient?._id
                 )

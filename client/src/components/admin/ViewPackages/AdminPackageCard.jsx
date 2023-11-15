@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 const AdminPackageCard = ({ Package }) => {
-    console.log(Package)
 const navigate = useNavigate()
     const handleSubmit = () => {
         navigate(`/admin/package/${Package._id}`)

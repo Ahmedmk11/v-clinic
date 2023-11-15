@@ -11,7 +11,6 @@ const PatientViewPrescription = () => {
             .get('/patient/get-patient-prescription/'+currUser?._id)
             .then((res) => {
                 setPrescriptions(res.data)
-                console.log("prescriptions",res.data)
             })
             .catch((err) => {
                 console.log(err)

@@ -36,7 +36,6 @@ const AdminProfile = () => {
                         withCredentials: true,
                     }
                 )
-                console.log('Form submitted')
             }
 
             setOpen(false)
