@@ -14,7 +14,7 @@ const appointmentsSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['upcoming', 'completed', 'cancelled', 'rescheduled'],
+            enum: ['upcoming', 'completed', 'cancelled', 'rescheduled','pending','rejected'],
             default: 'upcoming',
             required: true,
         },
@@ -49,7 +49,8 @@ const AppointmentModel = mongoose.model('Appointment', appointmentsSchema)
 const updateAppointmentStatus = async () => {
     const currentTime = new Date();
     await AppointmentModel.updateMany(
-        { end_time: { $lt: currentTime }, status: 'upcoming' },
+        //update status upcoming or rescheduled to completed
+        { end_time: { $lt: currentTime },$or: [{ status: 'upcoming' }, { status: 'rescheduled' }]},
         { $set: { status: 'completed' } }
     );
     console.log('Appointment statuses updated.');

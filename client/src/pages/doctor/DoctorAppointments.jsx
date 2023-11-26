@@ -1,9 +1,9 @@
 import './css/doctorAppointments.css'
 import DoctorAppointmentsList from '../../components/doctor/DoctorAppointments/DoctorAppointmentsList.jsx'
 import { useContext, useEffect, useState } from 'react'
-import axios from 'axios'
 import CurrUserContext from '../../contexts/CurrUser'
 import axiosApi from '../../utils/axiosApi'
+import { Tabs } from 'antd'
 const DoctorAppointments = () => {
     const { currUser: Doctor } = useContext(CurrUserContext)
     const [Appointments, setAppointments] = useState([])
@@ -21,7 +21,17 @@ const DoctorAppointments = () => {
     }, [Doctor])
     return (
         <div className='page'>
-            <DoctorAppointmentsList Appointments={Appointments} setAppointments={setAppointments}/>
+            <div className='primary-container'>
+                <Tabs defaultActiveKey='1'>
+                    <Tabs.TabPane tab='My Appointments' key='1'>
+                        <DoctorAppointmentsList Appointments={Appointments.filter((app=>!['pending','rejected'].includes(app?.status.toLowerCase())))} setAppointments={setAppointments}/>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab='Follow-Up Requests' key='2'>
+                        <DoctorAppointmentsList Appointments={Appointments.filter((app=>['pending','rejected'].includes(app?.status.toLowerCase())))}  setAppointments={setAppointments} mode="requests"/>
+                    </Tabs.TabPane>
+                </Tabs>
+            </div>
+            {/* <DoctorAppointmentsList Appointments={Appointments} setAppointments={setAppointments}/> */}
         </div>
     )
 }

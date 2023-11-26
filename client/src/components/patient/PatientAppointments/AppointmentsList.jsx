@@ -3,6 +3,7 @@ import { DatePicker, Select, Button } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import CancelAppointment from './CancelAppointment.jsx'
 import AppointmentReschedule from '../../doctor/DoctorAppointments/AppointmentReschedule.jsx'
+import RequestFollowUp from './RequestFollowUp.jsx'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 import dayjs from 'dayjs'
@@ -21,6 +22,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
     const [CancelAppointmentOpen, setCancelAppointmentOpen] = useState(false)
     const [AppointmentRescheduleOpen, setAppointmentRescheduleOpen] =
         useState(false)
+    const [RequestFollowUpOpen, setRequestFollowUpOpen] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
     const { currUser } = useContext(CurrUserContext)
 
@@ -67,17 +69,15 @@ const AppointmentsList = ({ mode = 'patient' }) => {
         if (!currUser) {
             return
         }
-            axiosApi
-                .get(`/patient/get-${mode}-appointments/${currUser._id}`)
-                .then((res) => {
-                    setAppointmentsList(res.data)
-                    setDisplayedAppointments(res.data)
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-
-           
+        axiosApi
+            .get(`/patient/get-${mode}-appointments/${currUser._id}`)
+            .then((res) => {
+                setAppointmentsList(res.data)
+                setDisplayedAppointments(res.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
     }, [currUser])
 
     const handleChange = (value) => {
@@ -110,13 +110,12 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                 placeholder='Select state'
                 onChange={handleChange}
                 options={[
-                    {
-                        label: 'Upcoming',
-                        value: 'upcoming',
-                    },
+                    { label: 'Upcoming', value: 'upcoming' },
                     { label: 'Completed', value: 'completed' },
                     { label: 'Cancelled', value: 'cancelled' },
                     { label: 'Rescheduled', value: 'rescheduled' },
+                    { label: 'Rejected', value: 'rejected' },
+                    { label: 'Pending', value: 'pending' },
                 ]}
             />
             <div className='card-list'>
@@ -124,12 +123,15 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                     <div className='card' key={appointment.id}>
                         <h2>{appointment?.patient_id?.name}</h2>
                         <h3>Dr. {appointment?.doctor_id.name}</h3>
-                        <strong>
-                            {formatDateRange(
-                                appointment.start_time,
-                                appointment.end_time
-                            )}
-                        </strong>
+                        <p>
+                            <strong>
+                                At{' '}
+                                {formatDateRange(
+                                    appointment.start_time,
+                                    appointment.end_time
+                                )}
+                            </strong>
+                        </p>
                         <p>
                             <strong>Status: </strong>
                             <span className={'status ' + appointment.status}>
@@ -138,7 +140,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                         </p>
                         <ConditionalRender
                             condition={
-                                !['completed', 'cancelled'].includes(
+                                !['completed', 'cancelled', 'pending'].includes(
                                     appointment?.status?.toLowerCase()
                                 )
                             }>
@@ -162,6 +164,22 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                                 </Button>
                             </div>
                         </ConditionalRender>
+                        <ConditionalRender
+                            condition={
+                                appointment?.status?.toLowerCase() ==
+                                'completed'
+                            }>
+                            <div className='edit-buttons'>
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        setRequestFollowUpOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Request Follow-Up
+                                </Button>
+                            </div>
+                        </ConditionalRender>
                     </div>
                 ))}
             </div>
@@ -176,6 +194,12 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                 Appointment={selectedAppointment}
                 showModal={AppointmentRescheduleOpen}
                 setShowModal={setAppointmentRescheduleOpen}
+                setAppointments={setDisplayedAppointments}
+            />
+            <RequestFollowUp
+                Appointment={selectedAppointment}
+                showModal={RequestFollowUpOpen}
+                setShowModal={setRequestFollowUpOpen}
                 setAppointments={setDisplayedAppointments}
             />
         </div>

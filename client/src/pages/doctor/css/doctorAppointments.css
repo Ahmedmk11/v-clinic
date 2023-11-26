@@ -22,6 +22,12 @@
 .status.rescheduled {
     color: #5bc0de;
 }
+.status.pending {
+    color: rgb(46, 127, 241);
+}
+.status.rejected {
+    color: #ff1810;
+}
 
 @media screen and (max-width: 768px) {
     .DatePicker {
