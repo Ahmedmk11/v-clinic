@@ -26,6 +26,7 @@ import {
     payAppointmentWallet,
     payAppointmentCard,
     cancelAutoRenewal,
+    getFamilyMembersAppointments
 } from '../controllers/patientController.js'
 
 let packagePaymentDone = false
@@ -42,6 +43,7 @@ router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id/:id', getPatientByID)
 router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
 router.get('/get-patient-appointments/:id', getPatientAppointments)
+router.get('/get-family-appointments/:id', getFamilyMembersAppointments)
 router.get('/get-patient-prescription/:id', getPatientPrescription)
 router.get('/get-patient-family-members/:id', getFamilyMembers)
 router.get('/get-patient-package/:id', getPatientDiscount)

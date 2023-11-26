@@ -46,6 +46,13 @@ const updateAllPatientsPackageRenewal = async () => {
                     // Save changes to the database
                     await patient.save()
                 }
+            } else if (
+                new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0) <=
+                    today &&
+                patient.packageStatus === 'Inactive'
+            ) {
+                patient.package = null
+                await patient.save()
             }
         }
         console.log('Package renewal updated for all patients.')

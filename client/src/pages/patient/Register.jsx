@@ -33,7 +33,6 @@ function PatientRegistration() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log('formData:', formData)
         try {
             const response = await axiosApi.post(
                 '/patient/create-patient',

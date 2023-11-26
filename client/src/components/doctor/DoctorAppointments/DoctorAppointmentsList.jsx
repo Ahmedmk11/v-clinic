@@ -6,10 +6,10 @@ import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
 
 dayjs.extend(utc)
-const DoctorAppointmentsList = ({ Appointments }) => {
+const DoctorAppointmentsList = ({ Appointments,setAppointments,mode="appointments" }) => {
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [selectedStates, setSelectedStates] = useState([])
+    const [selectedStates, setSelectedStates] = useState(mode==="requests"?['pending']:[])
     const [dateRange, setDateRange] = useState(null)
     const AppointmentsPerPage = 8
     const applyFilters = () => {
@@ -63,10 +63,28 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                   <AppointmentCard
                       key={appointment._id}
                       Appointment={appointment}
+                      setAppointments={setAppointments}
                   />
               ))
             : 'No appointments to show'
     }
+const filterOptions=mode=="requests"?
+[
+    {
+        label: 'Rejected',
+        value: 'rejected',
+    },
+    { label: 'Pending', value: 'pending' },
+]:
+[
+    {
+        label: 'Upcoming',
+        value: 'upcoming',
+    },
+    { label: 'Completed', value: 'completed' },
+    { label: 'Cancelled', value: 'cancelled' },
+    { label: 'Rescheduled', value: 'rescheduled' },
+];
 
     return (
         <div className='primary-container'>
@@ -87,15 +105,8 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                 allowClear
                 placeholder='Select state'
                 onChange={handleChange}
-                options={[
-                    {
-                        label: 'Upcoming',
-                        value: 'upcoming',
-                    },
-                    { label: 'Completed', value: 'completed' },
-                    { label: 'Cancelled', value: 'cancelled' },
-                    { label: 'Rescheduled', value: 'rescheduled' },
-                ]}
+                options={filterOptions}
+                defaultValue={mode=="requests"?['pending']:[]}
             />
             <div className='card-list'>{getCurrentAppointments()}</div>
             <Pagination

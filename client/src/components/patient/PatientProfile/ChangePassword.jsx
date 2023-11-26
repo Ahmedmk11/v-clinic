@@ -22,7 +22,6 @@ const ChangePassword = ({ open, setOpen }) => {
                     oldPassword,
                     newPassword,
                 })
-                console.log('Form submitted')
             }
 
             setOpen(false)

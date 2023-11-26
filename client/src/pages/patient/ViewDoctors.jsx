@@ -94,7 +94,6 @@ const PatientHome = () => {
     const filterByAvailability = () => {
         let doctorsToAdd = []
         if (doctors) {
-            console.log('dateRange4444', dateRange)
             if (dateRange) {
                 doctors.forEach((doctor) => {
                     const doctorAppointments = appointments.find(
@@ -128,20 +127,17 @@ const PatientHome = () => {
                     const days = doctor.timeSlots
 
                     if (!days || days.length === 0) {
-                        console.log('false', false)
                         return false
                     }
 
                     const dayStrings = days.map((dayObject) => dayObject.day)
 
                     if (!dayStrings.includes(selectedDateTime.format('dddd'))) {
-                        console.log('false', false)
                         return false
                     }
 
                     return days.some((day) => {
                         if (dayStrings.includes(day.day)) {
-                            console.log('im here')
                             const timeSlot = day.slots
                             return timeSlot.some((slot) => {
                                 const startTime = dayjs.utc(slot.startTime)
@@ -150,10 +146,8 @@ const PatientHome = () => {
                                     selectedDateTime >= startTime &&
                                     selectedDateTime <= endTime
                                 ) {
-                                    console.log('false', false)
                                     return false
                                 } else {
-                                    console.log('true', true)
                                     return true
                                 }
                             })
@@ -221,10 +215,6 @@ const PatientHome = () => {
             const filteredSpecialities = filterBySpecialities()
             const filteredAvailability = filterByAvailability()
             const searched = searchByNameOrSpeciality()
-
-            console.log('filteredSpecialities', filteredSpecialities)
-            console.log('filteredAvailability', filteredAvailability)
-            console.log('searched', searched)
 
             const filtered = doctors?.filter(
                 (doctor) =>

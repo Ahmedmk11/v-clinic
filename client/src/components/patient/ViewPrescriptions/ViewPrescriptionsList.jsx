@@ -24,7 +24,6 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
             )
         }
         if (dateRange) {
-            console.log(dateRange)
             filtered = filtered.filter(
                 (appointment) =>
                     new Date(appointment.date).toDateString() ===
@@ -43,7 +42,6 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
             indexOfFirstPrescription,
             indexOfLastPrescription
         )
-        console.log(currentPrescriptions)
         return currentPrescriptions.length > 0
             ? currentPrescriptions.map((prescription) => (
                   <PrescriptionCard

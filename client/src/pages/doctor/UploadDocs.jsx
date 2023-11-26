@@ -19,12 +19,10 @@ const UploadDocs = () => {
         for (let i = 0; i < fileList.length; i++) {
             formData.append(`files`, fileList[i].originFileObj)
         }
-        console.log(formData)
         formData.append('id', Doctor._id)
         axiosApi
             .post('/doctor/upload', formData)
             .then((res) => {
-                console.log(res)
                 setDoctor({
                     ...Doctor,
                     uploaded_documents: res.data.uploaded_documents,
@@ -38,8 +36,6 @@ const UploadDocs = () => {
     }
     const onFinish = (values) => {
         // Handle form submission with form values and fileList data
-        console.log('Form Values:', values)
-        console.log('Uploaded Files:', fileList)
         handleSubmit()
     }
     const customRequest = ({ onSuccess, onError, file }) => {

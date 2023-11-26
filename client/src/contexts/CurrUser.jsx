@@ -17,7 +17,6 @@ const Provider = ({ children }) => {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log('res.data:', res.data)
                 setUserID(res.data.userId)
                 setRole(res.data.role)
             })
@@ -43,7 +42,6 @@ const Provider = ({ children }) => {
             axiosApi
                 .get(url)
                 .then((res) => {
-                    console.log('res.data:', res.data)
                     setCurrUser(res.data)
                 })
                 .catch((err) => console.log(err))

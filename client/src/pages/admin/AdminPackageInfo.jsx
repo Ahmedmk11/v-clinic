@@ -78,7 +78,6 @@ const AdminPackageInfo = () => {
     
 
     const handleInputChange = (e) => {
-        console.log(e.target.value)
         setEditedPackage({
           ...editedPackage,
           [e.target.name]: e.target.value,

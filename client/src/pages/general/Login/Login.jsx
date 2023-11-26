@@ -24,7 +24,6 @@ const Login = () => {
                 credintials: 'include',
             })
             .then((response) => {
-                console.log('Response from server:', response.data)
                 message.success('Logged in successfully')
                 navigate(`/${userData.role}`)
             })
@@ -193,7 +192,23 @@ const Login = () => {
                     </Form.Item>
                 </ConditionalRender>
             </Form>
+            <div style={{textAlign:'center'}}> 
+            Remove this later , just for testing after cleaning database
+            <br/>
+            find this snippet @ client/src/pages/general/Login/Login.jsx line 195
+            <hr/>
+            admin account : admin , admin1234
+            <br/>
+            patient account with family : saleh , saleh1234 and family member : karma, karma1234
+            <br/>
+            patient account without family : ahmed , ahmed1234
+            <br/>
+            active doctor account : paul , paul1234
+            <br/>
+            inactive doctor account : belly , belly1234
         </div>
+        </div>
+        
     )
 }
 

@@ -72,7 +72,6 @@ const PatientInfo = () => {
         )
     }
     const handleCreateFollowUp = (values) => {
-        console.log("followw uppp",values)
         axiosApi
             .post('/patient/add-appointment', {
                 ...values,
@@ -90,7 +89,6 @@ const PatientInfo = () => {
                 message.error('Failed to schedule follow up')
             })
     }
-
     return (
         <div className='page'>
             <div className='primary-container'>
@@ -111,7 +109,7 @@ const PatientInfo = () => {
                         onCancel={() => setFollowUpVisible(false)}
                     />
                 </div>
-                <PatientInfoCard SelectedPatient={SelectedPatient} />
+                <PatientInfoCard SelectedPatient={SelectedPatient} id={Doctor?._id} />
                 <MedHistory />
                 <ViewUploadedRecords  Patient={SelectedPatient}/>
                 <PastPres />

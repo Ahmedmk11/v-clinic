@@ -97,15 +97,7 @@ async function getPatientByID(req, res) {
     try {
         const { id } = req.params
         const date = new Date()
-        date.setHours(0, 0, 0, 0)
         let patient = await PatientModel.findById(id)
-        if (date >= new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0))
-            if (patient.packageStatus == 'Inactive') {
-                patient.package = null
-                await patient.save()
-            }
-
-        patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')
             .populate('package')
@@ -273,7 +265,6 @@ async function payAppointmentWallet(req, res) {
         const patientID = req.params.id
         const deduction = req.body.deduction
         const doctorID = req.body.doctorID
-        console.log(patientID, doctorID, deduction)
         const ret = await PatientModel.findByIdAndUpdate(
             patientID,
             { $inc: { wallet: -deduction } },
@@ -297,9 +288,7 @@ async function buyPackageWallet(req, res) {
         const patient = await PatientModel.findById(patientID)
         const currPackage = await packageModel.findById(packageID)
 
-        console.log(patient.wallet)
         patient.wallet -= currPackage.price
-        console.log(patient.wallet)
         await patient.save()
         res.status(200).json({
             message: 'Package updated successfully',
@@ -327,7 +316,6 @@ async function addPackage(req, res) {
             let patient = await PatientModel.findById(patientID)
             if (patient) {
                 patient.packageStatus = 'Inactive'
-                console.log('Reference to Package removed.')
                 if (
                     new Date().setHours(0, 0, 0, 0) >=
                     new Date(patient.packageRenewalDate).setHours(0, 0, 0, 0)
@@ -357,7 +345,6 @@ async function addPackage(req, res) {
 const addMedicalHistory = async (req, res) => {
     try {
         const { medicalHistory } = req.body
-        console.log(medicalHistory)
         const newMedicalHistory = new MedicalHistoryModel(medicalHistory)
 
         await newMedicalHistory.save()
@@ -450,7 +437,6 @@ const removeUploadedFile = async (req, res) => {
                 fs.unlinkSync(filePathToRemove, (err) => {
                     if (err) throw err
                 })
-            console.log('File removed successfully')
             res.status(200).json({
                 message: 'File removed successfully',
                 health_records: patient.health_records,
@@ -572,8 +558,8 @@ async function stripeWebhook(request, response) {
                 date.setMonth(date.getMonth() + 12)
                 date.setHours(0, 0, 0, 0)
                 ret.package = metadata.packageID
-                ret.packageRenewalDate =  date
-                ret. packageStatus = 'Active'
+                ret.packageRenewalDate = date
+                ret.packageStatus = 'Active'
                 await ret.save()
             } catch (error) {
                 console.log(error)
@@ -586,8 +572,8 @@ async function stripeWebhook(request, response) {
                     date: metadata.start_time,
                     start_time: metadata.start_time,
                     end_time: metadata.end_time,
+                    fee: metadata.deduction
                 }
-                console.log('new app', newAppointment)
                 const appointment = new AppointmentModel(newAppointment)
                 await appointment.save()
                 await DoctorModel.findByIdAndUpdate(
@@ -705,6 +691,23 @@ async function cancelAutoRenewal(req, res) {
     }
 }
 
+const getFamilyMembersAppointments = async (req, res) => {
+    try {
+        const { id } = req.params
+        const family = await FamilyModel.findOne({ 'member.id': id })
+        const familyMembers = family.member.filter((familyMember)=>familyMember.id!=id).map((member) => member.id)
+        const appointments = await AppointmentModel.find({
+            patient_id: { $in: familyMembers },
+        })
+            .populate('doctor_id')
+            .populate('patient_id')
+        res.status(200).json(appointments)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
+
 export {
     createPatient,
     getPatients,
@@ -730,4 +733,5 @@ export {
     payAppointmentWallet,
     payAppointmentCard,
     cancelAutoRenewal,
+    getFamilyMembersAppointments
 }

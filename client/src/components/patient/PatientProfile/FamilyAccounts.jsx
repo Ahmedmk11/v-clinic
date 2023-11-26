@@ -38,7 +38,6 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
         const fetchFamily = async () => {
             try {
                 if (currUser) {
-                    console.log('currUser', currUser._id)
                     const res = await axiosApi.get(
                         `/patient/get-family/${currUser?._id}`
                     )
@@ -122,7 +121,8 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                         relation={
                             family.find((p) => member?._id == p.id)?.relation
                         }
-                        family={family}
+                        family={familyMemberProfiles}
+                        setFamily={setFamilyMemberProfiles}
                     />
                 ))}
                 <div

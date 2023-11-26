@@ -1,5 +1,23 @@
+import { useEffect, useState } from 'react'
 import calcAge from '../../../utils/calcAge'
-const PatientInfoCard = ({ SelectedPatient }) => {
+import axiosApi from '../../../utils/axiosApi'
+const PatientInfoCard = ({ SelectedPatient, id }) => {
+    const [nextAppointment, setNextAppointment] = useState(null)
+    const [lastVisit, setLastVisit] = useState(null)
+    useEffect(() => {
+        if (!SelectedPatient) return
+        axiosApi
+            .get(`/patient/get-patients-by-doctor-id/${id}`)
+            .then((res) => {
+                let patient = res.data?.find(
+                    (patient) => patient?._id === SelectedPatient?._id
+                )
+                setNextAppointment(patient.nextAppointment)
+                setLastVisit(patient.lastVisit)
+            })
+            .catch((err) => console.log(err))
+    }, [SelectedPatient])
+
     const GetPatientInfo = () => {
         return (
             <>
@@ -25,24 +43,21 @@ const PatientInfoCard = ({ SelectedPatient }) => {
                     </li>
                     <li>
                         <strong>Last Visit: </strong>{' '}
-                        {SelectedPatient?.lastVisit
-                            ? new Date(
-                                  SelectedPatient?.lastVisit
-                              ).toLocaleString()
+                        {lastVisit
+                            ? new Date(lastVisit).toLocaleString()
                             : 'No previous visits'}
                     </li>
                     <li>
                         <strong>Next Appointment: </strong>{' '}
-                        {SelectedPatient?.nextAppointment
-                            ? new Date(
-                                  SelectedPatient?.nextAppointment
-                              ).toLocaleString()
+                        {nextAppointment
+                            ? new Date(nextAppointment).toLocaleString()
                             : 'No upcoming appointments'}
                     </li>
                     <li>
                         <strong>Emergency Contact: </strong>{' '}
                         {`${SelectedPatient?.emergencyName},`}{' '}
-                        <a href={`tel:${SelectedPatient?.emergencyPhoneNumber}`}>
+                        <a
+                            href={`tel:${SelectedPatient?.emergencyPhoneNumber}`}>
                             {SelectedPatient?.emergencyPhoneNumber}
                         </a>
                     </li>

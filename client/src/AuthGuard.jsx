@@ -2,7 +2,6 @@ import React from 'react'
 import { Navigate } from 'react-router-dom'
 
 const LoginGuard = ({ isAuthenticated, role, children }) => {
-    console.log(isAuthenticated, role)
     if (!isAuthenticated) {
         return children
     } else {

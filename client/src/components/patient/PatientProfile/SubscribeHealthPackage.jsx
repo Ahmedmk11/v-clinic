@@ -31,7 +31,6 @@ const SubscribeHealthPackage = ({
 
     const handlePayWithCard = async () => {
         try {
-            console.log(subscriber._id, selectedPackageId)
             const res = await axiosApi.post(`patient/buy-package-card/${subscriber._id}`, 
                 {id: selectedPackageId}
             )
@@ -124,13 +123,11 @@ const SubscribeHealthPackage = ({
 
     const goToPaymentChoices = async () => {
         setConfirmPackageLoading(true)
-        console.log('subscriber', subscriber)
         if (targetSubscriberType == 'family') {
             try {
                 const res = await axiosApi.get(
                     `/patient/get-patient-by-id/${subscriber.id}`
                 )
-                console.log('res.data', res.data)
                 if (res.data?.package?._id == selectedPackageId) {
                     message.error('Already subscribed to this package')
                     setConfirmPackageLoading(false)
@@ -305,7 +302,6 @@ const SubscribeHealthPackage = ({
                                 <Select
                                     style={{ width: 300 }}
                                     onChange={(value) => {
-                                        console.log('value', value)
                                         setSubscriber(
                                             familyMemberProfiles.find(
                                                 (member) => member._id == value

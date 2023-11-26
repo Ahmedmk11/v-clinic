@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { DatePicker, Select } from 'antd'
-
+import { DatePicker, Select, Button } from 'antd'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+import CancelAppointment from './CancelAppointment.jsx'
+import AppointmentReschedule from '../../doctor/DoctorAppointments/AppointmentReschedule.jsx'
+import RequestFollowUp from './RequestFollowUp.jsx'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 import dayjs from 'dayjs'
@@ -10,12 +13,17 @@ import CurrUserContext from '../../../contexts/CurrUser.jsx'
 
 dayjs.extend(utc)
 
-const AppointmentsList = () => {
+const AppointmentsList = ({ mode = 'patient' }) => {
     const [appointmentsList, setAppointmentsList] = useState([])
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
+    const [CancelAppointmentOpen, setCancelAppointmentOpen] = useState(false)
+    const [AppointmentRescheduleOpen, setAppointmentRescheduleOpen] =
+        useState(false)
+    const [RequestFollowUpOpen, setRequestFollowUpOpen] = useState(false)
+    const [selectedAppointment, setSelectedAppointment] = useState(null)
     const { currUser } = useContext(CurrUserContext)
 
     const applyFilters = () => {
@@ -62,7 +70,7 @@ const AppointmentsList = () => {
             return
         }
         axiosApi
-            .get(`/patient/get-patient-appointments/${currUser._id}`)
+            .get(`/patient/get-${mode}-appointments/${currUser._id}`)
             .then((res) => {
                 setAppointmentsList(res.data)
                 setDisplayedAppointments(res.data)
@@ -81,7 +89,7 @@ const AppointmentsList = () => {
     }
 
     return (
-        <div className='primary-container'>
+        <div>
             <h2>My Appointments</h2>
             <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
@@ -102,32 +110,98 @@ const AppointmentsList = () => {
                 placeholder='Select state'
                 onChange={handleChange}
                 options={[
-                    {
-                        label: 'Upcoming',
-                        value: 'upcoming',
-                    },
+                    { label: 'Upcoming', value: 'upcoming' },
                     { label: 'Completed', value: 'completed' },
                     { label: 'Cancelled', value: 'cancelled' },
                     { label: 'Rescheduled', value: 'rescheduled' },
+                    { label: 'Rejected', value: 'rejected' },
+                    { label: 'Pending', value: 'pending' },
                 ]}
             />
             <div className='card-list'>
                 {displayedAppointments.map((appointment) => (
                     <div className='card' key={appointment.id}>
+                        <h2>{appointment?.patient_id?.name}</h2>
                         <h3>Dr. {appointment?.doctor_id.name}</h3>
-                        <strong>
-                            {formatDateRange(
-                                appointment.start_time,
-                                appointment.end_time
-                            )}
-                        </strong>
+                        <p>
+                            <strong>
+                                At{' '}
+                                {formatDateRange(
+                                    appointment.start_time,
+                                    appointment.end_time
+                                )}
+                            </strong>
+                        </p>
                         <p>
                             <strong>Status: </strong>
-                            {appointment.status}
+                            <span className={'status ' + appointment.status}>
+                                {appointment.status}
+                            </span>
                         </p>
+                        <ConditionalRender
+                            condition={
+                                !['completed', 'cancelled', 'pending'].includes(
+                                    appointment?.status?.toLowerCase()
+                                )
+                            }>
+                            <div className='edit-buttons'>
+                                <Button
+                                    danger
+                                    type='primary'
+                                    onClick={() => {
+                                        setCancelAppointmentOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        setAppointmentRescheduleOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Reschedule
+                                </Button>
+                            </div>
+                        </ConditionalRender>
+                        <ConditionalRender
+                            condition={
+                                appointment?.status?.toLowerCase() ==
+                                'completed'
+                            }>
+                            <div className='edit-buttons'>
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        setRequestFollowUpOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Request Follow-Up
+                                </Button>
+                            </div>
+                        </ConditionalRender>
                     </div>
                 ))}
             </div>
+            <CancelAppointment
+                Appointment={selectedAppointment}
+                showModal={CancelAppointmentOpen}
+                setShowModal={setCancelAppointmentOpen}
+                setAppointments={setDisplayedAppointments}
+                mode={mode}
+            />
+            <AppointmentReschedule
+                Appointment={selectedAppointment}
+                showModal={AppointmentRescheduleOpen}
+                setShowModal={setAppointmentRescheduleOpen}
+                setAppointments={setDisplayedAppointments}
+            />
+            <RequestFollowUp
+                Appointment={selectedAppointment}
+                showModal={RequestFollowUpOpen}
+                setShowModal={setRequestFollowUpOpen}
+                setAppointments={setDisplayedAppointments}
+            />
         </div>
     )
 }

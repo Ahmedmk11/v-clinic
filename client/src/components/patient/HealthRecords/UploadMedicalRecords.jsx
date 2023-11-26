@@ -39,8 +39,6 @@ const UploadMedicalRecords = () => {
 
     const onFinish = (values) => {
         // Handle form submission with form values and fileList data
-        console.log('Form Values:', values)
-        console.log('Uploaded Files:', fileList)
         handleSubmit()
     }
 
