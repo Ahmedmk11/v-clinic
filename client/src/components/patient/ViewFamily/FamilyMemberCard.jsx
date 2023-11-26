@@ -11,7 +11,7 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                 packageID: '-1',
             })
             .then((res) => {
-                const updatedFamily = family.map((familyMember) => {
+                const updatedFamily = family?.map((familyMember) => {
                     if (familyMember._id === familyMember._id) {
                         return { ...familyMember, package: res.data.package }
                     }
