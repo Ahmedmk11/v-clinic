@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { DatePicker, Select } from 'antd'
-
+import { DatePicker, Select, Button } from 'antd'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+import CancelAppointment from './CancelAppointment.jsx'
+import AppointmentReschedule from '../../doctor/DoctorAppointments/AppointmentReschedule.jsx'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 
 import dayjs from 'dayjs'
@@ -10,12 +12,16 @@ import CurrUserContext from '../../../contexts/CurrUser.jsx'
 
 dayjs.extend(utc)
 
-const AppointmentsList = () => {
+const AppointmentsList = ({ mode = 'patient' }) => {
     const [appointmentsList, setAppointmentsList] = useState([])
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [selectedStates, setSelectedStates] = useState([])
     const [dateRange, setDateRange] = useState(null)
+    const [CancelAppointmentOpen, setCancelAppointmentOpen] = useState(false)
+    const [AppointmentRescheduleOpen, setAppointmentRescheduleOpen] =
+        useState(false)
+    const [selectedAppointment, setSelectedAppointment] = useState(null)
     const { currUser } = useContext(CurrUserContext)
 
     const applyFilters = () => {
@@ -61,15 +67,17 @@ const AppointmentsList = () => {
         if (!currUser) {
             return
         }
-        axiosApi
-            .get(`/patient/get-patient-appointments/${currUser._id}`)
-            .then((res) => {
-                setAppointmentsList(res.data)
-                setDisplayedAppointments(res.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
+            axiosApi
+                .get(`/patient/get-${mode}-appointments/${currUser._id}`)
+                .then((res) => {
+                    setAppointmentsList(res.data)
+                    setDisplayedAppointments(res.data)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+
+           
     }, [currUser])
 
     const handleChange = (value) => {
@@ -81,7 +89,7 @@ const AppointmentsList = () => {
     }
 
     return (
-        <div className='primary-container'>
+        <div>
             <h2>My Appointments</h2>
             <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
@@ -114,6 +122,7 @@ const AppointmentsList = () => {
             <div className='card-list'>
                 {displayedAppointments.map((appointment) => (
                     <div className='card' key={appointment.id}>
+                        <h2>{appointment?.patient_id?.name}</h2>
                         <h3>Dr. {appointment?.doctor_id.name}</h3>
                         <strong>
                             {formatDateRange(
@@ -123,11 +132,52 @@ const AppointmentsList = () => {
                         </strong>
                         <p>
                             <strong>Status: </strong>
-                            {appointment.status}
+                            <span className={'status ' + appointment.status}>
+                                {appointment.status}
+                            </span>
                         </p>
+                        <ConditionalRender
+                            condition={
+                                !['completed', 'cancelled'].includes(
+                                    appointment?.status?.toLowerCase()
+                                )
+                            }>
+                            <div className='edit-buttons'>
+                                <Button
+                                    danger
+                                    type='primary'
+                                    onClick={() => {
+                                        setCancelAppointmentOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        setAppointmentRescheduleOpen(true),
+                                            setSelectedAppointment(appointment)
+                                    }}>
+                                    Reschedule
+                                </Button>
+                            </div>
+                        </ConditionalRender>
                     </div>
                 ))}
             </div>
+            <CancelAppointment
+                Appointment={selectedAppointment}
+                showModal={CancelAppointmentOpen}
+                setShowModal={setCancelAppointmentOpen}
+                setAppointments={setDisplayedAppointments}
+                mode={mode}
+            />
+            <AppointmentReschedule
+                Appointment={selectedAppointment}
+                showModal={AppointmentRescheduleOpen}
+                setShowModal={setAppointmentRescheduleOpen}
+                setAppointments={setDisplayedAppointments}
+            />
         </div>
     )
 }

@@ -57,7 +57,7 @@ const ReserveAppointment = ({
                 }
             )
             setCurrUser({...currUser, wallet: ret.data.wallet})
-            reserveAppointment()
+            reserveAppointment(appointmentPrice)
         } catch (error) {
             message.error('Something went wrong')
             console.log(error)
@@ -87,19 +87,20 @@ const ReserveAppointment = ({
     }
 
     //reserve appointment
-    const reserveAppointment = () => {
+    const reserveAppointment = (appointmentPrice) => {
         const startTime = new Date(date)
         const endTime = new Date(
             new Date(date).toDateString() + ' ' + timeSlot.endTime
         )
         setLoading(true)
         axiosApi
-            .post('/patient//add-appointment', {
+            .post('/patient/add-appointment', {
                 doctor_id: doctor._id,
                 patient_id: selectedFamilyMember._id,
                 date: date,
                 start_time: startTime,
                 end_time: endTime,
+                fee: appointmentPrice
             })
             .then((res) => {
                 const day = startTime.toLocaleString('default', {

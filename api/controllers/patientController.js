@@ -572,6 +572,7 @@ async function stripeWebhook(request, response) {
                     date: metadata.start_time,
                     start_time: metadata.start_time,
                     end_time: metadata.end_time,
+                    fee: metadata.deduction
                 }
                 const appointment = new AppointmentModel(newAppointment)
                 await appointment.save()
@@ -690,6 +691,23 @@ async function cancelAutoRenewal(req, res) {
     }
 }
 
+const getFamilyMembersAppointments = async (req, res) => {
+    try {
+        const { id } = req.params
+        const family = await FamilyModel.findOne({ 'member.id': id })
+        const familyMembers = family.member.filter((familyMember)=>familyMember.id!=id).map((member) => member.id)
+        const appointments = await AppointmentModel.find({
+            patient_id: { $in: familyMembers },
+        })
+            .populate('doctor_id')
+            .populate('patient_id')
+        res.status(200).json(appointments)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
+
 export {
     createPatient,
     getPatients,
@@ -715,4 +733,5 @@ export {
     payAppointmentWallet,
     payAppointmentCard,
     cancelAutoRenewal,
+    getFamilyMembersAppointments
 }

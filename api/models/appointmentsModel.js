@@ -30,6 +30,10 @@ const appointmentsSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
+        fee: {
+            type: Number,
+            default: 0,
+        },
     },
 
 

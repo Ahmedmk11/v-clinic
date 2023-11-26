@@ -165,9 +165,9 @@ input:focus {
     background-color: var(--accent-background-color);
 
 
-    &:hover {
+    /* &:hover {
         transform: scale(1.05);
-    }
+    } */
 
     & h3 {
         font-size: 18px;

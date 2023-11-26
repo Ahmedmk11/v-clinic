@@ -8,7 +8,7 @@ const PatientCard = ({ patient }) => {
         navigate(`/doctor/patient/info/${patient._id}`)
     }
     return (
-        <div className='card' onClick={handlePatientSelect}>
+        <div className='card'>
             <h3>{patient.name}</h3>
             <p>
                 <strong>Age: </strong>
@@ -30,7 +30,9 @@ const PatientCard = ({ patient }) => {
                     ? new Date(patient.nextAppointment).toLocaleString()
                     : 'No upcoming appointments'}
             </p>
-            <button className='view-records-btn button'>View Records</button>
+            <div className='edit-buttons'>
+            <button className='view-records-btn button' onClick={handlePatientSelect}>View Records</button>
+            </div>
         </div>
     )
 }

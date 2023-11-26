@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
 
 dayjs.extend(utc)
-const DoctorAppointmentsList = ({ Appointments }) => {
+const DoctorAppointmentsList = ({ Appointments,setAppointments }) => {
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedStates, setSelectedStates] = useState([])
@@ -63,6 +63,7 @@ const DoctorAppointmentsList = ({ Appointments }) => {
                   <AppointmentCard
                       key={appointment._id}
                       Appointment={appointment}
+                      setAppointments={setAppointments}
                   />
               ))
             : 'No appointments to show'

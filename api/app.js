@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import patientRoutes from './routes/patientRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
+import appointmentRoutes from './routes/appointmentRoutes.js'
 import { connectToDatabase } from './database.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -51,6 +52,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
+app.use('/api/appointment', appointmentRoutes)
 app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads')) //move to doctorRoutes
 app.use('/api/uploads/patientUploads', express.static('uploads/patientUploads')) //move to patientRoutes
 

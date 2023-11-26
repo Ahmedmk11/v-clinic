@@ -21,7 +21,7 @@ const DoctorAppointments = () => {
     }, [Doctor])
     return (
         <div className='page'>
-            <DoctorAppointmentsList Appointments={Appointments} />
+            <DoctorAppointmentsList Appointments={Appointments} setAppointments={setAppointments}/>
         </div>
     )
 }
