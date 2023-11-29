@@ -1,0 +1,13 @@
+.listMedicines{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right:10px ;
+    background-color: lightgray;
+    border-radius: 10px;
+    outline: lightgreen;
+}
+.listMedicines:hover{
+    background-color: lightpink;
+    transition: transform 500ms;
+}

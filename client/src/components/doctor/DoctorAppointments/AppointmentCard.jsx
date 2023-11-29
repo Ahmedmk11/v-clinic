@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { Button,message } from 'antd'
+import { Button,message, Modal } from 'antd'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import CancelAppointment from './CancelAppointment.jsx'
 import AppointmentReschedule from './AppointmentReschedule.jsx'
+import AppointmentPrescription from './AppointmentPrescription.jsx'
 import axiosApi from '../../../utils/axiosApi.js'
 
 const AppointmentCard = ({ Appointment,setAppointments }) => {
   const [CancelAppointmentOpen, setCancelAppointmentOpen] = useState(false)
   const [AppointmentRescheduleOpen, setAppointmentRescheduleOpen] = useState(false)
+  const [ViewPrescriptionOpen, setViewPrescriptionOpen] = useState(false)
   const [loadingAccept,setLoadingAccept]=useState(false)
   const [loadingReject,setLoadingReject]=useState(false)
 
@@ -92,6 +94,11 @@ const AppointmentCard = ({ Appointment,setAppointments }) => {
             <Button type='primary' onClick={()=>setAppointmentRescheduleOpen(true)} >Reschedule</Button>
             </div>
             </ConditionalRender>
+            <ConditionalRender condition={['completed'].includes(Appointment?.status?.toLowerCase())}>
+            <div className='edit-buttons'>
+            <Button type='primary' onClick={()=>setViewPrescriptionOpen(true)} >View Prescription</Button>
+            </div>
+            </ConditionalRender>
             <ConditionalRender condition={['pending'].includes(Appointment?.status?.toLowerCase())}>
             <div className='edit-buttons'>
             <Button loading={loadingReject} danger type='primary' onClick={RejectFollowUp}>Reject</Button>
@@ -100,7 +107,8 @@ const AppointmentCard = ({ Appointment,setAppointments }) => {
                 </div>
             </ConditionalRender>
             <CancelAppointment Appointment={Appointment} showModal={CancelAppointmentOpen} setShowModal={setCancelAppointmentOpen} setAppointments={setAppointments}/>
-                        <AppointmentReschedule Appointment={Appointment} showModal={AppointmentRescheduleOpen} setShowModal={setAppointmentRescheduleOpen} setAppointments={setAppointments}/>
+            <AppointmentReschedule Appointment={Appointment} showModal={AppointmentRescheduleOpen} setShowModal={setAppointmentRescheduleOpen} setAppointments={setAppointments}/>
+            <AppointmentPrescription Appointment={Appointment} showModal={ViewPrescriptionOpen} setShowModal={setViewPrescriptionOpen} setAppointments={setAppointments}/>
         </div>
     )
 }
