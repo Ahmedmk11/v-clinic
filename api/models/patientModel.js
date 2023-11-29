@@ -116,6 +116,21 @@ const patientModel = new mongoose.Schema(
                 },
             ],
         },
+        emergencyRelation: {
+          type: String,
+          required: [
+              true,
+              'Please enter the name of your emergency relation.',
+          ],
+          validate: [
+              {
+                  validator: function (value) {
+                      return /^[A-Za-z\s]+$/.test(value)
+                  },
+                  message: 'Name must contain only letters and spaces.',
+              },
+          ],
+        },
         package: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Package',
@@ -144,7 +159,6 @@ const patientModel = new mongoose.Schema(
         },
         linkingCode: {
             type: String,
-            required: true,
             unique: true,
         },
         packageRenewalDate: {
@@ -161,6 +175,15 @@ const patientModel = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        deliveryAddress: [
+          {
+            street_address: { type: String, required: true },
+            city: { type: String, required: true },
+            governate: { type: String, required: true },
+            is_default: { type: Boolean, default: false },
+          },
+        ],
+    
     },
     {
         toJSON: { virtuals: true },
@@ -203,6 +226,12 @@ patientModel.virtual('medicalHistory', {
     foreignField: 'patient_id',
     localField: '_id',
 })
+
+patientModel.virtual("cart", {
+  ref: "Cart",
+  foreignField: "patient_id",
+  localField: "_id",
+});
 
 const PatientModel = mongoose.model('Patient', patientModel)
 

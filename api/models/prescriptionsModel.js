@@ -5,6 +5,12 @@ const prescriptionSchema = new mongoose.Schema(
         name: {
             type: String,
             required: [true, 'Please enter the name of the prescription.'],
+            default: 'Prescription'
+        },
+        appointment_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Appointment',
         },
         patient_id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -26,9 +32,9 @@ const prescriptionSchema = new mongoose.Schema(
             default: Date.now,
         },
         medications: [{
-            name: {
-                type: String,
-                required: [true, 'Please enter the medication name.'],
+            medicine_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'medicine',
             },
             dosage: {
                 type: String,

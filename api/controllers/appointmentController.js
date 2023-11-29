@@ -1,6 +1,7 @@
 import PatientModel from '../models/patientModel.js'
 import AppointmentModel from '../models/appointmentsModel.js'
 import DoctorModel from '../models/doctorModel.js'
+import PrescriptionModel from '../models/prescriptionsModel.js'
 
 const cancelAppointmentDoctor = async (req, res) => {
     try {
@@ -149,6 +150,50 @@ const rejectFollowUp = async (req, res) => {
     }
 }
 
+const updatePrescription = async (req, res) => {
+    try {
+        const { appointmentId, prescription } = req.body
+        const appointment = await AppointmentModel.findById(appointmentId)
+        if (!appointment) {
+            return res.status(400).json({ message: 'Appointment not found' })
+        }
+        const getPrescription = await PrescriptionModel.findOne({appointment_id: appointmentId})
+        if (!getPrescription){
+                await PrescriptionModel.create({
+                    appointment_id: appointmentId,
+                    patient_id: appointment.patient_id,
+                    doctor_id: appointment.doctor_id,
+                    medications: prescription.medications,
+                    notes: prescription.notes,
+            })
+        }else{
+            await PrescriptionModel.findByIdAndUpdate(getPrescription._id, {
+                medications: prescription.medications,
+                notes: prescription.notes,
+                date: Date.now()
+            })
+        } 
+        res.status(200).json({ message: 'Prescription updated successfully' })
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+}
+
+const getPrescription = async (req, res) => {
+    try {
+        const appointmentId  = req.params.id
+        console.log(appointmentId)
+        const getPrescription = await PrescriptionModel.findOne({appointment_id: appointmentId})
+        if (!getPrescription){
+            return res.status(400).json({ message: 'Prescription not found' })
+        }else{
+            return res.status(200).json(getPrescription)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export {
     cancelAppointmentDoctor,
     cancelAppointmentPatient,
@@ -156,4 +201,6 @@ export {
     requestFollowUp,
     acceptFollowUp,
     rejectFollowUp,
+    updatePrescription,
+    getPrescription
 }

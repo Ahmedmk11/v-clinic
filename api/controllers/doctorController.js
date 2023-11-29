@@ -1,5 +1,6 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
+import Medicine from "../models/medicineModel.js";
 import multer from 'multer'
 import crypto from 'crypto'
 
@@ -77,6 +78,25 @@ const getActiveDoctors = async (req, res) => {
         res.status(404).json({ message: error.message })
     }
 }
+
+const getMedicineByName = async (req, res) => {
+    try {
+        const ret = await Medicine.find({name: req.params.name})
+        res.json(ret)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
+const getAllMedicines = async (req, res) => {
+    try {
+      const dbQuery = await Medicine.find();
+      const medicines = dbQuery;
+      res.status(200).json(medicines);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  };
 
 // @desc    Get a doctor by id
 // @route   GET /api/doctor/get-doctor/:id
@@ -244,5 +264,7 @@ export {
     uploadDoctorFiles,
     updateContract,
     updateTimeSlots,
-    getAppointmentsByDoctorIdArray
+    getAppointmentsByDoctorIdArray,
+    getAllMedicines,
+    getMedicineByName
 }

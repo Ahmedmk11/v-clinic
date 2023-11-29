@@ -12,6 +12,8 @@ import {
     uploadDoctorFiles,
     updateContract,
     updateTimeSlots,
+    getAllMedicines,
+    getMedicineByName,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -27,6 +29,8 @@ router.get(
 )
 
 router.get('/get-appointmentstimes/:id',getAppointmentsByDoctorIdArray)
+router.get('/get-all-medicines', getAllMedicines)
+router.get('/get-medicine-by-name/:name', getMedicineByName)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
 router.put('/update-contract', updateContract)
 router.post('/updateTimeSlots', updateTimeSlots)
