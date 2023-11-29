@@ -1,6 +1,6 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
-import Medicine from "../models/medicineModel.js";
+import Medicine from '../models/medicineModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
 
@@ -72,7 +72,10 @@ const getDoctors = async (req, res) => {
 // @access  Public
 const getActiveDoctors = async (req, res) => {
     try {
-        const doctors = await DoctorModel.find({ status: 'Active'  , contract_acceptance: 'Accepted'})
+        const doctors = await DoctorModel.find({
+            status: 'Active',
+            contract_acceptance: 'Accepted',
+        })
         res.json(doctors)
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -81,7 +84,7 @@ const getActiveDoctors = async (req, res) => {
 
 const getMedicineByName = async (req, res) => {
     try {
-        const ret = await Medicine.find({name: req.params.name})
+        const ret = await Medicine.find({ name: req.params.name })
         res.json(ret)
     } catch (error) {
         res.status(404).json({ message: error.message })
@@ -90,13 +93,13 @@ const getMedicineByName = async (req, res) => {
 
 const getAllMedicines = async (req, res) => {
     try {
-      const dbQuery = await Medicine.find();
-      const medicines = dbQuery;
-      res.status(200).json(medicines);
+        const dbQuery = await Medicine.find()
+        const medicines = dbQuery
+        res.status(200).json(medicines)
     } catch (err) {
-      res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message })
     }
-  };
+}
 
 // @desc    Get a doctor by id
 // @route   GET /api/doctor/get-doctor/:id
@@ -149,17 +152,18 @@ const getAppointmentsByDoctorIdArray = async (req, res) => {
         let doctor = await DoctorModel.findById(req.params.id)
         if (doctor) {
             // Populate appointments and convert to array
-            await doctor.populate('appointments').execPopulate();
-            const appointmentsArray = doctor.appointments.map(appointment => appointment.toObject());
-            res.json(appointmentsArray);
+            await doctor.populate('appointments').execPopulate()
+            const appointmentsArray = doctor.appointments.map((appointment) =>
+                appointment.toObject()
+            )
+            res.json(appointmentsArray)
         } else {
-            res.status(404).json({ message: 'Doctor not found' });
+            res.status(404).json({ message: 'Doctor not found' })
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message })
     }
-};
-
+}
 
 // @desc    Get all appointments by doctor id with patient names
 //@route    GET /api/doctor/get-appointments-with-names/:id
@@ -266,5 +270,5 @@ export {
     updateTimeSlots,
     getAppointmentsByDoctorIdArray,
     getAllMedicines,
-    getMedicineByName
+    getMedicineByName,
 }

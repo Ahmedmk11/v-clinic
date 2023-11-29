@@ -58,7 +58,7 @@ h1 {
 
     &:active,
     &:focus & {
-        background-color:  #47bd4b;
+        background-color: #47bd4b;
         color: white;
     }
 }
@@ -131,7 +131,6 @@ input:focus {
     padding: 20px;
     box-shadow: 0 0 10px var(--color-shadow);
     border-radius: 10px;
-    cursor: pointer;
     transition: transform 0.3s ease-in-out;
     background-color: var(--accent-background-color);
 
