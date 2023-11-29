@@ -3,11 +3,23 @@
     margin-bottom: 10px;
     padding-left: 10px;
     padding-right:10px ;
-    background-color: lightgray;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /*Give me a light white-beige kinda color like offwhite background color*/
+    background-color: #f5f5f5;
     border-radius: 10px;
-    outline: lightgreen;
+    /*this outline is not displayed cannot see it*/
+    
+    border: 1px solid rgb(71, 141, 255); /* Tomato color */
+    /*give me some modern box shadow*/
+    box-shadow: 0 0 10px var(--color-shadow);
+    cursor: pointer;
+    transition: transform 500ms, background-color 500ms, border-color 500ms; /* Add transition for transform, background-color, and border-color */
+
 }
 .listMedicines:hover{
+    /*I want the outline to hightight when hovered*/
+    outline: lightblue;
     background-color: lightpink;
-    transition: transform 500ms;
+    transform: scale(1.025);
 }
