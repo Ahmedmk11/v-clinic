@@ -24,7 +24,7 @@ const PrescriptionInfo = () => {
                     </p>
                     <p>
                         <strong>No. of Medications: </strong>
-                        {SelectedPrescription.medications.length}
+                        {SelectedPrescription.medications?.length}
                     </p>
                     <p>
                         <strong>Notes: </strong>
@@ -34,7 +34,7 @@ const PrescriptionInfo = () => {
                 <div className='sub-container'>
                     <h2>Medications</h2>
                     <div className='medical-history-view'>
-                        {SelectedPrescription.medications.map((medication) => (
+                        {SelectedPrescription.medications?.map((medication) => (
                             <MedicationCard
                                 key={medication._id}
                                 medication={medication}
