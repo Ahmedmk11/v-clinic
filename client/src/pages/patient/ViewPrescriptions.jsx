@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import ViewPrescriptionsList from '../../components/patient/ViewPrescriptions/ViewPrescriptionsList'
 import CurrUserContext from '../../contexts/CurrUser'
 import axiosApi from '../../utils/axiosApi'
@@ -8,7 +8,7 @@ const PatientViewPrescription = () => {
     useEffect(() => {
         if (!currUser) return
         axiosApi
-            .get('/patient/get-patient-prescription/'+currUser?._id)
+            .get('/patient/get-patient-prescriptions/' + currUser?._id)
             .then((res) => {
                 setPrescriptions(res.data)
             })

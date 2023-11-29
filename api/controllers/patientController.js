@@ -7,12 +7,14 @@ import DoctorModel from '../models/doctorModel.js'
 import packageModel from '../models/packageModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
+import puppeteer from 'puppeteer'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 import FamilyModel from '../models/familyModel.js'
 import stripe from 'stripe'
 import dotenv from 'dotenv'
+import medicineModel from '../models/medicineModel.js'
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
@@ -194,7 +196,7 @@ async function getPatientAppointments(req, res) {
     }
 }
 
-async function getPatientPrescription(req, res) {
+async function getPatientPrescriptions(req, res) {
     try {
         const patient = await PatientModel.findById(req.params.id)
         if (patient) {
@@ -572,7 +574,7 @@ async function stripeWebhook(request, response) {
                     date: metadata.start_time,
                     start_time: metadata.start_time,
                     end_time: metadata.end_time,
-                    fee: metadata.deduction
+                    fee: metadata.deduction,
                 }
                 const appointment = new AppointmentModel(newAppointment)
                 await appointment.save()
@@ -695,7 +697,9 @@ const getFamilyMembersAppointments = async (req, res) => {
     try {
         const { id } = req.params
         const family = await FamilyModel.findOne({ 'member.id': id })
-        const familyMembers = family.member.filter((familyMember)=>familyMember.id!=id).map((member) => member.id)
+        const familyMembers = family.member
+            .filter((familyMember) => familyMember.id != id)
+            .map((member) => member.id)
         const appointments = await AppointmentModel.find({
             patient_id: { $in: familyMembers },
         })
@@ -707,6 +711,96 @@ const getFamilyMembersAppointments = async (req, res) => {
     }
 }
 
+const generatePrescriptionPDF = async (req, res) => {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+
+    await page.goto('about:blank')
+
+    const prescription = req.query.prescription
+    console.log('prescription', prescription)
+
+    let medicationsArr = []
+
+    prescription.medications.forEach(async (medication) => {
+        const medicine = await medicineModel.findOne({
+            _id: medication.medicine_id,
+        })
+        medicationsArr.push({
+            name: medicine.name,
+            dosage: medication.dosage,
+            frequency: medication.frequency,
+            duration: medication.duration,
+        })
+    })
+
+    while (medicationsArr.length < prescription.medications.length) {
+        // eslint-disable-next-line no-undef
+        await new Promise((resolve) => setTimeout(resolve, 100))
+    }
+
+    console.log('medicationsArr', medicationsArr)
+
+    const content = `
+        <div class="prescription-container" style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #333;">Prescription Name: ${
+                prescription.name ?? 'No Name Found'
+            }</h2>
+            <p style="margin-bottom: 10px;">Patient Name: ${
+                prescription.patientName ?? 'No Name Found'
+            }</p>
+            <p style="margin-bottom: 10px;">Doctor Name: ${
+                prescription.doctorName ?? 'No Name Found'
+            }</p>
+            <p style="margin-bottom: 10px;">Status: ${
+                prescription.status ?? 'No Status Found'
+            }</p>
+            <p style="margin-bottom: 10px;">Date: ${new Date(
+                prescription.date
+            ).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            })}</p>
+            <p style="margin-bottom: 10px;">Notes: ${
+                prescription.notes ?? 'No Notes'
+            }</p>
+            <p style="margin-bottom: 10px; margin-top: 20px;"><strong>Medications</strong></p>
+            <div>
+                ${medicationsArr
+                    .map(
+                        (medicine) => `
+                            <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+                                <p>Medicine: ${
+                                    medicine.name ?? 'No Medicine Name Found'
+                                }</p>
+                                <p>Dosage: ${
+                                    medicine.dosage ?? 'No Dosage Found'
+                                }</p>
+                                <p>Frequency: ${
+                                    medicine.frequency ?? 'No Frequency Found'
+                                }</p>
+                                <p>Duration: ${
+                                    medicine.duration ?? 'No Duration Found'
+                                }</p>
+                            </div>
+                            `
+                    )
+                    .join('')}
+            </div>
+        </div>
+    `
+
+    await page.setContent(content)
+
+    const pdfBuffer = await page.pdf({ format: 'A4' })
+    await browser.close()
+    res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Length': pdfBuffer.length,
+    })
+    res.send(pdfBuffer)
+}
 
 export {
     createPatient,
@@ -714,7 +808,7 @@ export {
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
-    getPatientPrescription,
+    getPatientPrescriptions,
     getFamilyMembers,
     populateFamilyMembers,
     getPatientDiscount,
@@ -733,5 +827,6 @@ export {
     payAppointmentWallet,
     payAppointmentCard,
     cancelAutoRenewal,
-    getFamilyMembersAppointments
+    getFamilyMembersAppointments,
+    generatePrescriptionPDF,
 }

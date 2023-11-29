@@ -1,11 +1,25 @@
-import { Modal, Button, Form, DatePicker, TimePicker, message, Input, Select } from 'antd';
-import './AppointmentPrescription.css';
-import { CloseOutlined } from '@ant-design/icons';
-import axiosApi from '../../../utils/axiosApi';
-import disabledDate from '../../../utils/disabledDate';
-import { useState, useEffect } from 'react';
-import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender';
-const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setShowModal}) => {
+import {
+    Modal,
+    Button,
+    Form,
+    DatePicker,
+    TimePicker,
+    message,
+    Input,
+    Select,
+} from 'antd'
+import './AppointmentPrescription.css'
+import { CloseOutlined } from '@ant-design/icons'
+import axiosApi from '../../../utils/axiosApi'
+import disabledDate from '../../../utils/disabledDate'
+import { useState, useEffect } from 'react'
+import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
+const AppointmentPrescription = ({
+    Appointment,
+    setAppointments,
+    showModal,
+    setShowModal,
+}) => {
     const [form] = Form.useForm()
     const [currMedicines, setCurrMedicines] = useState(null);
     const [allMedicines, setAllMedicines] = useState([]); // [ {name: 'med1', id: '1'}, {name: 'med2', id: '2'}
@@ -18,16 +32,16 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            const response = await axiosApi.get('/doctor/get-all-medicines');
-            setMedicines(response.data);
-            //console.log(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
+            try {
+                const response = await axiosApi.get('/doctor/get-all-medicines')
+                setMedicines(response.data)
+                //console.log(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error)
+            }
         }
-        };
-        fetchData();
-    }, []); 
+        fetchData()
+    }, [])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,10 +82,11 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
     }, [prescriptionModified]); 
 
     const handleChange = (value) => {
-        setCurrMedicines(value);
+        setCurrMedicines(value)
     }
 
     const closeModal = () => {
+        setAddMedicine(false)
         setShowModal(false)
     }
 
@@ -79,7 +94,9 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
         try {
             const values = await form.validateFields()
             const { medicineName, Dosage, Frequency, Duration, notes } = values
-            const getMedicine =  await axiosApi.get(`/doctor/get-medicine-by-name/${medicineName}`)
+            const getMedicine = await axiosApi.get(
+                `/doctor/get-medicine-by-name/${medicineName}`
+            )
             // console.log(values)
             // console.log(currMedicines)
              //console.log(getMedicine.data)
@@ -92,12 +109,14 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
             console.log(allMedicines)
            
         } catch (error) {
-            console.log('Failed:', error)   
+            console.log('Failed:', error)
         }
     }
 
     const deleteMedicine = (medicine) => {
-        setAllMedicines((prev) => { return prev.filter((med) => med.medicine !== medicine) })
+        setAllMedicines((prev) => {
+            return prev.filter((med) => med.medicine !== medicine)
+        })
     }
 
     const handleSubmitPrescription = async () => {
@@ -114,9 +133,9 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
                 }
             })
             console.log(medicines)
-            await axiosApi.post(`/appointment/update-prescription`,{
+            await axiosApi.post(`/appointment/update-prescription`, {
                 appointmentId: Appointment._id,
-                prescription: { notes, medications: medicines}
+                prescription: { notes, medications: medicines },
             })
             setAppointments((prev) => {
                 return prev.map((appointment) => {
@@ -222,7 +241,7 @@ const AppointmentPrescription = ({ Appointment, setAppointments ,showModal,setSh
             ]}>
             <DatePicker  disabledDate={disabledDate} style={{ width: '100%' }} />
         </Form.Item> */}
-        {/* <Form.Item
+                {/* <Form.Item
             name='start_time'
             label='Start Time'
             rules={[

@@ -7,7 +7,7 @@ import {
     getPatientByID,
     getPatientsByDoctorID,
     getPatientAppointments,
-    getPatientPrescription,
+    getPatientPrescriptions,
     getFamilyMembers,
     populateFamilyMembers,
     getPatientDiscount,
@@ -26,7 +26,8 @@ import {
     payAppointmentWallet,
     payAppointmentCard,
     cancelAutoRenewal,
-    getFamilyMembersAppointments
+    getFamilyMembersAppointments,
+    generatePrescriptionPDF,
 } from '../controllers/patientController.js'
 
 let packagePaymentDone = false
@@ -44,7 +45,7 @@ router.get('/get-patient-by-id/:id', getPatientByID)
 router.get('/get-patients-by-doctor-id/:id', getPatientsByDoctorID)
 router.get('/get-patient-appointments/:id', getPatientAppointments)
 router.get('/get-family-appointments/:id', getFamilyMembersAppointments)
-router.get('/get-patient-prescription/:id', getPatientPrescription)
+router.get('/get-patient-prescriptions/:id', getPatientPrescriptions)
 router.get('/get-patient-family-members/:id', getFamilyMembers)
 router.get('/get-patient-package/:id', getPatientDiscount)
 router.post('/add-medical-history', addMedicalHistory)
@@ -54,6 +55,7 @@ router.post('/upload-health-records', savePatientfiles, uploadPatientFiles)
 router.delete('/remove-uploaded-file', removeUploadedFile)
 router.post('/add-to-family/:id', addToFamily)
 router.get('/get-family/:id', getFamily)
+router.get('/generate-prescription-pdf', generatePrescriptionPDF)
 router.post(
     '/stripe-webhook',
     bodyParser.raw({ type: 'application/json' }),
