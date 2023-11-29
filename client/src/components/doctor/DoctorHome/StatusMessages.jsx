@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import Contract from './Contract'
+import { Button } from 'antd'
 
 const StatusMessages = ({ Doctor }) => {
     const navigate = useNavigate()
@@ -24,9 +25,9 @@ const StatusMessages = ({ Doctor }) => {
                         complete your registration process, we kindly request
                         you to submit some documents
                     </h3>
-                    <button className='button' onClick={handleUpload}>
+                    <Button type='primary' onClick={handleUpload}>
                         Upload Documents
-                    </button>
+                    </Button>
                 </div>
             </ConditionalRender>
             <ConditionalRender
@@ -53,11 +54,11 @@ const StatusMessages = ({ Doctor }) => {
                         employment contract and sign it to start using the
                         platform.
                     </h3>
-                    <button
-                        className='button'
+                    <Button
+                    type='primary'
                         onClick={() => setContractVisible(true)}>
                         View Contract
-                    </button>
+                    </Button>
                 </div>
                 <Contract
                     visible={contractVisible}

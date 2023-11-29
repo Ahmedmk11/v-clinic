@@ -88,14 +88,14 @@ const AppointmentCard = ({ Appointment,setAppointments }) => {
             </p>
             <ConditionalRender condition={!['completed', 'cancelled','pending','rejected'].includes(Appointment?.status?.toLowerCase())}>
             <div className='edit-buttons'>
-            <Button danger type='primary' onClick={()=>setCancelAppointmentOpen(true)}>Cancel</Button>
-            <Button type='primary' onClick={()=>setAppointmentRescheduleOpen(true)} >Reschedule</Button>
+            <Button size='small' danger type='primary' onClick={()=>setCancelAppointmentOpen(true)}>Cancel</Button>
+            <Button size='small' type='primary' onClick={()=>setAppointmentRescheduleOpen(true)} >Reschedule</Button>
             </div>
             </ConditionalRender>
             <ConditionalRender condition={['pending'].includes(Appointment?.status?.toLowerCase())}>
             <div className='edit-buttons'>
-            <Button loading={loadingReject} danger type='primary' onClick={RejectFollowUp}>Reject</Button>
-            <Button loading={loadingAccept} type='primary' onClick={AcceptFollowUp}>Accept</Button>
+            <Button size='small' loading={loadingReject} danger type='primary' onClick={RejectFollowUp}>Reject</Button>
+            <Button size='small' loading={loadingAccept} type='primary' onClick={AcceptFollowUp}>Accept</Button>
 
                 </div>
             </ConditionalRender>

@@ -185,7 +185,6 @@ const UploadDocs = () => {
                                 alignItems: 'flex-end',
                             }}>
                             <Button
-                                id='green-button'
                                 type='primary'
                                 htmlType='submit'>
                                 Submit Documents

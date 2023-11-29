@@ -1,6 +1,6 @@
 .requests-table-container{
     & a {
-        color: var(--main-green);
+        color: var(--main-blue);
     }
     & h4{
         background-color: var(--complementary-yellow);

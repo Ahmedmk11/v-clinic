@@ -16,7 +16,7 @@
   }
   
   .page-number.active {
-    background-color: #4caf50;
+    background-color: var(--main-blue);
     color: white;
   }
   

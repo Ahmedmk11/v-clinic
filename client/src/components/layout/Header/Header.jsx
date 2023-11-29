@@ -9,6 +9,7 @@ import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import axiosApi from '../../../utils/axiosApi'
+import { FloatButton } from 'antd';
 
 const SunIcon = () => <img style={{ width: 20, height: 20 }} src={sunIcn} />
 const MoonIcon = () => <img style={{ width: 20, height: 20 }} src={moonIcn} />
@@ -81,12 +82,6 @@ const Header = () => {
                 <span>V-</span>Clinic
             </div>
             <div id='navbar-buttons'>
-                <Button
-                    type='text'
-                    onClick={handleTheme}
-                    icon={theme === 'light' ? <SunIcon /> : <MoonIcon />}>
-                    {theme === 'light' ? <p>Light</p> : <p>Dark</p>}
-                </Button>
                 <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
                     <span>{currUser?.wallet?.toFixed(0)} EGP</span>
@@ -106,6 +101,7 @@ const Header = () => {
                     </a>
                 </Dropdown>
             </div>
+            <FloatButton icon={theme !== 'light' ? <SunIcon /> : <MoonIcon />}  onClick={handleTheme} />
         </header>
     )
 }

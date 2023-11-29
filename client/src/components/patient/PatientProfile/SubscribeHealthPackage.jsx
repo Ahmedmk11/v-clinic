@@ -206,22 +206,22 @@ const SubscribeHealthPackage = ({
                 onCancel={onCancelModal}
                 destroyOnClose
                 footer={[
-                    <ConditionalRender
+                   <div key="footerdiv78">
+                     <ConditionalRender
                         condition={page === 1}
                         elseComponent={<Page2Buttons />}>
                         <Button
-                            key='cancel-button0'
-                            id='cancel-button'
                             onClick={onCancelModal}>
                             Cancel
                         </Button>
                         <Button
                             key='next-button0'
-                            id='green-button'
+                          type='primary'
                             onClick={goToPaymentChoices}>
                             Next
                         </Button>
-                    </ConditionalRender>,
+                    </ConditionalRender>
+                   </div>
                 ]}>
                 <ConditionalRender
                     condition={page === 1}

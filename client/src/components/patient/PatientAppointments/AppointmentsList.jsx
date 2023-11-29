@@ -5,7 +5,7 @@ import CancelAppointment from './CancelAppointment.jsx'
 import AppointmentReschedule from '../../doctor/DoctorAppointments/AppointmentReschedule.jsx'
 import RequestFollowUp from './RequestFollowUp.jsx'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
-
+import Pagination from '../../reusable/Pagination/Pagination.jsx'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import axiosApi from '../../../utils/axiosApi.js'
@@ -24,8 +24,9 @@ const AppointmentsList = ({ mode = 'patient' }) => {
         useState(false)
     const [RequestFollowUpOpen, setRequestFollowUpOpen] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
     const { currUser } = useContext(CurrUserContext)
-
+    const AppointmentsPerPage = 8
     const applyFilters = () => {
         let filtered = appointmentsList
 
@@ -88,6 +89,85 @@ const AppointmentsList = ({ mode = 'patient' }) => {
         setDateRange(dates)
     }
 
+    const getCurrentAppointments = () => {
+        const indexOfLastAppointment = currentPage * AppointmentsPerPage
+        const indexOfFirstAppointment =
+            indexOfLastAppointment - AppointmentsPerPage
+        const currentAppointments = displayedAppointments.slice(
+            indexOfFirstAppointment,
+            indexOfLastAppointment
+        )
+        return currentAppointments.length > 0
+            ? currentAppointments.map((appointment) => (
+                <div className='card' key={appointment.id}>
+                <h2>{appointment?.patient_id?.name}</h2>
+                <h3>Dr. {appointment?.doctor_id.name}</h3>
+                <p>
+                    <strong>
+                        At{' '}
+                        {formatDateRange(
+                            appointment.start_time,
+                            appointment.end_time
+                        )}
+                    </strong>
+                </p>
+                <p>
+                    <strong>Status: </strong>
+                    <span className={'status ' + appointment.status}>
+                        {appointment.status}
+                    </span>
+                </p>
+                <ConditionalRender
+                    condition={
+                        !['completed', 'cancelled', 'pending','rejected'].includes(
+                            appointment?.status?.toLowerCase()
+                        )
+                    }>
+                    <div className='edit-buttons'>
+                        <Button
+                        size="small"
+                            danger
+                            type='primary'
+                            onClick={() => {
+                                setCancelAppointmentOpen(true),
+                                    setSelectedAppointment(appointment)
+                            }}>
+                            Cancel
+                        </Button>
+                        <Button
+                        size="small"
+                            type='primary'
+                            onClick={() => {
+                                setAppointmentRescheduleOpen(true),
+                                    setSelectedAppointment(appointment)
+                            }}>
+                            Reschedule
+                        </Button>
+                    </div>
+                </ConditionalRender>
+                <ConditionalRender
+                    condition={
+                        appointment?.status?.toLowerCase() ==
+                        'completed'
+                    }>
+                    <div className='edit-buttons'>
+                        <Button
+                        size="small"
+                            type='primary'
+                            onClick={() => {
+                                setRequestFollowUpOpen(true),
+                                    setSelectedAppointment(appointment)
+                            }}>
+                            Request Follow-Up
+                        </Button>
+                    </div>
+                </ConditionalRender>
+            </div>
+        )
+            ):'No appointments to show'}
+
+                        
+    
     return (
         <div>
             <h2>My Appointments</h2>
@@ -119,69 +199,8 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                 ]}
             />
             <div className='card-list'>
-                {displayedAppointments.map((appointment) => (
-                    <div className='card' key={appointment.id}>
-                        <h2>{appointment?.patient_id?.name}</h2>
-                        <h3>Dr. {appointment?.doctor_id.name}</h3>
-                        <p>
-                            <strong>
-                                At{' '}
-                                {formatDateRange(
-                                    appointment.start_time,
-                                    appointment.end_time
-                                )}
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Status: </strong>
-                            <span className={'status ' + appointment.status}>
-                                {appointment.status}
-                            </span>
-                        </p>
-                        <ConditionalRender
-                            condition={
-                                !['completed', 'cancelled', 'pending','rejected'].includes(
-                                    appointment?.status?.toLowerCase()
-                                )
-                            }>
-                            <div className='edit-buttons'>
-                                <Button
-                                    danger
-                                    type='primary'
-                                    onClick={() => {
-                                        setCancelAppointmentOpen(true),
-                                            setSelectedAppointment(appointment)
-                                    }}>
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type='primary'
-                                    onClick={() => {
-                                        setAppointmentRescheduleOpen(true),
-                                            setSelectedAppointment(appointment)
-                                    }}>
-                                    Reschedule
-                                </Button>
-                            </div>
-                        </ConditionalRender>
-                        <ConditionalRender
-                            condition={
-                                appointment?.status?.toLowerCase() ==
-                                'completed'
-                            }>
-                            <div className='edit-buttons'>
-                                <Button
-                                    type='primary'
-                                    onClick={() => {
-                                        setRequestFollowUpOpen(true),
-                                            setSelectedAppointment(appointment)
-                                    }}>
-                                    Request Follow-Up
-                                </Button>
-                            </div>
-                        </ConditionalRender>
-                    </div>
-                ))}
+               {getCurrentAppointments()}
+                
             </div>
             <CancelAppointment
                 Appointment={selectedAppointment}
@@ -202,6 +221,12 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                 setShowModal={setRequestFollowUpOpen}
                 setAppointments={setDisplayedAppointments}
             />
+                <Pagination
+                    itemsPerPage={AppointmentsPerPage}
+                    totalItems={displayedAppointments?.length}
+                    paginate={(pageNumber) => setCurrentPage(pageNumber)}
+                    currentPage={currentPage}
+                />
         </div>
     )
 }

@@ -20,10 +20,7 @@ const UploadMedicalRecords = () => {
         console.log(formData)
         formData.append('id', Patient._id)
         axiosApi
-            .post(
-                '/patient/upload-health-records',
-                formData
-            )
+            .post('/patient/upload-health-records', formData)
             .then((res) => {
                 setPatient({
                     ...Patient,
@@ -89,7 +86,7 @@ const UploadMedicalRecords = () => {
                         flexDirection: 'column',
                         alignItems: 'flex-end',
                     }}>
-                    <Button id='green-button' type='primary' htmlType='submit'>
+                    <Button type='primary' htmlType='submit'>
                         Submit Documents
                     </Button>
                 </Form.Item>

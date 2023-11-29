@@ -55,7 +55,6 @@
         padding: 4px;
         border: 1px solid #ccc;
         border-radius: 4px;
-
     }
 }
 
@@ -74,7 +73,7 @@
     }
 
     & a {
-        color: var(--main-green);
+        color: var(--main-blue);
         text-decoration: none;
     }
 }
@@ -84,7 +83,7 @@ span.Pending {
 }
 
 span.Active {
-    color: var(--main-green);
+    color: var(--main-blue);
 }
 
 span.Rejected {
@@ -95,18 +94,6 @@ span.Rejected {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-}
-
-.cancel-button {
-    background-color: var(--complementary-gray);
-
-    &:hover {
-        background-color: var(--complementary-red);
-    }
-
-    &:active {
-        background-color: var(--complementary-red);
-    }
 }
 
 .message.canceled {

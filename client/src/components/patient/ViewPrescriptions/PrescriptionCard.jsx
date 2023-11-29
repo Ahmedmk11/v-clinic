@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import PrescriptionContext from "../../../contexts/SelectedPrescription"
+import { Button } from "antd"
 const PrescriptionCard = ({ prescription }) => {
     const { setSelectedPrescription } = useContext(PrescriptionContext)
     const navigate = useNavigate()
@@ -27,9 +28,11 @@ const PrescriptionCard = ({ prescription }) => {
                 <strong>No. of Medications: </strong>
                 {prescription.medications.length}
             </p>
-            <button className='view-records-btn button'>
+            <div className="edit-buttons">
+            <Button type="primary" >
                 View Prescription
-            </button>
+            </Button>
+            </div>
         </div>
     )
 }

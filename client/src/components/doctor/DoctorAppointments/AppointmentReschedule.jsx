@@ -65,14 +65,12 @@ const AppointmentReschedule = ({ Appointment, setAppointments ,showModal,setShow
     footer={[
         <div key="footerDiv">
             <Button
-                key='cancel-button'
-                id='cancel-button'
                 onClick={closeModal}>
                 Cancel
             </Button>
             <Button
+                    type='primary'
                 key='next-button0'
-                id='green-button'
                 onClick={onFinish}>
                 Rechedule
             </Button>

@@ -1,61 +1,42 @@
 import React, { useState } from 'react'
-import { Button } from 'antd'
-
-import { useNavigate } from 'react-router-dom'
+import { Button, Form, Input, DatePicker, Select, Steps } from 'antd'
+import { useNavigate,Link } from 'react-router-dom'
 import axiosApi from '../../utils/axiosApi'
+import { LeftCircleOutlined } from '@ant-design/icons'
 
-function PatientRegistration() {
+const { Step } = Steps
+const { Option } = Select
+
+const PatientRegistration = () => {
+    const [form] = Form.useForm()
+    const [currentStep, setCurrentStep] = useState(0)
     const [message, setMessage] = useState(null)
-    const [formData, setFormData] = useState({
-        username: '',
-        name: '',
-        email: '',
-        password: '',
-        nid: '',
-        birthdate: '',
-        gender: '',
-        phoneNumber: '',
-        emergencyName: '',
-        emergencyPhoneNumber: '',
-        package: '',
-        health_records: '',
-    })
-
+    const [formData, setFormData] = useState({})
     const navigate = useNavigate()
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }))
+    const nextStep = () => {
+        form.validateFields().then((values) => {
+            setFormData({ ...formData, ...values }),
+                setCurrentStep(currentStep + 1)
+        })
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
+    const prevStep = () => {
+        setCurrentStep(currentStep - 1)
+    }
+
+    const handleSubmit = async (values) => {
+        // Handle form submission for the last step
         try {
-            const response = await axiosApi.post(
-                '/patient/create-patient',
-                formData
-            )
+            const response = await axiosApi.post('/patient/create-patient', {
+                ...formData,
+                ...values,
+            })
             const data = response.data
-            console.log(response)
             if (response) {
                 setMessage('Registration Successful')
-                setFormData({
-                    username: '',
-                    name: '',
-                    email: '',
-                    password: '',
-                    nid: '',
-                    birthdate: '',
-                    gender: '',
-                    phoneNumber: '',
-                    emergencyName: '',
-                    emergencyPhoneNumber: '',
-                    package: '',
-                    health_records: '',
-                })
+                form.resetFields()
+                setCurrentStep(0) // Reset to the first step after successful submission
             } else {
                 setMessage(data.message)
             }
@@ -64,123 +45,234 @@ function PatientRegistration() {
         }
     }
 
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input
-                        type='text'
+    const steps = [
+        {
+            title: 'Basic Info.',
+            content: (
+                <>
+                    <Form.Item
                         name='username'
-                        value={formData.username}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Name:
-                    <input
-                        type='text'
+                        label='Username'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         name='name'
-                        value={formData.name}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Email:
-                    <input
-                        type='email'
+                        label='Name'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your name!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         name='email'
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input
-                        type='password'
+                        label='Email'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your email!',
+                                type: 'email',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         name='password'
-                        value={formData.password}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    National ID:
-                    <input
-                        type='nid'
-                        name='nid'
-                        value={formData.nid}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Date of Birth:
-                    <input
-                        type='date'
+                        label='Password'
+                        rules={[
+                            {
+                                required: true,
+                                message: '',
+                            },
+                            {
+                                validator: (_, value) => {
+                                    if (value.length < 8) {
+                                        return Promise.reject(
+                                            'Password must be at least 8 characters'
+                                        )
+                                    }
+                                    if (
+                                        !/[a-zA-Z]/.test(value) ||
+                                        !/\d/.test(value)
+                                    ) {
+                                        return Promise.reject(
+                                            'Password must contain at least 1 letter and 1 number'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}>
+                        <Input.Password />
+                    </Form.Item>
+                </>
+            ),
+        },
+        {
+            title: 'Personal Info.',
+            content: (
+                <>
+                    <Form.Item
                         name='birthdate'
-                        value={formData.birthdate}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Gender:
-                    <select
-                        name='gender'
-                        value={formData.gender}
-                        onChange={handleInputChange}>
-                        <option value=''>Select Gender</option>
-                        <option value='male'>Male</option>
-                        <option value='female'>Female</option>
-                    </select>
-                </label>
-                <br />
-                <label>
-                    Phone Number:
-                    <input
-                        type='tel'
-                        name='phoneNumber'
-                        value={formData.phoneNumber}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Emergency Contact Name:
-                    <input
-                        type='text'
-                        name='emergencyName'
-                        value={formData.emergencyName}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Emergency Contact Phone Number:
-                    <input
-                        type='text'
-                        name='emergencyPhoneNumber'
-                        value={formData.emergencyPhoneNumber}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <br />
-                <button type='submit'>Register</button>
-                {message && <p>{message}</p>}
-            </form>
+                        label='Date of Birth'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please select your date of birth!',
+                            },
+                        ]}>
+                        <DatePicker style={{ width: '100%' }} />
+                    </Form.Item>
+                    <Form.Item
+                        name='nid'
+                        label='National ID'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your National ID!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
 
-            <Button
-                type='link'
-                onClick={() => {
-                    navigate('/register-doctor')
-                }}>
-                Want to register as a Doctor?
-            </Button>
-        </>
+                    <Form.Item
+                        name='gender'
+                        label='Gender'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please select your gender!',
+                            },
+                        ]}>
+                        <Select placeholder='Select Gender'>
+                            <Option value='male'>Male</Option>
+                            <Option value='female'>Female</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name='phoneNumber'
+                        label='Phone Number'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your phone number!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                </>
+            ),
+        },
+        {
+            title: 'Emergency Contact',
+            content: (
+                <>
+                    <Form.Item
+                        name='emergencyName'
+                        label='Contact Name'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input emergency contact name!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name='emergencyPhoneNumber'
+                        label='Contact Phone No.'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Please input emergency contact phone number!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                </>
+            ),
+        },
+    ]
+
+    return (
+        <div
+            style={{
+                width: '600px',
+                margin: 'auto',
+                padding: '2%',
+                border: '1px solid #ccc',
+                borderRadius: '8px',
+            }}>
+            <Link to='/login'>
+                <Button
+                    icon={<LeftCircleOutlined />}
+                    size='small'
+                    type='primary'>
+                    Back to Login
+                </Button>
+            </Link>
+            <h2 style={{ textAlign: 'center' }}>Patient Registration</h2>
+
+            <Steps current={currentStep} style={{ marginBottom: '20px' }}>
+                {steps.map((step, index) => (
+                    <Step key={index} title={step.title} />
+                ))}
+            </Steps>
+            <Form form={form} onFinish={handleSubmit}>
+                {steps[currentStep].content}
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: '20px',
+                    }}>
+                    {currentStep > 0 && (
+                        <Button type='default' onClick={prevStep}>
+                            Previous
+                        </Button>
+                    )}
+                    {currentStep < steps.length - 1 && (
+                        <Button type='primary' onClick={nextStep}>
+                            Next
+                        </Button>
+                    )}
+                    {currentStep === steps.length - 1 && (
+                        <Button type='primary' htmlType='submit'>
+                            Register
+                        </Button>
+                    )}
+                </div>
+                {message && (
+                    <p
+                        style={{
+                            color:
+                                message === 'Registration Successful'
+                                    ? 'green'
+                                    : 'red',
+                            textAlign: 'center',
+                            marginTop: '20px',
+                        }}>
+                        {message}
+                    </p>
+                )}
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                    <Button
+                        type='link'
+                        onClick={() => navigate('/register-doctor')}>
+                        Want to register as a Doctor?
+                    </Button>
+                </div>
+            </Form>
+        </div>
     )
 }
 

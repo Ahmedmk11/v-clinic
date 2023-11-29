@@ -11,7 +11,7 @@
 
     &::-webkit-scrollbar-thumb {
         height: 0.5px; /* width of the scrollbar */
-        background-color: var(--main-green); /* color of the scrollbar thumb */
+        background-color: var(--main-blue); /* color of the scrollbar thumb */
         border-radius: 2px; /* roundness of the scrollbar thumb */
     }
 
@@ -21,7 +21,7 @@
 }
 
 .slot-item {
-    background-color: var(--light-green);
+    background-color:  #c8e6c9;
     padding: 8px;
     margin: 4px;
     text-align: center;

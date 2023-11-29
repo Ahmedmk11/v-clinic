@@ -45,16 +45,14 @@ const CreateFollowUp = ({ visible, onCreate, onCancel }) => {
             onCancel={onCancel}
             width={300}
             footer={[
-                <div>
+                <div key="footerdiv12">
                     <Button
-                        key='cancel-button'
-                        id='cancel-button'
                         onClick={onCancel}>
                         Cancel
                     </Button>
                     <Button
                         key='next-button0'
-                        id='green-button'
+                       type='primary'
                         onClick={onFinish}>
                         Add
                     </Button>

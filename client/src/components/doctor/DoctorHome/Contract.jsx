@@ -66,14 +66,14 @@ const Contract = ({ visible, onCancel }) => {
                 footer={[
                     <Button
                         key='reject'
-                        id='red-button'
+                        type='primary'
+                        danger
                         onClick={() => setIsRejectModalVisible(true)}>
                         Reject
                     </Button>,
                     <Button
                         key='accept'
                         type='primary'
-                        id='green-button'
                         onClick={onAccept}>
                         Accept
                     </Button>,
@@ -89,7 +89,6 @@ const Contract = ({ visible, onCancel }) => {
                     <Button
                         key='accept'
                         type='primary'
-                        id='green-button'
                         onClick={onCancelAccept}>
                         Ok
                     </Button>,
@@ -103,7 +102,6 @@ const Contract = ({ visible, onCancel }) => {
                 footer={[
                     <Button
                         key='reject'
-                        id='red-button'
                         onClick={onCancelReject}>
                         Cancel
                     </Button>,

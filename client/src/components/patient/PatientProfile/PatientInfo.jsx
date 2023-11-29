@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import ChangePassword from './ChangePassword'
+import { Button } from 'antd'
 const PatientInfo = ({ patient }) => {
     const [open, setOpen] = useState(false)
     return (
@@ -30,9 +31,9 @@ const PatientInfo = ({ patient }) => {
                     {patient?.emergencyPhoneNumber}
                 </p>
                 <div className='edit-buttons'>
-                    <button className='button' onClick={() => setOpen(true)}>
+                    <Button type='primary' onClick={() => setOpen(true)}>
                         Change Password
-                    </button>
+                    </Button>
                     <ChangePassword open={open} setOpen={setOpen} />
                 </div>
             </div>

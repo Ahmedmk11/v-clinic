@@ -147,7 +147,6 @@ const ReserveAppointment = ({
                 <div className='edit-buttons'>
                     {/* cancel button, pay with card , pay with wallet */}
                     <Button
-                        danger
                         key='cancel'
                         onClick={() => {
                             setOpen(false)

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import { baseURL } from '../../../utils/axiosApi'
+import { Button } from 'antd'
 const RequireDocs = ({ docs, status, uploaded_documents }) => {
     const [show, setShow] = useState(true)
     const navigate = useNavigate()
@@ -44,9 +45,9 @@ const RequireDocs = ({ docs, status, uploaded_documents }) => {
                         Complete your registration process by uploading the
                         required documents to activate your account.
                     </p>
-                    <button className='button' onClick={handleUpload}>
+                    <Button type='primary' onClick={handleUpload}>
                         Upload Documents
-                    </button>
+                    </Button>
                 </div>
             </ConditionalRender>
             <ConditionalRender condition={status?.toLowerCase() == 'active'}>

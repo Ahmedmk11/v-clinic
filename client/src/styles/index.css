@@ -43,7 +43,7 @@ h1 {
 }
 
 .button {
-    background-color: var(--main-green);
+    background-color: var(--main-blue);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -58,43 +58,14 @@ h1 {
 
     &:active,
     &:focus & {
-        background-color: var(--accent-green);
+        background-color:  #47bd4b;
         color: white;
     }
 }
 
-#green-button {
-    background-color: #389e0d;
-    /* Darker green on hover/focus */
-    border-color: #389e0d;
-    color: #ffffff;
-    /* Text color (white) */
-}
-
-#green-button:hover,
-#green-button:focus {
-    background-color: #52c41a;
-    /* Green color */
-    border-color: #52c41a;
-    /* Border color */
-}
-
-#red-button:hover,
-#red-button:focus {
-    color: #d9363e;
-    border-color: #d9363e;
-}
-
-#cancel-button:hover,
-#cancel-button:focus {
-    color: black;
-    border-color: #ccc;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
-
 input:focus {
-    outline: var(--main-green) auto 1px;
-    border-color: var(--main-green);
+    outline: var(--main-blue) auto 1px;
+    border-color: var(--main-blue);
 }
 
 .main-container {
@@ -124,7 +95,7 @@ input:focus {
             height: 15px;
             margin-left: 10px;
             cursor: pointer;
-            accent-color: var(--main-green);
+            accent-color: var(--main-blue);
         }
     }
 }
@@ -137,7 +108,7 @@ input:focus {
     margin: 2%;
 
     & a {
-        color: var(--main-green);
+        color: var(--main-blue);
         text-decoration: none;
     }
 }
@@ -175,47 +146,8 @@ input:focus {
     }
 
     & p {
-        font-size: 14px;
+        font-size: 16px;
         margin-bottom: 8px;
+        margin-top: 6px;
     }
-}
-
-.ant-input:hover {
-    border-color: var(--main-green);
-}
-
-.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
-    border-color: var(--main-green);
-}
-
-.ant-picker-focused {
-    border-color: var(--main-green);
-}
-
-.ant-picker .ant-picker-input>input:hover {
-    border-color: var(--main-green);
-}
-
-:where(.css-dev-only-do-not-override-pr0fja).ant-picker:hover,
-:where(.css-dev-only-do-not-override-pr0fja).ant-picker-focused {
-    border-color: var(--main-green);
-}
-
-:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary {
-    background-color: var(--main-green);
-}
-
-:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active,
-:where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-    background-color: var(--lighter-green);
-}
-
-:where(.css-dev-only-do-not-override-pr0fja).ant-input:focus,
-:where(.css-dev-only-do-not-override-pr0fja).ant-input-focused {
-    border-color: var(--main-green);
-}
-
-:where(.css-dev-only-do-not-override-profja).ant-input:focus,
-:where(.css-dev-only-do-not-override-profja).ant-input-focused {
-    border-color: var(--main-green);
 }

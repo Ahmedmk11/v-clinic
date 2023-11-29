@@ -8,7 +8,7 @@ import ConditionalRender from '../../components/reusable/ConditionalRender/Condi
 import AddMedicalRecord from '../../components/doctor/PatientInfo/AddMedicalRecord'
 import CreateFollowUp from '../../components/doctor/PatientInfo/CreateFollowUp'
 import CurrUserContext from '../../contexts/CurrUser'
-import { message } from 'antd'
+import { message,Button } from 'antd'
 import ViewUploadedRecords from '../../components/patient/HealthRecords/ViewUploadedRecords'
 import axiosApi from '../../utils/axiosApi'
 const PatientInfo = () => {
@@ -30,11 +30,10 @@ const PatientInfo = () => {
             <div className='sub-container patient-info'>
                 <div className='flex-contianer'>
                     <h2>Medical Records</h2>
-                    <button
-                        className='button'
+                    <Button type='primary'
                         onClick={() => setAddMedicalRecordVisible(true)}>
                         Add Medical Records
-                    </button>
+                    </Button>
                 </div>
                 <ConditionalRender
                     condition={SelectedPatient?.medicalHistory[0]}
@@ -98,11 +97,10 @@ const PatientInfo = () => {
                         {SelectedPatient?.name}
                         's Information
                     </h2>
-                    <button
-                        className='button'
+                    <Button type='primary'
                         onClick={() => setFollowUpVisible(true)}>
                         Schedule Follow Up
-                    </button>
+                    </Button>
                     <CreateFollowUp
                         visible={followUpVisible}
                         onCreate={handleCreateFollowUp}

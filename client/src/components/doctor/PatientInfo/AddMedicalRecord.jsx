@@ -68,12 +68,9 @@ const AddMedicalRecord = ({
 
     const updatePatient = (newMedicalHistory) => {
         axiosApi
-            .put(
-                `/patient/update-medical-history/${SelectedPatient?._id}`,
-                {
-                    medicalHistory: newMedicalHistory,
-                }
-            )
+            .put(`/patient/update-medical-history/${SelectedPatient?._id}`, {
+                medicalHistory: newMedicalHistory,
+            })
             .then((res) => {
                 setSelectedPatient({
                     ...SelectedPatient,
@@ -98,13 +95,10 @@ const AddMedicalRecord = ({
 
     const Page2Buttons = () => (
         <>
-            <Button
-                key='back-button'
-                id='cancel-button'
-                onClick={() => setPage(1)}>
+            <Button key='back-button' onClick={() => setPage(1)}>
                 Back
             </Button>
-            <Button key='add-button' id='green-button' onClick={handleCreate}>
+            <Button key='add-button' type='primary' onClick={handleCreate}>
                 Add
             </Button>
         </>
@@ -116,25 +110,21 @@ const AddMedicalRecord = ({
             onCancel={handleCancel}
             width={600}
             footer={[
-                <ConditionalRender
+                <div key="footerdiv8679">
+                    <ConditionalRender
                     condition={page === 1}
                     elseComponent={<Page2Buttons />}>
-                    <Button
-                        key='cancel-button'
-                        id='cancel-button'
-                        onClick={handleCancel}>
-                        Cancel
-                    </Button>
+                    <Button onClick={handleCancel}>Cancel</Button>
                     <Button
                         key='next-button0'
-                        id='green-button'
+                        type='primary'
                         onClick={() =>
                             form.validateFields().then(() => setPage(2))
                         }>
                         Next
                     </Button>
-                </ConditionalRender>,
-                ,
+                </ConditionalRender>
+                </div>,
             ]}>
             <ConditionalRender condition={page === 1}>
                 <Form form={form} layout='vertical'>

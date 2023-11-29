@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import calcAge from '../../../utils/calcAge'
+import { Button } from 'antd'
 
 const PatientCard = ({ patient }) => {
    
@@ -31,7 +32,7 @@ const PatientCard = ({ patient }) => {
                     : 'No upcoming appointments'}
             </p>
             <div className='edit-buttons'>
-            <button className='view-records-btn button' onClick={handlePatientSelect}>View Records</button>
+            <Button type='primary' onClick={handlePatientSelect}>View Records</Button>
             </div>
         </div>
     )

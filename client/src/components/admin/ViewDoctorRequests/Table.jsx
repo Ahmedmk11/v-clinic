@@ -100,7 +100,7 @@ const AntTable = ({ requests, setRequests }) => {
             <Button
                 type='primary'
                 disabled={record.status !== 'Pending'}
-                style={{ backgroundColor: 'var(--main-green)' }}>
+                style={{ backgroundColor: 'var(--main-blue)' }}>
                 Accept
             </Button>
         )

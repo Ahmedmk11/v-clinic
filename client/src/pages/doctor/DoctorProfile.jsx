@@ -96,8 +96,7 @@ const DoctorProfile = () => {
     const getButtons = () => {
         return EditMode ? (
             <div className='edit-buttons'>
-                <button
-                    className='button cancel-button'
+                <Button size='large'
                     onClick={() => {
                         setEditMode(false)
                         setDoctorInfo(currUser)
@@ -105,27 +104,30 @@ const DoctorProfile = () => {
                         setTimeout(() => setEditMessage(''), 5000)
                     }}>
                     Cancel
-                </button>
-                <button
-                    className='button'
+                </Button>
+                <Button
+                type='primary'
+                     size='large'
                     disabled={SaveButtonClicked}
                     onClick={handleSave}>
                     Save
-                </button>
+                </Button>
             </div>
         ) : (
             <div className='edit-buttons'>
-                <button
-                    className='button'
+                <Button
+                   type='primary'
+                   size='large'
                     onClick={() => {
                         setEditMode(true)
                         setEditMessage('')
                     }}>
                     Edit Profile
-                </button>
-                <button className='button' onClick={showModal}>
+                </Button>
+                <Button type='primary'
+                     size='large' onClick={showModal}>
                     Change Password
-                </button>
+                </Button>
             </div>
         )
     }
