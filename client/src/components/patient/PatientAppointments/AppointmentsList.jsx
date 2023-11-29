@@ -140,7 +140,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
                         </p>
                         <ConditionalRender
                             condition={
-                                !['completed', 'cancelled', 'pending'].includes(
+                                !['completed', 'cancelled', 'pending','rejected'].includes(
                                     appointment?.status?.toLowerCase()
                                 )
                             }>
