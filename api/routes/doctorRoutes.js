@@ -28,7 +28,7 @@ router.get(
     getAppointmentsWithNamesByDoctorId
 )
 
-router.get('/get-appointmentstimes/:id',getAppointmentsByDoctorIdArray)
+router.get('/get-appointmentstimes/:id', getAppointmentsByDoctorIdArray)
 router.get('/get-all-medicines', getAllMedicines)
 router.get('/get-medicine-by-name/:name', getMedicineByName)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)

@@ -15,6 +15,8 @@ import FamilyModel from '../models/familyModel.js'
 import stripe from 'stripe'
 import dotenv from 'dotenv'
 import medicineModel from '../models/medicineModel.js'
+import NotificationsModel from '../models/notificationsModel.js'
+import nodemailer from 'nodemailer'
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
@@ -384,6 +386,77 @@ const addAppointment = async (req, res) => {
     try {
         const appointment = new AppointmentModel(req.body)
         await appointment.save()
+
+        const doctor = await DoctorModel.findById(appointment.doctor_id)
+        const patient = await PatientModel.findById(appointment.patient_id)
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'virtualclinicmail@gmail.com',
+                pass: process.env.GMAIL_PASSWORD,
+            },
+        })
+
+        const mailOptions = {
+            from: 'virtualclinicmail@gmail.com',
+            to: patient.email,
+            subject: `Your appointment with Dr. ${doctor.name}`,
+            html: `
+            <!DOCTYPE html>
+            <html lang="en" style="padding: 40px; width: 100%;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Appointment</title>
+                </head>
+                <body>
+                    <p>Dear ${patient.name},</p>
+                    <p>You have an appointment with Dr. ${
+                        doctor.name
+                    } on ${new Date(appointment.date).toLocaleDateString(
+                        'en-US',
+                        {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                        }
+                    )} at ${new Date(appointment.date).toLocaleTimeString(
+                        'en-US',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        }
+                    )}.</p>
+                    <p><strong>If you think this is a mistake please login to your account and cancel the appointment or contact us.</strong></p>
+                </body>
+            </html>
+                `,
+        }
+
+        transporter.sendMail(mailOptions, function (error) {
+            if (error) {
+                console.log(error)
+                res.status(500).json({ message: 'Error sending email' })
+            }
+        })
+
+        const notification = new NotificationsModel({
+            type: 'patient',
+            date: appointment.date,
+            doctor_id: null,
+            patient_id: appointment.patient_id,
+            appointment_id: appointment._id,
+            message: `You have an appointment with Dr. ${
+                doctor.name
+            } on ${new Date(appointment.date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            })}`,
+        })
+        await notification.save()
         res.status(201).json(appointment)
     } catch (error) {
         console.log(error)
@@ -802,6 +875,18 @@ const generatePrescriptionPDF = async (req, res) => {
     res.send(pdfBuffer)
 }
 
+const getNotifications = async (req, res) => {
+    try {
+        const { pid } = req.params
+        const notifications = await NotificationsModel.find({
+            patient_id: pid,
+        })
+        res.status(200).json(notifications)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -829,4 +914,5 @@ export {
     cancelAutoRenewal,
     getFamilyMembersAppointments,
     generatePrescriptionPDF,
+    getNotifications,
 }

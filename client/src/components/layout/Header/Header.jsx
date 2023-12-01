@@ -1,5 +1,5 @@
 import './header.css'
-import { React, useState, useEffect, useLayoutEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Avatar, Dropdown, Space, message } from 'antd'
 import { useContext } from 'react'
@@ -25,7 +25,6 @@ const MoonIcon = () => (
         src={moonIcn}
     />
 )
-
 const ChatIcon = () => <img style={{ width: 20, height: 20 }} src={chatIcn} />
 const InboxIcon = () => <img style={{ width: 20, height: 20 }} src={inboxIcn} />
 
@@ -37,23 +36,40 @@ const Header = () => {
     const { currUser, role } = useContext(CurrUser)
     const [userNotifications, setUserNotifications] = useState([
         {
-            id: 'no-notifs',
-            title: 'No notifications',
-            link: '/',
+            _id: 'no-notifs',
+            appointment_id: null,
+            doctor_id: null,
+            patient_id: null,
+            type: null,
+            date: null,
+            message: 'No notifications',
         },
     ])
 
-    const handleViewChat = () => {
-        navigate('/')
-    }
+    useEffect(() => {
+        if (currUser) {
+            axiosApi
+                .get(`/patient/get-notifications/${currUser._id}`)
+                .then((res) => {
+                    setUserNotifications(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [currUser])
 
     useEffect(() => {
         if (userNotifications.length === 0) {
             setUserNotifications([
                 {
-                    id: 'no-notifs',
-                    title: 'No notifications',
-                    link: '/',
+                    _id: 'no-notifs',
+                    appointment_id: null,
+                    doctor_id: null,
+                    patient_id: null,
+                    type: null,
+                    date: null,
+                    message: 'No notifications',
                 },
             ])
         }
@@ -69,6 +85,10 @@ const Header = () => {
             document.body.classList.add('light-mode')
             setTheme('light')
         }
+    }
+
+    const handleViewChat = () => {
+        navigate('/')
     }
 
     const items = [
@@ -119,13 +139,14 @@ const Header = () => {
 
     const notifications = userNotifications.map((notification) => {
         return {
-            key: notification.id,
+            key: notification._id,
             label: (
                 <a
-                    onClick={() => {
-                        navigate(notification.link)
-                    }}>
-                    {notification.title}
+                // onClick={() => {
+                //     navigate(notification.link)
+                // }}
+                >
+                    {notification.message}
                 </a>
             ),
         }
@@ -153,7 +174,7 @@ const Header = () => {
                         className='inbox-icon'
                         style={{ borderRadius: 0 }}
                         onClick={(e) => e.preventDefault()}>
-                        <Badge dot={userNotifications[0].id !== 'no-notifs'}>
+                        <Badge dot={userNotifications[0]._id !== 'no-notifs'}>
                             <InboxIcon />
                         </Badge>
                     </a>
