@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    color: var(--text-color);
+    color: var(--header-white);
 
     .ant-btn {
         height: 45px;
@@ -31,19 +31,36 @@
         -moz-transition: color 0ms;
         -ms-transition: color 0ms;
         -o-transition: color 0ms;
-        color: var(--text-color);
+        color: var(--header-white);
     }
 
     .ant-avatar {
-        cursor: pointer; 
-    }
-
-    .ant-wallet {
         cursor: pointer;
     }
- 
-   
-    
+
+    .inbox-icon {
+        cursor: pointer;
+    }
+
+}
+
+.ant-badge {
+    margin-top: 6.5px;
+    margin-right: 10px;
+}
+
+.notifs-class>ul {
+    border-radius: 0% !important;
+    -webkit-border-radius: 0% !important;
+    -moz-border-radius: 0% !important;
+    -ms-border-radius: 0% !important;
+    -o-border-radius: 0% !important;
+    padding: 0% !important;
+
+    .ant-dropdown-menu-item {
+        height: 60px;
+        width: 300px;
+    }
 }
 
 .logo {
