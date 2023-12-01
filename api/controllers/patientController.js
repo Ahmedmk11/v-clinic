@@ -15,6 +15,8 @@ import FamilyModel from '../models/familyModel.js'
 import stripe from 'stripe'
 import dotenv from 'dotenv'
 import medicineModel from '../models/medicineModel.js'
+import NotificationsModel from '../models/notificationsModel.js'
+import nodemailer from 'nodemailer'
 import Pharmacist from '../models/pharmacistModel.js'
 import Order from '../models/orderModel.js'
 
@@ -386,6 +388,133 @@ const addAppointment = async (req, res) => {
     try {
         const appointment = new AppointmentModel(req.body)
         await appointment.save()
+
+        const doctor = await DoctorModel.findById(appointment.doctor_id)
+        const patient = await PatientModel.findById(appointment.patient_id)
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'virtualclinicmail@gmail.com',
+                pass: process.env.GMAIL_PASSWORD,
+            },
+        })
+
+        const mailOptions = {
+            from: 'virtualclinicmail@gmail.com',
+            to: patient.email,
+            subject: `Your appointment with Dr. ${doctor.name}`,
+            html: `
+            <!DOCTYPE html>
+            <html lang="en" style="padding: 40px; width: 100%;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Appointment</title>
+                </head>
+                <body>
+                    <p>Dear ${patient.name},</p>
+                    <p>You have an appointment with Dr. ${
+                        doctor.name
+                    } on ${new Date(appointment.date).toLocaleDateString(
+                        'en-US',
+                        {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                        }
+                    )} at ${new Date(appointment.date).toLocaleTimeString(
+                        'en-US',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        }
+                    )}.</p>
+                    <p><strong>If you think this is a mistake please login to your account and cancel the appointment or contact us.</strong></p>
+                </body>
+            </html>
+                `,
+        }
+
+        const mailOptions2 = {
+            from: 'virtualclinicmail@gmail.com',
+            to: doctor.email,
+            subject: `Your appointment with ${patient.name}`,
+            html: `
+            <!DOCTYPE html>
+            <html lang="en" style="padding: 40px; width: 100%;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Appointment</title>
+                </head>
+                <body>
+                    <p>Dear Dr. ${doctor.name},</p>
+                    <p>You have an appointment with ${
+                        patient.name
+                    } on ${new Date(appointment.date).toLocaleDateString(
+                        'en-US',
+                        {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                        }
+                    )} at ${new Date(appointment.date).toLocaleTimeString(
+                        'en-US',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        }
+                    )}.</p>
+                    <p><strong>If you think this is a mistake please login to your account and cancel the appointment or contact us.</strong></p>
+                </body>
+            </html>
+                `,
+        }
+
+        transporter.sendMail(mailOptions, function (error) {
+            if (error) {
+                console.log(error)
+                res.status(500).json({ message: 'Error sending email' })
+            }
+        })
+
+        transporter.sendMail(mailOptions2, function (error) {
+            if (error) {
+                console.log(error)
+                res.status(500).json({ message: 'Error sending email' })
+            }
+        })
+
+        const notification = new NotificationsModel({
+            date: appointment.date,
+            doctor_id: appointment.doctor_id,
+            patient_id: appointment.patient_id,
+            appointment_id: appointment._id,
+            message_patient: `You have an appointment with Dr. ${
+                doctor.name
+            } on ${new Date(appointment.date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            })} at ${new Date(appointment.date).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+            })}`,
+            message_doctor: `You have an appointment with ${
+                patient.name
+            } on ${new Date(appointment.date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            })} at ${new Date(appointment.date).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+            })}`,
+        })
+        await notification.save()
         res.status(201).json(appointment)
     } catch (error) {
         console.log(error)
@@ -804,6 +933,7 @@ const generatePrescriptionPDF = async (req, res) => {
     res.send(pdfBuffer)
 }
 
+
 // send patient_id in body
 //send prescription_id in body
 //send paymentMethod in body
@@ -891,6 +1021,7 @@ const sendNotification = async (outOfStockMedicines) => {
     });
 }
 
+
 export {
     createPatient,
     getPatients,
@@ -918,4 +1049,6 @@ export {
     cancelAutoRenewal,
     getFamilyMembersAppointments,
     generatePrescriptionPDF,
+    getNotifications,
+    removeNotification,
 }
