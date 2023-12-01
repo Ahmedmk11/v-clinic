@@ -36,6 +36,10 @@ const prescriptionSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'medicine',
             },
+            name: {
+                type: String,
+                required: [true, 'Please enter the medicine name.'],
+            },
             dosage: {
                 type: String,
                 required: [true, 'Please enter the dosage.'],

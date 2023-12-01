@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, message, Modal } from 'antd'
+import { Button,message } from 'antd'
 import { formatDateRange } from '../../../utils/convertDateToString.js'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import CancelAppointment from './CancelAppointment.jsx'
