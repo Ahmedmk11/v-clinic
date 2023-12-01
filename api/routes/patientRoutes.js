@@ -29,6 +29,7 @@ import {
     getFamilyMembersAppointments,
     generatePrescriptionPDF,
     getNotifications,
+    removeNotification,
 } from '../controllers/patientController.js'
 
 let packagePaymentDone = false
@@ -58,6 +59,7 @@ router.post('/add-to-family/:id', addToFamily)
 router.get('/get-family/:id', getFamily)
 router.get('/generate-prescription-pdf', generatePrescriptionPDF)
 router.get('/get-notifications/:pid', getNotifications)
+router.put('/remove-notification/:nid/:id', removeNotification)
 router.post(
     '/stripe-webhook',
     bodyParser.raw({ type: 'application/json' }),

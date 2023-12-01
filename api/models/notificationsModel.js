@@ -14,15 +14,14 @@ const notificationsModel = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Patient',
         },
-        type: {
-            type: String,
-            enum: ['patient', 'doctor'],
-            required: [true, 'A notification must be for a patient or doctor'],
-        },
         date: {
             type: Date,
         },
-        message: {
+        message_patient: {
+            type: String,
+            required: [true, 'A notification must have a message'],
+        },
+        message_doctor: {
             type: String,
             required: [true, 'A notification must have a message'],
         },

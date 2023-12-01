@@ -435,6 +435,43 @@ const addAppointment = async (req, res) => {
                 `,
         }
 
+        const mailOptions2 = {
+            from: 'virtualclinicmail@gmail.com',
+            to: doctor.email,
+            subject: `Your appointment with ${patient.name}`,
+            html: `
+            <!DOCTYPE html>
+            <html lang="en" style="padding: 40px; width: 100%;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Appointment</title>
+                </head>
+                <body>
+                    <p>Dear Dr. ${doctor.name},</p>
+                    <p>You have an appointment with ${
+                        patient.name
+                    } on ${new Date(appointment.date).toLocaleDateString(
+                        'en-US',
+                        {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                        }
+                    )} at ${new Date(appointment.date).toLocaleTimeString(
+                        'en-US',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        }
+                    )}.</p>
+                    <p><strong>If you think this is a mistake please login to your account and cancel the appointment or contact us.</strong></p>
+                </body>
+            </html>
+                `,
+        }
+
         transporter.sendMail(mailOptions, function (error) {
             if (error) {
                 console.log(error)
@@ -442,18 +479,37 @@ const addAppointment = async (req, res) => {
             }
         })
 
+        transporter.sendMail(mailOptions2, function (error) {
+            if (error) {
+                console.log(error)
+                res.status(500).json({ message: 'Error sending email' })
+            }
+        })
+
         const notification = new NotificationsModel({
-            type: 'patient',
             date: appointment.date,
-            doctor_id: null,
+            doctor_id: appointment.doctor_id,
             patient_id: appointment.patient_id,
             appointment_id: appointment._id,
-            message: `You have an appointment with Dr. ${
+            message_patient: `You have an appointment with Dr. ${
                 doctor.name
             } on ${new Date(appointment.date).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
+            })} at ${new Date(appointment.date).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+            })}`,
+            message_doctor: `You have an appointment with ${
+                patient.name
+            } on ${new Date(appointment.date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            })} at ${new Date(appointment.date).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
             })}`,
         })
         await notification.save()
@@ -878,9 +934,34 @@ const generatePrescriptionPDF = async (req, res) => {
 const getNotifications = async (req, res) => {
     try {
         const { pid } = req.params
-        const notifications = await NotificationsModel.find({
-            patient_id: pid,
-        })
+        const type = req.query.type
+
+        let notifications = await NotificationsModel.find(
+            type == 'patient' ? { patient_id: pid } : { doctor_id: pid }
+        )
+
+        res.status(200).json(notifications)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
+const removeNotification = async (req, res) => {
+    try {
+        const { nid, id } = req.params
+
+        let notifications = await NotificationsModel.findById(nid)
+
+        if (notifications.patient_id == id) {
+            notifications.patient_id = null
+            await notifications.save()
+        }
+
+        if (notifications.doctor_id == id) {
+            notifications.doctor_id = null
+            await notifications.save()
+        }
+
         res.status(200).json(notifications)
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error' })
@@ -915,4 +996,5 @@ export {
     getFamilyMembersAppointments,
     generatePrescriptionPDF,
     getNotifications,
+    removeNotification,
 }

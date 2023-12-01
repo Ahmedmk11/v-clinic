@@ -49,6 +49,16 @@
     margin-right: 10px;
 }
 
+.notifs-class {
+    .ant-dropdown-menu-item {
+        cursor: default !important;
+
+        &:hover {
+            background-color: white !important;
+        }
+    }
+}
+
 .notifs-class>ul {
     border-radius: 0% !important;
     -webkit-border-radius: 0% !important;
@@ -59,7 +69,23 @@
 
     .ant-dropdown-menu-item {
         height: 60px;
-        width: 300px;
+        width: 320px;
+    }
+
+    .ant-dropdown-menu-item:hover {
+        background-color: white !important;
+    }
+
+    .ant-dropdown-menu-item-active {
+        background-color: white !important;
+    }
+}
+
+.read-button {
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--complementary-blue) !important;
     }
 }
 

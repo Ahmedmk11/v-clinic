@@ -7,6 +7,7 @@ import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
 import inboxIcn from '../../../assets/icons/inbox.svg'
+import readIcn from '../../../assets/icons/read.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
@@ -27,6 +28,7 @@ const MoonIcon = () => (
 )
 const ChatIcon = () => <img style={{ width: 20, height: 20 }} src={chatIcn} />
 const InboxIcon = () => <img style={{ width: 20, height: 20 }} src={inboxIcn} />
+const ReadIcon = () => <img style={{ width: 22, height: 22 }} src={readIcn} />
 
 const Header = () => {
     const navigate = useNavigate()
@@ -34,22 +36,26 @@ const Header = () => {
         document.body.classList.contains('light-mode') ? 'light' : 'dark'
     )
     const { currUser, role } = useContext(CurrUser)
+    const [visible, setVisible] = useState(false)
     const [userNotifications, setUserNotifications] = useState([
         {
             _id: 'no-notifs',
             appointment_id: null,
             doctor_id: null,
             patient_id: null,
-            type: null,
             date: null,
-            message: 'No notifications',
+            message_patient: 'No notifications',
+            message_doctor: 'No notifications',
         },
     ])
 
     useEffect(() => {
         if (currUser) {
+            const type = role == 'patient' ? 'patient' : 'doctor'
             axiosApi
-                .get(`/patient/get-notifications/${currUser._id}`)
+                .get(`/patient/get-notifications/${currUser._id}`, {
+                    params: { type },
+                })
                 .then((res) => {
                     setUserNotifications(res.data)
                 })
@@ -67,9 +73,9 @@ const Header = () => {
                     appointment_id: null,
                     doctor_id: null,
                     patient_id: null,
-                    type: null,
                     date: null,
-                    message: 'No notifications',
+                    message_patient: 'No notifications',
+                    message_doctor: 'No notifications',
                 },
             ])
         }
@@ -89,6 +95,10 @@ const Header = () => {
 
     const handleViewChat = () => {
         navigate('/')
+    }
+
+    const handleVisibleChange = (flag) => {
+        setVisible(flag)
     }
 
     const items = [
@@ -141,13 +151,64 @@ const Header = () => {
         return {
             key: notification._id,
             label: (
-                <a
-                // onClick={() => {
-                //     navigate(notification.link)
-                // }}
-                >
-                    {notification.message}
-                </a>
+                <div
+                    className='notification-item'
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                        height: '100%',
+                        cursor: 'default',
+                    }}>
+                    <p
+                        style={{
+                            width: '85%',
+                            textAlign: 'left',
+                            margin: 0,
+                            cursor: 'default',
+                        }}>
+                        {role == 'patient'
+                            ? notification.message_patient
+                            : role == 'doctor'
+                            ? notification.message_doctor
+                            : 'change the code'}
+                    </p>
+                    {userNotifications[0]._id != 'no-notifs' ? (
+                        <div
+                            onClick={() => {
+                                axiosApi
+                                    .put(
+                                        `/patient/remove-notification/${notification._id}/${currUser._id}`
+                                    )
+                                    .then(() => {
+                                        setUserNotifications(
+                                            userNotifications.filter(
+                                                (notif) =>
+                                                    notif._id !==
+                                                    notification._id
+                                            )
+                                        )
+                                        setVisible(false)
+                                    })
+                            }}
+                            style={{
+                                height: '100%',
+                                cursor: 'pointer',
+                                marginRight: '-12px',
+                                padding: '16px',
+                                backgroundColor: '#eee',
+                            }}
+                            onMouseEnter={(e) =>
+                                (e.currentTarget.style.backgroundColor = '#ddd')
+                            }
+                            onMouseLeave={(e) =>
+                                (e.currentTarget.style.backgroundColor = '#eee')
+                            }>
+                            <ReadIcon className='read-button' />
+                        </div>
+                    ) : null}
+                </div>
             ),
         }
     })
@@ -163,18 +224,21 @@ const Header = () => {
             </div>
             <div id='navbar-buttons'>
                 <Dropdown
+                    trigger={['click']}
                     placement='bottom'
                     overlayStyle={{ borderRadius: 0 }}
                     menu={{
                         items: notifications,
                     }}
+                    onOpenChange={handleVisibleChange}
+                    open={visible}
                     getPopupContainer={(triggerNode) => triggerNode.parentNode}
                     overlayClassName='notifs-class'>
                     <a
                         className='inbox-icon'
                         style={{ borderRadius: 0 }}
                         onClick={(e) => e.preventDefault()}>
-                        <Badge dot={userNotifications[0]._id !== 'no-notifs'}>
+                        <Badge dot={userNotifications[0]?._id !== 'no-notifs'}>
                             <InboxIcon />
                         </Badge>
                     </a>
