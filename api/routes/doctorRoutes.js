@@ -14,6 +14,8 @@ import {
     updateTimeSlots,
     getAllMedicines,
     getMedicineByName,
+    checkUsernameAvailability,
+    checkEmailAvailability,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -34,5 +36,7 @@ router.get('/get-medicine-by-name/:name', getMedicineByName)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
 router.put('/update-contract', updateContract)
 router.post('/updateTimeSlots', updateTimeSlots)
+router.get('/check-username-taken/:username', checkUsernameAvailability)
+router.get('/check-email-taken/:email', checkEmailAvailability)
 
 export default router
