@@ -8,6 +8,7 @@ import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
 import inboxIcn from '../../../assets/icons/inbox.svg'
 import readIcn from '../../../assets/icons/read.svg'
+import logoIcn from '../../../assets/icons/logo.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
@@ -48,6 +49,16 @@ const Header = () => {
             message_doctor: 'No notifications',
         },
     ])
+
+    const LogoIcon = () => (
+        <img
+            onClick={() => {
+                navigate(`/${role}`)
+            }}
+            style={{ width: 100, cursor: 'pointer' }}
+            src={logoIcn}
+        />
+    )
 
     useEffect(() => {
         if (currUser) {
@@ -215,13 +226,7 @@ const Header = () => {
 
     return (
         <header className='navbar'>
-            <div
-                className='logo'
-                onClick={() => {
-                    navigate(`/${role}`)
-                }}>
-                <span>V-</span>Clinic
-            </div>
+            <LogoIcon />
             <div id='navbar-buttons'>
                 {role !== 'admin' && (
                     <Dropdown

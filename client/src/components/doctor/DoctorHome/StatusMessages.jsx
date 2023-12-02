@@ -36,8 +36,8 @@ const StatusMessages = ({ Doctor }) => {
                     <h3>
                         Your registration request has been rejected. If you
                         think this is a mistake, please contact us at{' '}
-                        <a href='mailto: V-Clinic@gmail.com'>
-                            V-Clinic@gmail.com
+                        <a href='mailto: virtualclinicmail@gmail.com'>
+                            virtualclinicmail@gmail.com
                         </a>
                         .
                     </h3>
@@ -55,7 +55,7 @@ const StatusMessages = ({ Doctor }) => {
                         platform.
                     </h3>
                     <Button
-                    type='primary'
+                        type='primary'
                         onClick={() => setContractVisible(true)}>
                         View Contract
                     </Button>

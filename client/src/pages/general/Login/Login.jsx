@@ -1,10 +1,23 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import React from 'react'
-import { Button, Checkbox, Form, Input, message, Space, Select } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Form,
+    Input,
+    message,
+    Space,
+    Select,
+    Modal,
+} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import axiosApi from '../../../utils/axiosApi'
 import ConditionalRender from '../../../components/reusable/ConditionalRender/ConditionalRender'
+import logoIcn from '../../../assets/icons/logo.svg'
+import './Login.css'
+
+const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
 
 const Login = () => {
     const navigate = useNavigate()
@@ -15,6 +28,7 @@ const Login = () => {
         role: 'patient',
     })
     const [loading, setLoading] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     const onFinish = (values) => {
         setLoading(true)
@@ -41,174 +55,189 @@ const Login = () => {
     }
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '100dvh',
-            }}>
-            <div className='logo'>
-                <span>V-</span>Clinic
-            </div>
-            <Space wrap>
-                <h2>Login as a{userData.role == 'admin' && 'n'}</h2>
-                <Select
-                    allowClear
-                    defaultValue='patient'
-                    size='middle'
-                    style={{ width: 110 }}
-                    onChange={(value) => {
-                        setUserData({
-                            ...userData,
-                            role: value,
-                        })
-                    }}
-                    options={[
-                        {
-                            value: 'patient',
-                            label: 'Patient',
-                        },
-                        {
-                            value: 'doctor',
-                            label: 'Doctor',
-                        },
-                        {
-                            value: 'admin',
-                            label: 'Admin',
-                        },
-                    ]}
-                />
-            </Space>
-            <Form
-                name='loginForm'
+        <div id='login'>
+            <Button
                 style={{
-                    width: '40%',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    margin: '1rem',
                 }}
-                size='large'
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete='off'>
-                <Form.Item
-                    name='username'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}>
-                    <Input
-                        prefix={<UserOutlined />}
-                        onChange={(e) => {
+                onClick={() => setIsOpen(true)}>
+                Testing Info
+            </Button>
+            <div id='left'>
+                <LogoIcon />
+            </div>
+            <div id='right'>
+                <Space wrap>
+                    <h2>Login as a{userData.role == 'admin' && 'n'}</h2>
+                    <Select
+                        allowClear
+                        defaultValue='patient'
+                        size='middle'
+                        style={{ width: 110 }}
+                        onChange={(value) => {
                             setUserData({
                                 ...userData,
-                                username: e.target.value,
+                                role: value,
                             })
                         }}
-                        value={userData.username}
-                        placeholder='Username'
+                        options={[
+                            {
+                                value: 'patient',
+                                label: 'Patient',
+                            },
+                            {
+                                value: 'doctor',
+                                label: 'Doctor',
+                            },
+                            {
+                                value: 'admin',
+                                label: 'Admin',
+                            },
+                        ]}
                     />
-                </Form.Item>
-
-                <Form.Item
-                    name='password'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}>
-                    <Input.Password
-                        prefix={<LockOutlined />}
-                        onChange={(e) => {
-                            setUserData({
-                                ...userData,
-                                password: e.target.value,
-                            })
-                        }}
-                        value={userData.password}
-                        placeholder='Password'
-                    />
-                </Form.Item>
-                <div
+                </Space>
+                <Form
+                    name='loginForm'
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                    }}>
-                    <Form.Item name='remember' valuePropName='checked'>
-                        <Checkbox
+                        width: '40%',
+                    }}
+                    size='large'
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete='off'>
+                    <Form.Item
+                        name='username'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}>
+                        <Input
+                            prefix={<UserOutlined />}
                             onChange={(e) => {
                                 setUserData({
                                     ...userData,
-                                    remember: e.target.checked,
+                                    username: e.target.value,
                                 })
-                            }}>
-                            Remember me
-                        </Checkbox>
+                            }}
+                            value={userData.username}
+                            placeholder='Username'
+                        />
                     </Form.Item>
-                    <Form.Item>
-                        <Button
-                            type='link'
-                            onClick={() => {
-                                navigate('/forgot-password')
-                            }}>
-                            Forgot password?
-                        </Button>
-                    </Form.Item>
-                </div>
 
-                <Form.Item
-                    style={{
-                        marginBottom: 0,
-                    }}>
-                    <Button
-                        block
-                        type='primary'
-                        htmlType='submit'
-                        loading={loading}>
-                        Log in
-                    </Button>
-                </Form.Item>
-                <ConditionalRender condition={userData.role != 'admin'}>
                     <Form.Item
+                        name='password'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}>
+                        <Input.Password
+                            prefix={<LockOutlined />}
+                            onChange={(e) => {
+                                setUserData({
+                                    ...userData,
+                                    password: e.target.value,
+                                })
+                            }}
+                            value={userData.password}
+                            placeholder='Password'
+                        />
+                    </Form.Item>
+                    <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',
                         }}>
-                        <p style={{ marginRight: 0 }}>
-                            Dont have an account?
+                        <Form.Item name='remember' valuePropName='checked'>
+                            <Checkbox
+                                onChange={(e) => {
+                                    setUserData({
+                                        ...userData,
+                                        remember: e.target.checked,
+                                    })
+                                }}>
+                                Remember me
+                            </Checkbox>
+                        </Form.Item>
+                        <Form.Item>
                             <Button
                                 type='link'
                                 onClick={() => {
-                                    navigate('/register')
+                                    navigate('/forgot-password')
                                 }}>
-                                Register
+                                Forgot password?
                             </Button>
-                        </p>
+                        </Form.Item>
+                    </div>
+
+                    <Form.Item
+                        style={{
+                            marginBottom: 0,
+                        }}>
+                        <Button
+                            block
+                            type='primary'
+                            htmlType='submit'
+                            loading={loading}>
+                            Log in
+                        </Button>
                     </Form.Item>
-                </ConditionalRender>
-            </Form>
-            <div style={{textAlign:'center'}}> 
-            Remove this later , just for testing after cleaning database
-            <br/>
-            find this snippet @ client/src/pages/general/Login/Login.jsx line 195
-            <hr/>
-            admin account : admin , admin1234
-            <br/>
-            patient account with family : saleh , saleh1234 and family member : karma, karma1234
-            <br/>
-            patient account without family : ahmed , ahmed1234
-            <br/>
-            active doctor account : paul , paul1234
-            <br/>
-            inactive doctor account : belly , belly1234
+                    <ConditionalRender condition={userData.role != 'admin'}>
+                        <Form.Item
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}>
+                            <p style={{ marginRight: 0 }}>
+                                Dont have an account?
+                                <Button
+                                    type='link'
+                                    onClick={() => {
+                                        navigate('/register')
+                                    }}>
+                                    Register
+                                </Button>
+                            </p>
+                        </Form.Item>
+                    </ConditionalRender>
+                </Form>
+                <Modal
+                    open={isOpen}
+                    footer={null}
+                    title='Testing Info'
+                    onCancel={() => {
+                        setIsOpen(false)
+                    }}
+                    destroyOnClose>
+                    <div style={{ textAlign: 'center' }}>
+                        <span>Admin: admin, admin1234</span>
+                        <br />
+                        <span>
+                            Patient account with family: saleh, saleh1234
+                        </span>
+                        <br />
+                        <span>Family member: karma, karma1234</span>
+                        <br />
+                        <span>
+                            Patient account without family: ahmed, ahmed1234
+                        </span>
+                        <br />
+                        <span>Active doctor account: paul, paul1234</span>
+                        <br />
+                        <span>Inactive doctor account: belly, belly1234</span>
+                    </div>
+                </Modal>
+            </div>
         </div>
-        </div>
-        
     )
 }
 
