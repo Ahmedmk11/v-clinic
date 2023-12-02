@@ -19,6 +19,7 @@ import NotificationsModel from '../models/notificationsModel.js'
 import nodemailer from 'nodemailer'
 import Pharmacist from '../models/pharmacistModel.js'
 import Order from '../models/orderModel.js'
+import Email from '../utils/email.js'
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
@@ -1097,6 +1098,74 @@ const getPrescriptionPrice = async (req, res) => {
     }
 }
 
+const checkUsernameAvailability = async (req, res) => {
+    try {
+        const { username } = req.params
+        console.log(username)
+        const isTaken = await PatientModel.findOne({ username: username })
+        console.log(isTaken)
+        if (!isTaken) {
+            res.status(202).json({ message: 202 })
+        } else {
+            res.status(200).json({ message: 200 })
+        }
+    } catch (error) {
+        console.log('hi 500')
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const checkEmailAvailability = async (req, res) => {
+    try {
+        const { email } = req.params
+        console.log(email)
+        const isTaken = await PatientModel.findOne({ email: email })
+        console.log(isTaken)
+        if (!isTaken) {
+            res.status(202).json({ message: 202 })
+        } else {
+            res.status(200).json({ message: 200 })
+        }
+    } catch (error) {
+        console.log('hi 500')
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const checkPhoneAvailability = async (req, res) => {
+    try {
+        const { phone } = req.params
+        console.log(phone)
+        const isTaken = await PatientModel.findOne({ phoneNumber: phone })
+        console.log(isTaken)
+        if (!isTaken) {
+            res.status(202).json({ message: 202 })
+        } else {
+            res.status(200).json({ message: 200 })
+        }
+    } catch (error) {
+        console.log('hi 500')
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const checkNidAvailability = async (req, res) => {
+    try {
+        const { nid } = req.params
+        console.log(nid)
+        const isTaken = await PatientModel.findOne({ nid: nid })
+        console.log(isTaken)
+        if (!isTaken) {
+            res.status(202).json({ message: 202 })
+        } else {
+            res.status(200).json({ message: 200 })
+        }
+    } catch (error) {
+        console.log('hi 500')
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export {
     createPatient,
     getPatients,
@@ -1127,4 +1196,8 @@ export {
     getNotifications,
     removeNotification,
     getPrescriptionPrice,
+    checkUsernameAvailability,
+    checkEmailAvailability,
+    checkPhoneAvailability,
+    checkNidAvailability,
 }

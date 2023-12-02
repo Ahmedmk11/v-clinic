@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Form, Input, DatePicker, Select, Steps } from 'antd'
-import { useNavigate,Link } from 'react-router-dom'
+import { Button, Form, Input, DatePicker, Select, Steps, message } from 'antd'
+import { useNavigate, Link } from 'react-router-dom'
 import axiosApi from '../../utils/axiosApi'
 import { LeftCircleOutlined } from '@ant-design/icons'
 
@@ -10,11 +10,11 @@ const { Option } = Select
 const PatientRegistration = () => {
     const [form] = Form.useForm()
     const [currentStep, setCurrentStep] = useState(0)
-    const [message, setMessage] = useState(null)
+    const [msg, setMsg] = useState(null)
     const [formData, setFormData] = useState({})
     const navigate = useNavigate()
 
-    const nextStep = () => {
+    const nextStep = async () => {
         form.validateFields().then((values) => {
             setFormData({ ...formData, ...values }),
                 setCurrentStep(currentStep + 1)
@@ -23,6 +23,62 @@ const PatientRegistration = () => {
 
     const prevStep = () => {
         setCurrentStep(currentStep - 1)
+    }
+
+    const checkUsernameAvailablity = async (username) => {
+        try {
+            if (username?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-username-taken/${username}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking username availability:', error)
+        }
+    }
+
+    const checkEmailAvailablity = async (email) => {
+        try {
+            if (email?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-email-taken/${email}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking email availability:', error)
+        }
+    }
+
+    const checkPhoneAvailablity = async (phone) => {
+        try {
+            if (phone?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-phone-taken/${phone}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking phone availability:', error)
+        }
+    }
+
+    const checkNidAvailablity = async (nid) => {
+        try {
+            if (nid?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-nid-taken/${nid}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking national id availability:', error)
+        }
     }
 
     const handleSubmit = async (values) => {
@@ -34,14 +90,16 @@ const PatientRegistration = () => {
             })
             const data = response.data
             if (response) {
-                setMessage('Registration Successful')
+                message.success('Registration Successful')
                 form.resetFields()
-                setCurrentStep(0) // Reset to the first step after successful submission
+                setTimeout(() => {
+                    navigate('/login')
+                }, 2000)
             } else {
-                setMessage(data.message)
+                setMsg(data.message)
             }
         } catch (error) {
-            setMessage(error.message)
+            setMsg(error.message)
         }
     }
 
@@ -57,6 +115,20 @@ const PatientRegistration = () => {
                             {
                                 required: true,
                                 message: 'Please input your username!',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    const isUsernameAvailable =
+                                        await checkUsernameAvailablity(
+                                            form.getFieldValue('username')
+                                        )
+                                    if (isUsernameAvailable !== 202) {
+                                        return Promise.reject(
+                                            'Username is already in use'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -80,6 +152,20 @@ const PatientRegistration = () => {
                                 required: true,
                                 message: 'Please input your email!',
                                 type: 'email',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    const isEmailAvailable =
+                                        await checkEmailAvailablity(
+                                            form.getFieldValue('email')
+                                        )
+                                    if (isEmailAvailable !== 202) {
+                                        return Promise.reject(
+                                            'Email is already in use'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -128,6 +214,16 @@ const PatientRegistration = () => {
                                 required: true,
                                 message: 'Please select your date of birth!',
                             },
+                            {
+                                validator: (_, value) => {
+                                    if (value && value.isAfter(new Date())) {
+                                        return Promise.reject(
+                                            'Date of birth cannot be in the future'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
                         ]}>
                         <DatePicker style={{ width: '100%' }} />
                     </Form.Item>
@@ -138,6 +234,31 @@ const PatientRegistration = () => {
                             {
                                 required: true,
                                 message: 'Please input your National ID!',
+                            },
+                            {
+                                len: 14,
+                                message: 'National ID must be 14 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'National ID must contain numbers only'
+                                        )
+                                    }
+                                    if (value.length === 14) {
+                                        const isNidAvailable =
+                                            await checkNidAvailablity(
+                                                form.getFieldValue('nid')
+                                            )
+                                        if (isNidAvailable !== 202) {
+                                            return Promise.reject(
+                                                'National ID is already in use'
+                                            )
+                                        }
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -164,6 +285,34 @@ const PatientRegistration = () => {
                             {
                                 required: true,
                                 message: 'Please input your phone number!',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    const isPhoneAvailable =
+                                        await checkPhoneAvailablity(
+                                            form.getFieldValue('phoneNumber')
+                                        )
+                                    if (isPhoneAvailable !== 202) {
+                                        return Promise.reject(
+                                            'Phone number is already in use'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
+                            {
+                                len: 11,
+                                message: 'Phone number must be 11 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'Phone number must contain numbers only'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -194,6 +343,20 @@ const PatientRegistration = () => {
                                 required: true,
                                 message:
                                     'Please input emergency contact phone number!',
+                            },
+                            {
+                                len: 11,
+                                message: 'Phone number must be 11 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'Phone number must contain numbers only'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -244,7 +407,8 @@ const PatientRegistration = () => {
                 <div
                     style={{
                         display: 'flex',
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-end',
+                        gap: '10px',
                         marginTop: '20px',
                     }}>
                     {currentStep > 0 && (
@@ -263,17 +427,17 @@ const PatientRegistration = () => {
                         </Button>
                     )}
                 </div>
-                {message && (
+                {msg && (
                     <p
                         style={{
                             color:
-                                message === 'Registration Successful'
+                                msg === 'Registration Successful'
                                     ? 'green'
                                     : 'red',
                             textAlign: 'center',
                             marginTop: '20px',
                         }}>
-                        {message}
+                        {msg}
                     </p>
                 )}
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
