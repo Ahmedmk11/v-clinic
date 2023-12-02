@@ -67,9 +67,9 @@ const AdminProfile = () => {
                     <p>
                         <strong>Email:</strong> {currUser?.email}
                     </p>
-                    <button className='button' onClick={showModal}>
+                    <Button type='primary' onClick={showModal}>
                         Change Password
-                    </button>
+                    </Button>
                 </div>
             </div>
             <Modal

@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react'
 import './css/addAdminForm.css'
 import axiosApi from '../../utils/axiosApi'
+import { Form, Input, Button, message } from 'antd'
 
-const addAdminForm = () => {
+const AddAdminForm = ({ setAdmins, setIsOpen }) => {
+    const [form] = Form.useForm()
     const [Username, setUsername] = useState('')
     const [Password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
 
-    const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
-
-
     const handleSubmit = async (e) => {
-        e.preventDefault()
         try {
             await axiosApi.post('/admin/addAdmin', {
                 Username,
@@ -21,71 +18,65 @@ const addAdminForm = () => {
                 email,
                 name,
             })
-            setSuccess('User added succesfully')
-            setError(null)
             setUsername('')
             setPassword('')
             setEmail('')
             setName('')
+            setIsOpen(false)
+            let res = await axiosApi.get('/admin/getAllAdmins')
+            if (res.length !== 0) setAdmins(res.data)
+            console.log('Admins', res.data)
+            message.success('Admin added successfully')
         } catch (error) {
-            setError(error.response.data.message)
-            setSuccess(null)
+            message.error('Error adding admin')
             console.log(error.response.data.message)
         }
     }
 
     return (
-        <div className='page'>
-            <div className='primary-container'>
-                <h2>Add a new Admin</h2>
-                <form className='adminForm' onSubmit={handleSubmit}>
-                    <label>
-                        <strong>Username:</strong>
-                    </label>
-                    <input
-                        type='text'
+        <div>
+            <Form className='adminForm' form={form} onFinish={handleSubmit}>
+                <Form.Item label={<strong>Username</strong>} name='username'>
+                    <Input
+                        autoComplete='new-username'
                         onChange={(e) => setUsername(e.target.value)}
                         value={Username}
                     />
+                </Form.Item>
 
-                    <label>
-                        <strong>Password:</strong>
-                    </label>
-                    <input
-                        type='text'
+                <Form.Item label={<strong>Password</strong>} name='password'>
+                    <Input.Password
+                        autoComplete='new-password'
                         onChange={(e) => setPassword(e.target.value)}
                         value={Password}
                     />
-                    <label>
-                        <strong>Email:</strong>
-                    </label>
-                    <input
-                        type='text'
+                </Form.Item>
+
+                <Form.Item label={<strong>Email</strong>} name='email'>
+                    <Input
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
                     />
-                    <label>
-                        <strong>Name:</strong>
-                    </label>
-                    <input
-                        type='text'
+                </Form.Item>
+
+                <Form.Item label={<strong>Name</strong>} name='name'>
+                    <Input
                         onChange={(e) => setName(e.target.value)}
                         value={name}
                     />
+                </Form.Item>
 
-                    <button className='button' type='submit'>
+                <Form.Item
+                    style={{
+                        marginLeft: '80%',
+                    }}>
+                    <Button type='primary' htmlType='submit'>
                         Submit
-                    </button>
-                    {error ? (
-                        <div className='errorAdminForm'>{error}</div>
-                    ) : null}
-                    {success ? (
-                        <div className='successAdminForm'>{success}</div>
-                    ) : null}
-                </form>
-            </div>
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
     )
 }
 
-export default addAdminForm
+export default AddAdminForm

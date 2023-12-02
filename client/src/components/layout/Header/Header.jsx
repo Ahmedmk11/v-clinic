@@ -223,26 +223,31 @@ const Header = () => {
                 <span>V-</span>Clinic
             </div>
             <div id='navbar-buttons'>
-                <Dropdown
-                    trigger={['click']}
-                    placement='bottom'
-                    overlayStyle={{ borderRadius: 0 }}
-                    menu={{
-                        items: notifications,
-                    }}
-                    onOpenChange={handleVisibleChange}
-                    open={visible}
-                    getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                    overlayClassName='notifs-class'>
-                    <a
-                        className='inbox-icon'
-                        style={{ borderRadius: 0 }}
-                        onClick={(e) => e.preventDefault()}>
-                        <Badge dot={userNotifications[0]?._id !== 'no-notifs'}>
-                            <InboxIcon />
-                        </Badge>
-                    </a>
-                </Dropdown>
+                {role !== 'admin' && (
+                    <Dropdown
+                        trigger={['click']}
+                        placement='bottom'
+                        overlayStyle={{ borderRadius: 0 }}
+                        menu={{
+                            items: notifications,
+                        }}
+                        onOpenChange={handleVisibleChange}
+                        open={visible}
+                        getPopupContainer={(triggerNode) =>
+                            triggerNode.parentNode
+                        }
+                        overlayClassName='notifs-class'>
+                        <a
+                            className='inbox-icon'
+                            style={{ borderRadius: 0 }}
+                            onClick={(e) => e.preventDefault()}>
+                            <Badge
+                                dot={userNotifications[0]?._id !== 'no-notifs'}>
+                                <InboxIcon />
+                            </Badge>
+                        </a>
+                    </Dropdown>
+                )}
                 <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
                     <span>E£{currUser?.wallet?.toFixed(0)}</span>
@@ -262,7 +267,9 @@ const Header = () => {
                     </a>
                 </Dropdown>
             </div>
-            <FloatButton icon={<ChatIcon />} onClick={handleViewChat} />
+            {role !== 'admin' && (
+                <FloatButton icon={<ChatIcon />} onClick={handleViewChat} />
+            )}
         </header>
     )
 }

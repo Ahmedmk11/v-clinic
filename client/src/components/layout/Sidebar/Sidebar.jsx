@@ -4,17 +4,27 @@ import {
     HomeOutlined,
     TeamOutlined,
     ScheduleOutlined,
-    UserAddOutlined,
-    EyeOutlined,
-    FileSyncOutlined,
-    FilePptOutlined,
-    PlusOutlined,
     MedicineBoxOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
 import pillsIcn from '../../../assets/icons/pills.svg'
+import adminIcn from '../../../assets/icons/admin.svg'
+import doctorIcn from '../../../assets/icons/doctor.svg'
+import patientIcn from '../../../assets/icons/patient.svg'
+import packageIcn from '../../../assets/icons/package.svg'
 
 const PillsIcon = () => <img style={{ width: 24, height: 24 }} src={pillsIcn} />
+
+const AdminIcon = () => <img style={{ width: 24, height: 24 }} src={adminIcn} />
+const DoctorIcon = () => (
+    <img style={{ width: 24, height: 24 }} src={doctorIcn} />
+)
+const PatientIcon = () => (
+    <img style={{ width: 24, height: 24 }} src={patientIcn} />
+)
+const PackageIcon = () => (
+    <img style={{ width: 24, height: 24 }} src={packageIcn} />
+)
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false)
@@ -104,125 +114,52 @@ const Sidebar = () => {
                     <>
                         <p
                             className={
-                                page === 'add-admin'
+                                page === 'view-admins'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
                             onClick={() => {
-                                navigate('add-admin')
+                                navigate('view-admins')
                             }}>
-                            <UserAddOutlined />
-                            {isExpanded ? 'Add Admin' : ''}
+                            <AdminIcon />
+                            {isExpanded ? 'Admins' : ''}
                         </p>
                         <p
                             className={
-                                page === 'view-requests'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() => {
-                                navigate('view-requests')
-                            }}>
-                            <FileSyncOutlined />
-                            {isExpanded ? 'View Requests' : ''}
-                        </p>
-                        <p
-                            className={
-                                (showPackageSublist && isExpanded) ||
-                                page === 'add-package' ||
-                                page === 'view-packages'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() =>
-                                setShowPackageSublist(!showPackageSublist)
-                            }>
-                            <FilePptOutlined />
-                            {isExpanded ? 'Packages' : ''}
-                        </p>
-                        {showPackageSublist && isExpanded && (
-                            <div className='sublist'>
-                                <p
-                                    className={
-                                        page === 'add-package'
-                                            ? 'sidebar-item selected-sidebar-item'
-                                            : 'sidebar-item'
-                                    }
-                                    onClick={() => {
-                                        navigate('add-package')
-                                    }}>
-                                    <PlusOutlined />
-                                    {isExpanded ? 'Add Package' : ''}
-                                </p>
-                                <p
-                                    className={
-                                        page === 'view-packages'
-                                            ? 'sidebar-item selected-sidebar-item'
-                                            : 'sidebar-item'
-                                    }
-                                    onClick={() => {
-                                        navigate('view-packages')
-                                    }}>
-                                    <strong>VD</strong>
-                                    {isExpanded ? 'View & Delete' : ''}
-                                </p>
-                            </div>
-                        )}
-                        <p
-                            className={
-                                (showAdminSublist && isExpanded) ||
-                                page === 'view-admins' ||
-                                page === 'view-patients' ||
                                 page === 'view-doctors'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
-                            onClick={() =>
-                                setShowAdminSublist(!showAdminSublist)
-                            }>
-                            <EyeOutlined />
-                            {isExpanded ? 'View & Delete' : ''}
+                            onClick={() => {
+                                navigate('view-doctors')
+                            }}>
+                            <DoctorIcon />
+                            {isExpanded ? 'Doctors' : ''}
                         </p>
-                        {showAdminSublist && isExpanded && (
-                            <div className='sublist'>
-                                <p
-                                    className={
-                                        page === 'view-admins'
-                                            ? 'sidebar-item selected-sidebar-item'
-                                            : 'sidebar-item'
-                                    }
-                                    onClick={() => {
-                                        navigate('view-admins')
-                                    }}>
-                                    <strong>A</strong>
-                                    {isExpanded ? 'View Admins' : ''}
-                                </p>
-                                <p
-                                    className={
-                                        page === 'view-patients'
-                                            ? 'sidebar-item selected-sidebar-item'
-                                            : 'sidebar-item'
-                                    }
-                                    onClick={() => {
-                                        navigate('view-patients')
-                                    }}>
-                                    <strong>P</strong>
-                                    {isExpanded ? 'View Patients' : ''}
-                                </p>
-                                <p
-                                    className={
-                                        page === 'view-doctors'
-                                            ? 'sidebar-item selected-sidebar-item'
-                                            : 'sidebar-item'
-                                    }
-                                    onClick={() => {
-                                        navigate('view-doctors')
-                                    }}>
-                                    <strong>Dr</strong>
-                                    {isExpanded ? 'View Doctors' : ''}
-                                </p>
-                            </div>
-                        )}
+                        <p
+                            className={
+                                page === 'view-patients'
+                                    ? 'sidebar-item selected-sidebar-item'
+                                    : 'sidebar-item'
+                            }
+                            onClick={() => {
+                                navigate('view-patients')
+                            }}>
+                            <PatientIcon />
+                            {isExpanded ? 'Patients' : ''}
+                        </p>
+                        <p
+                            className={
+                                page === 'view-packages'
+                                    ? 'sidebar-item selected-sidebar-item'
+                                    : 'sidebar-item'
+                            }
+                            onClick={() => {
+                                navigate('view-packages')
+                            }}>
+                            <PackageIcon />
+                            {isExpanded ? 'Packages' : ''}
+                        </p>
                     </>
                 )}
             </div>

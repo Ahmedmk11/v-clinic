@@ -9,9 +9,7 @@ const ViewPackages = () => {
     }, [])
     const fetchPatients = async () => {
         try {
-            let res = await axiosApi.get(
-                '/admin/getAllPackages'
-            )
+            let res = await axiosApi.get('/admin/getAllPackages')
             if (res.length !== 0) setPackages(res.data)
         } catch (error) {
             console.log(error)
@@ -20,7 +18,10 @@ const ViewPackages = () => {
     return (
         <div className='page'>
             {Packages ? (
-                <AdminPackageList Packages={Packages}  />
+                <AdminPackageList
+                    Packages={Packages}
+                    setPackages={setPackages}
+                />
             ) : null}
         </div>
     )

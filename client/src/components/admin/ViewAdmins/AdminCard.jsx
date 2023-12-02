@@ -5,11 +5,11 @@ import axiosApi from '../../../utils/axiosApi'
 const { confirm } = Modal
 
 const AdminCard = ({ admin, onDelete }) => {
+    console.log('admin', admin)
     const id = admin._id
-    const navigate = useNavigate()
     const showDeleteConfirm = () => {
         confirm({
-            title: `Are you sure want to delete ${admin.Username}?`,
+            title: `Are you sure want to delete ${admin.username}?`,
             icon: <ExclamationCircleFilled />,
             content: 'Please confirm!',
             okText: 'Yes',
@@ -25,7 +25,7 @@ const AdminCard = ({ admin, onDelete }) => {
     }
     const success = () => {
         Modal.success({
-            content: `${admin.Username} has been deleted.`,
+            content: `${admin.username} has been deleted.`,
             onOk() {
                 onDelete(id)
             },
@@ -54,13 +54,43 @@ const AdminCard = ({ admin, onDelete }) => {
 
     return (
         <div className='card'>
-            <h3>{admin.Username}</h3>
-            <p>
-                <strong>Created at: </strong>
-                {new Date(admin.createdAt).toDateString()}
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    margin: 0,
+                }}>
+                <h3
+                    style={{
+                        margin: '0',
+                    }}>
+                    {admin.name}
+                </h3>
+                <h5
+                    style={{
+                        fontSize: '1rem',
+                        margin: '0',
+                    }}>
+                    @{admin.username}
+                </h5>
+            </div>
+            <h5
+                style={{
+                    fontSize: '0.8rem',
+                    margin: '0.5rem 0',
+                }}>
+                {admin.email}
+            </h5>
+            <p
+                style={{
+                    fontSize: '0.8rem',
+                    margin: '0.5rem 0',
+                }}>
+                Created on {new Date(admin.createdAt).toDateString()}
             </p>
             <Button type='primary' onClick={showDeleteConfirm} danger>
-                Delete
+                Delete Admin
             </Button>
         </div>
     )

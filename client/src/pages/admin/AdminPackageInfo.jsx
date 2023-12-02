@@ -7,7 +7,7 @@ const { confirm } = Modal
 
 const AdminPackageInfo = () => {
     const [SelectedPackage, setSelectedPackage] = useState({})
-    const [editedPackage, setEditedPackage] = useState({});
+    const [editedPackage, setEditedPackage] = useState({})
     const [editMode, setEditMode] = useState(false)
     const [editMessage, setEditMessage] = useState('')
     const { id, type } = useParams()
@@ -25,17 +25,16 @@ const AdminPackageInfo = () => {
     }, [id])
 
     const btnStyle = {
-        marginLeft:'13px',
-        backgroundColor: '#4caf50'
+        marginLeft: '13px',
+        backgroundColor: '#4caf50',
     }
     const inputStyle = {
         width: '100px',
         fontSize: '19px',
         padding: '1%',
-        height: '30px'
+        height: '30px',
     }
 
-  
     const messageStyle = {
         opacity: '1',
         backgroundColor: '#9e9e9e',
@@ -46,43 +45,43 @@ const AdminPackageInfo = () => {
         padding: '4px',
         paddingLeft: '10px',
         fontSize: '13px',
-        transition: '0.5s ease-in-out'
+        transition: '0.5s ease-in-out',
     }
-    
+
     const enterEdit = () => {
-        setEditMode(true);
+        setEditMode(true)
         setEditedPackage(SelectedPackage)
     }
 
     const cancelEdit = () => {
-        setEditMode(false);
+        setEditMode(false)
         setEditedPackage(SelectedPackage)
     }
 
     const saveFunc = async () => {
         try {
-            const ret = await axiosApi.put(`/admin/updatePackage/${id}`,
-        editedPackage)
-        setEditMessage('change saved successfully')
-        setSelectedPackage(editedPackage)
-        setEditMode(false)
+            const ret = await axiosApi.put(
+                `/admin/updatePackage/${id}`,
+                editedPackage
+            )
+            setEditMessage('change saved successfully')
+            setSelectedPackage(editedPackage)
+            setEditMode(false)
         } catch (error) {
-        setEditMessage(error.response.data.error)    
-        }finally{
+            setEditMessage(error.response.data.error)
+        } finally {
             setTimeout(() => {
                 setEditMessage('')
-            }, 5000);
+            }, 5000)
         }
-        
     }
-    
 
     const handleInputChange = (e) => {
         setEditedPackage({
-          ...editedPackage,
-          [e.target.name]: e.target.value,
-        });
-      };
+            ...editedPackage,
+            [e.target.name]: e.target.value,
+        })
+    }
 
     const getPatientInfo = () => {
         return (
@@ -93,67 +92,92 @@ const AdminPackageInfo = () => {
                     </li>
                     <li>
                         <strong>Price: </strong>
-                        {!editMode ? (` ${SelectedPackage.price} L.E`) :
-                        <Input
-                        name="price"
-                        value={editedPackage.price}
-                        type="number"
-                        onChange={handleInputChange}
-                        style={inputStyle}
-                      />
-                        }
+                        {!editMode ? (
+                            ` ${SelectedPackage.price} L.E`
+                        ) : (
+                            <Input
+                                name='price'
+                                value={editedPackage.price}
+                                type='number'
+                                onChange={handleInputChange}
+                                style={inputStyle}
+                            />
+                        )}
                     </li>
                     <li>
                         <strong>Session Discount: </strong>
-                        {!editMode ? (` ${SelectedPackage.sessionDiscount}%`):
-                         <Input
-                         name="sessionDiscount"
-                         value={editedPackage.sessionDiscount}
-                         type="number"
-                         onChange={handleInputChange}
-                         style={inputStyle}
-                       />
-                        }
+                        {!editMode ? (
+                            ` ${SelectedPackage.sessionDiscount}%`
+                        ) : (
+                            <Input
+                                name='sessionDiscount'
+                                value={editedPackage.sessionDiscount}
+                                type='number'
+                                onChange={handleInputChange}
+                                style={inputStyle}
+                            />
+                        )}
                     </li>
                     <li>
                         <strong>Medicine Discount: </strong>{' '}
-                        {!editMode ? (` ${SelectedPackage.medicineDiscount}%`):
-                         <Input
-                         name="medicineDiscount"
-                         value={editedPackage.medicineDiscount}
-                         type="number"
-                         onChange={handleInputChange}
-                         style={inputStyle}
-                       />
-                        }
+                        {!editMode ? (
+                            ` ${SelectedPackage.medicineDiscount}%`
+                        ) : (
+                            <Input
+                                name='medicineDiscount'
+                                value={editedPackage.medicineDiscount}
+                                type='number'
+                                onChange={handleInputChange}
+                                style={inputStyle}
+                            />
+                        )}
                     </li>
                     <li>
                         <strong>Family Subscription Discount: </strong>{' '}
-                        {!editMode ? (` ${SelectedPackage.familySubsDiscount}%`) :
-                             <Input
-                             name="familySubsDiscount"
-                             value={editedPackage.familySubsDiscount}
-                             type="number"
-                             onChange={handleInputChange}
-                             style={inputStyle}
-                           />
-                        }
+                        {!editMode ? (
+                            ` ${SelectedPackage.familySubsDiscount}%`
+                        ) : (
+                            <Input
+                                name='familySubsDiscount'
+                                value={editedPackage.familySubsDiscount}
+                                type='number'
+                                onChange={handleInputChange}
+                                style={inputStyle}
+                            />
+                        )}
                     </li>
                 </ul>
                 {!editMode ? (
-                    <><Button type='primary' onClick={showDeleteConfirm} danger>
-                        Delete
-                    </Button><Button type='primary' style={btnStyle} onClick={enterEdit}>
+                    <div
+                        style={{
+                            marginLeft: 'auto',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            width: 140,
+                        }}>
+                        <Button
+                            type='primary'
+                            onClick={showDeleteConfirm}
+                            danger>
+                            Delete
+                        </Button>
+                        <Button type='primary' onClick={enterEdit}>
                             Edit
-                        </Button></>
-                ):
-                <div className='edit-buttons'><Button type='primary' onClick={cancelEdit} danger >
-                Cancel
-            </Button><Button type='primary' style={btnStyle} onClick={saveFunc}>
-                    Save
-                </Button></div>
-                }
-
+                        </Button>
+                    </div>
+                ) : (
+                    <div className='edit-buttons'>
+                        <Button type='primary' onClick={cancelEdit} danger>
+                            Cancel
+                        </Button>
+                        <Button
+                            type='primary'
+                            style={btnStyle}
+                            onClick={saveFunc}>
+                            Save
+                        </Button>
+                    </div>
+                )}
             </>
         )
     }
@@ -197,26 +221,20 @@ const AdminPackageInfo = () => {
 
     return (
         <div className='page'>
+            <div className='primary-container'>
+                <h2>Selected Package</h2>
+                <div className='patient-name'>
+                    <h2>{SelectedPackage.name}</h2>
+                </div>
 
-        <div className='primary-container'>
-            <h2>Selected Package</h2>
-            <div className='patient-name'>
-                <h2>
-                {SelectedPackage.name}
-                </h2>
-            </div>
-
-            <div className='sub-container patient-info'>
-               {editMessage ? 
-                     <div style={messageStyle}>
-                     {editMessage}
-                 </div>:
-                null    
-            }
-            {getPatientInfo()}
+                <div className='sub-container patient-info'>
+                    {editMessage ? (
+                        <div style={messageStyle}>{editMessage}</div>
+                    ) : null}
+                    {getPatientInfo()}
+                </div>
             </div>
         </div>
-            </div>
     )
 }
 
