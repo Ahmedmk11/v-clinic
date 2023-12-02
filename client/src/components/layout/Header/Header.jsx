@@ -245,7 +245,7 @@ const Header = () => {
                 </Dropdown>
                 <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
-                    <span>{currUser?.wallet?.toFixed(0)} EGP</span>
+                    <span>E£{currUser?.wallet?.toFixed(0)}</span>
                 </ConditionalRender>
                 <Dropdown
                     menu={{

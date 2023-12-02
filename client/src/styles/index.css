@@ -150,3 +150,23 @@ input:focus {
         margin-top: 6px;
     }
 }
+
+.drpdn-class {
+    .ant-dropdown-menu-item {
+        cursor: default !important;
+
+        &:hover {
+            background-color: white !important;
+        }
+    }
+}
+
+.drpdn-class>ul {
+    .ant-dropdown-menu-item:hover {
+        background-color: white !important;
+    }
+
+    .ant-dropdown-menu-item-active {
+        background-color: white !important;
+    }
+}

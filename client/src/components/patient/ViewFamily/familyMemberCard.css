@@ -3,6 +3,5 @@
     margin: 2%;
     box-shadow: 0 0 10px var(--color-shadow);
     border-radius: 10px;
-    cursor: pointer;
     background-color: var(--accent-background-color);
 }

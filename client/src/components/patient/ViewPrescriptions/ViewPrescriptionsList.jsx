@@ -101,7 +101,6 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
             <br></br>
             <Select
                 className='Select'
-                mode='multiple'
                 allowClear
                 placeholder='Select state'
                 onChange={handleChange}

@@ -23,7 +23,7 @@ const SubscribeHealthPackage = ({
     const [subscriber, setSubscriber] = useState(null)
     const { currUser, setCurrUser } = useContext(CurrUserContext)
     const [form] = Form.useForm()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (targetSubscriberType === 'patient') setSubscriber(currUser)
@@ -31,8 +31,9 @@ const SubscribeHealthPackage = ({
 
     const handlePayWithCard = async () => {
         try {
-            const res = await axiosApi.post(`patient/buy-package-card/${subscriber._id}`, 
-                {id: selectedPackageId}
+            const res = await axiosApi.post(
+                `patient/buy-package-card/${subscriber._id}`,
+                { id: selectedPackageId }
             )
             window.location = res.data.ret
         } catch (error) {
@@ -64,7 +65,7 @@ const SubscribeHealthPackage = ({
                         wallet: res1.data.wallet,
                         package: response.data.package,
                         packageStatus: 'Active',
-                        packageRenewalDate:response.data.renewalDate
+                        packageRenewalDate: response.data.renewalDate,
                     })
                 else if (targetSubscriberType === 'family') {
                     setCurrUser({
@@ -148,10 +149,42 @@ const SubscribeHealthPackage = ({
         key: packageObj._id,
         label: (
             <div className='package-info'>
-                <p>Price: {packageObj.price}</p>
-                <p>Session Discount: {packageObj.sessionDiscount}</p>
-                <p>Pharmacy Discount: {packageObj.medicineDiscount}</p>
-                <p>Family Discount: {packageObj.familySubsDiscount}</p>
+                <p>
+                    <span
+                        style={{
+                            fontWeight: 700,
+                        }}>
+                        Price:
+                    </span>{' '}
+                    E£{packageObj.price}
+                </p>
+                <p>
+                    <span
+                        style={{
+                            fontWeight: 700,
+                        }}>
+                        Session Discount:
+                    </span>{' '}
+                    {packageObj.sessionDiscount}%
+                </p>
+                <p>
+                    <span
+                        style={{
+                            fontWeight: 700,
+                        }}>
+                        Pharmacy Discount:
+                    </span>{' '}
+                    {packageObj.medicineDiscount}%
+                </p>
+                <p>
+                    <span
+                        style={{
+                            fontWeight: 700,
+                        }}>
+                        Family Discount:
+                    </span>{' '}
+                    {packageObj.familySubsDiscount}%
+                </p>
             </div>
         ),
     }))
@@ -206,22 +239,19 @@ const SubscribeHealthPackage = ({
                 onCancel={onCancelModal}
                 destroyOnClose
                 footer={[
-                   <div key="footerdiv78">
-                     <ConditionalRender
-                        condition={page === 1}
-                        elseComponent={<Page2Buttons />}>
-                        <Button
-                            onClick={onCancelModal}>
-                            Cancel
-                        </Button>
-                        <Button
-                            key='next-button0'
-                          type='primary'
-                            onClick={goToPaymentChoices}>
-                            Next
-                        </Button>
-                    </ConditionalRender>
-                   </div>
+                    <div key='footerdiv78'>
+                        <ConditionalRender
+                            condition={page === 1}
+                            elseComponent={<Page2Buttons />}>
+                            <Button onClick={onCancelModal}>Cancel</Button>
+                            <Button
+                                key='next-button0'
+                                type='primary'
+                                onClick={goToPaymentChoices}>
+                                Next
+                            </Button>
+                        </ConditionalRender>
+                    </div>,
                 ]}>
                 <ConditionalRender
                     condition={page === 1}
@@ -255,6 +285,7 @@ const SubscribeHealthPackage = ({
                                             }}>
                                             <span>{currPackage.name}</span>
                                             <Dropdown
+                                                overlayClassName='drpdn-class'
                                                 placement='right'
                                                 overlay={
                                                     <Menu>

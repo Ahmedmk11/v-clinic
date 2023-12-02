@@ -1,13 +1,74 @@
 import { useState } from 'react'
 import ChangePassword from './ChangePassword'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { Button } from 'antd'
 const PatientInfo = ({ patient }) => {
     const [open, setOpen] = useState(false)
+    const [showLinkingCode, setShowLinkingCode] = useState(false)
+    const [copied, setCopied] = useState(false)
+
+    const handleToggle = () => {
+        setShowLinkingCode(!showLinkingCode)
+    }
+
+    const handleCopy = () => {
+        setTimeout(() => {
+            setCopied(false)
+        }, 2000)
+        setCopied(true)
+    }
     return (
         <>
-            {' '}
             <div className='patient-name'>
-                <h2>{patient?.name}</h2>
+                <h2
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
+                    {patient?.name}
+                    <Button onClick={handleToggle}>
+                        {showLinkingCode
+                            ? 'Hide Linking Code'
+                            : 'Show Linking Code'}
+                    </Button>
+                </h2>
+                <div>
+                    {showLinkingCode && (
+                        <div
+                            style={{
+                                fontSize: '0.8rem',
+                            }}>
+                            <p>Your Linking Code:</p>
+                            <div>
+                                <span
+                                    style={{
+                                        backgroundColor: '#eee',
+                                        padding: '0.5rem',
+                                        marginRight: '0.5rem',
+                                        borderRadius: '0.5rem',
+                                    }}>
+                                    {patient?.linkingCode}
+                                </span>
+                                <CopyToClipboard
+                                    text={patient?.linkingCode}
+                                    onCopy={handleCopy}>
+                                    <Button>
+                                        {copied
+                                            ? 'Copied!'
+                                            : 'Copy to Clipboard'}
+                                    </Button>
+                                </CopyToClipboard>
+                            </div>
+                            <p>
+                                <strong>
+                                    Only share this code with relatives you want
+                                    to add to your account.
+                                </strong>
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
             <div className='sub-container'>
                 <p>
