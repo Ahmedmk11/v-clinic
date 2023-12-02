@@ -17,6 +17,8 @@ import dotenv from 'dotenv'
 import medicineModel from '../models/medicineModel.js'
 import NotificationsModel from '../models/notificationsModel.js'
 import nodemailer from 'nodemailer'
+import Pharmacist from '../models/pharmacistModel.js'
+import Order from '../models/orderModel.js'
 
 const currentFileUrl = import.meta.url
 const currentFilePath = fileURLToPath(currentFileUrl)
@@ -291,7 +293,7 @@ async function buyPackageWallet(req, res) {
 
         const patient = await PatientModel.findById(patientID)
         const currPackage = await packageModel.findById(packageID)
-
+        console.log('here')
         patient.wallet -= currPackage.price
         await patient.save()
         res.status(200).json({
@@ -931,6 +933,94 @@ const generatePrescriptionPDF = async (req, res) => {
     res.send(pdfBuffer)
 }
 
+
+// send patient_id in body
+//send prescription_id in body
+//send paymentMethod in body
+const createPrecriptionOrder = async (req, res) => {
+    try {
+        const patient = await PatientModel.findById(req.body.patient_id);
+        if (!patient) {
+            return res.status(400).json({ message: "Patient not found" });
+        }
+        patient.deliveryAddress.forEach((address) => {
+            if (address.is_default == true) req.body.address = address;
+        });
+        if (!req.body.address) {
+            return res.status(400).json({ message: "Address not found" });
+        }
+        const prescription = await PrescriptionModel.findById(req.body.prescription_id);
+        prescription.medications.quantity = 1;
+        let price = 0;
+        for (let i = 0; i < prescription.medications.length; i++) {
+            const item = prescription.medications[i];
+            const medicine = await medicineModel.findById(item.medicine_id);
+            if (!medicine) {
+                return res.status(400).json({ message: "Medicine not found" });
+            }
+            let p = medicine.price;
+            price += p * item.quantity;
+        }
+        let medicines = [];
+        for (let i = 0; i < prescription.medications.length; i++) {
+            const item = prescription.medications[i];
+            const medicine = await medicineModel.findById(item.medicine_id);
+            if (!medicine) {
+                return res.status(400).json({ message: "Medicine not found" });
+            }
+            if (medicine.availableQuantity < item.quantity) {
+                return res.status(400).json({ message: `${medicine.name} out of stock` });
+            }
+            medicine.singleQuantity = item.quantity;
+            medicines.push(medicine);
+        }
+        if (req.body.paymentMethod == "wallet") {
+            if (patient.wallet < price) {
+              return res.status(400).json({ message: "Not enough money in wallet" });
+            }
+            patient.wallet -= price;
+            await patient.save();
+          }
+        let outOfStockMedicines = [];
+        for (let i = 0; i < prescription.medications.length; i++) {
+            const item = prescription.medications[i];
+            const medicine = await medicineModel.findById(item.medicine_id);
+            medicine.availableQuantity -= item.quantity;
+            if (medicine.availableQuantity <= 0) {
+                outOfStockMedicines.push(medicine);
+            }
+            medicine.sales += medicine.price * item.quantity;
+            await medicine.save();
+        }
+        const updatedMedications = prescription.medications.map((item) => {
+            const { medicine_id, quantity } = item;
+            return { medicine_id, quantity };
+        });
+        const order = new Order({
+            patient_id: patient._id,
+            items: updatedMedications,
+            total_price: price,
+            status: "Confirmed",
+            address: req.body.address,
+            paymentMethod: req.body.paymentMethod,
+        });
+        await order.save();
+        if (outOfStockMedicines.length > 0) {
+            sendNotification(outOfStockMedicines);
+        }
+        res.status(201).json({ order, outOfStockMedicines });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+}
+
+const sendNotification = async (outOfStockMedicines) => {
+    const pharmacists = await Pharmacist.find();
+    pharmacists.forEach(async (pharmacist) => {
+      await new Email( pharmacist, outOfStockMedicines).sendOutOfStockMedicines();
+    });
+}
+
 const getNotifications = async (req, res) => {
     try {
         const { pid } = req.params
@@ -968,6 +1058,36 @@ const removeNotification = async (req, res) => {
     }
 }
 
+const getPrescriptionPrice = async (req, res) => {
+    try {
+        const { prescription_id } = req.params
+        const prescription = await PrescriptionModel.findById(prescription_id)
+        const patient = await PatientModel.findById(prescription.patient_id)
+
+        const patient_package = await packageModel.findById(patient.package)
+        let medicineDiscount = 0
+        if (patient_package) {
+            medicineDiscount = patient_package.medicineDiscount
+        }
+        let price = 0
+        for (let i = 0; i < prescription.medications.length; i++) {
+            const item = prescription.medications[i]
+            const medicine = await medicineModel.findById(item.medicine_id)
+            console.log(medicine)
+            if (!medicine) {
+                return res.status(400).json({ message: 'Medicine not found' })
+            }
+            let p = medicine.price
+            price += p * 1
+        }
+        const newPrice = (price * (1 - medicineDiscount / 100)).toFixed(2)
+        res.status(200).json({ oldPrice: price, newPrice: newPrice })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
 export {
     createPatient,
     getPatients,
@@ -997,4 +1117,5 @@ export {
     generatePrescriptionPDF,
     getNotifications,
     removeNotification,
+    getPrescriptionPrice
 }

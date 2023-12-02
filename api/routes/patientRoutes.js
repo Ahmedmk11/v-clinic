@@ -30,11 +30,13 @@ import {
     generatePrescriptionPDF,
     getNotifications,
     removeNotification,
+    getPrescriptionPrice,
 } from '../controllers/patientController.js'
 
-let packagePaymentDone = false
+
 const router = express.Router()
 
+router.get('/get-prescription-price/:prescription_id', getPrescriptionPrice)
 router.post('/create-patient', createPatient)
 router.post('/populate-family-members/:id', populateFamilyMembers)
 router.post('/add-package/:id', addPackage)
