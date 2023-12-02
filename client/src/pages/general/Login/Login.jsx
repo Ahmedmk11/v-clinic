@@ -28,7 +28,7 @@ const Login = () => {
         role: 'patient',
     })
     const [loading, setLoading] = useState(false)
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
 
     const onFinish = (values) => {
         setLoading(true)

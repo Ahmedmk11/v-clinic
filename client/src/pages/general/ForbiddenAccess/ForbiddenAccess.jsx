@@ -10,7 +10,14 @@ const ForbiddenAccess = () => {
     }
 
     return (
-        <div>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+            }}>
             <h1>Forbidden Access</h1>
             <p>You do not have permission to access this page.</p>
             <Button type='primary' onClick={handleNavigateHome}>

@@ -3,8 +3,11 @@ import { useState, useRef } from 'react'
 import React from 'react'
 import { Button, Checkbox, Form, Input, message, Space, Select } from 'antd'
 import axiosApi from '../../../utils/axiosApi'
+import './forgotPassword.css'
+import logoIcn from '../../../assets/icons/logo.svg'
+const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
 
-const Login = () => {
+const ForgotPassword = () => {
     const navigate = useNavigate()
     const formRef = useRef(null)
 
@@ -74,169 +77,215 @@ const Login = () => {
                 setStage(3)
             })
             .catch((error) => {
-                console.error('Error:', error)
+                message.error('Invalid OTP')
             })
     }
 
     return (
-        <Form
-            ref={formRef}
-            name='password-change-form'
-            onFinish={
-                stage === 1
-                    ? onEmailFinish
-                    : stage === 2
-                    ? onOTPFinish
-                    : onFinish
-            }
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}>
-            {stage === 1 && (
-                <>
-                    <Form.Item label='Email' name='email'>
-                        <Input
-                            value={email}
-                            placeholder='Enter your registered Email'
-                            onChange={(e) => {
-                                setEmail(e.target.value)
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type='primary' htmlType='submit'>
-                            Send OTP
-                        </Button>
-                    </Form.Item>
-                </>
-            )}
-
-            {stage === 2 && (
-                <>
-                    <Form.Item label='OTP' name='otp'>
-                        <Input
-                            value={otp}
-                            placeholder='OTP'
-                            onChange={(e) => {
-                                setOTP(e.target.value)
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button
-                            onClick={() => {
-                                setStage(1)
-                            }}>
-                            Back
-                        </Button>
-                        <Button type='primary' htmlType='submit'>
-                            Next
-                        </Button>
-                    </Form.Item>
-                </>
-            )}
-
-            {stage === 3 && (
-                <>
-                    <Form.Item
-                        label='Role'
-                        name='role'
-                        initialValue={role}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select your role!',
-                            },
-                        ]}>
-                        <Space wrap>
-                            <Select
-                                allowClear
-                                defaultValue='patient'
+        <div id='forgot-password'>
+            <div id='left'>
+                <LogoIcon />
+            </div>
+            <div id='right'>
+                <Space wrap>
+                    <h2>Reset Password</h2>
+                </Space>
+                <Form
+                    ref={formRef}
+                    name='password-change-form'
+                    onFinish={
+                        stage === 1
+                            ? onEmailFinish
+                            : stage === 2
+                            ? onOTPFinish
+                            : onFinish
+                    }
+                    style={{
+                        width: '40%',
+                    }}
+                    size='large'>
+                    {stage === 1 && (
+                        <>
+                            <Form.Item label='Email' name='email'>
+                                <Input
+                                    value={email}
+                                    placeholder='Enter your registered Email'
+                                    onChange={(e) => {
+                                        setEmail(e.target.value)
+                                    }}
+                                />
+                            </Form.Item>
+                            <Form.Item
                                 style={{
-                                    width: 120,
-                                }}
-                                onChange={(value) => {
-                                    setRole(value)
-                                }}
-                                options={[
-                                    {
-                                        value: 'patient',
-                                        label: 'Patient',
-                                    },
-                                    {
-                                        value: 'doctor',
-                                        label: 'Doctor',
-                                    },
-                                    {
-                                        value: 'admin',
-                                        label: 'Admin',
-                                    },
-                                ]}
-                            />
-                        </Space>
-                    </Form.Item>
-                    <Form.Item
-                        label='New Password'
-                        name='newPassword'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please enter your new password!',
-                            },
-                        ]}>
-                        <Input.Password
-                            value={newPassword}
-                            placeholder='New Password'
-                            onChange={(e) => {
-                                setNewPassword(e.target.value)
-                            }}
-                        />
-                    </Form.Item>
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}>
+                                <Space
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        gap: '1rem',
+                                    }}>
+                                    <Button
+                                        onClick={() => {
+                                            navigate('/')
+                                        }}>
+                                        Back to Login
+                                    </Button>
+                                    <Button type='primary' htmlType='submit'>
+                                        Send OTP
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </>
+                    )}
 
-                    <Form.Item
-                        label='Confirm New Password'
-                        name='confirmPassword'
-                        dependencies={['newPassword']}
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please confirm your new password!',
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (
-                                        !value ||
-                                        getFieldValue('newPassword') === value
-                                    ) {
-                                        // eslint-disable-next-line no-undef
-                                        return Promise.resolve()
-                                    }
-                                    // eslint-disable-next-line no-undef
-                                    return Promise.reject(
-                                        'The two passwords do not match!'
-                                    )
-                                },
-                            }),
-                        ]}>
-                        <Input.Password placeholder='Confirm New Password' />
-                    </Form.Item>
+                    {stage === 2 && (
+                        <>
+                            <Form.Item label='OTP' name='otp'>
+                                <Input
+                                    value={otp}
+                                    placeholder='OTP'
+                                    onChange={(e) => {
+                                        setOTP(e.target.value)
+                                    }}
+                                />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                <Space
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        gap: '1rem',
+                                    }}>
+                                    <Button
+                                        onClick={() => {
+                                            setStage(1)
+                                        }}>
+                                        Back
+                                    </Button>
+                                    <Button type='primary' htmlType='submit'>
+                                        Next
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </>
+                    )}
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type='primary' htmlType='submit'>
-                            Save
-                        </Button>
-                        <Button
-                            danger
-                            onClick={() => {
-                                navigate('/')
-                            }}>
-                            Cancel
-                        </Button>
-                    </Form.Item>
-                </>
-            )}
-        </Form>
+                    {stage === 3 && (
+                        <>
+                            <Form.Item
+                                label='Role'
+                                name='role'
+                                initialValue={role}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please select your role!',
+                                    },
+                                ]}>
+                                <Space wrap>
+                                    <Select
+                                        allowClear
+                                        defaultValue='patient'
+                                        style={{
+                                            width: 120,
+                                        }}
+                                        onChange={(value) => {
+                                            setRole(value)
+                                        }}
+                                        options={[
+                                            {
+                                                value: 'patient',
+                                                label: 'Patient',
+                                            },
+                                            {
+                                                value: 'doctor',
+                                                label: 'Doctor',
+                                            },
+                                            {
+                                                value: 'admin',
+                                                label: 'Admin',
+                                            },
+                                        ]}
+                                    />
+                                </Space>
+                            </Form.Item>
+                            <Form.Item
+                                label='New Password'
+                                name='newPassword'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Please enter your new password!',
+                                    },
+                                ]}>
+                                <Input.Password
+                                    value={newPassword}
+                                    placeholder='New Password'
+                                    onChange={(e) => {
+                                        setNewPassword(e.target.value)
+                                    }}
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                label='Confirm New Password'
+                                name='confirmPassword'
+                                dependencies={['newPassword']}
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Please confirm your new password!',
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (
+                                                !value ||
+                                                getFieldValue('newPassword') ===
+                                                    value
+                                            ) {
+                                                // eslint-disable-next-line no-undef
+                                                return Promise.resolve()
+                                            }
+                                            // eslint-disable-next-line no-undef
+                                            return Promise.reject(
+                                                'The two passwords do not match!'
+                                            )
+                                        },
+                                    }),
+                                ]}>
+                                <Input.Password placeholder='Confirm New Password' />
+                            </Form.Item>
+
+                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                <Space
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        gap: '1rem',
+                                    }}>
+                                    <Button type='primary' htmlType='submit'>
+                                        Save
+                                    </Button>
+                                    <Button
+                                        danger
+                                        onClick={() => {
+                                            navigate('/')
+                                        }}>
+                                        Cancel
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </>
+                    )}
+                </Form>
+            </div>
+        </div>
     )
 }
 
-export default Login
+export default ForgotPassword
