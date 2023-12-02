@@ -55,6 +55,7 @@ async function createPatient(req, res) {
             phoneNumber,
             emergencyName,
             emergencyPhoneNumber,
+            emergencyRelation,
         } = req.body
 
         let linkingCode
@@ -75,6 +76,7 @@ async function createPatient(req, res) {
             emergencyName,
             emergencyPhoneNumber,
             linkingCode,
+            emergencyRelation,
         })
 
         await newPatient.save()

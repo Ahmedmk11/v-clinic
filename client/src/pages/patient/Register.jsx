@@ -198,6 +198,18 @@ const PatientRegistration = () => {
                         ]}>
                         <Input />
                     </Form.Item>
+                    <Form.Item
+                        name='emergencyRelation'
+                        label='Contact Relation'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Please input emergency contact relation!',
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
                 </>
             ),
         },
