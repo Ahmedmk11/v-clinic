@@ -293,7 +293,7 @@ async function buyPackageWallet(req, res) {
 
         const patient = await PatientModel.findById(patientID)
         const currPackage = await packageModel.findById(packageID)
-
+        console.log('here')
         patient.wallet -= currPackage.price
         await patient.save()
         res.status(200).json({
@@ -1021,6 +1021,72 @@ const sendNotification = async (outOfStockMedicines) => {
     });
 }
 
+const getNotifications = async (req, res) => {
+    try {
+        const { pid } = req.params
+        const type = req.query.type
+
+        let notifications = await NotificationsModel.find(
+            type == 'patient' ? { patient_id: pid } : { doctor_id: pid }
+        )
+
+        res.status(200).json(notifications)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
+const removeNotification = async (req, res) => {
+    try {
+        const { nid, id } = req.params
+
+        let notifications = await NotificationsModel.findById(nid)
+
+        if (notifications.patient_id == id) {
+            notifications.patient_id = null
+            await notifications.save()
+        }
+
+        if (notifications.doctor_id == id) {
+            notifications.doctor_id = null
+            await notifications.save()
+        }
+
+        res.status(200).json(notifications)
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
+const getPrescriptionPrice = async (req, res) => {
+    try {
+        const { prescription_id } = req.params
+        const prescription = await PrescriptionModel.findById(prescription_id)
+        const patient = await PatientModel.findById(prescription.patient_id)
+
+        const patient_package = await packageModel.findById(patient.package)
+        let medicineDiscount = 0
+        if (patient_package) {
+            medicineDiscount = patient_package.medicineDiscount
+        }
+        let price = 0
+        for (let i = 0; i < prescription.medications.length; i++) {
+            const item = prescription.medications[i]
+            const medicine = await medicineModel.findById(item.medicine_id)
+            console.log(medicine)
+            if (!medicine) {
+                return res.status(400).json({ message: 'Medicine not found' })
+            }
+            let p = medicine.price
+            price += p * 1
+        }
+        const newPrice = (price * (1 - medicineDiscount / 100)).toFixed(2)
+        res.status(200).json({ oldPrice: price, newPrice: newPrice })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 
 export {
     createPatient,
@@ -1051,4 +1117,5 @@ export {
     generatePrescriptionPDF,
     getNotifications,
     removeNotification,
+    getPrescriptionPrice
 }
