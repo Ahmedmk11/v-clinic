@@ -4,8 +4,9 @@ import MedicationCard from '../../components/patient/PrescriptionInfo/Medication
 import axiosApi from '../../utils/axiosApi'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
 import {Button, message} from 'antd'
+
 const PrescriptionInfo = () => {
-    const { SelectedPrescription } = useContext(PrescriptionContext)
+    const { SelectedPrescription, setSelectedPrescription} = useContext(PrescriptionContext)
     const [selectedPatient, setSelectedPatient] = useState({})
     const [prescriptionPrice, setPrescriptionPrice] = useState(0)
 
@@ -39,14 +40,20 @@ const PrescriptionInfo = () => {
     const handlePayWithCard = async () => {
     }
 
+
     const handlePayWithWallet = async () => {
         if (selectedPatient.wallet < prescriptionPrice.newPrice) {
-            message.error('You don\'t have enough money in your wallet')
-            return
-        }else{
-            message.success('Payment successful')
+            message.error('You don\'t have enough money in your wallet');
+            return;
+        } else {
+            message.success('Payment successful');
+            // Update the selectedPrescription status in the state
+            setSelectedPrescription(prevState => ({
+                ...prevState,
+                status: 'filled'
+            }));
         }
-    }
+    };
 
     return (
         <div className='page'>
