@@ -11,9 +11,10 @@ const HealthPackage = ({ allPackages }) => {
     const [open, setOpen] = useState(false)
 
     const handleCancelSubscirption = () => {
-        axiosApi.post(`/patient/add-package/${patient?._id}`, {
-            packageID: '-1'
-        })
+        axiosApi
+            .post(`/patient/add-package/${patient?._id}`, {
+                packageID: '-1',
+            })
             .then((res) => {
                 setPatient({ ...patient, package: res.data.package })
                 message.success('Package cancelled successfully')
@@ -32,10 +33,29 @@ const HealthPackage = ({ allPackages }) => {
                 elseComponent={
                     <p>You are not subscribed to any packages yet</p>
                 }>
-                <PackageInfo renewalDate={patient?.packageRenewalDate} healthPackage={patient?.package} status={patient?.packageStatus}/>
+                <PackageInfo
+                    renewalDate={patient?.packageRenewalDate}
+                    healthPackage={patient?.package}
+                    status={patient?.packageStatus}
+                />
             </ConditionalRender>
-            <ConditionalRender condition={patient?.package && patient?.packageStatus == 'Inactive'}>
-                <p>Your subscribtion cancelled and will expire on {new Date(patient?.packageRenewalDate).toDateString()}</p>
+            <ConditionalRender
+                condition={
+                    patient?.package && patient?.packageStatus == 'Inactive'
+                }>
+                <p style={{ fontSize: 11 }}>
+                    *Your subscribtion will expire on{' '}
+                    {new Date(patient?.packageRenewalDate).toDateString()}
+                </p>
+            </ConditionalRender>
+            <ConditionalRender
+                condition={
+                    patient?.package && patient?.packageStatus == 'Active'
+                }>
+                <p style={{ fontSize: 11 }}>
+                    *Your subscribtion will automatically renew on{' '}
+                    {new Date(patient?.packageRenewalDate).toDateString()}
+                </p>
             </ConditionalRender>
             <div className='edit-buttons'>
                 <Button danger onClick={handleCancelSubscirption}>

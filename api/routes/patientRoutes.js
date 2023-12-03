@@ -31,8 +31,11 @@ import {
     getNotifications,
     removeNotification,
     getPrescriptionPrice,
+    checkUsernameAvailability,
+    checkEmailAvailability,
+    checkPhoneAvailability,
+    checkNidAvailability,
 } from '../controllers/patientController.js'
-
 
 const router = express.Router()
 
@@ -59,6 +62,10 @@ router.post('/upload-health-records', savePatientfiles, uploadPatientFiles)
 router.delete('/remove-uploaded-file', removeUploadedFile)
 router.post('/add-to-family/:id', addToFamily)
 router.get('/get-family/:id', getFamily)
+router.get('/check-username-taken/:username', checkUsernameAvailability)
+router.get('/check-email-taken/:email', checkEmailAvailability)
+router.get('/check-phone-taken/:phone', checkPhoneAvailability)
+router.get('/check-nid-taken/:nid', checkNidAvailability)
 router.get('/generate-prescription-pdf', generatePrescriptionPDF)
 router.get('/get-notifications/:pid', getNotifications)
 router.put('/remove-notification/:nid/:id', removeNotification)

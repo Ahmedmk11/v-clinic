@@ -9,10 +9,9 @@ const AdminViewAdmins = () => {
     }, [])
     const fetchPatients = async () => {
         try {
-            let res = await axiosApi.get(
-                '/admin/getAllAdmins'
-            )
+            let res = await axiosApi.get('/admin/getAllAdmins')
             if (res.length !== 0) setAdmins(res.data)
+            console.log('Admins', res.data)
         } catch (error) {
             console.log(error)
         }

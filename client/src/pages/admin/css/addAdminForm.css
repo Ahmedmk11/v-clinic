@@ -1,21 +1,3 @@
-.adminForm {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 5px;
-    margin: auto;
-    width: 200px;
-    & button{
-        margin-top: 15px;
-    }
-    & label{
-        font-size: 1.1rem;
-    }
-    & input{
-        font-size: 1.1rem;
-    }
-}
-
 .errorAdminForm {
     text-align: center;
     width: 200px;
@@ -34,7 +16,7 @@
     padding: 10px;
     background: #69ec71;
     font-size: smaller;
-    border: 1px solid var( --lighter-blue);
+    border: 1px solid var(--lighter-blue);
     color: var(--text-light);
     border-radius: 4px;
     margin: 20px 0;

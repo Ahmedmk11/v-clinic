@@ -1,13 +1,11 @@
-import nodemailer from "nodemailer";
-
- 
+import nodemailer from 'nodemailer'
 
 class Email {
     constructor(user, params) {
-        this.to = user.email;
-        this.user = user;
-        this.params = params;
-        this.from = process.env.EMAIL_FROM;
+        this.to = user.email
+        this.user = user
+        this.params = params
+        this.from = process.env.EMAIL_FROM
     }
 
     newTransport() {
@@ -18,19 +16,19 @@ class Email {
                 user: process.env.EMAIL_USERNAME,
                 pass: process.env.EMAIL_PASSWORD,
             },
-        });
+        })
     }
 
     async sendOutOfStockMedicines() {
-        let medicines = "";
+        let medicines = ''
         this.params.map((medicine) => {
-            medicines += `<p style="margin-bottom: 40px;">${medicine.name} is out of stock</p>`;
-        });
+            medicines += `<p style="margin-bottom: 40px;">${medicine.name} is out of stock</p>`
+        })
 
         const mailOptions = {
             from: this.from,
             to: this.to,
-            subject: "Out of Stock Medicines",
+            subject: 'Out of Stock Medicines',
             html: `
                 <!DOCTYPE html>
                 <html lang="en" style="padding: 40px; width: 100%;">
@@ -48,12 +46,10 @@ class Email {
                 </body>
                 </html>
             `,
-        };
+        }
 
-        return await this.newTransport().sendMail(mailOptions);
+        return await this.newTransport().sendMail(mailOptions)
     }
 }
 
- 
-
-export default Email;
+export default Email

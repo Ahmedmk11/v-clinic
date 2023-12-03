@@ -13,7 +13,11 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
             .then((res) => {
                 const updatedFamily = family?.map((familyMember) => {
                     if (familyMember._id === familyMember._id) {
-                        return { ...familyMember, package: res.data.package, packageStatus: 'Inactive' }
+                        return {
+                            ...familyMember,
+                            package: res.data.package,
+                            packageStatus: 'Inactive',
+                        }
                     }
                     return familyMember
                 })
@@ -46,6 +50,10 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                 </span>
                 <ConditionalRender condition={member?.package != null}>
                     <Dropdown
+                        getPopupContainer={(triggerNode) =>
+                            triggerNode.parentNode
+                        }
+                        overlayClassName='drpdn-class'
                         placement='right'
                         overlay={
                             <Menu>
@@ -53,28 +61,52 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                                     {
                                         <div className='package-info'>
                                             <p>
-                                                Price: {member?.package?.price}
+                                                <span
+                                                    style={{
+                                                        fontWeight: 700,
+                                                    }}>
+                                                    Price:
+                                                </span>{' '}
+                                                E£{member?.package?.price}
                                             </p>
                                             <p>
-                                                Session Discount:{' '}
+                                                <span
+                                                    style={{
+                                                        fontWeight: 700,
+                                                    }}>
+                                                    Session Discount:{' '}
+                                                </span>{' '}
                                                 {
                                                     member?.package
                                                         ?.sessionDiscount
                                                 }
+                                                %
                                             </p>
                                             <p>
-                                                Pharmacy Discount:{' '}
+                                                <span
+                                                    style={{
+                                                        fontWeight: 700,
+                                                    }}>
+                                                    Pharmacy Discount:{' '}
+                                                </span>{' '}
                                                 {
                                                     member?.package
                                                         ?.medicineDiscount
                                                 }
+                                                %
                                             </p>
                                             <p>
-                                                Family Discount:{' '}
+                                                <span
+                                                    style={{
+                                                        fontWeight: 700,
+                                                    }}>
+                                                    Family Discount:{' '}
+                                                </span>{' '}
                                                 {
                                                     member?.package
                                                         ?.familySubsDiscount
                                                 }
+                                                %
                                             </p>
                                         </div>
                                     }
@@ -85,19 +117,45 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                     </Dropdown>
                 </ConditionalRender>
             </div>
-            <ConditionalRender condition={member.packageRenewalDate!=null && member?.packageStatus != 'Inactive'}>
+            {/* <ConditionalRender
+                condition={
+                    member.packageRenewalDate != null &&
+                    member?.packageStatus != 'Inactive'
+                }>
+                <div>
+                    <strong>Auto Renewal: </strong>
+                    {new Date(member.packageRenewalDate).toDateString()}
+                </div>
+            </ConditionalRender> */}
             <div>
-                <strong>Auto Renewal: </strong>
-                {new Date(member.packageRenewalDate).toDateString()}
-            </div>
-            </ConditionalRender>
-            <div>
-            <ConditionalRender condition={member.packageRenewalDate!=null&& member?.package && member?.packageStatus == 'Inactive'}>
-                <p>Subscribtion cancelled and will expire on {new Date(member?.packageRenewalDate).toDateString()}</p>
-            </ConditionalRender>
+                <ConditionalRender
+                    condition={
+                        member?.package && member?.packageStatus == 'Inactive'
+                    }>
+                    <p style={{ fontSize: 11 }}>
+                        *Subscribtion will expire on{' '}
+                        {new Date(member?.packageRenewalDate).toDateString()}
+                    </p>
+                </ConditionalRender>
+                <ConditionalRender
+                    condition={
+                        member?.package && member?.packageStatus == 'Active'
+                    }>
+                    <p style={{ fontSize: 11 }}>
+                        *Subscribtion will automatically renew on{' '}
+                        {new Date(member?.packageRenewalDate).toDateString()}
+                    </p>
+                </ConditionalRender>
             </div>
             <div className='edit-buttons'>
-                <Button danger onClick={handleCancelSubscirption}>
+                <Button
+                    disabled={
+                        (member?.package &&
+                            member?.packageStatus != 'Active') ||
+                        member?.package?.name == null
+                    }
+                    danger
+                    onClick={handleCancelSubscirption}>
                     Cancel Subscription
                 </Button>
             </div>

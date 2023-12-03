@@ -43,8 +43,22 @@ const PrescriptionCard = ({ prescription }) => {
     }
 
     return (
-        <div className='card'>
-            <h3>{prescription.name}</h3>
+        <div className='card' style={{ width: '100%' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}>
+                <h3>{prescription.name}</h3>
+                <Button
+                    type='primary'
+                    shape='circle'
+                    icon={<DownloadOutlined />}
+                    size='middle'
+                    onClick={handleDownload}
+                />
+            </div>
             <p>
                 <strong>Doctor: </strong>
                 {prescription.doctorName}
@@ -65,13 +79,6 @@ const PrescriptionCard = ({ prescription }) => {
                 <Button type='primary' onClick={handleSelect}>
                     View Prescription
                 </Button>
-                <Button
-                    type='primary'
-                    shape='circle'
-                    icon={<DownloadOutlined />}
-                    size='middle'
-                    onClick={handleDownload}
-                />
             </div>
         </div>
     )

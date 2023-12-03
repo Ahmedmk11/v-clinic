@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import AdminDoctorCard from './AdminDoctorCard'
 import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
+import { Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const AdminDoctorList = ({ doctors }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [filtereddoctors, setFiltereddoctors] = useState(doctors)
     const doctorsPerPage = 8
+    const navigate = useNavigate()
 
     useEffect(() => {
         const filtereddoctors = doctors.filter((doctor) =>
@@ -37,7 +40,21 @@ const AdminDoctorList = ({ doctors }) => {
 
     return (
         <section className='primary-container'>
-            <h2>Doctors</h2>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                }}>
+                <h2>Doctors</h2>
+                <Button
+                    onClick={() => {
+                        navigate('/admin/view-requests')
+                    }}>
+                    View Requests
+                </Button>
+            </div>
             <Search onSearch={onSearch} placeholder={'username'} />
             <div className='card-list'>{getCurrentdoctors()}</div>
             <Pagination

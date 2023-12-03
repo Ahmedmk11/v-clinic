@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import AdminPackageCard from './AdminPackageCard'
 import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
+import { Button, Modal } from 'antd'
+import AddPackageForm from '../../../pages/admin/AddPackageForm'
 
-const AdminPackageList = ({ Packages }) => {
+const AdminPackageList = ({ Packages, setPackages }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredPackages, setFilteredPackages] = useState(Packages)
     const PackagesPerPage = 8
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         const filteredPackages = Packages.filter((Package) =>
@@ -37,7 +40,21 @@ const AdminPackageList = ({ Packages }) => {
 
     return (
         <section className='primary-container'>
-            <h2>Packages</h2>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                }}>
+                <h2>Packages</h2>
+                <Button
+                    onClick={() => {
+                        setIsOpen(true)
+                    }}>
+                    Add Package
+                </Button>
+            </div>
             <Search onSearch={onSearch} placeholder={'Package name'} />
             <div className='card-list'>{getCurrentPackages()}</div>
             <Pagination
@@ -46,6 +63,22 @@ const AdminPackageList = ({ Packages }) => {
                 paginate={(pageNumber) => setCurrentPage(pageNumber)}
                 currentPage={currentPage}
             />
+            <Modal
+                title='Add Package'
+                open={isOpen}
+                onOk={() => {
+                    setIsOpen(false)
+                }}
+                onCancel={() => {
+                    setIsOpen(false)
+                }}
+                footer={null}
+                destroyOnClose>
+                <AddPackageForm
+                    setPackages={setPackages}
+                    setIsOpen={setIsOpen}
+                />
+            </Modal>
         </section>
     )
 }

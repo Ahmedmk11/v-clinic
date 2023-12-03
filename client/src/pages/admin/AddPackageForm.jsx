@@ -1,92 +1,99 @@
-import axiosApi from "../../utils/axiosApi"
-import { useState } from "react"
+import { message, Form, Input, Button } from 'antd'
+import axiosApi from '../../utils/axiosApi'
+import { useState } from 'react'
 
-const AddPackageForm = () => {
+const AddPackageForm = ({ setPackages, setIsOpen }) => {
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
     const [sessionDiscount, setSessionDiscount] = useState('')
     const [medicineDiscount, setMedicineDiscount] = useState('')
     const [familySubsDiscount, setFamilySubsDiscount] = useState('')
-    const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
+    const [form] = Form.useForm()
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
         try {
-            const response = await axiosApi.post("/admin/addPackage", { 
+            await axiosApi.post('/admin/addPackage', {
                 name,
                 price,
                 sessionDiscount,
                 medicineDiscount,
-                familySubsDiscount
+                familySubsDiscount,
             })
-            setSuccess("Package added succesfully")
-            setError(null)
+            message.success('Package added succesfully')
+            setIsOpen(false)
             setName('')
             setPrice('')
             setFamilySubsDiscount('')
             setSessionDiscount('')
             setMedicineDiscount('')
+
+            let res = await axiosApi.get('/admin/getAllPackages')
+            if (res.length !== 0) setPackages(res.data)
         } catch (error) {
-            if (error.response.data.message){
-                setError(error.response.data.message)
+            if (error.response.data.message) {
+                message.error('Something went wrong')
+            } else {
+                message.error(
+                    `Package with name ${error.response.data.keyValue.name} already exists`
+                )
             }
-            else{
-                setError(`Package with name ${error.response.data.keyValue.name} already exists`)
-            }
-            setSuccess(null)
         }
     }
 
     return (
+        <div>
+            <Form form={form} className='adminForm' onFinish={handleSubmit}>
+                <Form.Item label={<strong>Name</strong>} name='name'>
+                    <Input
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                    />
+                </Form.Item>
 
-        <div className="page">
-       <div className="primary-container">
-            <h2>Add a new Package</h2>
-       <form className="adminForm" onSubmit={handleSubmit}>
+                <Form.Item label={<strong>Price</strong>} name='price'>
+                    <Input
+                        onChange={(e) => setPrice(e.target.value)}
+                        value={price}
+                    />
+                </Form.Item>
 
-            <label><strong>Name:</strong></label>
-            <input 
-            type="text"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            />
+                <Form.Item
+                    label={<strong>Session Discount</strong>}
+                    name='sessionDiscount'>
+                    <Input
+                        onChange={(e) => setSessionDiscount(e.target.value)}
+                        value={sessionDiscount}
+                    />
+                </Form.Item>
 
-            <label><strong>Price:</strong></label>
-            <input 
-            type="number"
-            onChange={(e) => setPrice(e.target.value)}
-            value={price}
-            />
+                <Form.Item
+                    label={<strong>Medicine Discount</strong>}
+                    name='medicineDiscount'>
+                    <Input
+                        onChange={(e) => setMedicineDiscount(e.target.value)}
+                        value={medicineDiscount}
+                    />
+                </Form.Item>
 
-            <label><strong>Session Discount:</strong></label>
-            <input 
-            type="number"
-            onChange={(e) => setSessionDiscount(e.target.value)}
-            value={sessionDiscount}
-            />
+                <Form.Item
+                    label={<strong>Family Subscription Discount</strong>}
+                    name='familySubsDiscount'>
+                    <Input
+                        onChange={(e) => setFamilySubsDiscount(e.target.value)}
+                        value={familySubsDiscount}
+                    />
+                </Form.Item>
 
-            <label><strong>Medicine Discount:</strong></label>
-            <input 
-            type="number"
-            onChange={(e) => setMedicineDiscount(e.target.value)}
-            value={medicineDiscount}
-            />
-
-            <label><strong>Family Subscription Discount:</strong></label>
-            <input 
-            type="number"
-            onChange={(e) => setFamilySubsDiscount(e.target.value)}
-            value={familySubsDiscount}
-            />
-
-
-            <button className="button" type="submit">Submit</button>
-            {error ? <div className="errorAdminForm">{error}</div> : null}
-            {success ? <div className="successAdminForm">{success}</div> : null}
-        </form>
-            </div>
-       </div>
+                <Form.Item
+                    style={{
+                        marginLeft: '80%',
+                    }}>
+                    <Button type='primary' htmlType='submit'>
+                        Submit
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
     )
 }
 

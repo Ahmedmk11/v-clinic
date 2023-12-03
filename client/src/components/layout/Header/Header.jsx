@@ -8,6 +8,7 @@ import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
 import inboxIcn from '../../../assets/icons/inbox.svg'
 import readIcn from '../../../assets/icons/read.svg'
+import logoIcn from '../../../assets/icons/logo.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
@@ -48,6 +49,16 @@ const Header = () => {
             message_doctor: 'No notifications',
         },
     ])
+
+    const LogoIcon = () => (
+        <img
+            onClick={() => {
+                navigate(`/${role}`)
+            }}
+            style={{ width: 100, cursor: 'pointer' }}
+            src={logoIcn}
+        />
+    )
 
     useEffect(() => {
         if (currUser) {
@@ -215,37 +226,36 @@ const Header = () => {
 
     return (
         <header className='navbar'>
-            <div
-                className='logo'
-                onClick={() => {
-                    navigate(`/${role}`)
-                }}>
-                <span>V-</span>Clinic
-            </div>
+            <LogoIcon />
             <div id='navbar-buttons'>
-                <Dropdown
-                    trigger={['click']}
-                    placement='bottom'
-                    overlayStyle={{ borderRadius: 0 }}
-                    menu={{
-                        items: notifications,
-                    }}
-                    onOpenChange={handleVisibleChange}
-                    open={visible}
-                    getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                    overlayClassName='notifs-class'>
-                    <a
-                        className='inbox-icon'
-                        style={{ borderRadius: 0 }}
-                        onClick={(e) => e.preventDefault()}>
-                        <Badge dot={userNotifications[0]?._id !== 'no-notifs'}>
-                            <InboxIcon />
-                        </Badge>
-                    </a>
-                </Dropdown>
+                {role !== 'admin' && (
+                    <Dropdown
+                        trigger={['click']}
+                        placement='bottom'
+                        overlayStyle={{ borderRadius: 0 }}
+                        menu={{
+                            items: notifications,
+                        }}
+                        onOpenChange={handleVisibleChange}
+                        open={visible}
+                        getPopupContainer={(triggerNode) =>
+                            triggerNode.parentNode
+                        }
+                        overlayClassName='notifs-class'>
+                        <a
+                            className='inbox-icon'
+                            style={{ borderRadius: 0 }}
+                            onClick={(e) => e.preventDefault()}>
+                            <Badge
+                                dot={userNotifications[0]?._id !== 'no-notifs'}>
+                                <InboxIcon />
+                            </Badge>
+                        </a>
+                    </Dropdown>
+                )}
                 <ConditionalRender condition={role != 'admin'}>
                     <WalletOutlined className='ant-wallet' />
-                    <span>{currUser?.wallet?.toFixed(0)} EGP</span>
+                    <span>E£{currUser?.wallet?.toFixed(0)}</span>
                 </ConditionalRender>
                 <Dropdown
                     menu={{
@@ -262,7 +272,9 @@ const Header = () => {
                     </a>
                 </Dropdown>
             </div>
-            <FloatButton icon={<ChatIcon />} onClick={handleViewChat} />
+            {role !== 'admin' && (
+                <FloatButton icon={<ChatIcon />} onClick={handleViewChat} />
+            )}
         </header>
     )
 }

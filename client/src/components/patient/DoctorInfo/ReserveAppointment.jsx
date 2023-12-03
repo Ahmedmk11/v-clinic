@@ -14,11 +14,11 @@ const ReserveAppointment = ({
     setTimeSlots,
     timeSlots,
 }) => {
-    const { currUser, setCurrUser} = useContext(CurrUserContext)
+    const { currUser, setCurrUser } = useContext(CurrUserContext)
     const [form] = Form.useForm()
     const [familyMemberProfiles, setFamilyMemberProfiles] = useState([])
     const [selectedFamilyMember, setSelectedFamilyMember] = useState(null)
-    const [loading ,setLoading]=useState(false)
+    const [loading, setLoading] = useState(false)
 
     //fetch family members
     useEffect(() => {
@@ -42,31 +42,34 @@ const ReserveAppointment = ({
 
     const payWithWallet = async () => {
         form.validateFields()
-        const appointmentPrice = ((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(0)
+        const appointmentPrice = (
+            (doctor.hourly_rate * 1.1).toFixed(0) * discount
+        ).toFixed(0)
         const doctorID = doctor._id
         if (!selectedFamilyMember) return
-        
-        if (currUser?.wallet < appointmentPrice){
+
+        if (currUser?.wallet < appointmentPrice) {
             message.error('Insufficient Funds!')
             return
         }
         try {
-            const ret = await axiosApi.post(`/patient/pay-appointment-wallet/${currUser?._id}`, 
-                {deduction: appointmentPrice, 
-                    doctorID
-                }
+            const ret = await axiosApi.post(
+                `/patient/pay-appointment-wallet/${currUser?._id}`,
+                { deduction: appointmentPrice, doctorID }
             )
-            setCurrUser({...currUser, wallet: ret.data.wallet})
+            setCurrUser({ ...currUser, wallet: ret.data.wallet })
             reserveAppointment(appointmentPrice)
         } catch (error) {
             message.error('Something went wrong')
             console.log(error)
-        } 
+        }
     }
 
     const payWithCard = async () => {
         form.validateFields()
-        const appointmentPrice = ((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(0)
+        const appointmentPrice = (
+            (doctor.hourly_rate * 1.1).toFixed(0) * discount
+        ).toFixed(0)
         const doctorID = doctor._id
         const startTime = new Date(date)
         const endTime = new Date(
@@ -75,15 +78,15 @@ const ReserveAppointment = ({
         if (!selectedFamilyMember) return
 
         try {
-            const ret = await axiosApi.post(`/patient/pay-appointment-card/${selectedFamilyMember._id}`, 
-                {price: appointmentPrice, date, startTime, endTime, doctorID}
+            const ret = await axiosApi.post(
+                `/patient/pay-appointment-card/${selectedFamilyMember._id}`,
+                { price: appointmentPrice, date, startTime, endTime, doctorID }
             )
             window.location = ret.data.ret
         } catch (error) {
             message.error('error')
             console.log(error)
         }
-
     }
 
     //reserve appointment
@@ -100,7 +103,7 @@ const ReserveAppointment = ({
                 date: date,
                 start_time: startTime,
                 end_time: endTime,
-                fee: appointmentPrice
+                fee: appointmentPrice,
             })
             .then((res) => {
                 const day = startTime.toLocaleString('default', {
@@ -120,13 +123,14 @@ const ReserveAppointment = ({
                 setTimeSlots(timeSlots)
                 setOpen(false)
                 form.resetFields()
-                setSelectedFamilyMember(null);
+                setSelectedFamilyMember(null)
                 message.success('Appointment reserved successfully')
             })
             .catch((err) => {
                 message.error('Something went wrong')
                 console.error(err)
-            }).finally(()=>{
+            })
+            .finally(() => {
                 setLoading(false)
             })
     }
@@ -186,10 +190,10 @@ const ReserveAppointment = ({
                             {doctor?.hourly_rate?.toFixed(0)}
                         </span>{' '}
                     </ConditionalRender>
+                    E£
                     {((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
                         0
                     )}
-                    EGP
                 </p>
                 <Form.Item
                     name={'familyMember'}

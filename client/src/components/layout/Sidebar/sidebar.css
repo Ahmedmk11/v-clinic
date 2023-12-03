@@ -48,6 +48,6 @@
 
 @media (max-width: 768px) {
     .sidebar-expanded {
-      position: absolute;
+        position: absolute;
     }
 }

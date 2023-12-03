@@ -1,14 +1,14 @@
-import { useEffect, useState,useContext } from 'react'
-import { useParams} from 'react-router-dom'
+import { useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import axiosApi from '../../utils/axiosApi'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
 import DoctorFreeAppointments from '../../components/patient/DoctorInfo/DoctorFreeAppointments'
 import CurrUserContext from '../../contexts/CurrUser'
 const DoctorInfo = () => {
-    const {currUser}=useContext(CurrUserContext)
+    const { currUser } = useContext(CurrUserContext)
     const id = window.location.href.split('/').pop()
     const [doctor, setDoctor] = useState({})
-    const [discount,setDiscount]=useState(1)
+    const [discount, setDiscount] = useState(1)
 
     useEffect(() => {
         axiosApi
@@ -22,10 +22,9 @@ const DoctorInfo = () => {
     }, [])
 
     useEffect(() => {
-        if(currUser?.package)
-       setDiscount(1-currUser?.package.sessionDiscount/100)
-    }
-    , [currUser])
+        if (currUser?.package)
+            setDiscount(1 - currUser?.package.sessionDiscount / 100)
+    }, [currUser])
 
     return (
         <div className='page'>
@@ -52,15 +51,16 @@ const DoctorInfo = () => {
                     </p>
                     <p>
                         <strong>Session Price: </strong>
-                        <ConditionalRender condition={currUser?.package!=null}>
-                        <span style={{ textDecoration: 'line-through' }}>
-                            {doctor?.hourly_rate?.toFixed(0)} 
-                        </span>{" "}
+                        <ConditionalRender
+                            condition={currUser?.package != null}>
+                            <span style={{ textDecoration: 'line-through' }}>
+                                {doctor?.hourly_rate?.toFixed(0)}
+                            </span>{' '}
                         </ConditionalRender>
+                        E£
                         {(
-                            (doctor.hourly_rate * 1.1).toFixed(0) * (discount)
+                            (doctor.hourly_rate * 1.1).toFixed(0) * discount
                         ).toFixed(0)}{' '}
-                        EGP
                     </p>
                 </div>
                 <DoctorFreeAppointments doctor={doctor} discount={discount} />

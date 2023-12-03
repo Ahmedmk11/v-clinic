@@ -53,10 +53,11 @@ const UploadMedicalRecords = () => {
         <div className='sub-container medical-records-upload'>
             <h2 style={{ marginBottom: '0px' }}>Upload Medical History</h2>
             <p className='allowed-formats'>
-                Allowed formats: .jpg, .jpeg, .png, .pdf
-                <br></br>
-                Maximum 7 files allowed per Upload
+                <strong>Allowed formats:</strong> .jpg, .jpeg, .png, .pdf.
+                <br />
+                <strong>Maximum of 7 files allowed per upload.</strong>
             </p>
+
             <Form onFinish={onFinish}>
                 <Form.Item
                     name='documents'

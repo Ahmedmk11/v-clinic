@@ -75,6 +75,10 @@ const patientModel = new mongoose.Schema(
             type: String,
             required: [true, 'Please select your gender.'],
         },
+        nid: {
+            type: String,
+            required: [true, 'Please enter your national ID.'],
+        },
         phoneNumber: {
             type: String,
             required: [true, 'Please enter your phone number.'],
@@ -117,19 +121,19 @@ const patientModel = new mongoose.Schema(
             ],
         },
         emergencyRelation: {
-          type: String,
-          required: [
-              true,
-              'Please enter the name of your emergency relation.',
-          ],
-          validate: [
-              {
-                  validator: function (value) {
-                      return /^[A-Za-z\s]+$/.test(value)
-                  },
-                  message: 'Name must contain only letters and spaces.',
-              },
-          ],
+            type: String,
+            required: [
+                true,
+                'Please enter the name of your emergency relation.',
+            ],
+            validate: [
+                {
+                    validator: function (value) {
+                        return /^[A-Za-z\s]+$/.test(value)
+                    },
+                    message: 'Name must contain only letters and spaces.',
+                },
+            ],
         },
         package: {
             type: mongoose.Schema.Types.ObjectId,
@@ -176,14 +180,13 @@ const patientModel = new mongoose.Schema(
             default: false,
         },
         deliveryAddress: [
-          {
-            street_address: { type: String, required: true },
-            city: { type: String, required: true },
-            governate: { type: String, required: true },
-            is_default: { type: Boolean, default: false },
-          },
+            {
+                street_address: { type: String, required: true },
+                city: { type: String, required: true },
+                governate: { type: String, required: true },
+                is_default: { type: Boolean, default: false },
+            },
         ],
-    
     },
     {
         toJSON: { virtuals: true },
@@ -227,11 +230,11 @@ patientModel.virtual('medicalHistory', {
     localField: '_id',
 })
 
-patientModel.virtual("cart", {
-  ref: "Cart",
-  foreignField: "patient_id",
-  localField: "_id",
-});
+patientModel.virtual('cart', {
+    ref: 'Cart',
+    foreignField: 'patient_id',
+    localField: '_id',
+})
 
 const PatientModel = mongoose.model('Patient', patientModel)
 

@@ -1,19 +1,26 @@
-import React, { useState } from 'react'
-import { Button, Form, Input, DatePicker, Steps, message } from 'antd'
-import { useNavigate, Link } from 'react-router-dom'
-import axiosApi from '../../utils/axiosApi'
-import { LeftCircleOutlined } from '@ant-design/icons'
+import React, { useState, useContext } from 'react'
+import { Button, Form, Input, DatePicker, Select, Steps, message } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import axiosApi from '../../../utils/axiosApi'
+import CurrUserContext from '../../../contexts/CurrUser'
 
 const { Step } = Steps
+const { Option } = Select
 
-const DoctorRegistration = () => {
+const PatientRegistrationLogic = ({
+    mode,
+    setNewAccountModalOpen,
+    setFamily,
+    setFamilyMemberProfiles,
+}) => {
     const [form] = Form.useForm()
     const [currentStep, setCurrentStep] = useState(0)
     const [msg, setMsg] = useState(null)
     const [formData, setFormData] = useState({})
     const navigate = useNavigate()
+    const { currUser } = useContext(CurrUserContext)
 
-    const nextStep = () => {
+    const nextStep = async () => {
         form.validateFields().then((values) => {
             setFormData({ ...formData, ...values }),
                 setCurrentStep(currentStep + 1)
@@ -30,7 +37,7 @@ const DoctorRegistration = () => {
                 return 202
             }
             const response = await axiosApi.get(
-                `/doctor/check-username-taken/${username}`
+                `/patient/check-username-taken/${username}`
             )
             return response.data.message
         } catch (error) {
@@ -44,7 +51,7 @@ const DoctorRegistration = () => {
                 return 202
             }
             const response = await axiosApi.get(
-                `/doctor/check-email-taken/${email}`
+                `/patient/check-email-taken/${email}`
             )
             return response.data.message
         } catch (error) {
@@ -52,20 +59,67 @@ const DoctorRegistration = () => {
         }
     }
 
-    const handleSubmit = async (values) => {
-        // Handle form submission for the last step
+    const checkPhoneAvailablity = async (phone) => {
         try {
-            const response = await axiosApi.post('/doctor/create-doctor', {
-                ...formData,
+            if (phone?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-phone-taken/${phone}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking phone availability:', error)
+        }
+    }
+
+    const checkNidAvailablity = async (nid) => {
+        try {
+            if (nid?.length === 0) {
+                return 202
+            }
+            const response = await axiosApi.get(
+                `/patient/check-nid-taken/${nid}`
+            )
+            return response.data.message
+        } catch (error) {
+            console.error('Error checking national id availability:', error)
+        }
+    }
+
+    const handleSubmit = async (values) => {
+        try {
+            const { family_relation, ...formDataWithoutRelation } = formData
+            const response = await axiosApi.post('/patient/create-patient', {
+                ...formDataWithoutRelation,
                 ...values,
             })
             const data = response.data
             if (response) {
                 message.success('Registration Successful')
                 form.resetFields()
-                setTimeout(() => {
-                    navigate('/login')
-                }, 2000)
+                if (mode === 1) {
+                    setTimeout(() => {
+                        navigate('/login')
+                    }, 2000)
+                } else {
+                    setNewAccountModalOpen(false)
+                    await axiosApi.post(
+                        `/patient/add-to-family/${currUser?._id}`,
+                        {
+                            gender: response.data.gender,
+                            email: response.data.email,
+                            phoneNumber: response.data.phoneNumber,
+                            relation: formData.family_relation,
+                            linkingCode: response.data.linkingCode,
+                        }
+                    )
+                    const res = await axiosApi.get(
+                        `/patient/get-family/${currUser?._id}`
+                    )
+                    setFamily(res.data.familyMembers)
+                    setFamilyMemberProfiles(res.data.familyMemberProfiles)
+                }
             } else {
                 setMsg(data.message)
             }
@@ -79,6 +133,22 @@ const DoctorRegistration = () => {
             title: 'Basic Info.',
             content: (
                 <>
+                    <Form.Item
+                        name='family_relation'
+                        label='Relation'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please select your relationship!',
+                            },
+                        ]}>
+                        <Select placeholder='Select Relationship'>
+                            <Option value='Wife'>Wife</Option>
+                            <Option value='Child'>Child</Option>
+                            <Option value='Husband'>Husband</Option>
+                        </Select>
+                    </Form.Item>
+
                     <Form.Item
                         name='username'
                         label='Username'
@@ -188,7 +258,7 @@ const DoctorRegistration = () => {
             content: (
                 <>
                     <Form.Item
-                        name='dob'
+                        name='birthdate'
                         label='Date of Birth'
                         rules={[
                             {
@@ -197,12 +267,9 @@ const DoctorRegistration = () => {
                             },
                             {
                                 validator: (_, value) => {
-                                    const age =
-                                        new Date().getFullYear() -
-                                        new Date(value).getFullYear()
-                                    if (age < 25) {
+                                    if (value && value.isAfter(new Date())) {
                                         return Promise.reject(
-                                            'You must be at least 25 years old'
+                                            'Date of birth cannot be in the future'
                                         )
                                     }
                                     return Promise.resolve()
@@ -212,13 +279,91 @@ const DoctorRegistration = () => {
                         <DatePicker style={{ width: '100%' }} />
                     </Form.Item>
                     <Form.Item
-                        name='education'
-                        label='Educational Background'
+                        name='nid'
+                        label='National ID'
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Please input your educational background!',
+                                message: 'Please input your National ID!',
+                            },
+                            {
+                                len: 14,
+                                message: 'National ID must be 14 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'National ID must contain numbers only'
+                                        )
+                                    }
+                                    if (value.length === 14) {
+                                        const isNidAvailable =
+                                            await checkNidAvailablity(
+                                                form.getFieldValue('nid')
+                                            )
+                                        if (isNidAvailable !== 202) {
+                                            return Promise.reject(
+                                                'National ID is already in use'
+                                            )
+                                        }
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='gender'
+                        label='Gender'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please select your gender!',
+                            },
+                        ]}>
+                        <Select placeholder='Select Gender'>
+                            <Option value='male'>Male</Option>
+                            <Option value='female'>Female</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name='phoneNumber'
+                        label='Phone Number'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your phone number!',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    const isPhoneAvailable =
+                                        await checkPhoneAvailablity(
+                                            form.getFieldValue('phoneNumber')
+                                        )
+                                    if (isPhoneAvailable !== 202) {
+                                        return Promise.reject(
+                                            'Phone number is already in use'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
+                            {
+                                len: 11,
+                                message: 'Phone number must be 11 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'Phone number must contain numbers only'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
@@ -227,22 +372,22 @@ const DoctorRegistration = () => {
             ),
         },
         {
-            title: 'Work Info.',
+            title: 'Emergency Contact',
             content: (
                 <>
                     <Form.Item
-                        name='hourly_rate'
-                        label='Hourly Rate'
+                        name='emergencyName'
+                        label='Contact Name'
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your hourly rate!',
+                                message: 'Please input emergency contact name!',
                             },
                             {
-                                validator: (_, value) => {
-                                    if (value < 0) {
+                                validator: async (_, value) => {
+                                    if (!/^[a-zA-Z\s]*$/.test(value)) {
                                         return Promise.reject(
-                                            'Hourly rate must be greater than 0'
+                                            'Name must contain letters only'
                                         )
                                     }
                                     return Promise.resolve()
@@ -252,23 +397,39 @@ const DoctorRegistration = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name='speciality'
-                        label='Speciality'
+                        name='emergencyPhoneNumber'
+                        label='Contact Phone No.'
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your speciality!',
+                                message:
+                                    'Please input emergency contact phone number!',
+                            },
+                            {
+                                len: 11,
+                                message: 'Phone number must be 11 digits',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (!/^\d+$/.test(value)) {
+                                        return Promise.reject(
+                                            'Phone number must contain numbers only'
+                                        )
+                                    }
+                                    return Promise.resolve()
+                                },
                             },
                         ]}>
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name='affiliation'
-                        label='Affiliation'
+                        name='emergencyRelation'
+                        label='Contact Relation'
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your affiliation!',
+                                message:
+                                    'Please input emergency contact relation!',
                             },
                         ]}>
                         <Input />
@@ -279,24 +440,14 @@ const DoctorRegistration = () => {
     ]
 
     return (
-        <div
-            style={{
-                width: '600px',
-                margin: 'auto',
-                padding: '2%',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-            }}>
-            <Link to='/login'>
-                <Button
-                    icon={<LeftCircleOutlined />}
-                    size='small'
-                    type='primary'>
-                    Back to Login
-                </Button>
-            </Link>
-            <h2 style={{ textAlign: 'center' }}>Doctor Registration</h2>
-            <Steps current={currentStep} style={{ marginBottom: '20px' }}>
+        <>
+            {mode === 1 && (
+                <h2 style={{ textAlign: 'center' }}>Patient Registration</h2>
+            )}
+
+            <Steps
+                current={currentStep}
+                style={{ marginBottom: '20px', marginTop: 20 }}>
                 {steps.map((step, index) => (
                     <Step key={index} title={step.title} />
                 ))}
@@ -339,14 +490,18 @@ const DoctorRegistration = () => {
                         {msg}
                     </p>
                 )}
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                    <Button type='link' onClick={() => navigate('/register')}>
-                        Want to register as a Patient?
-                    </Button>
-                </div>
+                {mode === 1 && (
+                    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <Button
+                            type='link'
+                            onClick={() => navigate('/register-doctor')}>
+                            Want to register as a Doctor?
+                        </Button>
+                    </div>
+                )}
             </Form>
-        </div>
+        </>
     )
 }
 
-export default DoctorRegistration
+export default PatientRegistrationLogic
