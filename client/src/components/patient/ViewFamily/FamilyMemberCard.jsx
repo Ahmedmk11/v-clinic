@@ -150,7 +150,9 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
             <div className='edit-buttons'>
                 <Button
                     disabled={
-                        member?.package && member?.packageStatus != 'Active'
+                        (member?.package &&
+                            member?.packageStatus != 'Active') ||
+                        member?.package?.name == null
                     }
                     danger
                     onClick={handleCancelSubscirption}>

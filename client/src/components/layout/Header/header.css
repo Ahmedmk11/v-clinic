@@ -36,6 +36,7 @@
 
     .ant-avatar {
         cursor: pointer;
+        margin-left: 30px;
     }
 
     .inbox-icon {
