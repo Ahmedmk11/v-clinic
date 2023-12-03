@@ -24,10 +24,6 @@ const AdminPackageInfo = () => {
             })
     }, [id])
 
-    const btnStyle = {
-        marginLeft: '13px',
-        backgroundColor: '#4caf50',
-    }
     const inputStyle = {
         width: '100px',
         fontSize: '19px',
@@ -170,10 +166,7 @@ const AdminPackageInfo = () => {
                         <Button type='primary' onClick={cancelEdit} danger>
                             Cancel
                         </Button>
-                        <Button
-                            type='primary'
-                            style={btnStyle}
-                            onClick={saveFunc}>
+                        <Button type='primary' onClick={saveFunc}>
                             Save
                         </Button>
                     </div>

@@ -15,6 +15,12 @@ import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRende
 import axiosApi from '../../../utils/axiosApi'
 import { FloatButton } from 'antd'
 
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode')
+} else {
+    document.body.classList.add('light-mode')
+}
+
 const SunIcon = () => (
     <img
         style={{ width: 14, height: 14, marginLeft: -2, marginRight: 10 }}
@@ -34,10 +40,11 @@ const ReadIcon = () => <img style={{ width: 22, height: 22 }} src={readIcn} />
 const Header = () => {
     const navigate = useNavigate()
     const [theme, setTheme] = useState(
-        document.body.classList.contains('light-mode') ? 'light' : 'dark'
+        localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
     )
     const { currUser, role } = useContext(CurrUser)
     const [visible, setVisible] = useState(false)
+    const [visible2, setVisible2] = useState(false)
     const [userNotifications, setUserNotifications] = useState([
         {
             _id: 'no-notifs',
@@ -49,6 +56,22 @@ const Header = () => {
             message_doctor: 'No notifications',
         },
     ])
+
+    useEffect(() => {
+        if (document.body.classList.contains('light-mode')) {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.remove('light-mode')
+                document.body.classList.add('dark-mode')
+                setTheme('dark')
+            }
+        } else {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.remove('dark-mode')
+                document.body.classList.add('light-mode')
+                setTheme('light')
+            }
+        }
+    }, [])
 
     const LogoIcon = () => (
         <img
@@ -97,10 +120,12 @@ const Header = () => {
             document.body.classList.remove('light-mode')
             document.body.classList.add('dark-mode')
             setTheme('dark')
+            localStorage.setItem('theme', 'dark')
         } else {
             document.body.classList.remove('dark-mode')
             document.body.classList.add('light-mode')
             setTheme('light')
+            localStorage.setItem('theme', 'light')
         }
     }
 
@@ -110,6 +135,10 @@ const Header = () => {
 
     const handleVisibleChange = (flag) => {
         setVisible(flag)
+    }
+
+    const handleVisibleChange2 = (flag) => {
+        setVisible2(flag)
     }
 
     const items = [
@@ -254,10 +283,21 @@ const Header = () => {
                     </Dropdown>
                 )}
                 <ConditionalRender condition={role != 'admin'}>
-                    <WalletOutlined className='ant-wallet' />
-                    <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                    <div
+                        id='wallet-amount'
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '5px',
+                        }}>
+                        <WalletOutlined className='ant-wallet' />
+                        <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                    </div>
                 </ConditionalRender>
                 <Dropdown
+                    open={visible2}
+                    onOpenChange={handleVisibleChange2}
                     menu={{
                         items,
                     }}>

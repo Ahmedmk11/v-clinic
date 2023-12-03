@@ -5,6 +5,8 @@ import { Button, Checkbox, Form, Input, message, Space, Select } from 'antd'
 import axiosApi from '../../../utils/axiosApi'
 import './forgotPassword.css'
 import logoIcn from '../../../assets/icons/logo.svg'
+import Theme from '../../../components/layout/Header/Theme'
+
 const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
 
 const ForgotPassword = () => {
@@ -82,11 +84,19 @@ const ForgotPassword = () => {
     }
 
     return (
-        <div id='forgot-password'>
-            <div id='left'>
+        <div class='registration'>
+            <Theme />
+            <div class='left-register'>
                 <LogoIcon />
             </div>
-            <div id='right'>
+            <div
+                class='right-register'
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                 <Space wrap>
                     <h2>Reset Password</h2>
                 </Space>
@@ -101,12 +111,19 @@ const ForgotPassword = () => {
                             : onFinish
                     }
                     style={{
-                        width: '40%',
+                        width: '100%',
                     }}
                     size='large'>
                     {stage === 1 && (
                         <>
-                            <Form.Item label='Email' name='email'>
+                            <Form.Item
+                                label='Email'
+                                name='email'
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                 <Input
                                     value={email}
                                     placeholder='Enter your registered Email'
@@ -142,7 +159,14 @@ const ForgotPassword = () => {
 
                     {stage === 2 && (
                         <>
-                            <Form.Item label='OTP' name='otp'>
+                            <Form.Item
+                                label='OTP'
+                                name='otp'
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                 <Input
                                     value={otp}
                                     placeholder='OTP'

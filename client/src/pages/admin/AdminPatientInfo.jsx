@@ -8,64 +8,20 @@ const { confirm } = Modal
 
 const AdminPatientInfo = () => {
     const [SelectedPatient, setSelectedPatient] = useState({})
-    const { id } = useParams()
+    const id = window.location.href.split('/').pop()
     const navigate = useNavigate()
 
     useEffect(() => {
         axiosApi
             .get(`/patient/get-patient-by-id/${id}`)
             .then((res) => {
+                console.log(res.data)
                 setSelectedPatient(res.data)
             })
             .catch((err) => {
                 console.log(err)
             })
     }, [id])
-
-    const getPatientInfo = () => {
-        return (
-            <>
-                <ul>
-                    <li>
-                        <strong>Username: </strong> {SelectedPatient.username}
-                    </li>
-                    <li>
-                        <strong>Phone Number: </strong>
-                        <a href={`tel:${SelectedPatient.phoneNumber}`}>
-                            {SelectedPatient.phoneNumber}
-                        </a>
-                    </li>
-                    <li>
-                        <strong>Email: </strong>{' '}
-                        <a href={`mailto:${SelectedPatient.email}`}>
-                            {SelectedPatient.email}
-                        </a>
-                    </li>
-                    <li>
-                        <strong>Age: </strong>{' '}
-                        {calcAge(SelectedPatient.birthdate)}
-                    </li>
-                    <li>
-                        <strong>Gender: </strong> {SelectedPatient.gender}
-                    </li>
-                    <li>
-                        <strong>Package: </strong>{' '}
-                        {SelectedPatient.package || 'No Package Selected'}
-                    </li>
-                    <li>
-                        <strong>Emergency Contact: </strong>{' '}
-                        {`${SelectedPatient.emergencyName},`}{' '}
-                        <a href={`tel:${SelectedPatient.emergencyPhoneNumber}`}>
-                            {SelectedPatient.emergencyPhoneNumber}
-                        </a>
-                    </li>
-                </ul>
-                <Button type='primary' onClick={showDeleteConfirm} danger>
-                    Delete
-                </Button>
-            </>
-        )
-    }
 
     const showDeleteConfirm = () => {
         confirm({
@@ -121,7 +77,47 @@ const AdminPatientInfo = () => {
                     </h2>
                 </div>
                 <div className='sub-container patient-info'>
-                    {getPatientInfo()}
+                    <ul>
+                        <li>
+                            <strong>Username: </strong>{' '}
+                            {SelectedPatient.username}
+                        </li>
+                        <li>
+                            <strong>Phone Number: </strong>
+                            <a href={`tel:${SelectedPatient.phoneNumber}`}>
+                                {SelectedPatient.phoneNumber}
+                            </a>
+                        </li>
+                        <li>
+                            <strong>Email: </strong>{' '}
+                            <a href={`mailto:${SelectedPatient.email}`}>
+                                {SelectedPatient.email}
+                            </a>
+                        </li>
+                        <li>
+                            <strong>Age: </strong>{' '}
+                            {calcAge(SelectedPatient.birthdate)}
+                        </li>
+                        <li>
+                            <strong>Gender: </strong> {SelectedPatient.gender}
+                        </li>
+                        <li>
+                            <strong>Package: </strong>{' '}
+                            {SelectedPatient?.package?.name ||
+                                'No Package Selected'}
+                        </li>
+                        <li>
+                            <strong>Emergency Contact: </strong>{' '}
+                            {`${SelectedPatient.emergencyName},`}{' '}
+                            <a
+                                href={`tel:${SelectedPatient.emergencyPhoneNumber}`}>
+                                {SelectedPatient.emergencyPhoneNumber}
+                            </a>
+                        </li>
+                    </ul>
+                    <Button type='primary' onClick={showDeleteConfirm} danger>
+                        Delete
+                    </Button>
                 </div>
             </div>
         </div>

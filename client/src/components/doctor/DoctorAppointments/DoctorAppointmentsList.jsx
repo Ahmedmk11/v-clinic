@@ -6,10 +6,16 @@ import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
 
 dayjs.extend(utc)
-const DoctorAppointmentsList = ({ Appointments,setAppointments,mode="appointments" }) => {
+const DoctorAppointmentsList = ({
+    Appointments,
+    setAppointments,
+    mode = 'appointments',
+}) => {
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [selectedStates, setSelectedStates] = useState(mode==="requests"?['pending']:[])
+    const [selectedStates, setSelectedStates] = useState(
+        mode === 'requests' ? ['pending'] : []
+    )
     const [dateRange, setDateRange] = useState(null)
     const AppointmentsPerPage = 8
     const applyFilters = () => {
@@ -68,26 +74,27 @@ const DoctorAppointmentsList = ({ Appointments,setAppointments,mode="appointment
               ))
             : 'No appointments to show'
     }
-const filterOptions=mode=="requests"?
-[
-    {
-        label: 'Rejected',
-        value: 'rejected',
-    },
-    { label: 'Pending', value: 'pending' },
-]:
-[
-    {
-        label: 'Upcoming',
-        value: 'upcoming',
-    },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Cancelled', value: 'cancelled' },
-    { label: 'Rescheduled', value: 'rescheduled' },
-];
+    const filterOptions =
+        mode == 'requests'
+            ? [
+                  {
+                      label: 'Rejected',
+                      value: 'rejected',
+                  },
+                  { label: 'Pending', value: 'pending' },
+              ]
+            : [
+                  {
+                      label: 'Upcoming',
+                      value: 'upcoming',
+                  },
+                  { label: 'Completed', value: 'completed' },
+                  { label: 'Cancelled', value: 'cancelled' },
+                  { label: 'Rescheduled', value: 'rescheduled' },
+              ]
 
     return (
-        <div className='primary-container'>
+        <div className='login-text primary-container'>
             <h2>My Appointments</h2>
             <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
@@ -106,7 +113,7 @@ const filterOptions=mode=="requests"?
                 placeholder='Select state'
                 onChange={handleChange}
                 options={filterOptions}
-                defaultValue={mode=="requests"?['pending']:[]}
+                defaultValue={mode == 'requests' ? ['pending'] : []}
             />
             <div className='card-list'>{getCurrentAppointments()}</div>
             <Pagination

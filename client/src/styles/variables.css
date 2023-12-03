@@ -2,8 +2,19 @@
 :root {
     & body.light-mode {
         --main-blue: #0a86fa;
-        /* Primary blue shade for background and major UI elements */
-        --background-color: var(--light-gray);
+        --background-color: #f5f5f5;
+        --main-text-color: #333333;
+        --sidebar-text-color: #333333;
+        --secondary-text-color: #d9d9d9;
+        --header-items: #d9d9d9;
+        --nav-bar: #ddd;
+        --header: #0a86fa;
+        --footer: #0a86fa;
+        --siderbar-item: #bfbfbf;
+        --siderbar-item-hover: #cbcbcb;
+        --svg-color: #292929;
+        --border-sidebar-item: rgba(0, 0, 0, 0.5);
+
         --color: var(--text-light);
         --color-shadow: rgba(0, 0, 0, 0.1);
         --accent-background-color: #ffffff;
@@ -11,23 +22,25 @@
 
     & body.dark-mode {
         --main-blue: #0050b3;
-        /* Primary blue shade for background and major UI elements */
-        --background-color: var(--dark-gray);
-        --color: var(--text-dark);
-        --color-shadow: rgba(169, 169, 169, 0.132);
-        --accent-background-color: #5f5f5f;
-    }
+        --background-color: #111827;
+        --main-text-color: #d9d9d9;
+        --sidebar-text-color: #333333;
+        --secondary-text-color: #333333;
+        --header-items: #d9d9d9;
+        --nav-bar: #f5f5f5;
+        --header: #0050b3;
+        --footer: #0050b3;
+        --siderbar-item: #b2b2b2;
+        --siderbar-item-hover: #d1d1d1;
+        --svg-color: #f5f5f5;
+        --border-sidebar-item: rgba(0, 0, 0, 0.5);
 
-    --header-white: #ffffff;
-    --lighter-blue: #91d5ff;
-    /* Lighter shade for hover effects and subtle accents */
-    --accent-blue: #40a9ff;
-    /* Slightly different shade for emphasis, buttons, and icons */
-    --light-blue: #bae7ff;
-    /* Subtle blue for highlights or hover effects */
+        --color: var(--text-dark);
+        --color-shadow: rgba(5, 5, 5, 0.4);
+        --accent-background-color: #1F2937;
+    }
 }
 
-/* Complementary Colors */
 :root {
     --complementary-red: #ff4d4f;
     /* Contrasting color for accents and interactive elements */
@@ -41,36 +54,4 @@
     /* Medium gray for sidebar  */
     --low-medium-gray: #cbcbcb;
     /* Low-Medium gray for sidebar  */
-    --border-sidebar-item: rgba(0, 0, 0, 0.5);
-    /* Border sidebar for sidebar items  */
 }
-
-/* Additional Shades */
-:root {
-    --dark-gray: #333333;
-    /* Backgrounds, especially in dark mode */
-    --light-gray: #f5f5f5;
-    /* Clean and light background for sections */
-}
-
-/* Text Colors */
-:root {
-    & body.light-mode {
-        --text-color: rgba(255, 255, 255, 0.8);
-    }
-
-    & body.dark-mode {
-        --text-color: rgba(0, 0, 0, 0.8);
-    }
-
-    --text-light: #333333;
-    /* Dark text color for light mode */
-    --text-dark: #f5f5f5;
-    /* Light text color for dark mode */
-    --text-color-dark: rgba(0, 0, 0, 0.8);
-}
-
-/* Tips for Usage */
-/* Use variables like var(--main-blue) for background colors and var(--text-light) for text colors */
-/* Example usage: background-color: var(--main-blue); color: var(--text-light); */
-/* Ensure appropriate contrast for readability, especially in dark mode */

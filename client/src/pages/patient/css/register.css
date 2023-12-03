@@ -1,11 +1,11 @@
-#login {
+.registration {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     height: 100dvh;
 
-    #left {
+    .left-register {
         width: 20%;
         height: 100dvh;
         display: flex;
@@ -15,12 +15,11 @@
         background-color: var(--main-blue);
     }
 
-    #right {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        height: 100dvh;
-        width: 80%;
+    .right-register {
+        width: 600px;
+        margin: auto;
+        padding: 2%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
     }
 }

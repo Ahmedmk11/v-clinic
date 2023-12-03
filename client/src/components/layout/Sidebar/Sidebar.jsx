@@ -12,6 +12,7 @@ import adminIcn from '../../../assets/icons/admin.svg'
 import doctorIcn from '../../../assets/icons/doctor.svg'
 import patientIcn from '../../../assets/icons/patient.svg'
 import packageIcn from '../../../assets/icons/package.svg'
+import homeIcn from '../../../assets/icons/home.svg'
 
 const PillsIcon = () => <img style={{ width: 24, height: 24 }} src={pillsIcn} />
 
@@ -25,14 +26,13 @@ const PatientIcon = () => (
 const PackageIcon = () => (
     <img style={{ width: 24, height: 24 }} src={packageIcn} />
 )
+const HomeIcon = () => <img style={{ width: 24, height: 24 }} src={homeIcn} />
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false)
     const navigate = useNavigate()
     const page = window.location.pathname.split('/').pop()
     const userType = window.location.pathname.split('/')[1]
-    const [showAdminSublist, setShowAdminSublist] = useState(false)
-    const [showPackageSublist, setShowPackageSublist] = useState(false)
 
     return (
         <div
