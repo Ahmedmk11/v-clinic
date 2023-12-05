@@ -36,6 +36,7 @@ import NotFound from './pages/general/NotFound/NotFound'
 import UploadDocs from './pages/doctor/UploadDocs'
 import ForgotPassword from './pages/general/ForgotPassword/ForgotPassword'
 import ForbiddenAccess from './pages/general/ForbiddenAccess/ForbiddenAccess'
+import Chat from './components/reusable/Chat/Chat'
 
 import { LoginGuard, PatientGuard, DoctorGuard, AdminGuard } from './AuthGuard'
 
@@ -99,6 +100,7 @@ const RouteSwitch = () => {
                 <Route path='patient/info/:id' element={<PatientInfo />} />
                 <Route path='appointments' element={<DoctorAppointments />} />
                 <Route path='uploadDocuments' element={<UploadDocs />} />
+                <Route path='chat' element={<Chat />} />
             </Route>
 
             <Route
@@ -124,6 +126,7 @@ const RouteSwitch = () => {
                     path='prescription-info'
                     element={<PrescriptionInfo />}
                 />
+                <Route path='chat' element={<Chat />} />
             </Route>
 
             <Route

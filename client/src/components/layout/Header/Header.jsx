@@ -128,7 +128,7 @@ const Header = () => {
     }
 
     const handleViewChat = () => {
-        navigate('/')
+        navigate('chat')
     }
 
     const handleVisibleChange = (flag) => {
