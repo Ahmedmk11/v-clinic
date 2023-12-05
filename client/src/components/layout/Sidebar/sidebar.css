@@ -23,6 +23,7 @@
         cursor: pointer;
         padding: 12px 0px 12px 18px;
         color: var(--sidebar-text-color);
+
         white-space: nowrap;
 
         .anticon {
@@ -31,8 +32,13 @@
 
         &:hover:not(.selected-sidebar-item) {
             background-color: var(--siderbar-item-hover);
+            color: var(--nav-bar-selected-hovered);
         }
     }
+}
+
+.selected-sidebar-item {
+    color: var(--nav-bar-selected-hovered) !important;
 }
 
 .sidebar-expanded {

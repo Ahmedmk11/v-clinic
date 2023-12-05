@@ -1,38 +1,93 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import {
     HomeOutlined,
     TeamOutlined,
     ScheduleOutlined,
     MedicineBoxOutlined,
+    FileAddOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
-import pillsIcn from '../../../assets/icons/pills.svg'
+
 import adminIcn from '../../../assets/icons/admin.svg'
 import doctorIcn from '../../../assets/icons/doctor.svg'
 import patientIcn from '../../../assets/icons/patient.svg'
 import packageIcn from '../../../assets/icons/package.svg'
-import homeIcn from '../../../assets/icons/home.svg'
 
-const PillsIcon = () => <img style={{ width: 24, height: 24 }} src={pillsIcn} />
-
-const AdminIcon = () => <img style={{ width: 24, height: 24 }} src={adminIcn} />
-const DoctorIcon = () => (
-    <img style={{ width: 24, height: 24 }} src={doctorIcn} />
-)
-const PatientIcon = () => (
-    <img style={{ width: 24, height: 24 }} src={patientIcn} />
-)
-const PackageIcon = () => (
-    <img style={{ width: 24, height: 24 }} src={packageIcn} />
-)
-const HomeIcon = () => <img style={{ width: 24, height: 24 }} src={homeIcn} />
+import adminIcn2 from '../../../assets/icons/dark/admin2.svg'
+import doctorIcn2 from '../../../assets/icons/dark/doctor2.svg'
+import patientIcn2 from '../../../assets/icons/dark/patient2.svg'
+import packageIcn2 from '../../../assets/icons/dark/package2.svg'
+import CurrTheme from '../../../contexts/CurrTheme'
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
     const page = window.location.pathname.split('/').pop()
     const userType = window.location.pathname.split('/')[1]
+    const { theme, setTheme } = useContext(CurrTheme)
+
+    const [active, setActive] = useState([
+        page === 'view-admins',
+        page === 'view-doctors',
+        page === 'view-patients',
+        page === 'view-packages',
+    ])
+
+    useEffect(() => {
+        setActive([
+            page === 'view-admins',
+            page === 'view-doctors',
+            page === 'view-patients',
+            page === 'view-packages',
+        ])
+    }, [location])
+
+    const AdminIcon = () => (
+        <img
+            style={{ width: 24, height: 24 }}
+            src={
+                theme === 'light' ? adminIcn : active[0] ? adminIcn : adminIcn2
+            }
+        />
+    )
+    const DoctorIcon = () => (
+        <img
+            style={{ width: 24, height: 24 }}
+            src={
+                theme === 'light'
+                    ? doctorIcn
+                    : active[1]
+                    ? doctorIcn
+                    : doctorIcn2
+            }
+        />
+    )
+    const PatientIcon = () => (
+        <img
+            style={{ width: 24, height: 24 }}
+            src={
+                theme === 'light'
+                    ? patientIcn
+                    : active[2]
+                    ? patientIcn
+                    : patientIcn2
+            }
+        />
+    )
+    const PackageIcon = () => (
+        <img
+            style={{ width: 24, height: 24 }}
+            src={
+                theme === 'light'
+                    ? packageIcn
+                    : active[3]
+                    ? packageIcn
+                    : packageIcn2
+            }
+        />
+    )
 
     return (
         <div
@@ -65,10 +120,11 @@ const Sidebar = () => {
                             onClick={() => {
                                 navigate('view-health-records')
                             }}>
-                            <MedicineBoxOutlined />
+                            <FileAddOutlined />
                             {isExpanded ? 'Health Records' : ''}
                         </p>
                         <p
+                            id='pills-icon'
                             className={
                                 page === 'view-prescriptions'
                                     ? 'sidebar-item selected-sidebar-item'
@@ -77,7 +133,7 @@ const Sidebar = () => {
                             onClick={() => {
                                 navigate('view-prescriptions')
                             }}>
-                            <PillsIcon />
+                            <MedicineBoxOutlined />
                             {isExpanded ? 'Prescriptions' : ''}
                         </p>
                     </>
@@ -113,6 +169,22 @@ const Sidebar = () => {
                 {userType === 'admin' && (
                     <>
                         <p
+                            onMouseEnter={() => {
+                                setActive([
+                                    true,
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
+                            onMouseLeave={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
                             className={
                                 page === 'view-admins'
                                     ? 'sidebar-item selected-sidebar-item'
@@ -125,6 +197,22 @@ const Sidebar = () => {
                             {isExpanded ? 'Admins' : ''}
                         </p>
                         <p
+                            onMouseEnter={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    true,
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
+                            onMouseLeave={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
                             className={
                                 page === 'view-doctors'
                                     ? 'sidebar-item selected-sidebar-item'
@@ -137,6 +225,22 @@ const Sidebar = () => {
                             {isExpanded ? 'Doctors' : ''}
                         </p>
                         <p
+                            onMouseEnter={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    true,
+                                    page === 'view-packages',
+                                ])
+                            }}
+                            onMouseLeave={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
                             className={
                                 page === 'view-patients'
                                     ? 'sidebar-item selected-sidebar-item'
@@ -149,6 +253,22 @@ const Sidebar = () => {
                             {isExpanded ? 'Patients' : ''}
                         </p>
                         <p
+                            onMouseEnter={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    true,
+                                ])
+                            }}
+                            onMouseLeave={() => {
+                                setActive([
+                                    page === 'view-admins',
+                                    page === 'view-doctors',
+                                    page === 'view-patients',
+                                    page === 'view-packages',
+                                ])
+                            }}
                             className={
                                 page === 'view-packages'
                                     ? 'sidebar-item selected-sidebar-item'

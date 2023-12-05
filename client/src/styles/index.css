@@ -186,10 +186,10 @@ input:focus {
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     cursor: pointer;
-    background-color: var(--nav-bar);
+    background-color: var(--back-button);
 
     &:hover {
-        background-color: var(--siderbar-item-hover);
+        background-color: var(--back-hover);
     }
 }
 
@@ -226,12 +226,13 @@ input:focus {
 .ant-form-item-required,
 .ant-steps-item-title,
 .ant-divider-inner-text,
-.ant-modal-body p {
+.ant-modal-body p,
+.error {
     color: var(--main-text-color) !important;
 }
 
 .ant-steps-item-icon {
-    background-color: var(--nav-bar) !important;
+    background-color: var(--back-button) !important;
 }
 
 .ant-steps-item-process {

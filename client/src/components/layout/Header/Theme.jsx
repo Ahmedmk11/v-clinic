@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import moonIcn from '../../../assets/icons/moon2.svg'
+import React, { useState, useEffect, useContext } from 'react'
+import moonIcn from '../../../assets/icons/dark/moon2.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
+
+import CurrTheme from '../../../contexts/CurrTheme'
 
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode')
@@ -16,9 +18,7 @@ const MoonIcon = () => (
 )
 
 const Theme = () => {
-    const [theme, setTheme] = useState(
-        localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
-    )
+    const { theme, setTheme } = useContext(CurrTheme)
 
     useEffect(() => {
         if (document.body.classList.contains('light-mode')) {

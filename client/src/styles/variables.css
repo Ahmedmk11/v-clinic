@@ -8,13 +8,17 @@
         --secondary-text-color: #d9d9d9;
         --header-items: #d9d9d9;
         --nav-bar: #ddd;
+        --back-button: #ddd;
+        --back-hover: #cbcbcb;
         --header: #0a86fa;
         --footer: #0a86fa;
         --siderbar-item: #bfbfbf;
         --siderbar-item-hover: #cbcbcb;
         --svg-color: #292929;
         --border-sidebar-item: rgba(0, 0, 0, 0.5);
-
+        --background-color-input: #ddd;
+        --background-color-input-border: #CCCCCC;
+        --nav-bar-selected-hovered: #333333;
         --color: var(--text-light);
         --color-shadow: rgba(0, 0, 0, 0.1);
         --accent-background-color: #ffffff;
@@ -24,16 +28,21 @@
         --main-blue: #0050b3;
         --background-color: #111827;
         --main-text-color: #d9d9d9;
-        --sidebar-text-color: #333333;
+        --sidebar-text-color: #bcbcbc;
         --secondary-text-color: #333333;
         --header-items: #d9d9d9;
-        --nav-bar: #f5f5f5;
+        --nav-bar: #121723;
+        --back-button: #ccc;
+        --back-hover: #fff;
         --header: #0050b3;
         --footer: #0050b3;
         --siderbar-item: #b2b2b2;
         --siderbar-item-hover: #d1d1d1;
-        --svg-color: #f5f5f5;
+        --svg-color: #fff;
         --border-sidebar-item: rgba(0, 0, 0, 0.5);
+        --background-color-input: #111827;
+        --background-color-input-border: rgba(204, 204, 204, 0.4);
+        --nav-bar-selected-hovered: #333333;
 
         --color: var(--text-dark);
         --color-shadow: rgba(5, 5, 5, 0.4);

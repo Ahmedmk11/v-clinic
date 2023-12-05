@@ -1,8 +1,7 @@
 import './header.css'
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Avatar, Dropdown, Space, message } from 'antd'
-import { useContext } from 'react'
 import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
@@ -11,6 +10,7 @@ import readIcn from '../../../assets/icons/read.svg'
 import logoIcn from '../../../assets/icons/logo.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
+import CurrTheme from '../../../contexts/CurrTheme'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import axiosApi from '../../../utils/axiosApi'
 import { FloatButton } from 'antd'
@@ -39,9 +39,7 @@ const ReadIcon = () => <img style={{ width: 22, height: 22 }} src={readIcn} />
 
 const Header = () => {
     const navigate = useNavigate()
-    const [theme, setTheme] = useState(
-        localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
-    )
+    const { theme, setTheme } = useContext(CurrTheme)
     const { currUser, role } = useContext(CurrUser)
     const [visible, setVisible] = useState(false)
     const [visible2, setVisible2] = useState(false)
