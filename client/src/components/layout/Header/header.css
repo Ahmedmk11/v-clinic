@@ -72,8 +72,8 @@
     padding: 0% !important;
 
     .ant-dropdown-menu-item {
-        height: 60px;
-        width: 320px;
+        height: 90px;
+        width: 360px;
     }
 
     .ant-dropdown-menu-item:hover {

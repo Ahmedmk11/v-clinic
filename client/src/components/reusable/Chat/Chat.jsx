@@ -20,7 +20,12 @@ const Chat = () => {
                     let id = chat.members[0]
                     let senderId = chat.members[0]
                     if (senderId == currUser?._id) senderId = chat.members[1]
-                    return {senderId, name, id: chat._id,members:chat.members}
+                    return {
+                        senderId,
+                        name,
+                        id: chat._id,
+                        members: chat.members,
+                    }
                 })
             )
         })
@@ -41,7 +46,10 @@ const Chat = () => {
                 if (name == currUser.name) name = chat.membersInfo[1]
                 let senderId = chat.members[0]
                 if (senderId == currUser?._id) senderId = chat.members[1]
-                setChats([ ...chats, {senderId, name, id: chat._id,members:chat.members}  ])
+                setChats([
+                    ...chats,
+                    { senderId, name, id: chat._id, members: chat.members },
+                ])
             })
     }
 

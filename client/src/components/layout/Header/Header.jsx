@@ -231,11 +231,14 @@ const Header = () => {
                                     })
                             }}
                             style={{
-                                height: '100%',
+                                height: '90px',
                                 cursor: 'pointer',
                                 marginRight: '-12px',
                                 padding: '16px',
                                 backgroundColor: '#eee',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onMouseEnter={(e) =>
                                 (e.currentTarget.style.backgroundColor = '#ddd')
@@ -258,7 +261,7 @@ const Header = () => {
                 {role !== 'admin' && (
                     <Dropdown
                         trigger={['click']}
-                        placement='bottom'
+                        placement='bottomLeft'
                         overlayStyle={{ borderRadius: 0 }}
                         menu={{
                             items: notifications,

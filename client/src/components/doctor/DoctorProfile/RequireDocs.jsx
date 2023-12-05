@@ -54,9 +54,7 @@ const RequireDocs = ({ docs, status, uploaded_documents }) => {
                 <div className='sub-container'>
                     <h2>Uploaded Documents</h2>
                     <ImageGallery
-                        images={uploaded_documents?.map(
-                            (url) => baseURL + url
-                        )}
+                        images={uploaded_documents?.map((url) => baseURL + url)}
                     />
                 </div>
             </ConditionalRender>

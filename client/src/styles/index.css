@@ -227,8 +227,15 @@ input:focus {
 .ant-steps-item-title,
 .ant-divider-inner-text,
 .ant-modal-body p,
-.error {
+.error,
+.upload-text,
+.anticon.anticon-plus,
+.ant-card-head-title {
     color: var(--main-text-color) !important;
+}
+
+.doctor-reminder {
+    color: #333333 !important;
 }
 
 .ant-steps-item-icon {
@@ -254,4 +261,13 @@ input:focus {
 
 .ant-tabs-tab {
     color: var(--main-text-color) !important;
+}
+
+.ant-input-disabled::placeholder {
+    color: #888 !important;
+}
+
+input:disabled::placeholder,
+.ant-select-selection-placeholder {
+    color: #aaa !important;
 }

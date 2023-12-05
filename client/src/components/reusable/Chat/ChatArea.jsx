@@ -40,9 +40,9 @@ const ChatArea = ({ selectedChat }) => {
     useEffect(() => {
         if (!currUser) return
         socket.current.emit('addUser', currUser?._id)
-        socket.current.on("getUsers", (users) => {
+        socket.current.on('getUsers', (users) => {
             console.log(users)
-          });
+        })
     }, [currUser])
 
     useEffect(() => {
@@ -50,8 +50,10 @@ const ChatArea = ({ selectedChat }) => {
         setLoad(true)
         axiosApi
             .get('chat/get-messages/' + selectedChat?.id)
-            .then((response) => {setChatMessages(response.data);
-            console.log(response.data)})
+            .then((response) => {
+                setChatMessages(response.data)
+                console.log(response.data)
+            })
             .catch((err) => {
                 console.log(err.message)
             })
@@ -59,7 +61,7 @@ const ChatArea = ({ selectedChat }) => {
     }, [selectedChat])
 
     const handleSendMessage = () => {
-console.log(selectedChat)
+        console.log(selectedChat)
 
         if (!message || !currUser || !selectedChat) return
         const receiverId = selectedChat?.members?.find(
@@ -144,10 +146,24 @@ console.log(selectedChat)
                 </Card>
             )}
             {!selectedChat && (
-                <div className='no-contact-selected'>
-                    <p>Choose someone to chat with.</p>
-                    <img src={chatImage} alt='No contact selected' />
-                </div>
+                <Card
+                    title={
+                        'Select a contact to start a conversation or create a new one'
+                    }
+                    className='chat-window'>
+                    <div className='chat-messages'></div>
+
+                    <div className='chat-area'>
+                        <TextArea
+                            disabled
+                            placeholder={'Select a contact to start a chat'}
+                            autoSize={{ minRows: 1, maxRows: 4 }}
+                        />
+                        <Button className='send-button' type='primary' disabled>
+                            <SendOutlined />
+                        </Button>
+                    </div>
+                </Card>
             )}
             {load && (
                 <div className='no-contact-selected'>

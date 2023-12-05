@@ -237,7 +237,9 @@ const Login = () => {
                             Patient account without family: ahmed, ahmed1234
                         </span>
                         <br />
-                        <span>Active doctor account: paul, paul1234</span>
+                        <span>
+                            Active doctor account: iamasurgeon, ahmed123
+                        </span>
                         <br />
                         <span>Inactive doctor account: belly, belly1234</span>
                     </div>
