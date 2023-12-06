@@ -31,7 +31,6 @@ const Chat = () => {
     }, [currUser])
 
     const createNewChat = (contact) => {
-        console.log(contact)
         axiosApi
             .post('chat/create-chat', {
                 sender: currUser?._id,

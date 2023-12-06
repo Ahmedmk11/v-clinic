@@ -6,11 +6,6 @@ import CurrUserContext from '../../../contexts/CurrUser'
 const Contacts = ({ contacts, selectChat, selectedChat, createNewChat }) => {
     const [open, setOpen] = useState(false)
     const { role } = useContext(CurrUserContext)
-    useEffect(() => {
-        console.log(selectedChat)
-        console.log(contacts)
-    }
-    )
     return (
         <div>
             <div className='contacts-header'>

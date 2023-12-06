@@ -17,7 +17,6 @@ const UploadMedicalRecords = () => {
         for (let i = 0; i < fileList.length; i++) {
             formData.append(`files`, fileList[i].originFileObj)
         }
-        console.log(formData)
         formData.append('id', Patient._id)
         axiosApi
             .post('/patient/upload-health-records', formData)

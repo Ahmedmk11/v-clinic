@@ -61,8 +61,6 @@ const ChatArea = ({ selectedChat }) => {
     }, [selectedChat])
 
     const handleSendMessage = () => {
-        console.log(selectedChat)
-
         if (!message || !currUser || !selectedChat) return
         const receiverId = selectedChat?.members?.find(
             (member) => member !== currUser?._id
