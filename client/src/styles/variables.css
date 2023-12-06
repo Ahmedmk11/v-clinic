@@ -22,7 +22,7 @@
         --color: var(--text-light);
         --color-shadow: rgba(0, 0, 0, 0.1);
         --accent-background-color: #ffffff;
-        --card-border: #fff;
+        --card-border: #f0f0f0;
     }
 
     & body.dark-mode {
