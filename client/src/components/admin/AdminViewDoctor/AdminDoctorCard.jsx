@@ -6,7 +6,7 @@ const AdminDoctorCard = ({ doctor }) => {
         navigate(`/admin/doctor/${doctor._id}`)
     }
     return (
-        <div className='card' onClick={handleSubmit}>
+        <div className='card'>
             <h3>{doctor.username}</h3>
             <p>
                 <strong>ID: </strong>
@@ -29,6 +29,7 @@ const AdminDoctorCard = ({ doctor }) => {
                 {doctor.speciality}
             </p>
             <Button
+                onClick={handleSubmit}
                 type='primary'
                 style={{
                     marginLeft: '65%',

@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import { Modal, Form, Input, Select, Checkbox } from 'antd'
 import axiosApi from '../../../utils/axiosApi'
 const { Option } = Select
-const LinkFamilyMember = ({currUser,openFamilyModal,setOpenFamilyModal}) => {
-    
+const LinkFamilyMember = ({
+    currUser,
+    openFamilyModal,
+    setOpenFamilyModal,
+}) => {
     const [confirmFamilyLoading, setConfirmFamilyLoading] = useState(false)
     const [familyMemberEmail, setFamilyMemberEmail] = useState('')
     const [familyMemberPhone, setFamilyMemberPhone] = useState('')
@@ -19,16 +22,13 @@ const LinkFamilyMember = ({currUser,openFamilyModal,setOpenFamilyModal}) => {
             if (formFamilyRef.current) {
                 await formFamilyRef.current.validateFields()
 
-                await axiosApi.post(
-                    `/patient/add-to-family/${currUser?._id}`,
-                    {
-                        gender: currUser?.gender,
-                        email: useEmail ? familyMemberEmail : '',
-                        phoneNumber: useEmail ? '' : familyMemberPhone,
-                        relation: familyMemberRelation,
-                        linkingCode: familyLinkingCode,
-                    }
-                )
+                await axiosApi.post(`/patient/add-to-family/${currUser?._id}`, {
+                    gender: currUser?.gender,
+                    email: useEmail ? familyMemberEmail : '',
+                    phoneNumber: useEmail ? '' : familyMemberPhone,
+                    relation: familyMemberRelation,
+                    linkingCode: familyLinkingCode,
+                })
             }
 
             setOpenFamilyModal(false)
@@ -141,6 +141,7 @@ const LinkFamilyMember = ({currUser,openFamilyModal,setOpenFamilyModal}) => {
                     />
                 </Form.Item>
                 <Checkbox
+                    className='login-text'
                     onChange={(e) => {
                         setUseEmail(!e.target.checked)
                     }}>

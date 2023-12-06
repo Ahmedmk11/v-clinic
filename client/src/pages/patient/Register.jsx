@@ -2,26 +2,30 @@ import { Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { LeftCircleOutlined } from '@ant-design/icons'
 import PatientRegistrationLogic from '../../components/patient/Register/PatientRegistrationLogic'
+import logoIcn from '../../assets/icons/logo.svg'
+import './css/register.css'
+import Theme from '../../components/layout/Header/Theme'
+
+const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
 
 const PatientRegistration = () => {
     return (
-        <div
-            style={{
-                width: '600px',
-                margin: 'auto',
-                padding: '2%',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-            }}>
-            <Link to='/login'>
-                <Button
-                    icon={<LeftCircleOutlined />}
-                    size='small'
-                    type='primary'>
-                    Back to Login
-                </Button>
-            </Link>
-            <PatientRegistrationLogic mode={1} setNewAccountModalOpen={null} />
+        <div className='registration'>
+            <Theme />
+            <div className='left-register'>
+                <LogoIcon />
+            </div>
+            <div className='right-register'>
+                <Link to='/login'>
+                    <Button icon={<LeftCircleOutlined />} type='primary'>
+                        Back to Login
+                    </Button>
+                </Link>
+                <PatientRegistrationLogic
+                    mode={1}
+                    setNewAccountModalOpen={null}
+                />
+            </div>
         </div>
     )
 }

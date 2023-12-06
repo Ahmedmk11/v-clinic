@@ -1,8 +1,7 @@
 import './header.css'
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Avatar, Dropdown, Space, message } from 'antd'
-import { useContext } from 'react'
 import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
@@ -11,9 +10,16 @@ import readIcn from '../../../assets/icons/read.svg'
 import logoIcn from '../../../assets/icons/logo.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
+import CurrTheme from '../../../contexts/CurrTheme'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import axiosApi from '../../../utils/axiosApi'
 import { FloatButton } from 'antd'
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode')
+} else {
+    document.body.classList.add('light-mode')
+}
 
 const SunIcon = () => (
     <img
@@ -33,11 +39,10 @@ const ReadIcon = () => <img style={{ width: 22, height: 22 }} src={readIcn} />
 
 const Header = () => {
     const navigate = useNavigate()
-    const [theme, setTheme] = useState(
-        document.body.classList.contains('light-mode') ? 'light' : 'dark'
-    )
+    const { theme, setTheme } = useContext(CurrTheme)
     const { currUser, role } = useContext(CurrUser)
     const [visible, setVisible] = useState(false)
+    const [visible2, setVisible2] = useState(false)
     const [userNotifications, setUserNotifications] = useState([
         {
             _id: 'no-notifs',
@@ -49,6 +54,22 @@ const Header = () => {
             message_doctor: 'No notifications',
         },
     ])
+
+    useEffect(() => {
+        if (document.body.classList.contains('light-mode')) {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.remove('light-mode')
+                document.body.classList.add('dark-mode')
+                setTheme('dark')
+            }
+        } else {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.remove('dark-mode')
+                document.body.classList.add('light-mode')
+                setTheme('light')
+            }
+        }
+    }, [])
 
     const LogoIcon = () => (
         <img
@@ -97,19 +118,25 @@ const Header = () => {
             document.body.classList.remove('light-mode')
             document.body.classList.add('dark-mode')
             setTheme('dark')
+            localStorage.setItem('theme', 'dark')
         } else {
             document.body.classList.remove('dark-mode')
             document.body.classList.add('light-mode')
             setTheme('light')
+            localStorage.setItem('theme', 'light')
         }
     }
 
     const handleViewChat = () => {
-        navigate('/')
+        navigate('chat')
     }
 
     const handleVisibleChange = (flag) => {
         setVisible(flag)
+    }
+
+    const handleVisibleChange2 = (flag) => {
+        setVisible2(flag)
     }
 
     const items = [
@@ -204,11 +231,14 @@ const Header = () => {
                                     })
                             }}
                             style={{
-                                height: '100%',
+                                height: '90px',
                                 cursor: 'pointer',
                                 marginRight: '-12px',
                                 padding: '16px',
                                 backgroundColor: '#eee',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onMouseEnter={(e) =>
                                 (e.currentTarget.style.backgroundColor = '#ddd')
@@ -231,7 +261,7 @@ const Header = () => {
                 {role !== 'admin' && (
                     <Dropdown
                         trigger={['click']}
-                        placement='bottom'
+                        placement='bottomLeft'
                         overlayStyle={{ borderRadius: 0 }}
                         menu={{
                             items: notifications,
@@ -254,10 +284,21 @@ const Header = () => {
                     </Dropdown>
                 )}
                 <ConditionalRender condition={role != 'admin'}>
-                    <WalletOutlined className='ant-wallet' />
-                    <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                    <div
+                        id='wallet-amount'
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '5px',
+                        }}>
+                        <WalletOutlined className='ant-wallet' />
+                        <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                    </div>
                 </ConditionalRender>
                 <Dropdown
+                    open={visible2}
+                    onOpenChange={handleVisibleChange2}
                     menu={{
                         items,
                     }}>

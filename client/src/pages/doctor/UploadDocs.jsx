@@ -184,9 +184,7 @@ const UploadDocs = () => {
                                 flexDirection: 'column',
                                 alignItems: 'flex-end',
                             }}>
-                            <Button
-                                type='primary'
-                                htmlType='submit'>
+                            <Button type='primary' htmlType='submit'>
                                 Submit Documents
                             </Button>
                         </Form.Item>

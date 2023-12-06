@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
 import {
     Button,
@@ -16,6 +16,7 @@ import axiosApi from '../../../utils/axiosApi'
 import ConditionalRender from '../../../components/reusable/ConditionalRender/ConditionalRender'
 import logoIcn from '../../../assets/icons/logo.svg'
 import './Login.css'
+import Theme from '../../../components/layout/Header/Theme'
 
 const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
 
@@ -56,10 +57,12 @@ const Login = () => {
 
     return (
         <div id='login'>
+            <Theme />
             <Button
+                type='link'
                 style={{
                     position: 'absolute',
-                    top: 0,
+                    bottom: 0,
                     right: 0,
                     margin: '1rem',
                 }}
@@ -71,7 +74,9 @@ const Login = () => {
             </div>
             <div id='right'>
                 <Space wrap>
-                    <h2>Login as a{userData.role == 'admin' && 'n'}</h2>
+                    <h2 className='login-text'>
+                        Login as a{userData.role == 'admin' && 'n'}
+                    </h2>
                     <Select
                         allowClear
                         defaultValue='patient'
@@ -164,9 +169,8 @@ const Login = () => {
                                         ...userData,
                                         remember: e.target.checked,
                                     })
-                                }}>
-                                Remember me
-                            </Checkbox>
+                                }}></Checkbox>
+                            <span className='login-text r'>Remember me</span>
                         </Form.Item>
                         <Form.Item>
                             <Button
@@ -197,7 +201,9 @@ const Login = () => {
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}>
-                            <p style={{ marginRight: 0 }}>
+                            <p
+                                className='login-text'
+                                style={{ marginRight: 0 }}>
                                 Dont have an account?
                                 <Button
                                     type='link'
@@ -231,7 +237,9 @@ const Login = () => {
                             Patient account without family: ahmed, ahmed1234
                         </span>
                         <br />
-                        <span>Active doctor account: paul, paul1234</span>
+                        <span>
+                            Active doctor account: iamasurgeon, ahmed123
+                        </span>
                         <br />
                         <span>Inactive doctor account: belly, belly1234</span>
                     </div>

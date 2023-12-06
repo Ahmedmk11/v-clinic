@@ -1,6 +1,7 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
 import Medicine from '../models/medicineModel.js'
+import AppointmentModel from '../models/appointmentsModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
 

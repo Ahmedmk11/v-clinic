@@ -21,14 +21,9 @@ body {
     min-height: 100dvh;
 }
 
-body.light-mode {
-    background-color: var(--light-gray);
-    color: var(--text-light);
-}
-
-body.dark-mode {
-    background-color: var(--dark-gray);
-    color: var(--text-dark);
+body {
+    background-color: var(--background-color);
+    color: var(--main-text-color);
 }
 
 #root {
@@ -108,8 +103,12 @@ input:focus {
     margin: 2%;
 
     & a {
-        color: var(--main-blue);
+        color: var(--main-text-color) !important;
         text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 
@@ -187,8 +186,88 @@ input:focus {
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     cursor: pointer;
+    background-color: var(--back-button);
 
     &:hover {
-        background-color: #ddd;
+        background-color: var(--back-hover);
     }
+}
+
+.ant-modal .ant-modal-content {
+    .ant-modal-title {
+        background-color: var(--background-color);
+        color: var(--main-text-color) !important;
+    }
+
+    background-color: var(--background-color);
+    color: var(--main-text-color) !important;
+
+    .ant-form-item-required {
+        color: var(--main-text-color) !important;
+    }
+
+    .ant-modal-close-x {
+        color: var(--main-text-color) !important;
+    }
+}
+
+.login-text {
+    color: var(--main-text-color);
+
+    &.r {
+        margin-left: 10px;
+    }
+}
+
+.slot-item {
+    color: black !important;
+}
+
+.ant-form-item-required,
+.ant-steps-item-title,
+.ant-divider-inner-text,
+.ant-modal-body p,
+.error,
+.upload-text,
+.anticon.anticon-plus,
+.ant-card-head-title {
+    color: var(--main-text-color) !important;
+}
+
+.doctor-reminder {
+    color: #333333 !important;
+}
+
+.ant-steps-item-icon {
+    background-color: var(--back-button) !important;
+}
+
+.ant-steps-item-process {
+    .ant-steps-item-icon {
+        background-color: var(--main-blue) !important;
+    }
+}
+
+.logged-out-theme {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: calc(1rem + 4px);
+}
+
+.edit-buttons .ant-btn:disabled {
+    color: #696969 !important;
+}
+
+.ant-tabs-tab {
+    color: var(--main-text-color) !important;
+}
+
+.ant-input-disabled::placeholder {
+    color: #888 !important;
+}
+
+input:disabled::placeholder,
+.ant-select-selection-placeholder {
+    color: #aaa !important;
 }

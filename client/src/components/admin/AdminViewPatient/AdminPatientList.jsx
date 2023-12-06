@@ -24,9 +24,11 @@ const PatientList = ({ patients }) => {
             indexOfFirstPatient,
             indexOfLastPatient
         )
+
+        console.log('heekkekde', currentPatients[0])
         return currentPatients.length
             ? currentPatients.map((patient) => (
-                  <AdminPatientCard key={patient.id} patient={patient} />
+                  <AdminPatientCard key={patient._id} patient={patient} />
               ))
             : 'No patients to show'
     }

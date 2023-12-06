@@ -6,7 +6,7 @@ const AdminPackageCard = ({ Package }) => {
         navigate(`/admin/package/${Package._id}`)
     }
     return (
-        <div className='card' onClick={handleSubmit}>
+        <div className='card'>
             <h3>{Package.name}</h3>
             <p>
                 <strong>Price: </strong> {Package.price} L.E.
@@ -16,6 +16,7 @@ const AdminPackageCard = ({ Package }) => {
                 {Package.sessionDiscount}%
             </p>
             <Button
+                onClick={handleSubmit}
                 type='primary'
                 style={{
                     marginLeft: '65%',
