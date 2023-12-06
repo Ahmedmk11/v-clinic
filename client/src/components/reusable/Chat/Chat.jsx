@@ -17,7 +17,6 @@ const Chat = () => {
                 response.data?.map((chat) => {
                     let name = chat.membersInfo[0]
                     if (name == currUser.name) name = chat.membersInfo[1]
-                    let id = chat.members[0]
                     let senderId = chat.members[0]
                     if (senderId == currUser?._id) senderId = chat.members[1]
                     return {
