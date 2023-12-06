@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { DownloadOutlined } from '@ant-design/icons'
 import PrescriptionContext from '../../../contexts/SelectedPrescription'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import axiosApi from '../../../utils/axiosApi'
 import CurrUserContext from '../../../contexts/CurrUser'
 const PrescriptionCard = ({ prescription }) => {
@@ -13,6 +13,20 @@ const PrescriptionCard = ({ prescription }) => {
     const handleSelect = () => {
         setSelectedPrescription(prescription)
         navigate('/patient/prescription-info')
+    }
+
+    const fillCartWithPrescription = async () => {
+        try {
+            await axiosApi.post(`/cart/prescription/${prescription._id}`, {
+                id: currUser._id,
+            })
+        const newTab = window.open();
+        newTab.location.href = 'http://localhost:5173/login?redirect=true';
+        } catch (error) {
+        message.error(error.response.data.message);
+        console.error(error.message);
+        }
+        
     }
 
     const handleDownload = () => {
@@ -76,6 +90,9 @@ const PrescriptionCard = ({ prescription }) => {
                 {prescription.medications.length}
             </p>
             <div className='edit-buttons'>
+                <Button type='primary' onClick={fillCartWithPrescription}>
+                    Buy Prescription
+                </Button>
                 <Button type='primary' onClick={handleSelect}>
                     View Prescription
                 </Button>
