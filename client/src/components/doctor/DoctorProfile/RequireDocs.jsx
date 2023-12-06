@@ -5,9 +5,8 @@ import { useState } from 'react'
 import ImageGallery from '../../reusable/ImageGallery/ImageGallery'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import { baseURL } from '../../../utils/axiosApi'
-import { Button } from 'antd'
-const RequireDocs = ({ docs, status, uploaded_documents }) => {
-    const [show, setShow] = useState(true)
+import { Button ,Alert,Space} from 'antd'
+const RequireDocs = ({ docs, status,children}) => {
     const navigate = useNavigate()
     const handleUpload = () => {
         navigate('/doctor/uploadDocuments')
@@ -18,27 +17,30 @@ const RequireDocs = ({ docs, status, uploaded_documents }) => {
             <ConditionalRender
                 condition={
                     docs?.length < 3 &&
-                    status?.toLowerCase() == 'pending' &&
-                    show
+                    status?.toLowerCase() == 'pending'
                 }>
-                <div className='sub-container doctor-reminder'>
-                    <div
-                        className='close'
-                        onClick={() => {
-                            setShow(false)
-                        }}>
-                        <CloseOutlined />
-                    </div>
-                    <p>
-                        Thank you for registering with our platform. We
-                        appreciate your interest in joining our community. To
-                        complete your registration process, we kindly request
-                        you to submit some documents
-                    </p>
+                <div className=' doctor-reminder'>
+                <Alert
+                action={
+        <Space>
+          <Button  size="small" onClick={handleUpload}>
+            Proceed
+          </Button>
+        </Space>
+      }
+                       message=' Thank you for registering with our platform. We
+                       appreciate your interest in joining our community. To
+                       complete your registration process, we kindly request
+                       you to submit some documents down below.' 
+                          type='warning'
+                            showIcon
+                            closable
+                   />
                 </div>
             </ConditionalRender>
+            {children}
             <ConditionalRender
-                condition={status?.toLowerCase() == 'pending' && show}>
+                condition={status?.toLowerCase() == 'pending'}>
                 <div className='sub-container'>
                     <h2>Documents Upload</h2>
                     <p>
@@ -50,14 +52,7 @@ const RequireDocs = ({ docs, status, uploaded_documents }) => {
                     </Button>
                 </div>
             </ConditionalRender>
-            <ConditionalRender condition={status?.toLowerCase() == 'active'}>
-                <div className='sub-container'>
-                    <h2>Uploaded Documents</h2>
-                    <ImageGallery
-                        images={uploaded_documents?.map((url) => baseURL + url)}
-                    />
-                </div>
-            </ConditionalRender>
+            
         </>
     )
 }

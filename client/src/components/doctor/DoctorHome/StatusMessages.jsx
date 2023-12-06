@@ -25,9 +25,11 @@ const StatusMessages = ({ Doctor }) => {
                         complete your registration process, we kindly request
                         you to submit some documents
                     </h3>
-                    <Button type='primary' onClick={handleUpload}>
+                   <div className='edit-buttons'>
+                   <Button type='primary' onClick={handleUpload}>
                         Upload Documents
                     </Button>
+                   </div>
                 </div>
             </ConditionalRender>
             <ConditionalRender

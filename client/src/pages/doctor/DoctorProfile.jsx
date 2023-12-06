@@ -1,12 +1,14 @@
 import './css/doctorProfile.css'
 import doctorImg from '../../assets/imgs/doctorProfile.png'
 import { useState, useContext, useEffect, useRef } from 'react'
-import { Button, Modal, Form, Input } from 'antd'
+import { Button, Modal, Form, Input, Alert } from 'antd'
 import CurrUserContext from '../../contexts/CurrUser'
 import RequireDocs from '../../components/doctor/DoctorProfile/RequireDocs'
 import DoctorCalender from '../../components/doctor/DoctorProfile/DoctorCalender'
 import ConditionalRender from '../../components/reusable/ConditionalRender/ConditionalRender'
-import axiosApi from '../../utils/axiosApi'
+import axiosApi ,{baseURL}from '../../utils/axiosApi'
+import ImageGallery from '../../components/reusable/ImageGallery/ImageGallery'
+
 const DoctorProfile = () => {
     const {
         currUser,
@@ -36,15 +38,12 @@ const DoctorProfile = () => {
             if (formRef.current) {
                 await formRef.current.validateFields()
 
-                await axiosApi.put(
-                    `/auth/change-password`,
-                    {
-                        id: currUser._id,
-                        role: role,
-                        oldPassword,
-                        newPassword,
-                    }
-                )
+                await axiosApi.put(`/auth/change-password`, {
+                    id: currUser._id,
+                    role: role,
+                    oldPassword,
+                    newPassword,
+                })
             }
 
             setOpen(false)
@@ -96,7 +95,8 @@ const DoctorProfile = () => {
     const getButtons = () => {
         return EditMode ? (
             <div className='edit-buttons'>
-                <Button size='large'
+                <Button
+                    size='large'
                     onClick={() => {
                         setEditMode(false)
                         setDoctorInfo(currUser)
@@ -106,8 +106,8 @@ const DoctorProfile = () => {
                     Cancel
                 </Button>
                 <Button
-                type='primary'
-                     size='large'
+                    type='primary'
+                    size='large'
                     disabled={SaveButtonClicked}
                     onClick={handleSave}>
                     Save
@@ -116,16 +116,15 @@ const DoctorProfile = () => {
         ) : (
             <div className='edit-buttons'>
                 <Button
-                   type='primary'
-                   size='large'
+                    type='primary'
+                    size='large'
                     onClick={() => {
                         setEditMode(true)
                         setEditMessage('')
                     }}>
                     Edit Profile
                 </Button>
-                <Button type='primary'
-                     size='large' onClick={showModal}>
+                <Button type='primary' size='large' onClick={showModal}>
                     Change Password
                 </Button>
             </div>
@@ -135,10 +134,7 @@ const DoctorProfile = () => {
     const handleSave = async () => {
         setSaveButtonClicked(true)
         try {
-            await axiosApi.put(
-                `/doctor/update-doctor`,
-                DoctorInfo
-            )
+            await axiosApi.put(`/doctor/update-doctor`, DoctorInfo)
             setDoctor(DoctorInfo)
             setEditMode(false)
             setEditMessage('success')
@@ -157,13 +153,30 @@ const DoctorProfile = () => {
         return (
             <>
                 <h2 style={{ marginBottom: '0px' }}>My Info</h2>
-                <div className={`message ${EditMessage}`}>
-                    {EditMessage === 'success'
-                        ? 'Saved successfully!'
-                        : EditMessage === 'failed'
-                        ? 'Could not save. Please try again later.'
-                        : 'Did not save any changes.'}
-                </div>
+                {EditMessage === 'success' && (
+                    <Alert
+                        message='Saved successfully'
+                        type='success'
+                        showIcon
+                        closable
+                    />
+                )}
+                {EditMessage === 'failed' && (
+                    <Alert
+                        message='Could not save. Please try again later.'
+                        type='error'
+                        showIcon
+                        closable
+                    />
+                )}
+                {EditMessage === 'canceled' && (
+                    <Alert
+                        message='Did not save any changes.'
+                        type='info'
+                        showIcon
+                        closable
+                    />
+                )}
                 <ul>
                     {getDoctorData('education', 'text', 'Education')}
                     {getDoctorData('email', 'email', 'Email')}
@@ -192,16 +205,24 @@ const DoctorProfile = () => {
                         </p>
                     </section>
                 </div>
-                <div className='doctor-info-container'>{getDoctorInfo()}</div>
+                <RequireDocs
+                    docs={currUser?.uploaded_documents}
+                    status={currUser?.status}
+                    children={ <div className='doctor-info-container'>{getDoctorInfo()}</div>}
+                />
+               
                 <ConditionalRender
                     condition={currUser?.contract_acceptance == 'Accepted'}>
                     <DoctorCalender />
                 </ConditionalRender>
-                <RequireDocs
-                    docs={currUser?.uploaded_documents}
-                    status={currUser?.status}
-                    uploaded_documents={currUser?.uploaded_documents}
-                />
+                <ConditionalRender condition={currUser?.status?.toLowerCase() == 'active'}>
+                <div className='sub-container'>
+                    <h2>Uploaded Documents</h2>
+                    <ImageGallery
+                        images={currUser?.uploaded_documents?.map((url) => baseURL + url)}
+                    />
+                </div>
+            </ConditionalRender>
             </div>
             <Modal
                 title='Change Password'
