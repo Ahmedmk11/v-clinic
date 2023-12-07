@@ -293,7 +293,7 @@ const Header = () => {
                             gap: '5px',
                         }}>
                         <WalletOutlined className='ant-wallet' />
-                        <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                        <span>${currUser?.wallet?.toFixed(0)}</span>
                     </div>
                 </ConditionalRender>
                 <Dropdown

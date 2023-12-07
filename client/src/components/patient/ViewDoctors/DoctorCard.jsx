@@ -19,7 +19,7 @@ const DoctorCard = ({ doctor, discount }) => {
                         {doctor?.hourly_rate?.toFixed(0)}
                     </span>{' '}
                 </ConditionalRender>
-                E£
+                $
                 {((doctor?.hourly_rate * 1.1).toFixed(0) * discount).toFixed(0)}{' '}
             </p>
             <div className='edit-buttons'>

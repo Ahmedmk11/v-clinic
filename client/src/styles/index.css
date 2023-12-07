@@ -230,7 +230,8 @@ input:focus {
 .error,
 .upload-text,
 .anticon.anticon-plus,
-.ant-card-head-title {
+.ant-card-head-title,
+.main-text {
     color: var(--main-text-color) !important;
 }
 

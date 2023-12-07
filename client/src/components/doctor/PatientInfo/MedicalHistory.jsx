@@ -41,7 +41,9 @@ const MedicalHistory = ({ medicalHistory }) => {
                                     />
                                 }
                                 hoverable>
-                                <h3>Chronic Conditions</h3>
+                                <h3 className='main-text'>
+                                    Chronic Conditions
+                                </h3>
                                 {medicalHistory.chronicConditions.map(
                                     (condition, index) => (
                                         <div

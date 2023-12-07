@@ -110,20 +110,20 @@ const AddMedicalRecord = ({
             onCancel={handleCancel}
             width={600}
             footer={[
-                <div key="footerdiv8679">
+                <div key='footerdiv8679'>
                     <ConditionalRender
-                    condition={page === 1}
-                    elseComponent={<Page2Buttons />}>
-                    <Button onClick={handleCancel}>Cancel</Button>
-                    <Button
-                        key='next-button0'
-                        type='primary'
-                        onClick={() =>
-                            form.validateFields().then(() => setPage(2))
-                        }>
-                        Next
-                    </Button>
-                </ConditionalRender>
+                        condition={page === 1}
+                        elseComponent={<Page2Buttons />}>
+                        <Button onClick={handleCancel}>Cancel</Button>
+                        <Button
+                            key='next-button0'
+                            type='primary'
+                            onClick={() =>
+                                form.validateFields().then(() => setPage(2))
+                            }>
+                            Next
+                        </Button>
+                    </ConditionalRender>
                 </div>,
             ]}>
             <ConditionalRender condition={page === 1}>
@@ -137,7 +137,9 @@ const AddMedicalRecord = ({
                                 message: 'Please select a record type',
                             },
                         ]}>
-                        <Select onChange={handleTypeChange}>
+                        <Select
+                            placeholder='Select a record type'
+                            onChange={handleTypeChange}>
                             {renderOptions()}
                         </Select>
                     </Form.Item>
