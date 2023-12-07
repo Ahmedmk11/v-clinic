@@ -3,6 +3,16 @@ import { Button, Form, Input, DatePicker, Select, Steps, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import axiosApi from '../../../utils/axiosApi'
 import CurrUserContext from '../../../contexts/CurrUser'
+import {
+    UserOutlined,
+    MailOutlined,
+    LockOutlined,
+    DollarOutlined,
+    BookOutlined,
+    PhoneOutlined,
+    NumberOutlined,
+    NodeIndexOutlined
+} from '@ant-design/icons'
 
 const { Step } = Steps
 const { Option } = Select
@@ -172,7 +182,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                       <Input prefix={<UserOutlined/>} placeholder='Username' />
                     </Form.Item>
                     <Form.Item
                         name='name'
@@ -193,7 +203,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<UserOutlined/>} placeholder='Name' />
                     </Form.Item>
                     <Form.Item
                         name='email'
@@ -219,7 +229,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<MailOutlined/>} placeholder='Email'/>
                     </Form.Item>
                     <Form.Item
                         name='password'
@@ -248,7 +258,8 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input.Password />
+                        <Input.Password  prefix={<LockOutlined />}
+                            placeholder='8 Characters password, minimum 1 number'/>
                     </Form.Item>
                 </>
             ),
@@ -312,7 +323,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<NumberOutlined />}  placeholder="National Id"/>
                     </Form.Item>
 
                     <Form.Item
@@ -366,7 +377,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<PhoneOutlined />} placeholder="Phone Number" />
                     </Form.Item>
                 </>
             ),
@@ -394,7 +405,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                         <Input prefix={<UserOutlined/>} placeholder='Name' />
                     </Form.Item>
                     <Form.Item
                         name='emergencyPhoneNumber'
@@ -420,7 +431,7 @@ const PatientRegistrationLogic = ({
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<PhoneOutlined/>} placeholder="Phone Number"/>
                     </Form.Item>
                     <Form.Item
                         name='emergencyRelation'
@@ -432,7 +443,7 @@ const PatientRegistrationLogic = ({
                                     'Please input emergency contact relation!',
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<NodeIndexOutlined />} placeholder="Relation" />
                     </Form.Item>
                 </>
             ),

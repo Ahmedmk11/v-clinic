@@ -5,6 +5,12 @@ import AppointmentModel from '../models/appointmentsModel.js'
 const newChat = async (req, res) => {
     try {
         const { sender, receiver, senderName, receiverName } = req.body
+        const oldChat = await ConversationModel.findOne({
+            members: { $all: [sender, receiver] },
+        })
+        if (oldChat) {
+            return res.status(200).json({ message: 'Chat already exists',chat:oldChat })
+        }
         const chat = new ConversationModel({
             members: [sender, receiver],
             membersInfo: [senderName, receiverName],

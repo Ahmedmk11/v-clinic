@@ -3,7 +3,7 @@ import { Modal, Input, Card } from 'antd'
 import axiosApi from '../../../utils/axiosApi'
 import CurrUserContext from '../../../contexts/CurrUser'
 
-const NewChat = ({ open, onCancel, onContactSelect }) => {
+const NewChat = ({ open, onCancel, onContactSelect,chats }) => {
     const [searchValue, setSearchValue] = useState('')
     const [contacts, setContacts] = useState([])
     const { currUser, role } = useContext(CurrUserContext)
@@ -26,7 +26,7 @@ const NewChat = ({ open, onCancel, onContactSelect }) => {
                     })
                 break
         }
-    }, [currUser])
+    }, [currUser,chats])
 
     const handleContactSelect = (contact) => {
         onContactSelect(contact)
