@@ -16,6 +16,7 @@ import {
     getMedicineByName,
     checkUsernameAvailability,
     checkEmailAvailability,
+    getPatientByDoctorId,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -23,6 +24,7 @@ router.post('/create-doctor', createDoctor)
 router.get('/get-doctors', getDoctors)
 router.get('/get-active-doctors', getActiveDoctors)
 router.get('/get-doctor/:id', getDoctorById)
+router.get('/get-patient/:doctor_id/:patient_id', getPatientByDoctorId)
 router.put('/update-doctor', updateDoctor)
 router.get('/get-appointments/:id', getAppointmentsByDoctorId)
 router.get(

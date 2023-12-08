@@ -105,7 +105,6 @@ async function getPatients(req, res) {
 async function getPatientByID(req, res) {
     try {
         const { id } = req.params
-        const date = new Date()
         let patient = await PatientModel.findById(id)
             .populate('prescriptions')
             .populate('medicalHistory')

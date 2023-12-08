@@ -20,7 +20,7 @@ const PatientInfo = () => {
     const { currUser: Doctor } = useContext(CurrUserContext)
     useEffect(() => {
         axiosApi
-            .get(`/patient/get-patient-by-id/${id}`)
+            .get(`/doctor/get-patient/${Doctor?._id}/${id}`)
             .then((res) => setSelectedPatient(res.data))
             .catch((err) => console.log(err))
     }, [])

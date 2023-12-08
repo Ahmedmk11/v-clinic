@@ -115,6 +115,29 @@ const getDoctorById = async (req, res) => {
     }
 }
 
+// @desc    Get a patient by doctor id
+// @route   GET /api/doctor/get-patient/:id
+// @access  Public
+const getPatientByDoctorId = async (req, res) => {
+    try {
+        const { doctor_id,patient_id } = req.params
+        let patient = await PatientModel.findById(patient_id)
+            .populate('prescriptions')
+            .populate('medicalHistory')
+            .populate('package')
+        patient = {
+            ...patient._doc,
+            prescriptions: patient.prescriptions.filter((prescription) =>
+                prescription.doctor_id.equals(doctor_id)
+            ),
+            medicalHistory: patient.medicalHistory,
+        }
+        res.status(200).json(patient)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
 // @desc    Update a doctor by id
 // @route   PUT /api/doctor/update-doctor
 // @access  Public
@@ -296,6 +319,7 @@ export {
     createDoctor,
     getDoctors,
     getDoctorById,
+    getPatientByDoctorId,
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
