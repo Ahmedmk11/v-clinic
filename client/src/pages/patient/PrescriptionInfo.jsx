@@ -46,12 +46,23 @@ const PrescriptionInfo = () => {
             message.error('You don\'t have enough money in your wallet');
             return;
         } else {
-            message.success('Payment successful');
-            // Update the selectedPrescription status in the state
-            setSelectedPrescription(prevState => ({
-                ...prevState,
-                status: 'filled'
-            }));
+            try {
+                await axiosApi.post(`/patient/buy-prescription-wallet`, 
+                {
+                    prescription_id: SelectedPrescription._id,
+                    patient_id: SelectedPrescription.patient_id,
+                    price: prescriptionPrice.newPrice,
+                    paymentMethod: 'wallet'
+                });
+                message.success('Payment successful');
+                setSelectedPrescription(prevState => ({
+                    ...prevState,
+                    status: 'filled'
+                }));
+            } catch (error) {
+                message.error('Payment failed');
+                console.log(error)
+            }
         }
     };
 
