@@ -61,8 +61,6 @@ const ChatArea = ({ selectedChat }) => {
     }, [selectedChat])
 
     const handleSendMessage = () => {
-        console.log(selectedChat)
-
         if (!message || !currUser || !selectedChat) return
         const receiverId = selectedChat?.members?.find(
             (member) => member !== currUser?._id
@@ -148,7 +146,7 @@ const ChatArea = ({ selectedChat }) => {
             {!selectedChat && (
                 <Card
                     title={
-                        'Select a contact to start a conversation or create a new one'
+                       <span style={{whiteSpace:"pre-wrap"}}>Select a contact to start a conversation or create a new one</span>
                     }
                     className='chat-window'>
                     <div className='chat-messages'></div>

@@ -31,7 +31,6 @@ const Chat = () => {
     }, [currUser])
 
     const createNewChat = (contact) => {
-        console.log(contact)
         axiosApi
             .post('chat/create-chat', {
                 sender: currUser?._id,
@@ -45,11 +44,18 @@ const Chat = () => {
                 if (name == currUser.name) name = chat.membersInfo[1]
                 let senderId = chat.members[0]
                 if (senderId == currUser?._id) senderId = chat.members[1]
+                setSelectedChat({
+                    senderId,
+                    name,
+                    id: chat._id,
+                    members: chat.members,
+                })
                 setChats([
                     ...chats,
                     { senderId, name, id: chat._id, members: chat.members },
                 ])
             })
+            .catch((err) => console.log(err.message))
     }
 
     const handleContactSelect = (contact) => {

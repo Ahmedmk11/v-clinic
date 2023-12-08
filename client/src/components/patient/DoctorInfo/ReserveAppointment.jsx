@@ -28,10 +28,16 @@ const ReserveAppointment = ({
                     const res = await axiosApi.get(
                         `/patient/get-family/${currUser?._id}`
                     )
-                    setFamilyMemberProfiles([
-                        ...res.data.familyMemberProfiles,
-                        { ...currUser, name: 'Yourself' },
-                    ])
+                    if (res.data.familyMemberProfiles?.length > 0) {
+                        setFamilyMemberProfiles([
+                            ...res.data.familyMemberProfiles,
+                            { ...currUser, name: 'Yourself' },
+                        ])
+                    } else {
+                        setFamilyMemberProfiles([
+                            { ...currUser, name: 'Yourself' },
+                        ])
+                    }
                 }
             } catch (error) {
                 console.error(error)
@@ -190,7 +196,7 @@ const ReserveAppointment = ({
                             {doctor?.hourly_rate?.toFixed(0)}
                         </span>{' '}
                     </ConditionalRender>
-                    E£
+                    $
                     {((doctor.hourly_rate * 1.1).toFixed(0) * discount).toFixed(
                         0
                     )}

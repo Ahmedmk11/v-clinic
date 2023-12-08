@@ -6,7 +6,7 @@
         --main-text-color: #333333;
         --sidebar-text-color: #333333;
         --secondary-text-color: #d9d9d9;
-        --header-items: #d9d9d9;
+        --header-items: #fff;
         --nav-bar: #ddd;
         --back-button: #ddd;
         --back-hover: #cbcbcb;
@@ -31,7 +31,7 @@
         --main-text-color: #d9d9d9;
         --sidebar-text-color: #bcbcbc;
         --secondary-text-color: #333333;
-        --header-items: #d9d9d9;
+        --header-items: #fff;
         --nav-bar: #0d1119;
         --back-button: #ccc;
         --back-hover: #fff;

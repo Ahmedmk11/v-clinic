@@ -7,8 +7,7 @@ const PackageInfo = ({ healthPackage, renewalDate = null, status = null }) => {
                 {healthPackage?.name}
             </p>
             <p>
-                <strong>Package Price: </strong>
-                E£{healthPackage?.price}
+                <strong>Package Price: </strong>${healthPackage?.price}
             </p>
             <p>
                 <strong>Session Discount: </strong>

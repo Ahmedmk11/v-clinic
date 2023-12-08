@@ -67,7 +67,7 @@ const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
                                                     }}>
                                                     Price:
                                                 </span>{' '}
-                                                E£{member?.package?.price}
+                                                ${member?.package?.price}
                                             </p>
                                             <p>
                                                 <span

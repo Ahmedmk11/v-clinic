@@ -47,6 +47,7 @@ const PatientInfo = ({ patient }) => {
                                         padding: '0.5rem',
                                         marginRight: '0.5rem',
                                         borderRadius: '0.5rem',
+                                        color: '#000',
                                     }}>
                                     {patient?.linkingCode}
                                 </span>

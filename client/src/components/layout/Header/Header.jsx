@@ -13,7 +13,7 @@ import CurrUser from '../../../contexts/CurrUser'
 import CurrTheme from '../../../contexts/CurrTheme'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import axiosApi from '../../../utils/axiosApi'
-import { FloatButton } from 'antd'
+import { FloatButton,Tooltip } from 'antd'
 
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode')
@@ -213,6 +213,7 @@ const Header = () => {
                             : 'change the code'}
                     </p>
                     {userNotifications[0]._id != 'no-notifs' ? (
+                            <Tooltip placement="right" title={"Mark as read"}>
                         <div
                             onClick={() => {
                                 axiosApi
@@ -246,8 +247,9 @@ const Header = () => {
                             onMouseLeave={(e) =>
                                 (e.currentTarget.style.backgroundColor = '#eee')
                             }>
-                            <ReadIcon className='read-button' />
+                          <ReadIcon className='read-button' />
                         </div>
+                          </Tooltip>
                     ) : null}
                 </div>
             ),
@@ -293,7 +295,7 @@ const Header = () => {
                             gap: '5px',
                         }}>
                         <WalletOutlined className='ant-wallet' />
-                        <span>E£{currUser?.wallet?.toFixed(0)}</span>
+                        <span>${currUser?.wallet?.toFixed(0)}</span>
                     </div>
                 </ConditionalRender>
                 <Dropdown

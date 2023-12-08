@@ -11,7 +11,9 @@ const MedicalRecordFields = ({ medicalRecordType }) => {
         <>
             <ConditionalRender
                 condition={medicalRecordType === 'chronicConditions'}>
-                <h3 style={{ textAlign: 'center' }}>Chronic Conditions</h3>
+                <h3 className='main-text' style={{ textAlign: 'center' }}>
+                    Chronic Conditions
+                </h3>
                 <Form.Item
                     name='name'
                     label='Condition Name'
@@ -54,7 +56,7 @@ const MedicalRecordFields = ({ medicalRecordType }) => {
                         ))}
                     </Select>
                 </Form.Item>
-                <Form.Item name='notes' label='Notes'>
+                <Form.Item required name='notes' label='Notes'>
                     <Input.TextArea />
                 </Form.Item>
             </ConditionalRender>

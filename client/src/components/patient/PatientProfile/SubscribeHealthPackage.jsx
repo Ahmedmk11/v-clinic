@@ -156,7 +156,7 @@ const SubscribeHealthPackage = ({
                         }}>
                         Price:
                     </span>{' '}
-                    E£{packageObj.price}
+                    ${packageObj.price}
                 </p>
                 <p>
                     <span

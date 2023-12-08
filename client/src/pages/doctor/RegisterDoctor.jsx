@@ -6,6 +6,13 @@ import { LeftCircleOutlined } from '@ant-design/icons'
 import logoIcn from '../../assets/icons/logo.svg'
 import '../../pages/patient/css/register.css'
 import Theme from '../../components/layout/Header/Theme'
+import {
+    UserOutlined,
+    MailOutlined,
+    LockOutlined,
+    DollarOutlined,
+    BookOutlined,
+} from '@ant-design/icons'
 
 const { Step } = Steps
 
@@ -106,7 +113,7 @@ const DoctorRegistration = () => {
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<UserOutlined/>} placeholder='Username'/>
                     </Form.Item>
                     <Form.Item
                         name='name'
@@ -127,7 +134,7 @@ const DoctorRegistration = () => {
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<UserOutlined/>} placeholder='Name' />
                     </Form.Item>
                     <Form.Item
                         name='email'
@@ -153,7 +160,7 @@ const DoctorRegistration = () => {
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<MailOutlined/>} placeholder='Email'/>
                     </Form.Item>
                     <Form.Item
                         name='password'
@@ -182,7 +189,10 @@ const DoctorRegistration = () => {
                                 },
                             },
                         ]}>
-                        <Input.Password />
+                        <Input.Password
+                            prefix={<LockOutlined />}
+                            placeholder='8 Characters password, minimum 1 number'
+                        />
                     </Form.Item>
                 </>
             ),
@@ -225,7 +235,10 @@ const DoctorRegistration = () => {
                                     'Please input your educational background!',
                             },
                         ]}>
-                        <Input />
+                         <Input
+            prefix={<BookOutlined />}
+            placeholder="Educational Background"
+          />
                     </Form.Item>
                 </>
             ),
@@ -253,7 +266,7 @@ const DoctorRegistration = () => {
                                 },
                             },
                         ]}>
-                        <Input />
+                        <Input prefix={<DollarOutlined/>} placeholder='Hourly rate' />
                     </Form.Item>
                     <Form.Item
                         name='speciality'
@@ -264,7 +277,7 @@ const DoctorRegistration = () => {
                                 message: 'Please input your speciality!',
                             },
                         ]}>
-                        <Input />
+                        <Input placeholder='Speciality' />
                     </Form.Item>
                     <Form.Item
                         name='affiliation'
@@ -275,7 +288,7 @@ const DoctorRegistration = () => {
                                 message: 'Please input your affiliation!',
                             },
                         ]}>
-                        <Input />
+                        <Input placeholder='Affiliation' />
                     </Form.Item>
                 </>
             ),

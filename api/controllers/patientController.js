@@ -657,8 +657,8 @@ async function getFamily(req, res) {
     try {
         const { id } = req.params
         let family = await FamilyModel.findOne({ 'member.id': id })
-        family.member = family.member.filter((p) => p.id != id)
         if (family) {
+            family.member = family.member.filter((p) => p.id != id)
             const familyMemberProfiles = []
             for (let i = 0; i < family.member.length; i++) {
                 familyMemberProfiles.push(
@@ -672,7 +672,7 @@ async function getFamily(req, res) {
                 familyMemberProfiles: familyMemberProfiles,
             })
         } else {
-            res.json(null)
+            res.json([])
         }
     } catch (error) {
         res.status(500).json({ message: error.message })
