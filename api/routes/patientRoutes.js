@@ -35,7 +35,6 @@ import {
     checkEmailAvailability,
     checkPhoneAvailability,
     checkNidAvailability,
-    createPrecriptionOrder
 } from '../controllers/patientController.js'
 
 const router = express.Router()
