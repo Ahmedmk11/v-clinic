@@ -182,14 +182,14 @@ const ReserveAppointment = ({
                 </div>,
             ]}>
             <Form form={form} layout='vertical'>
-                <p>
+                <p className='main-text'>
                     <strong>Time:</strong> {timeSlot?.startTime} -{' '}
                     {timeSlot?.endTime}
                 </p>
-                <p>
+                <p className='main-text'>
                     <strong>Date:</strong> {new Date(date).toLocaleDateString()}
                 </p>
-                <p>
+                <p className='main-text'>
                     <strong>Session Price: </strong>
                     <ConditionalRender condition={discount != 1}>
                         <span style={{ textDecoration: 'line-through' }}>

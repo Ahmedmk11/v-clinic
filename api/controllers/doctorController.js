@@ -1,7 +1,7 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
 import Medicine from '../models/medicineModel.js'
-import AppointmentModel from '../models/appointmentsModel.js'
+import PrescriptionModel from '../models/prescriptionsModel.js'
 import multer from 'multer'
 import crypto from 'crypto'
 
@@ -103,6 +103,47 @@ const getAllMedicines = async (req, res) => {
     }
 }
 
+const editMedicineByName = async (req, res) => {
+    console.log('Request Body:', req.body) // Log the request body
+
+    try {
+        const medName = req.body.name
+        const aid = req.body.aid
+        const prescription = await PrescriptionModel.findOne({
+            appointment_id: aid,
+        })
+
+        const medicationsPrescription = prescription.medications
+
+        if (medicationsPrescription) {
+            // without the aid field
+            const newMed = req.body
+            delete newMed.aid
+            console.log('New Medicine:', newMed)
+            const medIndex = medicationsPrescription.findIndex(
+                (med) => med.name === medName
+            )
+            medicationsPrescription[medIndex] = newMed
+            await prescription.save()
+
+            const prescriptionRes = await PrescriptionModel.findOne({
+                appointment_id: aid,
+            })
+
+            const medicationsRes = prescriptionRes.medications
+
+            res.status(200).json({
+                message: 'Medicine edited successfully',
+                medications: medicationsRes,
+            })
+        } else {
+            res.status(404).json({ message: 'Medicine not found' })
+        }
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
 // @desc    Get a doctor by id
 // @route   GET /api/doctor/get-doctor/:id
 // @access  Public
@@ -120,7 +161,7 @@ const getDoctorById = async (req, res) => {
 // @access  Public
 const getPatientByDoctorId = async (req, res) => {
     try {
-        const { doctor_id,patient_id } = req.params
+        const { doctor_id, patient_id } = req.params
         let patient = await PatientModel.findById(patient_id)
             .populate('prescriptions')
             .populate('medicalHistory')
@@ -315,6 +356,35 @@ const checkEmailAvailability = async (req, res) => {
     }
 }
 
+const deleteMedicine = async (req, res) => {
+    try {
+        const { id } = req.params
+        const prescription = await PrescriptionModel.findOne({
+            appointment_id: id,
+        })
+        const medicationsPrescription = prescription.medications
+        if (medicationsPrescription) {
+            const medIndex = medicationsPrescription.findIndex(
+                (med) => med._id == id
+            )
+            medicationsPrescription.splice(medIndex, 1)
+            await prescription.save()
+            const prescriptionRes = await PrescriptionModel.findOne({
+                appointment_id: id,
+            })
+            const medicationsRes = prescriptionRes.medications
+            res.status(200).json({
+                message: 'Medicine deleted successfully',
+                medications: medicationsRes,
+            })
+        } else {
+            res.status(404).json({ message: 'Medicine not found' })
+        }
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
 export {
     createDoctor,
     getDoctors,
@@ -333,4 +403,6 @@ export {
     getMedicineByName,
     checkUsernameAvailability,
     checkEmailAvailability,
+    editMedicineByName,
+    deleteMedicine,
 }

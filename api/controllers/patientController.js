@@ -1040,7 +1040,11 @@ const getNotifications = async (req, res) => {
             type == 'patient' ? { patient_id: pid } : { doctor_id: pid }
         )
 
-        res.status(200).json(notifications)
+        // res.status(200).json(notifications) filter it by notification date, only return notifications with date not yet reached
+
+        notifications = notifications.filter(
+            (notification) => notification.date > new Date()
+        )
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error' })
     }

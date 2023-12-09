@@ -1,6 +1,6 @@
-import { Modal, Button, Form, message, Input, Select } from 'antd'
+import { Modal, Button, Form, message, Input, Select, Space } from 'antd'
 import './AppointmentPrescription.css'
-import { CloseOutlined } from '@ant-design/icons'
+import { CloseOutlined, EditOutlined } from '@ant-design/icons'
 import axiosApi from '../../../utils/axiosApi'
 import { useState, useEffect } from 'react'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
@@ -11,6 +11,8 @@ const AppointmentPrescription = ({
     setShowModal,
 }) => {
     const [form] = Form.useForm()
+    const [medForm] = Form.useForm()
+
     const [currMedicines, setCurrMedicines] = useState(null)
     const [allMedicines, setAllMedicines] = useState([])
     const [medicines, setMedicines] = useState(null)
@@ -18,6 +20,7 @@ const AppointmentPrescription = ({
     const [notes, setNotes] = useState(null)
     const [canEdit, setCanEdit] = useState(true)
     const [prescriptionModified, setPrescriptionModified] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,7 +92,7 @@ const AppointmentPrescription = ({
 
     const handleAddMedicine = async () => {
         try {
-            const values = await form.validateFields()
+            const values = await medForm.validateFields()
             const { medicineName, Dosage, Frequency, Duration, notes } = values
             const getMedicine = await axiosApi.get(
                 `/doctor/get-medicine-by-name/${medicineName}`
@@ -113,17 +116,83 @@ const AppointmentPrescription = ({
                     ]
                 })
                 setAddMedicine(false)
+                medForm.resetFields()
+                message.success('Medicine added')
             } else message.error('Medicine already added')
             console.log(allMedicines)
         } catch (error) {
             console.log('Failed:', error)
+            message.error('Error adding medicine')
         }
     }
 
-    const deleteMedicine = (medicine) => {
-        setAllMedicines((prev) => {
-            return prev.filter((med) => med.medicine !== medicine)
+    const deleteMedicine = async (medicine) => {
+        try {
+            const response = await axiosApi.delete(
+                `/doctor/delete-medication-from-prescription/${Appointment._id}`
+            )
+            console.log(response.data)
+            setAllMedicines((prev) => {
+                return prev.filter((med) => med.medicine !== medicine)
+            })
+            message.success('Medicine deleted')
+        } catch (error) {
+            console.log('Failed:', error)
+            message.error('Error deleting medicine')
+        }
+    }
+
+    const editMedicine = (medicine) => {
+        setIsEdit(true)
+        medForm.setFieldsValue({
+            medicineName: medicine,
         })
+        setAddMedicine(true)
+    }
+
+    const handleEditMedicine = async () => {
+        try {
+            const values = await medForm.validateFields()
+            const { medicineName, Dosage, Frequency, Duration, notes } = values
+            const response = await axiosApi.put(
+                `/doctor/edit-medicine-by-name`,
+                {
+                    name: medicineName,
+                    dosage: Dosage,
+                    frequency: Frequency,
+                    duration: Duration,
+                    aid: Appointment._id,
+                }
+            )
+            response.data.medications.forEach((medication) => {
+                setAllMedicines((prev) => {
+                    if (
+                        !prev.some(
+                            (m) => m.medicine_id === medication.medicine_id
+                        )
+                    ) {
+                        return [
+                            ...prev,
+                            {
+                                medicine: medication.name,
+                                Dosage: medication.dosage,
+                                Frequency: medication.frequency,
+                                Duration: medication.duration,
+                                notes: medication.notes,
+                                medicine_id: medication.medicine_id,
+                            },
+                        ]
+                    } else {
+                        return prev
+                    }
+                })
+            })
+            setAddMedicine(false)
+            setIsEdit(false)
+            medForm.resetFields()
+        } catch (error) {
+            console.log('Failed:', error)
+        }
     }
 
     const handleSubmitPrescription = async () => {
@@ -223,127 +292,156 @@ const AppointmentPrescription = ({
                                 <strong>Duration: </strong>
                                 {medicine.Duration}
                             </p>
-                            <ConditionalRender condition={canEdit}>
-                                <CloseOutlined
-                                    onClick={() =>
+                            <EditOutlined
+                                style={
+                                    !canEdit
+                                        ? { color: 'gray', cursor: 'default' }
+                                        : null
+                                }
+                                onClick={() => {
+                                    if (canEdit) {
+                                        editMedicine(medicine.medicine)
+                                    }
+                                }}
+                            />
+                            <CloseOutlined
+                                style={
+                                    !canEdit
+                                        ? { color: 'gray', cursor: 'default' }
+                                        : null
+                                }
+                                onClick={() => {
+                                    if (canEdit) {
                                         deleteMedicine(medicine.medicine)
                                     }
-                                />
-                            </ConditionalRender>
+                                }}
+                            />
                         </div>
                     ))}
                 </ConditionalRender>
-                <ConditionalRender condition={!addMedicine && canEdit}>
-                    <Button
-                        key='add-med-button'
-                        type='primary'
-                        style={{ marginTop: '3px', marginBottom: '10px' }}
-                        onClick={() => setAddMedicine(true)}>
-                        Add Medicine
-                    </Button>
-                </ConditionalRender>
-                <ConditionalRender condition={addMedicine}>
-                    <Form.Item
-                        name='medicineName'
-                        label='Select the medicine'
-                        style={{
-                            width: '200px',
-                            marginTop: '1px',
-                            marginBottom: '0px',
-                            padding: '0px',
-                        }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please add the Medicine name',
-                            },
-                        ]}>
-                        <Select
-                            className='Select'
-                            showSearch
-                            allowClear
-                            placeholder='Select Medication'
-                            style={{ margin: '0px' }}
-                            onChange={handleChange}
-                            options={medicines?.map((medicine) => ({
-                                label: medicine.name,
-                                value: medicine.name,
-                            }))}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name='Dosage'
-                        label='Dosage'
-                        style={{
-                            width: '200px',
-                            marginTop: '1px',
-                            marginBottom: '0px',
-                            padding: '0px',
-                        }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please add the Dosage',
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name='Frequency'
-                        label='Frquency (per day)'
-                        style={{
-                            width: '200px',
-                            marginTop: '1px',
-                            marginBottom: '0px',
-                            padding: '0px',
-                        }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please add the Frequency',
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name='Duration'
-                        label='Duration (in days)'
-                        style={{
-                            width: '200px',
-                            marginTop: '1px',
-                            marginBottom: '0px',
-                            padding: '0px',
-                        }}
-                        rules={[
-                            {
-                                required: true,
-                                message:
-                                    'Please add the number of days for this medicine',
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                    <Button
-                        key='add-med-button'
-                        type='primary'
-                        style={{ marginTop: '7px', marginBottom: '10px' }}
-                        onClick={handleAddMedicine}>
-                        Done
-                    </Button>
-                    <Button
-                        key='add-med-button'
-                        danger
-                        type='primary'
-                        style={{
-                            marginTop: '7px',
-                            marginBottom: '10px',
-                            marginLeft: '10px',
-                        }}
-                        onClick={() => setAddMedicine(false)}>
-                        Cancel
-                    </Button>
-                    <br></br>
-                </ConditionalRender>
+
+                <Button
+                    disabled={!(!addMedicine && canEdit)}
+                    key='add-med-button'
+                    type='primary'
+                    style={{ marginTop: '3px', marginBottom: '10px' }}
+                    onClick={() => setAddMedicine(true)}>
+                    Add Medicine
+                </Button>
+
+                <Form
+                    form={medForm}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                        justifyContent: 'space-between',
+                        minHeight: 'fit-content',
+                    }}>
+                    {addMedicine && (
+                        <>
+                            <Form.Item
+                                name='medicineName'
+                                label='Select the medicine'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please select a medicine',
+                                    },
+                                ]}
+                                style={{
+                                    marginBottom: '30px',
+                                    minHeight: '60px',
+                                }}>
+                                <Select
+                                    className='Select'
+                                    showSearch
+                                    allowClear
+                                    placeholder='Select Medication'
+                                    onChange={handleChange}
+                                    options={medicines?.map((medicine) => ({
+                                        label: medicine.name,
+                                        value: medicine.name,
+                                    }))}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name='Dosage'
+                                label='Dosage'
+                                style={{
+                                    minHeight: '60px',
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please add the Dosage',
+                                    },
+                                ]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                name='Frequency'
+                                label='Frequency (per day)'
+                                style={{
+                                    minHeight: '60px',
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please add the Frequency',
+                                    },
+                                ]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                name='Duration'
+                                label='Duration (in days)'
+                                style={{
+                                    minHeight: '60px',
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Please add the number of days for this medicine',
+                                    },
+                                ]}>
+                                <Input />
+                            </Form.Item>
+                            <Space
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-end',
+                                    gap: '10px',
+                                    marginTop: '10px',
+                                }}>
+                                <Button
+                                    key='cancel-med-button'
+                                    danger
+                                    type='primary'
+                                    onClick={() => {
+                                        setAddMedicine(false)
+                                        medForm.resetFields()
+                                    }}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    key='add-med-button'
+                                    type='primary'
+                                    onClick={() => {
+                                        if (isEdit) {
+                                            handleEditMedicine()
+                                        } else {
+                                            handleAddMedicine()
+                                        }
+                                    }}>
+                                    {isEdit ? 'Edit' : 'Add'}
+                                </Button>
+                            </Space>
+                        </>
+                    )}
+                </Form>
                 <Form.Item
                     name='notes'
                     label='Notes'
@@ -351,7 +449,8 @@ const AppointmentPrescription = ({
                     required
                     rules={[
                         {
-                            message: 'Write any extra notes here',
+                            message:
+                                'Write any extra notes here. i.e. when to take the medicine',
                         },
                     ]}>
                     <Input.TextArea disabled={!canEdit} />

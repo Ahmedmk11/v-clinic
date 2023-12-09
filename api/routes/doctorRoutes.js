@@ -17,6 +17,8 @@ import {
     checkUsernameAvailability,
     checkEmailAvailability,
     getPatientByDoctorId,
+    editMedicineByName,
+    deleteMedicine,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -31,12 +33,14 @@ router.get(
     '/get-appointments-with-names/:id',
     getAppointmentsWithNamesByDoctorId
 )
+router.delete('/delete-medication-from-prescription/:id', deleteMedicine)
 
 router.get('/get-appointmentstimes/:id', getAppointmentsByDoctorIdArray)
 router.get('/get-all-medicines', getAllMedicines)
 router.get('/get-medicine-by-name/:name', getMedicineByName)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)
 router.put('/update-contract', updateContract)
+router.put('/edit-medicine-by-name', editMedicineByName)
 router.post('/updateTimeSlots', updateTimeSlots)
 router.get('/check-username-taken/:username', checkUsernameAvailability)
 router.get('/check-email-taken/:email', checkEmailAvailability)
