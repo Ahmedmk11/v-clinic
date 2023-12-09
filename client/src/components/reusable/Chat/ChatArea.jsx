@@ -1,11 +1,12 @@
 import { Card, Input, Button, Avatar, Spin } from 'antd'
-import { SendOutlined } from '@ant-design/icons'
+import { SendOutlined, VideoCameraAddOutlined } from '@ant-design/icons'
 import chatImage from '../../../assets/imgs/chat.png'
 import { useEffect, useState, useRef, useContext } from 'react'
 import CurrUserContext from '../../../contexts/CurrUser'
 import axiosApi from '../../../utils/axiosApi'
 import { io } from 'socket.io-client'
 import { format } from 'timeago.js'
+import './ChatArea.css'
 const { TextArea } = Input
 const ChatArea = ({ selectedChat }) => {
     const [chatMessages, setChatMessages] = useState([])
@@ -94,12 +95,28 @@ const ChatArea = ({ selectedChat }) => {
             {selectedChat && (
                 <Card
                     title={
-                        <span>
-                            <Avatar size={'small'}>
-                                {selectedChat.name.charAt(0)}
-                            </Avatar>{' '}
-                            {selectedChat.name}
-                        </span>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                            <span>
+                                <Avatar size={'small'}>
+                                    {selectedChat.name.charAt(0)}
+                                </Avatar>{' '}
+                                {selectedChat.name}
+                            </span>
+                            <VideoCameraAddOutlined
+                                onClick={() => {}}
+                                id='video-call-icon'
+                                style={{
+                                    color: '#1677ff',
+                                    fontSize: '20px',
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        </div>
                     }
                     className='chat-window'>
                     <div className='chat-messages'>
@@ -146,7 +163,10 @@ const ChatArea = ({ selectedChat }) => {
             {!selectedChat && (
                 <Card
                     title={
-                       <span style={{whiteSpace:"pre-wrap"}}>Select a contact to start a conversation or create a new one</span>
+                        <span style={{ whiteSpace: 'pre-wrap' }}>
+                            Select a contact to start a conversation or create a
+                            new one
+                        </span>
                     }
                     className='chat-window'>
                     <div className='chat-messages'></div>
