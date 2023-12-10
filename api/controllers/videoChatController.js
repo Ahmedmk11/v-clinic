@@ -1,5 +1,6 @@
 import qs from 'qs'
 import axios from 'axios'
+import meetingObject from '../utils/meetingObject.js'
 
 const getZoomToken = async (req, res, next) => {
     try {
@@ -27,31 +28,19 @@ const getZoomToken = async (req, res, next) => {
 }
 
 const createMeeting = async (req, res) => {
-    const { topic, type, start_time, duration, timezone, access_token } =
-        req.body
-    const data = {
-        agenda: 'My Meeting',
-        default_password: false,
-        password: '',
-        settings: {
-            allow_multiple_devices: true,
-            approval_type: 0,
-            join_before_host: true,
-        },
-    }
-
-    const config = {
-        method: 'post',
-        url: 'https://api.zoom.us/v2/users/me/meetings',
-        headers: {
-            Authorization: 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(data),
-    }
+    const { access_token } = req.body
 
     try {
-        const response = await axios(config)
+        const response = await axios.post(
+            'https://api.zoom.us/v2/users/me/meetings',
+            meetingObject,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + access_token,
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
         return res.json(response.data)
     } catch (error) {
         console.error(
