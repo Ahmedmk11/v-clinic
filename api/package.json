@@ -12,6 +12,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "axios": "^1.6.2",
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
         "cookie-parser": "^1.4.6",
@@ -29,6 +30,7 @@
         "notp": "^2.0.3",
         "prettier": "^3.0.3",
         "puppeteer": "^21.5.2",
+        "qs": "^6.11.2",
         "raw-body": "^2.5.2",
         "speakeasy": "^2.0.0",
         "stripe": "^14.3.0",

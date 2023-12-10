@@ -12,11 +12,13 @@ import appointmentRoutes from './routes/appointmentRoutes.js'
 import NotificationsModel from './models/notificationsModel.js'
 import chatRoutes from './routes/chatRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
+import videoChatRoutes from './routes/videoChatRoutes.js'
 import { connectToDatabase } from './database.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import cookieParser from 'cookie-parser'
 import './controllers/packageController.js'
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -57,6 +59,7 @@ app.use('/api/doctor', doctorRoutes)
 app.use('/api/appointment', appointmentRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/cart', cartRoutes)
+app.use('/api/videoChat', videoChatRoutes)
 app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads')) //move to doctorRoutes
 app.use('/api/uploads/patientUploads', express.static('uploads/patientUploads')) //move to patientRoutes
 
