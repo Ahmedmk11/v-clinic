@@ -41,9 +41,7 @@ const ChatArea = ({ selectedChat }) => {
     useEffect(() => {
         if (!currUser) return
         socket.current.emit('addUser', currUser?._id)
-        socket.current.on('getUsers', (users) => {
-            console.log(users)
-        })
+        socket.current.on('getUsers', (users) => {})
     }, [currUser])
 
     useEffect(() => {
@@ -61,8 +59,8 @@ const ChatArea = ({ selectedChat }) => {
         setLoad(false)
     }, [selectedChat])
 
-    const handleSendMessage = () => {
-        if (!message || !currUser || !selectedChat) return
+    const handleSendMessage = (msg=null) => {
+        if ((!message&& !msg) || !currUser || !selectedChat) return
         const receiverId = selectedChat?.members?.find(
             (member) => member !== currUser?._id
         )
@@ -70,17 +68,16 @@ const ChatArea = ({ selectedChat }) => {
         socket.current.emit('sendMessage', {
             senderId: currUser?._id,
             receiverId,
-            text: message,
+            text: message||msg,
         })
 
         axiosApi
             .post('chat/send-message', {
                 conversationId: selectedChat?.id,
                 sender: currUser?._id,
-                text: message,
+                text: message||msg,
             })
             .then((response) => {
-                console.log(response.data)
                 setChatMessages([...chatMessages, response.data])
                 setMessage('')
             })
@@ -88,6 +85,46 @@ const ChatArea = ({ selectedChat }) => {
                 console.log(err.message)
                 message.error('Failed to send message')
             })
+    }
+
+    const sendVideoCall = () => {
+        if (!currUser || !selectedChat) return
+        axiosApi
+            .get('videoChat/create-meeting')
+            .then(async(response) => {
+                handleSendMessage('Join video call at ' + response.data.roomLink)
+                window.open(response.data.roomLink, '_blank')
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
+    }
+
+    const renderMessage = (text) => {
+        if (!text.includes('Join video call at https://v-clinic.whereby.com/'))
+            return text
+        else {
+            const videoCallLink = text.split('Join video call at')[1]
+            return (
+                <>
+                    <a href={videoCallLink} target='_blank' rel='noreferrer'>
+                        <img
+                            style={{ width: '100%', height: 'auto' }}
+                            src='https://framerusercontent.com/images/O3vWiQpmEywTT2Nr0hcDVqf8GI.png'
+                            alt='video call image'
+                        />
+                    </a>
+                    Join video call at{'  '}
+                    <a
+                        className='video-call-link'
+                        href={videoCallLink}
+                        target='_blank'
+                        rel='noreferrer'>
+                        {text.split('Join video call at ')[1]}
+                    </a>
+                </>
+            )
+        }
     }
 
     return (
@@ -108,7 +145,9 @@ const ChatArea = ({ selectedChat }) => {
                                 {selectedChat.name}
                             </span>
                             <VideoCameraAddOutlined
-                                onClick={() => {}}
+                                onClick={() => {
+                                    sendVideoCall()
+                                }}
                                 id='video-call-icon'
                                 style={{
                                     color: '#1677ff',
@@ -130,7 +169,7 @@ const ChatArea = ({ selectedChat }) => {
                                             ? 'sender-message'
                                             : 'receiver-message'
                                     }`}>
-                                    {msg.text}
+                                    {renderMessage(msg.text)}
                                 </p>
                                 <span
                                     className={`msg-time ${

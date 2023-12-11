@@ -94,7 +94,7 @@ const Header = () => {
                 socketRef.current.disconnect()
             }
         }
-    }, [socketRef, currUser])
+    }, [currUser])
 
     useEffect(() => {
         setCompareNotifications(userNotifications)

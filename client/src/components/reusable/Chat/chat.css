@@ -211,6 +211,10 @@
     text-align: left;
     background-color: var(--complementary-blue);
     align-self: flex-end;
+
+    & .video-call-link{
+        color: var(--secondary-text-color);
+    }
 }
 
 .receiver-message {
