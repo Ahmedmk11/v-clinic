@@ -61,7 +61,7 @@ const CancelAppointment = ({
             confirmLoading={cancelLoading}
             onCancel={closeModal}
             footer={null}>
-            <p>
+            <p className='main-text'>
                 Are you sure you want to cancel this appointment? Cancelling less than 24 hours before the appointment is non-refundable!
             </p>
             <div className='edit-buttons'>
