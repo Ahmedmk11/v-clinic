@@ -1,7 +1,7 @@
 import './header.css'
-import { React, useState, useEffect, useContext } from 'react'
+import { React, useState, useEffect, useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Avatar, Dropdown, Space, message } from 'antd'
+import { Badge, Avatar, Dropdown, Space, message, notification } from 'antd'
 import moonIcn from '../../../assets/icons/moon.svg'
 import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
@@ -13,7 +13,8 @@ import CurrUser from '../../../contexts/CurrUser'
 import CurrTheme from '../../../contexts/CurrTheme'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import axiosApi from '../../../utils/axiosApi'
-import { FloatButton,Tooltip } from 'antd'
+import { FloatButton, Tooltip } from 'antd'
+import { io } from 'socket.io-client'
 
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode')
@@ -38,11 +39,24 @@ const InboxIcon = () => <img style={{ width: 20, height: 20 }} src={inboxIcn} />
 const ReadIcon = () => <img style={{ width: 22, height: 22 }} src={readIcn} />
 
 const Header = () => {
+    const socketRef = useRef(null)
     const navigate = useNavigate()
     const { theme, setTheme } = useContext(CurrTheme)
     const { currUser, role } = useContext(CurrUser)
     const [visible, setVisible] = useState(false)
     const [visible2, setVisible2] = useState(false)
+    const [initialRender, setInitialRender] = useState(false)
+    const [compareNotifications, setCompareNotifications] = useState([
+        {
+            _id: 'no-notifs',
+            appointment_id: null,
+            doctor_id: null,
+            patient_id: null,
+            date: null,
+            message_patient: 'No notifications',
+            message_doctor: 'No notifications',
+        },
+    ])
     const [userNotifications, setUserNotifications] = useState([
         {
             _id: 'no-notifs',
@@ -54,6 +68,60 @@ const Header = () => {
             message_doctor: 'No notifications',
         },
     ])
+
+    useEffect(() => {
+        if (socketRef.current) {
+            socketRef.current.disconnect()
+        }
+
+        socketRef.current = io('http://localhost:8900')
+
+        const handleNewNotification = (allNotifications) => {
+            let userNotf = allNotifications.notifications.filter((notif) => {
+                return role === 'patient'
+                    ? notif.patient_id && notif.patient_id == currUser?._id
+                    : notif.doctor_id && notif.doctor_id == currUser?._id
+            })
+
+            setUserNotifications(userNotf)
+        }
+
+        socketRef.current.on('newNotification', handleNewNotification)
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.off('newNotification', handleNewNotification)
+                socketRef.current.disconnect()
+            }
+        }
+    }, [currUser])
+
+    useEffect(() => {
+        setCompareNotifications(userNotifications)
+        if (
+            compareNotifications.length > 0 &&
+            compareNotifications[0]._id !== 'no-notifs'
+        ) {
+            setInitialRender(true)
+        }
+    }, [userNotifications])
+
+    useEffect(() => {
+        const userNotificationsString = JSON.stringify(userNotifications)
+        const compareNotificationsString = JSON.stringify(compareNotifications)
+
+        if (initialRender) {
+            if (userNotificationsString !== compareNotificationsString) {
+                notification.open({
+                    message: 'New Appointment!',
+                    description:
+                        'You have a new appointment, please check your inbox for more details.',
+                    duration: 2,
+                    placement: 'bottomRight',
+                })
+            }
+        }
+    }, [userNotifications, compareNotifications])
 
     useEffect(() => {
         if (document.body.classList.contains('light-mode')) {
@@ -81,21 +149,21 @@ const Header = () => {
         />
     )
 
-    useEffect(() => {
-        if (currUser) {
-            const type = role == 'patient' ? 'patient' : 'doctor'
-            axiosApi
-                .get(`/patient/get-notifications/${currUser._id}`, {
-                    params: { type },
-                })
-                .then((res) => {
-                    setUserNotifications(res.data)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    }, [currUser])
+    // useEffect(() => {
+    //     if (currUser) {
+    //         const type = role == 'patient' ? 'patient' : 'doctor'
+    //         axiosApi
+    //             .get(`/patient/get-notifications/${currUser._id}`, {
+    //                 params: { type },
+    //             })
+    //             .then((res) => {
+    //                 setUserNotifications(res.data)
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err)
+    //             })
+    //     }
+    // }, [currUser])
 
     useEffect(() => {
         if (userNotifications.length === 0) {
@@ -213,43 +281,41 @@ const Header = () => {
                             : 'change the code'}
                     </p>
                     {userNotifications[0]._id != 'no-notifs' ? (
-                            <Tooltip placement="right" title={"Mark as read"}>
-                        <div
-                            onClick={() => {
-                                axiosApi
-                                    .put(
-                                        `/patient/remove-notification/${notification._id}/${currUser._id}`
-                                    )
-                                    .then(() => {
-                                        setUserNotifications(
-                                            userNotifications.filter(
-                                                (notif) =>
-                                                    notif._id !==
-                                                    notification._id
-                                            )
+                        <Tooltip placement='right' title={'Mark as read'}>
+                            <div
+                                onClick={() => {
+                                    axiosApi
+                                        .put(
+                                            `/patient/remove-notification/${notification._id}/${currUser._id}`
                                         )
-                                        setVisible(false)
-                                    })
-                            }}
-                            style={{
-                                height: '90px',
-                                cursor: 'pointer',
-                                marginRight: '-12px',
-                                padding: '16px',
-                                backgroundColor: '#eee',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.backgroundColor = '#ddd')
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.backgroundColor = '#eee')
-                            }>
-                          <ReadIcon className='read-button' />
-                        </div>
-                          </Tooltip>
+                                        .then(() => {
+                                            message.success(
+                                                'Notification marked as read'
+                                            )
+                                            setVisible(false)
+                                        })
+                                }}
+                                style={{
+                                    height: '70px',
+                                    cursor: 'pointer',
+                                    marginRight: '-12px',
+                                    padding: '16px',
+                                    backgroundColor: '#eee',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                onMouseEnter={(e) =>
+                                    (e.currentTarget.style.backgroundColor =
+                                        '#ddd')
+                                }
+                                onMouseLeave={(e) =>
+                                    (e.currentTarget.style.backgroundColor =
+                                        '#eee')
+                                }>
+                                <ReadIcon className='read-button' />
+                            </div>
+                        </Tooltip>
                     ) : null}
                 </div>
             ),
@@ -279,7 +345,12 @@ const Header = () => {
                             style={{ borderRadius: 0 }}
                             onClick={(e) => e.preventDefault()}>
                             <Badge
-                                dot={userNotifications[0]?._id !== 'no-notifs'}>
+                                count={
+                                    userNotifications[0]?._id === 'no-notifs'
+                                        ? null
+                                        : userNotifications?.length
+                                }
+                                size='small'>
                                 <InboxIcon />
                             </Badge>
                         </a>

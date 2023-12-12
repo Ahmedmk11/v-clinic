@@ -29,8 +29,6 @@ async function login(req, res) {
         const remember = req.body.remember
         const role = req.body.role
 
-        console.log('remember?', remember)
-
         const user =
             role === 'patient'
                 ? await PatientModel.findOne({ username: username })
@@ -68,13 +66,11 @@ async function login(req, res) {
 }
 
 async function getCurrUser(req, res) {
-    console.log('reqreq', req.cookies)
     const token = req.cookies.token
 
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            console.log('User from JWT: ', decoded)
             res.status(200).json(decoded)
         } catch (error) {
             console.error('Error decoding JWT: ', error)

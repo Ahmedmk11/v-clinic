@@ -231,8 +231,14 @@ input:focus {
 .upload-text,
 .anticon.anticon-plus,
 .ant-card-head-title,
-.main-text {
+.main-text,
+.ant-modal-body .main-text {
     color: var(--main-text-color) !important;
+}
+
+.ant-modal-body .ant-btn:disabled,
+.ant-input-disabled {
+    color: var(--secondary-text-color) !important;
 }
 
 .doctor-reminder {

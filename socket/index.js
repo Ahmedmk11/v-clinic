@@ -1,5 +1,9 @@
-// socketServer.js
-const io = require("socket.io")(8900, {
+import { checkNotifications } from "../api/app.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+const httpServer = createServer();
+const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:5174",
   },
@@ -32,16 +36,32 @@ io.on("connection", (socket) => {
   //send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);
-    if(!user) return;
+    if (!user) return;
     io.to(user.socketId).emit("getMessage", {
       senderId,
       text,
     });
   });
 
+  (function checkMedicineStockInterval() {
+    setInterval(async () => {
+      let notifications = await checkNotifications();
+
+      io.emit("newNotification", {
+        notifications,
+      });
+    }, 5000);
+  })();
+
   //when disconnect
   socket.on("disconnect", () => {
     console.log("a user disconnected!");
     removeUser(socket.id);
   });
+});
+
+const PORT = 8900;
+
+httpServer.listen(PORT, () => {
+  console.log(`Socket.io server is running on port ${PORT}`);
 });

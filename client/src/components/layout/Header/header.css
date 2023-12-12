@@ -18,7 +18,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 18px;
 
     .ant-btn {
         height: 45px;
@@ -39,7 +39,6 @@
 
     .ant-avatar {
         cursor: pointer;
-        margin-left: 30px;
     }
 
     .inbox-icon {
@@ -53,8 +52,34 @@
     margin-right: 10px;
 }
 
+.ant-dropdown.notifs-class {
+    max-height: 300px !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        height: 0.5px;
+        background-color: var(--main-blue);
+        border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #f5f5f5;
+    }
+
+    scroll-behavior: smooth;
+
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+}
+
 .notifs-class {
     .ant-dropdown-menu-item {
+        max-height: 100px !important;
         cursor: default !important;
 
         &:hover {
@@ -72,8 +97,12 @@
     padding: 0% !important;
 
     .ant-dropdown-menu-item {
-        height: 90px;
+        user-select: all;
+        min-height: 70px;
+        height: fit-content;
         width: 360px;
+        padding: 0px 12px 0px 12px !important;
+
     }
 
     .ant-dropdown-menu-item:hover {
@@ -87,6 +116,7 @@
 
 .read-button {
     cursor: pointer;
+    user-select: none !important;
 
     &:hover {
         background-color: var(--complementary-blue) !important;

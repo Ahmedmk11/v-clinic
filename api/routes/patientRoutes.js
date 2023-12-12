@@ -67,7 +67,7 @@ router.get('/check-email-taken/:email', checkEmailAvailability)
 router.get('/check-phone-taken/:phone', checkPhoneAvailability)
 router.get('/check-nid-taken/:nid', checkNidAvailability)
 router.get('/generate-prescription-pdf', generatePrescriptionPDF)
-router.get('/get-notifications/:pid', getNotifications)
+router.get('/get-notifications/:pid', getNotifications) // unused
 router.put('/remove-notification/:nid/:id', removeNotification)
 router.post(
     '/stripe-webhook',
