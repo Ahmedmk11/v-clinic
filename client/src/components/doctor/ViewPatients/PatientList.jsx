@@ -3,8 +3,9 @@ import './patientList.css'
 import PatientCard from './PatientCard'
 import Search from '../../reusable/Search/Search'
 import Pagination from '../../reusable/Pagination/Pagination'
+import { Skeleton } from 'antd'
 
-const PatientList = ({ patients }) => {
+const PatientList = ({ patients, skeleton }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredPatients, setFilteredPatients] = useState([])
@@ -32,9 +33,17 @@ const PatientList = ({ patients }) => {
             indexOfFirstPatient,
             indexOfLastPatient
         )
+        if (skeleton)
+            return (
+                <>
+                    <div className='card'>
+                        <Skeleton active />
+                    </div>
+                </>
+            )
         return currentPatients.length
             ? currentPatients.map((patient) => (
-                  <PatientCard key={patient._id +"0" } patient={patient} />
+                  <PatientCard key={patient._id + '0'} patient={patient} />
               ))
             : 'No patients to show'
     }

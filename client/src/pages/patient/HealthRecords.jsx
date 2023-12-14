@@ -23,9 +23,13 @@ const HealthRecords = () => {
         )
     }
     return <div className='page'>
-        <UploadMedicalRecords />
+      <section className='primary-container'>
+
+      <UploadMedicalRecords />
         <ViewUploadedRecords  Patient={Patient} setPatient={setPatient} role={role}/>
         <MedHistory medicalHistory={Patient?.MedicalHistory} />
+      </section>
+
     </div>
 }
 export default HealthRecords

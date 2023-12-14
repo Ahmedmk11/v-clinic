@@ -4,12 +4,14 @@ import Pagination from '../../reusable/Pagination/Pagination'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import AppointmentCard from './AppointmentCard'
+import { Skeleton } from 'antd'
 
 dayjs.extend(utc)
 const DoctorAppointmentsList = ({
     Appointments,
     setAppointments,
     mode = 'appointments',
+    skeleton,
 }) => {
     const [displayedAppointments, setDisplayedAppointments] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -64,6 +66,14 @@ const DoctorAppointmentsList = ({
             indexOfFirstAppointment,
             indexOfLastAppointment
         )
+        if (skeleton)
+            return (
+                <>
+                    <div className='card'>
+                        <Skeleton active />
+                    </div>
+                </>
+            )
         return currentAppointments.length > 0
             ? currentAppointments.map((appointment) => (
                   <AppointmentCard
@@ -94,8 +104,7 @@ const DoctorAppointmentsList = ({
               ]
 
     return (
-        <div className='login-text primary-container'>
-            <h2>My Appointments</h2>
+        <div className='login-text'>
             <label style={{ margin: 0 }}>Pick a date to filter on: </label>
             <br></br>
             <DatePicker

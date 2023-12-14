@@ -8,6 +8,7 @@ import {
     FileAddOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
+import backIcn from '../../../assets/icons/back.svg'
 
 import adminIcn from '../../../assets/icons/admin.svg'
 import doctorIcn from '../../../assets/icons/doctor.svg'
@@ -89,199 +90,214 @@ const Sidebar = () => {
         />
     )
 
+    const BackIcon = () => (
+        <img
+            onClick={() => {
+                window.history.back()
+            }}
+            className='back-btn'
+            style={{ width: 25, height: 25 }}
+            src={backIcn}
+        />
+    )
+
     return (
-        <div
-            className={`sidebar ${isExpanded ? 'sidebar-expanded' : ''}`}
-            onMouseEnter={() => setIsExpanded(true)}
-            onMouseLeave={() => setIsExpanded(false)}>
+        <div className={`sidebar ${isExpanded ? 'sidebar-expanded' : ''}`}>
             <div>
-                <p
-                    className={
-                        page === 'doctor' ||
-                        page === 'patient' ||
-                        page === 'admin'
-                            ? 'sidebar-item selected-sidebar-item'
-                            : 'sidebar-item'
-                    }
-                    onClick={() => {
-                        navigate(`/${userType}`)
-                    }}>
-                    <HomeOutlined />
-                    {isExpanded ? 'Home' : ''}
+                <p className='back-button'>
+                    <BackIcon />
                 </p>
-                {userType === 'patient' && ( // to be changed when adding more patient pages
-                    <>
-                        <p
-                            className={
-                                page === 'view-health-records'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() => {
-                                navigate('view-health-records')
-                            }}>
-                            <FileAddOutlined />
-                            {isExpanded ? 'Health Records' : ''}
-                        </p>
-                        <p
-                            id='pills-icon'
-                            className={
-                                page === 'view-prescriptions'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() => {
-                                navigate('view-prescriptions')
-                            }}>
-                            <MedicineBoxOutlined />
-                            {isExpanded ? 'Prescriptions' : ''}
-                        </p>
-                    </>
-                )}
-                {userType === 'doctor' && ( // to be changed when adding more patient pages
+                <div
+                    onMouseEnter={() => setIsExpanded(true)}
+                    onMouseLeave={() => setIsExpanded(false)}>
                     <p
                         className={
-                            page === 'patients'
+                            page === 'doctor' ||
+                            page === 'patient' ||
+                            page === 'admin'
                                 ? 'sidebar-item selected-sidebar-item'
                                 : 'sidebar-item'
                         }
                         onClick={() => {
-                            navigate('patients')
+                            navigate(`/${userType}`)
                         }}>
-                        <TeamOutlined />
-                        {isExpanded ? 'Patients' : ''}
+                        <HomeOutlined />
+                        {isExpanded ? 'Home' : ''}
                     </p>
-                )}
-                {(userType === 'doctor' || userType === 'patient') && (
-                    <p
-                        className={
-                            page === 'appointments'
-                                ? 'sidebar-item selected-sidebar-item'
-                                : 'sidebar-item'
-                        }
-                        onClick={() => {
-                            navigate('appointments')
-                        }}>
-                        <ScheduleOutlined />
-                        {isExpanded ? 'Appointments' : ''}
-                    </p>
-                )}
-                {userType === 'admin' && (
-                    <>
+                    {userType === 'patient' && ( // to be changed when adding more patient pages
+                        <>
+                            <p
+                                className={
+                                    page === 'view-health-records'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-health-records')
+                                }}>
+                                <FileAddOutlined />
+                                {isExpanded ? 'Health Records' : ''}
+                            </p>
+                            <p
+                                id='pills-icon'
+                                className={
+                                    page === 'view-prescriptions'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-prescriptions')
+                                }}>
+                                <MedicineBoxOutlined />
+                                {isExpanded ? 'Prescriptions' : ''}
+                            </p>
+                        </>
+                    )}
+                    {userType === 'doctor' && ( // to be changed when adding more patient pages
                         <p
-                            onMouseEnter={() => {
-                                setActive([
-                                    true,
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
-                            onMouseLeave={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
                             className={
-                                page === 'view-admins'
+                                page === 'patients'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
                             onClick={() => {
-                                navigate('view-admins')
+                                navigate('patients')
                             }}>
-                            <AdminIcon />
-                            {isExpanded ? 'Admins' : ''}
-                        </p>
-                        <p
-                            onMouseEnter={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    true,
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
-                            onMouseLeave={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
-                            className={
-                                page === 'view-doctors'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() => {
-                                navigate('view-doctors')
-                            }}>
-                            <DoctorIcon />
-                            {isExpanded ? 'Doctors' : ''}
-                        </p>
-                        <p
-                            onMouseEnter={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    true,
-                                    page === 'view-packages',
-                                ])
-                            }}
-                            onMouseLeave={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
-                            className={
-                                page === 'view-patients'
-                                    ? 'sidebar-item selected-sidebar-item'
-                                    : 'sidebar-item'
-                            }
-                            onClick={() => {
-                                navigate('view-patients')
-                            }}>
-                            <PatientIcon />
+                            <TeamOutlined />
                             {isExpanded ? 'Patients' : ''}
                         </p>
+                    )}
+                    {(userType === 'doctor' || userType === 'patient') && (
                         <p
-                            onMouseEnter={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    true,
-                                ])
-                            }}
-                            onMouseLeave={() => {
-                                setActive([
-                                    page === 'view-admins',
-                                    page === 'view-doctors',
-                                    page === 'view-patients',
-                                    page === 'view-packages',
-                                ])
-                            }}
                             className={
-                                page === 'view-packages'
+                                page === 'appointments'
                                     ? 'sidebar-item selected-sidebar-item'
                                     : 'sidebar-item'
                             }
                             onClick={() => {
-                                navigate('view-packages')
+                                navigate('appointments')
                             }}>
-                            <PackageIcon />
-                            {isExpanded ? 'Packages' : ''}
+                            <ScheduleOutlined />
+                            {isExpanded ? 'Appointments' : ''}
                         </p>
-                    </>
-                )}
+                    )}
+                    {userType === 'admin' && (
+                        <>
+                            <p
+                                onMouseEnter={() => {
+                                    setActive([
+                                        true,
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                onMouseLeave={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                className={
+                                    page === 'view-admins'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-admins')
+                                }}>
+                                <AdminIcon />
+                                {isExpanded ? 'Admins' : ''}
+                            </p>
+                            <p
+                                onMouseEnter={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        true,
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                onMouseLeave={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                className={
+                                    page === 'view-doctors'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-doctors')
+                                }}>
+                                <DoctorIcon />
+                                {isExpanded ? 'Doctors' : ''}
+                            </p>
+                            <p
+                                onMouseEnter={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        true,
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                onMouseLeave={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                className={
+                                    page === 'view-patients'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-patients')
+                                }}>
+                                <PatientIcon />
+                                {isExpanded ? 'Patients' : ''}
+                            </p>
+                            <p
+                                onMouseEnter={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        true,
+                                    ])
+                                }}
+                                onMouseLeave={() => {
+                                    setActive([
+                                        page === 'view-admins',
+                                        page === 'view-doctors',
+                                        page === 'view-patients',
+                                        page === 'view-packages',
+                                    ])
+                                }}
+                                className={
+                                    page === 'view-packages'
+                                        ? 'sidebar-item selected-sidebar-item'
+                                        : 'sidebar-item'
+                                }
+                                onClick={() => {
+                                    navigate('view-packages')
+                                }}>
+                                <PackageIcon />
+                                {isExpanded ? 'Packages' : ''}
+                            </p>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     )

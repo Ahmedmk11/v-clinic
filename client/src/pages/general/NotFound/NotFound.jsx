@@ -1,17 +1,19 @@
 import './notFound.css'
+import { Result, Button } from 'antd'
 
 const NotFound = () => {
     return (
         <div className='not-found-container'>
-            <div className='error-code'>404</div>
-            <h1 className='error-heading'>Page Not Found</h1>
-            <p className='error-message'>
-                Oops! The page you are looking for might have been removed, had
-                its name changed, or is temporarily unavailable.
-            </p>
-            <p className='home-link'>
-                <a href='/'>Go to Home</a>
-            </p>
+            <Result
+                status='404'
+                title='404'
+                subTitle='Sorry, the page you visited does not exist.'
+                extra={
+                    <a href='/'>
+                        <Button type='primary'>Back Home</Button>
+                    </a>
+                }
+            />
         </div>
     )
 }
