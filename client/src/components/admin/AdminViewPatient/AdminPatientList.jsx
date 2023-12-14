@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import AdminPatientCard from './AdminPatientCard'
 import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
+import { Skeleton } from 'antd'
 
 const PatientList = ({ patients }) => {
     const [searchTerm, setSearchTerm] = useState('')
@@ -10,7 +11,7 @@ const PatientList = ({ patients }) => {
     const patientsPerPage = 8
 
     useEffect(() => {
-        const filteredPatients = patients.filter((patient) =>
+        const filteredPatients = patients?.filter((patient) =>
             patient.username?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFilteredPatients(filteredPatients)
@@ -18,6 +19,10 @@ const PatientList = ({ patients }) => {
     }, [searchTerm, patients])
 
     const getCurrentPatients = () => {
+        if(!filteredPatients)
+            return <div className='card'>
+                <Skeleton active />
+            </div>
         const indexOfLastPatient = currentPage * patientsPerPage
         const indexOfFirstPatient = indexOfLastPatient - patientsPerPage
         const currentPatients = filteredPatients.slice(
@@ -25,7 +30,6 @@ const PatientList = ({ patients }) => {
             indexOfLastPatient
         )
 
-        console.log('heekkekde', currentPatients[0])
         return currentPatients.length
             ? currentPatients.map((patient) => (
                   <AdminPatientCard key={patient._id} patient={patient} />
@@ -44,7 +48,7 @@ const PatientList = ({ patients }) => {
             <div className='card-list'>{getCurrentPatients()}</div>
             <Pagination
                 itemsPerPage={patientsPerPage}
-                totalItems={filteredPatients.length}
+                totalItems={filteredPatients?.length}
                 paginate={(pageNumber) => setCurrentPage(pageNumber)}
                 currentPage={currentPage}
             />

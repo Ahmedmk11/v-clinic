@@ -17,12 +17,12 @@ const ViewPackages = () => {
     }
     return (
         <div className='page'>
-            {Packages ? (
+     
                 <AdminPackageList
                     Packages={Packages}
                     setPackages={setPackages}
                 />
-            ) : null}
+           
         </div>
     )
 }

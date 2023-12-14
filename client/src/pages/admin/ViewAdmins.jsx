@@ -18,9 +18,9 @@ const AdminViewAdmins = () => {
     }
     return (
         <div className='page'>
-            {Admins ? (
+         
                 <AdminList Admins={Admins} setAdmins={setAdmins} />
-            ) : null}
+       
         </div>
     )
 }

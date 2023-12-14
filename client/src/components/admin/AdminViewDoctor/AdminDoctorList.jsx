@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import AdminDoctorCard from './AdminDoctorCard'
 import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const AdminDoctorList = ({ doctors }) => {
@@ -13,7 +13,7 @@ const AdminDoctorList = ({ doctors }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const filtereddoctors = doctors.filter((doctor) =>
+        const filtereddoctors = doctors?.filter((doctor) =>
             doctor.username?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFiltereddoctors(filtereddoctors)
@@ -21,6 +21,10 @@ const AdminDoctorList = ({ doctors }) => {
     }, [searchTerm, doctors])
 
     const getCurrentdoctors = () => {
+        if(!filtereddoctors)
+            return <div className='card'>
+                <Skeleton active />
+            </div>
         const indexOfLastdoctor = currentPage * doctorsPerPage
         const indexOfFirstdoctor = indexOfLastdoctor - doctorsPerPage
         const currentdoctors = filtereddoctors.slice(
@@ -59,7 +63,7 @@ const AdminDoctorList = ({ doctors }) => {
             <div className='card-list'>{getCurrentdoctors()}</div>
             <Pagination
                 itemsPerPage={doctorsPerPage}
-                totalItems={filtereddoctors.length}
+                totalItems={filtereddoctors?.length}
                 paginate={(pageNumber) => setCurrentPage(pageNumber)}
                 currentPage={currentPage}
             />

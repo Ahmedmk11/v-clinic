@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import AdminPackageCard from './AdminPackageCard'
 import Pagination from '../../reusable/Pagination/Pagination'
 import Search from '../../reusable/Search/Search'
-import { Button, Modal } from 'antd'
+import { Button, Modal,Skeleton } from 'antd'
 import AddPackageForm from '../../../pages/admin/AddPackageForm'
 
 const AdminPackageList = ({ Packages, setPackages }) => {
@@ -13,7 +13,7 @@ const AdminPackageList = ({ Packages, setPackages }) => {
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
-        const filteredPackages = Packages.filter((Package) =>
+        const filteredPackages = Packages?.filter((Package) =>
             Package.name?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFilteredPackages(filteredPackages)
@@ -21,6 +21,12 @@ const AdminPackageList = ({ Packages, setPackages }) => {
     }, [searchTerm, Packages])
 
     const getCurrentPackages = () => {
+        if (!filteredPackages)
+            return (
+                <div className='card'>
+                    <Skeleton active />
+                </div>
+            )
         const indexOfLastPackage = currentPage * PackagesPerPage
         const indexOfFirstPackage = indexOfLastPackage - PackagesPerPage
         const currentPackages = filteredPackages.slice(
@@ -59,7 +65,7 @@ const AdminPackageList = ({ Packages, setPackages }) => {
             <div className='card-list'>{getCurrentPackages()}</div>
             <Pagination
                 itemsPerPage={PackagesPerPage}
-                totalItems={filteredPackages.length}
+                totalItems={filteredPackages?.length}
                 paginate={(pageNumber) => setCurrentPage(pageNumber)}
                 currentPage={currentPage}
             />

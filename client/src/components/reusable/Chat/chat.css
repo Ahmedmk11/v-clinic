@@ -1,5 +1,6 @@
 .chat-container {
     margin: 4%;
+    margin-left: 70px;
     padding: 3%;
     border-radius: 10px;
     box-shadow: 0px 0px 20px 0px var(--color-shadow);

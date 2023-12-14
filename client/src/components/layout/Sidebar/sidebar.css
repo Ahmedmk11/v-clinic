@@ -11,7 +11,7 @@
     -moz-transition: all 300ms ease-in-out;
     -ms-transition: all 300ms ease-in-out;
     -o-transition: all 300ms ease-in-out;
-    z-index: 1;
+    z-index: 10;
     overflow-x: hidden;
     position: fixed;
     border-radius: 20px;

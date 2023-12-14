@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import AdminCard from './AdminCard'
 import Pagination from '../../reusable/Pagination/Pagination'
-import { Button, Modal } from 'antd'
+import { Button, Modal, Skeleton } from 'antd'
 import Search from '../../reusable/Search/Search'
 import AddAdminForm from '../../../pages/admin/AddAdminForm'
 
@@ -12,7 +12,7 @@ const AdminList = ({ Admins, setAdmins }) => {
     const [isOpen, setIsOpen] = useState(false)
     const AdminsPerPage = 8
     useEffect(() => {
-        const filteredAdmins = Admins.filter((admin) =>
+        const filteredAdmins = Admins?.filter((admin) =>
             admin.username?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFilteredAdmins(filteredAdmins)
@@ -20,11 +20,18 @@ const AdminList = ({ Admins, setAdmins }) => {
     }, [searchTerm, Admins])
 
     const handleDelete = (id) => {
-        const updatedAdmins = Admins.filter((admin) => admin._id !== id)
+        const updatedAdmins = Admins?.filter((admin) => admin._id !== id)
         setAdmins(updatedAdmins)
     }
 
     const getCurrentAdmins = () => {
+        if (!filteredAdmins)
+            return (
+                <div className='card'>
+                    <Skeleton active />
+                </div>
+            )
+
         const indexOfLastadmin = currentPage * AdminsPerPage
         const indexOfFirstadmin = indexOfLastadmin - AdminsPerPage
         const currentAdmins = filteredAdmins.slice(
@@ -70,7 +77,7 @@ const AdminList = ({ Admins, setAdmins }) => {
             <div className='card-list'>{getCurrentAdmins()}</div>
             <Pagination
                 itemsPerPage={AdminsPerPage}
-                totalItems={filteredAdmins.length}
+                totalItems={filteredAdmins?.length}
                 paginate={(pageNumber) => setCurrentPage(pageNumber)}
                 currentPage={currentPage}
             />
