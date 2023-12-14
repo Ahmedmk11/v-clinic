@@ -164,7 +164,67 @@ const addPackage = async (req, res) => {
     }
 }
 
+const updatePackage = async (req, res) => {
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).send({ error: 'invalid id sent to database' })
+    const {
+        name,
+        price,
+        sessionDiscount,
+        medicineDiscount,
+        familySubsDiscount,
+    } = req.body
+    if (
+        !(
+            price > 0 &&
+            sessionDiscount > -1 &&
+            medicineDiscount > -1 &&
+            familySubsDiscount > -1
+        )
+    )
+        return res
+            .status(404)
+            .send({ error: 'invalid request, all values must be positive' })
+    if (
+        !(
+            sessionDiscount < 101 &&
+            medicineDiscount < 101 &&
+            familySubsDiscount < 101
+        )
+    )
+        return res.status(400).send({
+            error: 'invalid request, all discounts must be less than 100',
+        })
+    try {
+        const ret = await packageModel.findByIdAndUpdate(
+            id,
+            {
+                name,
+                price,
+                sessionDiscount,
+                medicineDiscount,
+                familySubsDiscount,
+            },
+            { new: true }
+        )
+        res.status(200).send(ret)
+    } catch (error) {
+        res.status(500).send({ error: 'database failed' })
+    }
+}
 
+const getPackagebyID = async (req, res) => {
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id))
+        return res.status(500).send({ error: 'invalid id sent to database' })
+    try {
+        const ret = await packageModel.findByIdAndUpdate(id)
+        res.status(200).send(ret)
+    } catch (error) {
+        res.status(500).send({ error: 'database failed' })
+    }
+}
 
 const deletePackage = async (req, res) => {
     const { id } = req.params
