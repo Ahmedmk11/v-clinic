@@ -1,9 +1,12 @@
 ### Badges
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
-![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Ant Design](https://img.shields.io/badge/Ant%20Design-0170FE?style=for-the-badge&logo=ant-design&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
 ## <img src="./client/src/assets/icons/logoBlue.svg" alt="V-Clinic Icon" width="150" height="150"> 
 ### About the Project:
@@ -20,13 +23,13 @@ V-Clinic stands out through its focus on providing a comprehensive healthcare so
 
 ---
 
-## Motivation
+## Motiviation :fire:
 
 Healthcare interactions often involve various inefficiencies, from cumbersome appointment scheduling and inaccessible medical records to complex prescription management. V-Clinic is motivated by the need to address these challenges and revolutionize the healthcare industry by offering a unified platform for patients, doctors, and clinics. Our goal is to provide a seamless experience, bridging the gap between patients and healthcare providers while optimizing the healthcare journey for all stakeholders involved.
 
 ---
 
-## Build Status
+## Build Status :mechanical_arm:
 
 - The project is currently in active development.
 - **Deployment Plan:** Scheduled deployment through AWS Services or similar platforms in the near future.
@@ -35,7 +38,10 @@ Healthcare interactions often involve various inefficiencies, from cumbersome ap
 
 ---
 
-## Code Quality and Style Enforcement
+## Code Quality and Style Enforcement  :writing_hand:
+
+[![Code Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
+
 
 **ESLint (Backend & Frontend):** Employed for enforcing clean, optimal, and consistent code practices in both backend and frontend development. ESLint is configured to define and enforce rules ensuring a unified code style among team members.
 
@@ -45,7 +51,7 @@ These tools, ESLint for code rule enforcement and Prettier for code formatting, 
 
 ---
 
-## Tech/Framework Used
+## Tech/Framework Used 🧰
 
 The project is built on the MERN stack, which comprises the following technologies:
 
@@ -53,25 +59,248 @@ The project is built on the MERN stack, which comprises the following technologi
 - **Express.js:** A Node.js web application framework used for building robust APIs and web applications.
 - **React:** A JavaScript library for building interactive and dynamic user interfaces.
 - **Node.js:** A JavaScript runtime environment used for server-side scripting and building scalable applications.
+  
+In addition to the core stack, the project incorporates several essential APIs and integrations to enhance its functionality:
 
-These technologies collectively form the foundation of the project, allowing for a full-stack JavaScript-based development approach. Understanding these technologies is essential for comprehending and contributing to the project.
+- **JWT (JSON Web Tokens):** Used for secure authentication and authorization, JWT plays a pivotal role in ensuring data security and user access control.
+- **Socket.IO:** Enabling real-time communication, Socket.IO enhances the platform with live chat functionality, fostering immediate interaction between users and pharmacists.
+- **Stripe:** Integrated for seamless and secure payment processing, Stripe ensures a smooth transaction experience for purchasing medicines.
+- **Multer:** Employed for handling file uploads, Multer simplifies the process of uploading prescription files, enhancing the prescription-based medication purchase feature.
+- **Nodemailer:** Integrated for email functionality, Nodemailer facilitates the sending of notifications and updates to users, enhancing communication within the platform.
+- **React-PDF:** Utilized for PDF rendering within the application, React-PDF enhances the platform's functionality by providing robust PDF display capabilities, supporting various document formats.
+- **Whereby:** Utilized for video chat integration, Whereby provides a seamless video conferencing experience, allowing users to engage in remote consultations with healthcare professionals.
+- **News API:** Integrated to display the most recent news, the News API feature enriches the platform with up-to-date information and news articles for users' reference and awareness.
+
+
+These technologies and APIs collectively form the foundation of the project, enabling a comprehensive full-stack JavaScript-based development approach. Understanding and familiarity with these technologies are crucial for comprehending, contributing to, and further enhancing the project.
 
 ---
-
+<details>
+<summary>
+  
 ## Screenshots
+</summary>
+
 
 ---
+</details>
 
 ## Features
 
 ---
 
 
-## Code Examples
+## Code Examples :computer:
+- **Viewing Patients in Frontend:**
+```javascript
+const ViewPatients = () => {
+    const { currUser: Doctor } = useContext(CurrUserContext)
+    const [Patients, setPatients] = useState([])
+    const [skeleton, setSkeleton] = useState(true)
+    useEffect(() => {
+        {
+            Doctor && fetchPatients()
+        }
+    }, [Doctor])
+    const fetchPatients = () => {
+        axiosApi
+            .get(`/patient/get-patients-by-doctor-id/${Doctor._id}`)
+            .then((res) => setPatients(res.data))
+            .catch((err) => console.log(err))
+            .finally(() => setSkeleton(false))
+    }
+    return (
+        <div className='page'>
+            <PatientList patients={Patients} skeleton={skeleton} />
+        </div>
+    )
+}
+export default ViewPatients
+
+
+const PatientList = ({ patients, skeleton }) => {
+    const [searchTerm, setSearchTerm] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const [filteredPatients, setFilteredPatients] = useState([])
+    const [showUpcomingAppointments, setShowUpcomingAppointments] =
+        useState(false)
+    const patientsPerPage = 8
+
+    useEffect(() => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const filteredPatients = patients.filter(
+            (patient) =>
+                (!showUpcomingAppointments ||
+                    new Date(patient.nextAppointment) >= today) &&
+                patient.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        setFilteredPatients(filteredPatients)
+        setCurrentPage(1)
+    }, [searchTerm, showUpcomingAppointments, patients])
+
+    const getCurrentPatients = () => {
+        const indexOfLastPatient = currentPage * patientsPerPage
+        const indexOfFirstPatient = indexOfLastPatient - patientsPerPage
+        const currentPatients = filteredPatients.slice(
+            indexOfFirstPatient,
+            indexOfLastPatient
+        )
+        if (skeleton)
+            return (
+                <>
+                    <div className='card'>
+                        <Skeleton active />
+                    </div>
+                </>
+            )
+        return currentPatients.length
+            ? currentPatients.map((patient) => (
+                  <PatientCard key={patient._id + '0'} patient={patient} />
+              ))
+            : 'No patients to show'
+    }
+
+    const onSearch = (searchString) => {
+        setSearchTerm(searchString, true)
+    }
+
+    const onCheckboxChange = () => {
+        setShowUpcomingAppointments(!showUpcomingAppointments)
+    }
+
+    return (
+        <section className='primary-container patient-list-container'>
+            <h2>My Patients</h2>
+            <Search onSearch={onSearch} />
+            <label>
+                Show Upcoming Appointments
+                <input
+                    type='checkbox'
+                    checked={showUpcomingAppointments}
+                    onChange={onCheckboxChange}
+                />
+            </label>
+            <div className='card-list'>{getCurrentPatients()}</div>
+            <Pagination
+                itemsPerPage={patientsPerPage}
+                totalItems={filteredPatients.length}
+                paginate={(pageNumber) => setCurrentPage(pageNumber)}
+                currentPage={currentPage}
+            />
+        </section>
+    )
+}
+
+export default PatientList
+
+
+const PatientCard = ({ patient }) => {
+    const navigate = useNavigate()
+    const handlePatientSelect = () => {
+        navigate(`/doctor/patient/info/${patient._id}`)
+    }
+    return (
+        <div className='card'>
+            <h3>{patient.name}</h3>
+            <p>
+                <strong>Age: </strong>
+                {calcAge(patient.birthdate)}
+            </p>
+            <p>
+                <strong>Gender: </strong>
+                {patient.gender}
+            </p>
+            <p>
+                <strong>Last Visit: </strong>
+                {patient.lastVisit
+                    ? new Date(patient.lastVisit).toLocaleString()
+                    : 'No previous visits'}
+            </p>
+            <p>
+                <strong>Next Appointment: </strong>
+                {patient.nextAppointment
+                    ? new Date(patient.nextAppointment).toLocaleString()
+                    : 'No upcoming appointments'}
+            </p>
+            <div className='edit-buttons'>
+                <Button type='primary' onClick={handlePatientSelect}>
+                    View Records
+                </Button>
+            </div>
+        </div>
+    )
+}
+
+export default PatientCard
+
+
+```
+- **Adding doctor documents in Backend:**
+```javascript
+// @desc    Upload a doctor image
+// @route   POST /api/doctor/upload
+// @access  Public
+const uploadDoctorFiles = async (req, res) => {
+    try {
+        const id = req.body.id
+        const files = req.files
+        if (!files?.length)
+            return res.status(400).json({ message: 'No files uploaded' })
+        const doctor = await DoctorModel.findById(id)
+        if (doctor) {
+            const newFilePaths = files.map((file) => file.path)
+            doctor.uploaded_documents =
+                doctor.uploaded_documents.concat(newFilePaths)
+            doctor.save()
+            res.json({
+                message: 'Files uploaded successfully',
+                uploaded_documents: doctor.uploaded_documents,
+            })
+        } else {
+            res.status(404).json({ message: 'Doctor not found' })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+```
+
 
 ---
 
+
 ## Installation
+
+To run the project locally, follow these steps:
+
+- **Clone this repository.**
+
+```bash
+git clone <repository_url>
+```
+
+- **Navigate to the project directory.**
+
+```bash
+cd balabizo-pharmacy
+```
+
+- **Navigate to the socket directory, install dependencies and start the socket server**
+
+```bash
+cd socket
+npm install
+npm start
+```
+
+- **Navigate to the client directory, install dependencies and start the client**
+
+```bash
+cd client
+npm install
+npm start
+```
 
 ---
 
@@ -81,21 +310,109 @@ These technologies collectively form the foundation of the project, allowing for
 
 ## Tests
 
+**Testing Process Used with Postman**
+
+During the development phase of this project, We conducted various tests using Postman to ensure functionality and reliability.
+
+- **Endpoint Validation:**
+
+Employed Postman to test each API endpoint individually, verifying their functionalities by sending distinct requests (GET, POST, PUT, DELETE, etc.) to specific routes.
+
+Checked the response data against expected outcomes, ensuring proper functionality.
+
+- **Authentication and Authorization:**
+
+Tested the authentication mechanism, validating correct authentication and handling of invalid credentials.
+
+Ensured proper authorization by attempting access to restricted routes and verifying the response for unauthorized access.
+
+- **Data Integrity and Error Handling:**
+
+Conducted tests with different sets of data to validate input validation and response integrity.
+
+Simulated error scenarios by intentionally sending incorrect requests, ensuring the API provided accurate error messages and appropriate HTTP status codes.
+
+- **Cross-Functional Testing:**
+
+Tested the integration between different functionalities to ensure seamless operation across various parts of the system.
+
+These tests allowed for thorough validation and verification of the project's functionalities during the development phase. They helped in identifying and rectifying issues, ensuring the robustness and reliability of the API endpoints.
+
 ---
 
 ## How to Use?
+
+### For Doctors:
+
+- **Registration and Document Upload:**
+  
+Navigate to the registration page and sign up by providing required professional information.
+
+- **Login and Document Upload:**
+  
+Log in to your account using the provided credentials.
+Complete your profile and upload necessary documents for verification purposes, such as medical certifications and credentials.
+
+- **Verification Process:**
+
+After submitting your profile and documents, our team will review the provided information.
+Upon approval, you'll receive a notification requesting contract acceptance to gain access to the full platform functionalities.
+
+- **Acceptance of Contract:**
+
+Once verified, you'll be prompted to review and accept the contract terms provided in the notification.
+Upon accepting the contract, you'll gain access to the complete range of platform features, including patient interactions, prescription management, and live consultations.
+
+- **Access Website Features:**
+  
+Access the dashboard and utilize the comprehensive suite of website features. This includes managing prescriptions, interacting with patients through live chat, and providing remote consultations.
+
+### For Patients:
+
+- **Sign Up:**
+
+Visit the registration page and create an account by filling in the required details.
+
+- **Login and Start Exploring:**
+
+Log in to your account using the provided credentials.
+
+Explore the various features available, such as browsing and purchasing medicines, tracking orders, and engaging in live chat with registered pharmacists for assistance or queries.
 
 ---
 
 ## Contribute
 
+We encourage and value contributions from the community! If you're interested in contributing to this project feel free to reach out to us via email at yousseftamer1990@gmail.com. We look forward to collaborating with you!
+
+Your contributions, whether it's in the form of code, suggestions, or bug fixes, are highly appreciated and vital to the project's growth and improvement.
+
 ---
 
 ## Credits
 
+### Ant Design
+
+We would like to extend our gratitude to Ant Design for providing a rich collection of UI components and design resources that significantly contributed to the user interface of this project. Their robust and customizable components have enhanced the visual appeal and functionality of our platform.
+
+### Net Ninja and Web Dev Simplified
+
+We express our appreciation to Net Ninja and Web Dev Simplified for their invaluable online tutorials and educational content. The insightful tutorials, explanations, and guidance from these platforms have been instrumental in shaping our understanding of various web development concepts, enabling us to build and improve this project effectively.
+
+### Video Tutorials for Implementation
+
+We acknowledge and appreciate the instructional content provided by Lama Dev and openJavaScript on YouTube in their videos:
+
+- [Text Chat Implementation](https://youtu.be/HggSXt1Hzfk?si=j8AvgiF1CscbgHIQ) : Utilized for implementing the text chat feature in our project.
+- [Upload Functionality Tutorial](https://youtu.be/TZvMLWFVVhE?si=rT2CIJLey6owPnd0) : Used as a resource during the implementation of upload functionality in our project.
+
+The guidance and insights shared in these videos have been invaluable in the development of this project.
+
 ---
 
 ## License
+
+This project is licensed under both the MIT License and the Apache License 2.0.
 
 
 
