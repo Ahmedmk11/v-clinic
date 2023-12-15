@@ -126,6 +126,7 @@ const doctorSchema = new mongoose.Schema(
             default: [],
         },
     },
+    { timestamps: true},
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },

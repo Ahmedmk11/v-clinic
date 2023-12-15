@@ -19,7 +19,7 @@ const DoctorAppointmentsList = ({
         mode === 'requests' ? ['pending'] : []
     )
     const [dateRange, setDateRange] = useState(null)
-    const AppointmentsPerPage = 8
+    const AppointmentsPerPage = 6
     const applyFilters = () => {
         let filtered = Appointments
         if (selectedStates.length > 0) {
@@ -82,7 +82,7 @@ const DoctorAppointmentsList = ({
                       setAppointments={setAppointments}
                   />
               ))
-            : 'No appointments to show'
+            : mode=='requests'?'No follow-up requests to view':'No appointments to view'
     }
     const filterOptions =
         mode == 'requests'

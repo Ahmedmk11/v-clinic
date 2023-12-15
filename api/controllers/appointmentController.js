@@ -173,6 +173,8 @@ const cancelAppointmentPatient = async (req, res) => {
         if (appointment.start_time - Date.now() > 86400000) {
             patient.wallet = patient.wallet + appointment.fee
             doctor.wallet = doctor.wallet - appointment.fee * 0.9
+            appointment.fee=0;
+            appointment.save();
             await patient.save()
             await doctor.save()
         }

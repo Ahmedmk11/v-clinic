@@ -23,6 +23,8 @@
         --color-shadow: rgba(0, 0, 0, 0.1);
         --accent-background-color: #ffffff;
         --card-border: #f0f0f0;
+        --news-card: #ddd;
+        --dashboard-secondary:rgba(0, 0, 0, 0.45);
     }
 
     & body.dark-mode {
@@ -48,6 +50,9 @@
         --color-shadow: rgba(5, 5, 5, 0.4);
         --accent-background-color: #1F2937;
         --card-border: #000;
+        --news-card:#0d1119;
+        --dashboard-secondary:  rgba(255, 255, 255, 0.45);
+        
     }
 }
 

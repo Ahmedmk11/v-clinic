@@ -19,6 +19,7 @@ import {
     getPatientByDoctorId,
     editMedicineByName,
     deleteMedicine,
+    dashboard,
 } from '../controllers/doctorController.js'
 const router = express.Router()
 
@@ -44,5 +45,6 @@ router.put('/edit-medicine-by-name', editMedicineByName)
 router.post('/updateTimeSlots', updateTimeSlots)
 router.get('/check-username-taken/:username', checkUsernameAvailability)
 router.get('/check-email-taken/:email', checkEmailAvailability)
+router.get('/dashboard/:id', dashboard)
 
 export default router

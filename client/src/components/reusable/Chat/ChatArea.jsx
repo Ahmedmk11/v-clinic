@@ -1,6 +1,6 @@
 import { Card, Input, Button, Avatar, Spin } from 'antd'
 import { SendOutlined, VideoCameraAddOutlined } from '@ant-design/icons'
-import chatImage from '../../../assets/imgs/chat.png'
+import vidChatImg from '../../../assets/imgs/video-chat.png'
 import { useEffect, useState, useRef, useContext } from 'react'
 import CurrUserContext from '../../../contexts/CurrUser'
 import axiosApi from '../../../utils/axiosApi'
@@ -110,7 +110,7 @@ const ChatArea = ({ selectedChat }) => {
                     <a href={videoCallLink} target='_blank' rel='noreferrer'>
                         <img
                             style={{ width: '100%', height: 'auto' }}
-                            src='https://framerusercontent.com/images/O3vWiQpmEywTT2Nr0hcDVqf8GI.png'
+                            src={vidChatImg}
                             alt='video call image'
                         />
                     </a>

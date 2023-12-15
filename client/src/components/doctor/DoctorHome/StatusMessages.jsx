@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import Contract from './Contract'
-import { Button } from 'antd'
+import { Button, Alert, Divider } from 'antd'
 
 const StatusMessages = ({ Doctor }) => {
     const navigate = useNavigate()
@@ -18,50 +18,61 @@ const StatusMessages = ({ Doctor }) => {
                     Doctor?.status?.toLowerCase() === 'pending' &&
                     Doctor?.uploaded_documents?.length < 1
                 }>
-                <div className='sub-container'>
-                    <h3>
-                        Thank you for registering with our platform. We
-                        appreciate your interest in joining our community. To
-                        complete your registration process, we kindly request
-                        you to submit some documents
-                    </h3>
-                   <div className='edit-buttons'>
-                   <Button type='primary' onClick={handleUpload}>
-                        Upload Documents
-                    </Button>
-                   </div>
-                </div>
+                <Alert
+                    message={
+                        <h3 style={{ marginBottom: 0 }}>
+                            Welcome to Virtual Clinic!
+                        </h3>
+                    }
+                    description='Thank you for registering with our platform. We appreciate your interest in joining our community. To complete your registration process, we kindly request you to submit some documents'
+                    type='info'
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    action={
+                        <Button type='primary' onClick={handleUpload}>
+                            Upload Documents
+                        </Button>
+                    }
+                />
+                <Divider />
             </ConditionalRender>
             <ConditionalRender
                 condition={Doctor?.status?.toLowerCase() === 'rejected'}>
-                <div className='sub-container'>
-                    <h3>
-                        Your registration request has been rejected. If you
-                        think this is a mistake, please contact us at{' '}
-                        <a href='mailto: virtualclinicmail@gmail.com'>
-                            virtualclinicmail@gmail.com
-                        </a>
-                        .
-                    </h3>
-                </div>
+                <Alert
+                    message={
+                        <h3 style={{ marginBottom: 0 }}>Sad to see you go!</h3>
+                    }
+                    type='error'
+                    description={
+                        <p>
+                            Your registration request has been rejected. If you
+                            think this is a mistake, please contact us at{' '}
+                            <a href='mailto: virtualclinicmail@gmail.com'>
+                                virtualclinicmail@gmail.com
+                            </a>
+                            .
+                        </p>
+                    }></Alert>
+                    <Divider />
             </ConditionalRender>
             <ConditionalRender
                 condition={
                     Doctor?.status?.toLowerCase() === 'active' &&
                     Doctor?.contract_acceptance?.toLowerCase() == 'pending'
                 }>
-                <div className='sub-container'>
-                    <h3>
-                        Your registration request has been accepted. Review your
-                        employment contract and sign it to start using the
-                        platform.
-                    </h3>
-                    <Button
-                        type='primary'
-                        onClick={() => setContractVisible(true)}>
-                        View Contract
-                    </Button>
-                </div>
+                <Alert
+                    message={<h3 style={{ marginBottom: 0 }}>Congrats!</h3>}
+                    type='success'
+                    description=' Your registration request has been accepted. Review your
+                    employment contract and sign it to start using the
+                    platform.'
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    action={
+                        <Button onClick={() => setContractVisible(true)}>
+                            View Contract
+                        </Button>
+                    }
+                />
+
                 <Contract
                     visible={contractVisible}
                     name={Doctor?.name}
@@ -69,6 +80,7 @@ const StatusMessages = ({ Doctor }) => {
                         setContractVisible(false)
                     }}
                 />
+                <Divider />
             </ConditionalRender>
         </>
     )

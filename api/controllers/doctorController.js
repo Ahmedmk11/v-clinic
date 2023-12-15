@@ -1,5 +1,8 @@
 import DoctorModel from '../models/doctorModel.js'
 import PatientModel from '../models/patientModel.js'
+
+import ConversationModel from '../models/conversationModel.js'
+import MessageModel from '../models/messageModel.js'
 import Medicine from '../models/medicineModel.js'
 import PrescriptionModel from '../models/prescriptionsModel.js'
 import multer from 'multer'
@@ -385,6 +388,172 @@ const deleteMedicine = async (req, res) => {
     }
 }
 
+const dashboard = async (req, res) => {
+    try {
+        const { id } = req.params
+        let doctor = await DoctorModel.findById(id)
+        doctor = await doctor.populate({
+            path: 'appointments',
+            populate: {
+                path: 'patient_id',
+                model: 'Patient',
+            },
+        })
+        const nextAppointment = getNextAppointment(doctor.appointments)
+        const pastWeekAppointments = getPastWeekAppointments(
+            doctor.appointments
+        )
+        const conversations = await ConversationModel.find({
+            members: { $in: [id] },
+        })
+        //get all messages of all conversations
+        const messages = await Promise.all(
+            conversations.map(async (conversation) => {
+                const messages = await MessageModel.find({
+                    conversationId: conversation._id,
+                    sender: { $ne: doctor._id },
+                })
+                return messages
+            })
+        )
+        const lastMessage = getLastMessage(messages, conversations, doctor.name)
+
+        const doctorStats = getDoctorStats(doctor.appointments)
+
+        res.status(200).json({
+            nextAppointment,
+            pastWeekAppointments,
+            lastMessage,
+            doctorStats,
+        })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+const getNextAppointment = (appointments) => {
+    if (appointments.length === 0)
+        return [{ patientName: 'No Upcoming Appointments' }]
+    appointments = appointments.filter((appointment) => {
+        const today = new Date()
+        return (
+            appointment.date.getDate() >= today.getDate() &&
+            (appointment.status == 'rescheduled' ||
+                appointment.status == 'upcoming')
+        )
+    })
+    let nextAppointment = appointments.sort((a, b) => a.date - b.date)[0]
+    nextAppointment = [
+        {
+            patientName: nextAppointment.patient_id.name,
+            appointmentStartTime: nextAppointment.start_time,
+            appointmentEndTime: nextAppointment.end_time,
+        },
+    ]
+    return nextAppointment
+}
+
+const getPastWeekAppointments = (appointments) => {
+    const pastWeekAppointments = [
+        { day: 'Mon', appointments: 0 },
+        { day: 'Tue', appointments: 0 },
+        { day: 'Wed', appointments: 0 },
+        { day: 'Thu', appointments: 0 },
+        { day: 'Fri', appointments: 0 },
+        { day: 'Sat', appointments: 0 },
+        { day: 'Sun', appointments: 0 },
+    ]
+    if (appointments.length === 0) return pastWeekAppointments
+    const today = new Date()
+    const pastWeek = new Date(today.setDate(today.getDate() - 7))
+    appointments.forEach((appointment) => {
+        if (appointment.date > pastWeek && appointment.status == 'completed') {
+            const day = appointment.date.getDay()
+            pastWeekAppointments[day].appointments += 1
+        }
+    })
+    return pastWeekAppointments
+}
+
+const getDoctorStats = (appointments) => {
+    let todaysPatients = appointments.filter((appointment) => {
+        const today = new Date()
+        return (
+            appointment.date.getDate() === today.getDate() &&
+            appointment.date.getMonth() === today.getMonth() &&
+            appointment.date.getFullYear() === today.getFullYear() &&
+            (appointment.status == 'completed' ||
+                appointment.status == 'upcoming')
+        )
+    }).length
+
+    let thisMonthsPatients = appointments.filter((appointment) => {
+        const today = new Date()
+        return (
+            appointment.date.getMonth() === today.getMonth() &&
+            appointment.date.getFullYear() === today.getFullYear() &&
+            (appointment.status == 'completed' ||
+                appointment.status == 'upcoming')
+        )
+    }).length
+
+    let remaingAppointmentsToday = appointments.filter((appointment) => {
+        const today = new Date()
+        return (
+            appointment.date.getDate() === today.getDate() &&
+            appointment.date.getMonth() === today.getMonth() &&
+            appointment.date.getFullYear() === today.getFullYear() &&
+            appointment.status === 'Pending'
+        )
+    }).length
+
+    let totalRevenueThisMonth = appointments.reduce((total, appointment) => {
+        const today = new Date()
+        if (
+            appointment.date.getMonth() === today.getMonth() &&
+            appointment.date.getFullYear() === today.getFullYear()
+        )
+            return total + appointment.fee
+        return total
+    }, 0)
+
+    return [
+        { title: 'Patients Today', value: todaysPatients },
+        {
+            title: 'Remaining Appointments Today',
+            value: remaingAppointmentsToday,
+        },
+        { title: 'Total Appointments This Month', value: thisMonthsPatients },
+        { title: 'Revenue This Month', value: '$ ' + totalRevenueThisMonth },
+    ]
+}
+
+const getLastMessage = (messages, conversations, doctorName) => {
+    if (messages.length === 0)
+        return [
+            {
+                senderName: 'No Messages',
+            },
+        ]
+    messages = messages.flat()
+    console.log(messages)
+    let lastMessage = messages.sort((a, b) => b.createdAt - a.createdAt)[0]
+    
+    const membersInfo = conversations.find(
+        (conversation) => conversation._id == lastMessage.conversationId
+    ).membersInfo
+
+    let senderName = membersInfo[0]
+    if (senderName == doctorName) senderName = membersInfo[1]
+    lastMessage = [
+        {
+            senderName: senderName,
+            message: lastMessage.text,
+        },
+    ]
+    return lastMessage
+}
+
 export {
     createDoctor,
     getDoctors,
@@ -405,4 +574,5 @@ export {
     checkEmailAvailability,
     editMedicineByName,
     deleteMedicine,
+    dashboard,
 }
