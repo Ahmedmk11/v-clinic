@@ -335,7 +335,51 @@ npm start
 
 ## API Reference
 
----
+### Admin APIs
+#### Get all admins
+```http
+  GET api/admin/getAllAdmins
+```
+<details>
+ <summary>
+  Response
+ </summary>
+ 
+ ```json
+ [{"_id":"65549d1e57bc513a3937689a","username":"admin","name":"admin","email":"admin@gmail.com","password":"$2b$12$FRAIfWM/OB7GqReNEsTcUuqlaeiXDrMrJgWvg2bLkEEFExNxPnBce","createdAt":"2023-11-15T10:27:42.499Z","updatedAt":"2023-11-15T10:27:42.499Z","__v":0}
+,{"_id":"656cafccc1eab0a408e91bb3","username":"admin2","name":"Ahmed Mahmoud","email":"ahmedmahmoudkzem@gmail.com","password":"$2b$12$ER84B8lTOO8EZKImeLvN4uMstTHaYy0vzcjdpgS/eYXOefF0jDDOu","createdAt":"2023-12-03T16:41:48.241Z","updatedAt":"2023-12-03T16:41:48.241Z","__v":0}]
+ ```
+ </details>
+
+ #### Get all doctors
+```http
+  GET api/admin/getAllDoctors
+```
+<details>
+ <summary>
+  Response
+ </summary>
+ 
+ ```json
+ [{"_id":"6554a105602bb02ebd8ebf4e","username":"belly","name":"Belly","email":"belly@gmail.com","password":"$2b$12$4kyeuY6a62vLv6KSFt3xS.UAKVwsH.F6cvW6.4UYjSV32AlTyZlky","dob":"2023-11-06T00:00:00.000Z","hourly_rate":400,"affiliation":"WHO","education":"Oxford","wallet":0,"status":"Pending","contract_acceptance":"Pending","speciality":"Neurologist","uploaded_documents":[],"timeSlots":[],"__v":0},{"_id":"6563448aa7d20ecb01722ace","username":"doc3","name":"jojo","email":"ahmedmahmoudkm@gmail.com","password":"$2b$12$vM37et5vm4tS4/M8HYGAbueI3Fg2CiUi26NyVX0hb9PAIfGZpgc8S","dob":"2023-11-01T00:00:00.000Z","hourly_rate":100,"affiliation":"Wedan","education":"GUC","wallet":0,"status":"Pending","contract_acceptance":"Pending","speciality":"Wedan","uploaded_documents":[],"timeSlots":[],"__v":0}]
+ ```
+ </details>
+
+  #### Get all patients
+```http
+  GET api/admin/getAllPatients
+```
+<details>
+ <summary>
+  Response
+ </summary>
+ 
+ ```json
+ [{"_id":"65549e9657bc513a393768a7","username":"saleh","name":"Saleh","email":"salehmohamad210@gmail.com","password":"$2b$12$BgLM.3TZBgT7VF/Vr55ZBOS3b4LaBdYE0RrWOouVlOErbxW2GJY..","wallet":259472,"birthdate":"1715-01-01T00:00:00.000Z","gender":"male","phoneNumber":"01234567890","emergencyName":"Omar","emergencyPhoneNumber":"11111114311","linkingCode":"3633a99b6e072a88959f55737ac2efda","packageRenewalDate":"2024-12-01T22:00:00.000Z","packageStatus":"Active","isAutoRenewalBlocked":false,"health_records":[],"__v":1,"package":"65549d7d57bc513a3937689e","emergencyRelation":"brother","deliveryAddress":[],"nid":"00000000000000"},
+{"_id":"65549ed257bc513a393768ac","username":"karma","name":"Karma","email":"karma@gmail.com","password":"$2b$12$pSzoAsHduCxZ9Fff2bT5OeJnFk1XfpT3pjSp.jKF76g.xr6Qhszt6","wallet":1584,"birthdate":"1719-01-15T00:00:00.000Z","gender":"female","phoneNumber":"11111111121","emergencyName":"Saleh","emergencyPhoneNumber":"11111111111","linkingCode":"e4df903ff18574e5e60c6527abccc1ca","packageRenewalDate":"2024-11-25T22:00:00.000Z","packageStatus":"Inactive","isAutoRenewalBlocked":false,"health_records":[],"__v":0,"package":"65549dce57bc513a393768a4","nid":"00000000000001","deliveryAddress":[]}]
+ ```
+ </details>
+ 
 
 ## Tests
 
