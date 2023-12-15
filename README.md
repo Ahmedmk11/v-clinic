@@ -8,8 +8,26 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-## <img src="./client/src/assets/icons/logoBlue.svg" alt="V-Clinic Icon" width="150" height="150"> 
-### About the Project:
+### <img src="./client/src/assets/icons/logoBlue.svg" alt="V-Clinic Icon" width="150" height="150"> 
+
+## Table of Contents
+- [About the Project](#about-the-project)
+- [Motivation](#motivation)
+- [Build Status](#build-status)
+- [Code Quality and Style Enforcement](#code-quality-and-style-enforcement)
+- [Tech/Framework Used](#techframework-used)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Code Examples](#code-examples)
+- [Installation](#installation)
+- [API Reference](#api-reference)
+- [Tests](#tests)
+- [How to Use?](#how-to-use)
+- [Contribute](#contribute)
+- [Credits](#credits)
+- [License](#license)
+
+## About the Project:
 
 V-Clinic is a revolutionary virtual clinic solution designed to streamline healthcare interactions among patients, medical professionals, and clinics. Our platform aims to automate and simplify various healthcare processes, including appointment scheduling, medical record access, prescription management, and seamless communication between doctors and patients.
 
@@ -23,13 +41,13 @@ V-Clinic stands out through its focus on providing a comprehensive healthcare so
 
 ---
 
-## Motiviation :fire:
+## Motivation
 
 Healthcare interactions often involve various inefficiencies, from cumbersome appointment scheduling and inaccessible medical records to complex prescription management. V-Clinic is motivated by the need to address these challenges and revolutionize the healthcare industry by offering a unified platform for patients, doctors, and clinics. Our goal is to provide a seamless experience, bridging the gap between patients and healthcare providers while optimizing the healthcare journey for all stakeholders involved.
 
 ---
 
-## Build Status :mechanical_arm:
+## Build Status
 
 - The project is currently in active development.
 - **Deployment Plan:** Scheduled deployment through AWS Services or similar platforms in the near future.
@@ -38,7 +56,7 @@ Healthcare interactions often involve various inefficiencies, from cumbersome ap
 
 ---
 
-## Code Quality and Style Enforcement  :writing_hand:
+## Code Quality and Style Enforcement 
 
 [![Code Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
@@ -51,7 +69,7 @@ These tools, ESLint for code rule enforcement and Prettier for code formatting, 
 
 ---
 
-## Tech/Framework Used 🧰
+## Tech/Framework Used
 
 The project is built on the MERN stack, which comprises the following technologies:
 
@@ -70,7 +88,8 @@ In addition to the core stack, the project incorporates several essential APIs a
 - **React-PDF:** Utilized for PDF rendering within the application, React-PDF enhances the platform's functionality by providing robust PDF display capabilities, supporting various document formats.
 - **Whereby:** Utilized for video chat integration, Whereby provides a seamless video conferencing experience, allowing users to engage in remote consultations with healthcare professionals.
 - **News API:** Integrated to display the most recent news, the News API feature enriches the platform with up-to-date information and news articles for users' reference and awareness.
-
+- **Recharts:** 
+  Recharts, a charting library for React, is employed to create intuitive and visually appealing data visualizations within the application.
 
 These technologies and APIs collectively form the foundation of the project, enabling a comprehensive full-stack JavaScript-based development approach. Understanding and familiarity with these technologies are crucial for comprehending, contributing to, and further enhancing the project.
 
@@ -90,7 +109,7 @@ These technologies and APIs collectively form the foundation of the project, ena
 ---
 
 
-## Code Examples :computer:
+## Code Examples
 - **Viewing Patients in Frontend:**
 ```javascript
 const ViewPatients = () => {
@@ -302,6 +321,16 @@ npm install
 npm start
 ```
 
+#### Before running the project, make sure you have the following environment variables set:
+
+- `CONN_STRING`: [Your MongoDB Connection String]
+- `JWT_SECRET`: [Your JWT Secret Key]
+- `GMAIL_PASSWORD`: [Your Gmail Account Password for Nodemailer]
+- `STRIPE_PRIVATE_KEY`: [Your Stripe Private Key]
+- `STRIPE_PUBLISHABLE_KEY`: [Your Stripe Publishable Key]
+- `WHEREBY_API_KEY`: [Your Whereby API Key]
+- `API_URL`: [Your API URL]
+
 ---
 
 ## API Reference
@@ -413,11 +442,3 @@ The guidance and insights shared in these videos have been invaluable in the dev
 ## License
 
 This project is licensed under both the MIT License and the Apache License 2.0.
-
-
-
-
-
-
-
-
