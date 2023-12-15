@@ -53,7 +53,7 @@
     }
 }
 
-.dashboard .additional-stats {
+.dashboard .additional-stats,.user-count,.health-packages,.subscriptions {
 color: var(--main-text-color);
 background-color: var(--accent-background-color);
 

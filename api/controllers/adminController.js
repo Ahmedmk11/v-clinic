@@ -239,6 +239,49 @@ const deletePackage = async (req, res) => {
 }
 /* -----------------Package funcs------------------------ */
 
+const dashboard = async (req, res) => {
+    try {
+        const doctors = (
+            await DoctorModel.find({ contract_acceptance: 'Accepted' })
+        ).length
+        const patients = (await PatientModel.find())
+        const requests = (await DoctorModel.find({ status: 'Pending' })).length
+        const subscribers = (
+            await PatientModel.find({ packageStatus: 'Active' })
+        ).length
+        const canceled = (
+            await PatientModel.find({ packageStatus: 'Inactive' })
+        ).length
+        let packages = await packageModel.find()
+  
+        packages = packages.map(async(p) => {
+            return {
+                title: p.name,
+                subscriptions: (
+                   await PatientModel.find({
+                        package: p._id,
+                    })
+                ).length,
+            }
+        }
+        )
+        packages = await Promise.all(packages)
+
+
+
+        res.status(200).json({
+            doctors,
+            patients:patients.length,
+            requests,
+            subscribers,
+            canceled,
+            packages,
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 const adminController = {
     addAdmin,
     getUser,
@@ -254,5 +297,6 @@ const adminController = {
     addPackage,
     updateDoctorStatus,
     getPackagebyID,
+    dashboard
 }
 export default adminController
