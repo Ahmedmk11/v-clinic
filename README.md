@@ -179,7 +179,7 @@ These technologies and APIs collectively form the foundation of the project, ena
 - #### Admin view available health packages.
 
 <img width="1000" alt="admin" src="./screenshots/view_packages.png">
----
+
 </details>
 
 ## Features
@@ -488,8 +488,8 @@ npm start
  ```
  </details>
 
-#### Check out our full API Documentation on Postman by clicking [here]()
-#### Check out our API Workspace on Postman by clicking [here]()
+#### Check out our full API Documentation on Postman by clicking [here](https://documenter.getpostman.com/view/29807347/2s9Ykn8h1C)
+#### Check out our API Workspace on Postman by clicking [here](https://www.postman.com/speeding-crescent-574741/workspace/acl-v-clinic)
 
 <br/>
 <a href="https://www.getpostman.com/"><img src="https://assets.getpostman.com/common-share/postman-logo-horizontal-320x132.png" /></a><br />
