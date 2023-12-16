@@ -100,7 +100,85 @@ These technologies and APIs collectively form the foundation of the project, ena
 ## Screenshots
 </summary>
 
+- #### Sign in using username and password.
 
+<img width="1000" alt="login" src="./screenshots/login.png">
+
+- #### Sign up as a patient.
+
+<img width="1000" alt="signup" src="./screenshots/registeration.png">
+
+- #### light and dark mode.
+
+<img width="500" margin="20" alt="light" src="./screenshots/light_mode.png"> <img width="500" alt="dark" src="./screenshots/dark_mode.png">
+
+- #### Doctor Dashboard.
+
+<img width="1000" alt="doctor" src="./screenshots/doctor_dashboard.png">
+
+- #### Doctor view and edit profile.
+
+<img width="1000" alt="doctor" src="./screenshots/doctor_profile.png">
+
+- #### Doctor view and add free time slots.
+
+<img width="1000" alt="doctor" src="./screenshots/add_time_slots.png">
+
+- #### Doctor view appointments.
+
+<img width="1000" alt="doctor" src="./screenshots/doctor_apps.png">
+
+- #### Doctor chat with patient.
+
+<img width="1000" alt="chat" src="./screenshots/chat.png">
+
+- #### Patient Profile.
+
+<img width="1000" alt="patient" src="./screenshots/patient_profile.png">
+
+- #### Patient view health subscribed package.
+
+<img width="1000" alt="patient" src="./screenshots/view_health_package.png">
+
+- #### Patient subscribe to health package.
+
+<img width="1000" alt="patient" src="./screenshots/subscribe_health_pack.png">
+
+- #### Patient upload and view medical history files.
+
+<img width="1000" alt="patient" src="./screenshots/medical_history.png">
+
+- #### Patient view medical records.
+
+<img width="1000" alt="patient" src="./screenshots/medical_records.png">
+
+- #### Patient view selected prescription.
+
+<img width="1000" alt="patient" src="./screenshots/prescription.png">
+
+- #### Patient view active doctors.
+
+<img width="1000" alt="patient" src="./screenshots/view_doctors.png">
+
+- #### Patient view doctor's slots.
+
+<img width="1000" alt="patient" src="./screenshots/view_doctor_free_slots.png">
+
+- #### Patient book appointment.
+
+<img width="1000" alt="patient" src="./screenshots/reserve_app.png">
+
+- #### Admin Dashboard.
+
+<img width="1000" alt="admin" src="./screenshots/admin_dashboard.png">
+
+- #### Admin view doctors' requests.
+
+<img width="1000" alt="admin" src="./screenshots/view_requests.png">
+
+- #### Admin view available health packages.
+
+<img width="1000" alt="admin" src="./screenshots/view_packages.png">
 ---
 </details>
 
