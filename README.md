@@ -20,7 +20,7 @@
 - [Features](#features)
 - [Code Examples](#code-examples)
 - [Installation](#installation)
-- [API Reference](#api-reference)
+- [API Documentation](#api-documentation)
 - [Tests](#tests)
 - [How to Use?](#how-to-use)
 - [Contribute](#contribute)
@@ -333,7 +333,7 @@ npm start
 
 ---
 
-## API Reference
+## API Documentation
 
 ### Admin APIs
 #### Get all admins
@@ -379,6 +379,15 @@ npm start
 {"_id":"65549ed257bc513a393768ac","username":"karma","name":"Karma","email":"karma@gmail.com","password":"$2b$12$pSzoAsHduCxZ9Fff2bT5OeJnFk1XfpT3pjSp.jKF76g.xr6Qhszt6","wallet":1584,"birthdate":"1719-01-15T00:00:00.000Z","gender":"female","phoneNumber":"11111111121","emergencyName":"Saleh","emergencyPhoneNumber":"11111111111","linkingCode":"e4df903ff18574e5e60c6527abccc1ca","packageRenewalDate":"2024-11-25T22:00:00.000Z","packageStatus":"Inactive","isAutoRenewalBlocked":false,"health_records":[],"__v":0,"package":"65549dce57bc513a393768a4","nid":"00000000000001","deliveryAddress":[]}]
  ```
  </details>
+
+#### Check out our full API Documentation on Postman by clicking [here](https://documenter.getpostman.com/view/17286684/2s8Z6zzC3R)
+#### Check out our API Workspace on Postman by clicking [here](https://www.postman.com/crimson-escape-923343/workspace/acl-team-workspace/collection/17286684-0dc5a3aa-0a42-4d4a-9e2b-cca9f820817a?action=share&creator=24014344)
+
+<br/>
+<a href="https://www.getpostman.com/"><img src="https://assets.getpostman.com/common-share/postman-logo-horizontal-320x132.png" /></a><br />
+
+
+<br/><br/>
  
 
 ## Tests
