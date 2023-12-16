@@ -26,7 +26,7 @@ const DoctorCard = ({ doctor, discount }) => {
                 <Button
                     type='primary'
                     onClick={() => {
-                        navigate(`/patient/doctor-info/${doctor.id}`, {
+                        navigate(`/patient/doctor-info/${doctor?._id}`, {
                             state: { discount },
                         })
                     }}>

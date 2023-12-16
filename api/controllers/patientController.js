@@ -543,7 +543,7 @@ const uploadPatientFiles = async (req, res) => {
                 ...newFilePaths,
             ]
             await patient.save()
-            res.status(201).json({
+            res.status(200).json({
                 message: 'Files uploaded successfully',
                 UploadedMedicalRecords: patient.health_records,
             })
@@ -1113,7 +1113,6 @@ const checkUsernameAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
         res.status(500).json({ message: error.message })
     }
 }
@@ -1130,7 +1129,7 @@ const checkEmailAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
+        
         res.status(500).json({ message: error.message })
     }
 }
@@ -1147,7 +1146,7 @@ const checkPhoneAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
+        
         res.status(500).json({ message: error.message })
     }
 }
@@ -1164,7 +1163,6 @@ const checkNidAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
         res.status(500).json({ message: error.message })
     }
 }

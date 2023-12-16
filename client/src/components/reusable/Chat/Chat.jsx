@@ -12,7 +12,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (!currUser) return
-        axiosApi.get('chat/get-chats' + currUser?._id).then((response) => {
+        axiosApi.get('chat/get-chats/' + currUser?._id).then((response) => {
             setChats(() =>
                 response.data?.map((chat) => {
                     let name = chat.membersInfo[0]

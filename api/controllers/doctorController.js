@@ -29,7 +29,6 @@ const doctorUpload = multer({ storage: doctorStorage })
 // @access  Public
 const createDoctor = async (req, res) => {
     try {
-        console.log(req.body)
         const {
             username,
             name,
@@ -107,8 +106,6 @@ const getAllMedicines = async (req, res) => {
 }
 
 const editMedicineByName = async (req, res) => {
-    console.log('Request Body:', req.body) // Log the request body
-
     try {
         const medName = req.body.name
         const aid = req.body.aid
@@ -122,7 +119,6 @@ const editMedicineByName = async (req, res) => {
             // without the aid field
             const newMed = req.body
             delete newMed.aid
-            console.log('New Medicine:', newMed)
             const medIndex = medicationsPrescription.findIndex(
                 (med) => med.name === medName
             )
@@ -211,24 +207,6 @@ const getAppointmentsByDoctorId = async (req, res) => {
             doctor = await doctor.populate('appointments')
             res.json(doctor.appointments)
         } else res.status(404).json({ message: 'Doctor not found' })
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-}
-
-const getAppointmentsByDoctorIdArray = async (req, res) => {
-    try {
-        let doctor = await DoctorModel.findById(req.params.id)
-        if (doctor) {
-            // Populate appointments and convert to array
-            await doctor.populate('appointments').execPopulate()
-            const appointmentsArray = doctor.appointments.map((appointment) =>
-                appointment.toObject()
-            )
-            res.json(appointmentsArray)
-        } else {
-            res.status(404).json({ message: 'Doctor not found' })
-        }
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -328,16 +306,13 @@ const updateTimeSlots = async (req, res) => {
 const checkUsernameAvailability = async (req, res) => {
     try {
         const { username } = req.params
-        console.log(username)
         const isTaken = await DoctorModel.findOne({ username: username })
-        console.log(isTaken)
         if (!isTaken) {
             res.status(202).json({ message: 202 })
         } else {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
         res.status(500).json({ message: error.message })
     }
 }
@@ -345,30 +320,28 @@ const checkUsernameAvailability = async (req, res) => {
 const checkEmailAvailability = async (req, res) => {
     try {
         const { email } = req.params
-        console.log(email)
         const isTaken = await DoctorModel.findOne({ email: email })
-        console.log(isTaken)
         if (!isTaken) {
             res.status(202).json({ message: 202 })
         } else {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        console.log('hi 500')
         res.status(500).json({ message: error.message })
     }
 }
 
 const deleteMedicine = async (req, res) => {
     try {
-        const { id } = req.params
+        const { id, medId } = req.params
+
         const prescription = await PrescriptionModel.findOne({
             appointment_id: id,
         })
         const medicationsPrescription = prescription.medications
         if (medicationsPrescription) {
             const medIndex = medicationsPrescription.findIndex(
-                (med) => med._id == id
+                (med) => med._id == medId
             )
             medicationsPrescription.splice(medIndex, 1)
             await prescription.save()
@@ -536,9 +509,8 @@ const getLastMessage = (messages, conversations, doctorName) => {
             },
         ]
     messages = messages.flat()
-    console.log(messages)
     let lastMessage = messages.sort((a, b) => b.createdAt - a.createdAt)[0]
-    
+
     const membersInfo = conversations.find(
         (conversation) => conversation._id == lastMessage.conversationId
     ).membersInfo
@@ -567,7 +539,6 @@ export {
     uploadDoctorFiles,
     updateContract,
     updateTimeSlots,
-    getAppointmentsByDoctorIdArray,
     getAllMedicines,
     getMedicineByName,
     checkUsernameAvailability,

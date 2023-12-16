@@ -568,7 +568,6 @@ const updatePrescription = async (req, res) => {
 const getPrescription = async (req, res) => {
     try {
         const appointmentId  = req.params.id
-        console.log(appointmentId)
         const getPrescription = await PrescriptionModel.findOne({appointment_id: appointmentId})
         if (!getPrescription){
             return res.status(400).json({ message: 'Prescription not found' })

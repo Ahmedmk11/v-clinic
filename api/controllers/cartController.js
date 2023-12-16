@@ -19,10 +19,8 @@ const fillCartWithPrescription = async (req, res) => {
 
     prescription.medications.forEach((medication) => {
       const existingItem = cart.items.find(
-        (item) => item.medicine_id.toString() === medication.medicine_id.toString()
+        (item) => item.medicine_id == medication.medicine_id
       );
-      console.log('cart', cart)
-      console.log('medication', medication)
       if (existingItem) {
         existingItem.quantity += 1;
       } else {

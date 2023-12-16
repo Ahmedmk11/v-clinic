@@ -6,7 +6,6 @@ import {
     updateDoctor,
     getAppointmentsByDoctorId,
     getAppointmentsWithNamesByDoctorId,
-    getAppointmentsByDoctorIdArray,
     getActiveDoctors,
     saveDoctorfiles,
     uploadDoctorFiles,
@@ -34,9 +33,7 @@ router.get(
     '/get-appointments-with-names/:id',
     getAppointmentsWithNamesByDoctorId
 )
-router.delete('/delete-medication-from-prescription/:id', deleteMedicine)
-
-router.get('/get-appointmentstimes/:id', getAppointmentsByDoctorIdArray)
+router.delete('/delete-medication-from-prescription/:id/:medId', deleteMedicine)
 router.get('/get-all-medicines', getAllMedicines)
 router.get('/get-medicine-by-name/:name', getMedicineByName)
 router.post('/upload', saveDoctorfiles, uploadDoctorFiles)

@@ -129,7 +129,7 @@ const AppointmentPrescription = ({
     const deleteMedicine = async (medicine) => {
         try {
             const response = await axiosApi.delete(
-                `/doctor/delete-medication-from-prescription/${Appointment._id}`
+                `/doctor/delete-medication-from-prescription/${Appointment._id}/${medicine._id}`
             )
             console.log(response.data)
             setAllMedicines((prev) => {
@@ -250,10 +250,10 @@ const AppointmentPrescription = ({
                             key='next-button0'
                             type='primary'
                             onClick={handleSubmitPrescription}>
-                            Edit Prescrition
+                            Save Changes
                         </Button>
                     </ConditionalRender>
-                </div>,
+                </div>
             ]}>
             <Form form={form} layout='vertical' name='create_appointment_form'>
                 <label
