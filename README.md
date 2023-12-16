@@ -106,7 +106,37 @@ These technologies and APIs collectively form the foundation of the project, ena
 
 ## Features
 
----
+- **Appointment Reservation:** Patients can reserve and pay for appointments with doctors through our website.
+
+- **Linking Family Members:** Patients have the option to link family members which allows them to reserve appointments for them.
+
+- **Package Subscriptions:** Patients can subscribe to packages to get discounts on medicines and appointments.
+
+- **Appointment Timings:** Doctors have the option to select their working hours and the system divides the shift into appointments that can be reserved.
+
+- **Medical History/Medical Records:** Doctors have access to their patient's Medical history and records.
+  
+- **Prescription Purchase:** Integration with V-Pharmacy allows the patients to purchase their prescriptions online.
+  
+- **Credit Card and Wallet Payment:** Patients can choose to pay for appointments, packages, and prescriptions through credit card or wallet.
+
+- **Video Chat with Doctors:** Reserved appointments can be conducted online through our video chat feature. 
+
+- **Live Text Chat with Doctors:** Patients have the option to text chat with doctors, if needed.
+
+
+
+|       Feature                   |  Status  |
+| -------------------------- | :----------------:| 
+| Authentiation            |         ✔️         |    
+| Authorization            |         ✔️         |    
+| User Roles             |         ✔️         |    
+| Payments         |         ✔️         |   
+| User Email Notifications  |         ✔️         |      
+| User Password Reset    |         ✔️         |
+| Upload PDFs/Images    |         ✔️         |
+
+
 
 
 ## Code Examples
