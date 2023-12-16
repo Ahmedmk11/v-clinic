@@ -6,9 +6,9 @@ import {
     ScheduleOutlined,
     MedicineBoxOutlined,
     FileAddOutlined,
+    ArrowLeftOutlined,
 } from '@ant-design/icons'
 import './sidebar.css'
-import backIcn from '../../../assets/icons/back.svg'
 
 import adminIcn from '../../../assets/icons/admin.svg'
 import doctorIcn from '../../../assets/icons/doctor.svg'
@@ -90,23 +90,21 @@ const Sidebar = () => {
         />
     )
 
-    const BackIcon = () => (
-        <img
-            onClick={() => {
-                window.history.back()
-            }}
-            className='back-btn'
-            style={{ width: 25, height: 25 }}
-            src={backIcn}
-        />
-    )
-
     return (
         <div className={`sidebar ${isExpanded ? 'sidebar-expanded' : ''}`}>
             <div>
-                <p className='back-button'>
-                    <BackIcon />
-                </p>
+                <div
+                    onMouseEnter={() => setIsExpanded(true)}
+                    onMouseLeave={() => setIsExpanded(false)}>
+                    <p
+                        className={'sidebar-item'}
+                        onClick={() => {
+                            window.history.back()
+                        }}>
+                        <ArrowLeftOutlined />
+                        {isExpanded ? 'Back' : ''}
+                    </p>
+                </div>
                 <div
                     onMouseEnter={() => setIsExpanded(true)}
                     onMouseLeave={() => setIsExpanded(false)}>

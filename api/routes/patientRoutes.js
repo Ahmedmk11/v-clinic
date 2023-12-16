@@ -39,7 +39,8 @@ import {
 
 const router = express.Router()
 
-router.post('/create-patient', createPatient)
+// readme
+
 router.post('/populate-family-members/:id', populateFamilyMembers)
 router.post('/add-package/:id', addPackage)
 router.post('/buy-package-wallet/:id', buyPackageWallet)
@@ -49,6 +50,7 @@ router.post('/pay-appointment-card/:id', payAppointmentCard)
 router.post('/add-medical-history', addMedicalHistory)
 router.put('/update-medical-history/:id', updateMedicalHistory)
 
+router.post('/create-patient', createPatient)
 router.get('/get-prescription-price/:prescription_id', getPrescriptionPrice)
 router.get('/get-patients', getPatients)
 router.get('/get-patient-by-id/:id', getPatientByID)

@@ -1,7 +1,17 @@
 import express from 'express'
-import { cancelAppointmentDoctor,cancelAppointmentPatient ,rescheduleAppointment,requestFollowUp,acceptFollowUp,rejectFollowUp, updatePrescription, getPrescription} from '../controllers/appointmentController.js'
+import {
+    cancelAppointmentDoctor,
+    cancelAppointmentPatient,
+    rescheduleAppointment,
+    requestFollowUp,
+    acceptFollowUp,
+    rejectFollowUp,
+    updatePrescription,
+    getPrescription,
+} from '../controllers/appointmentController.js'
 const router = express.Router()
 
+// readme
 router.patch('/cancel-appointment-doctor', cancelAppointmentDoctor)
 router.patch('/cancel-appointment-patient', cancelAppointmentPatient)
 router.patch('/reschedule-appointment', rescheduleAppointment)
