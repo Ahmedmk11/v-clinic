@@ -1,4 +1,5 @@
-import { checkNotifications } from "../api/app.js";
+import NotificationsModel from "./Models/notificationsModel.js";
+import { connectToDatabase } from "./database.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
@@ -10,6 +11,12 @@ const io = new Server(httpServer, {
 });
 
 let users = [];
+
+const checkNotifications = async () => {
+  console.log("Checking Notifications");
+  const notifications = await NotificationsModel.find();
+  return notifications;
+};
 
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
@@ -61,7 +68,8 @@ io.on("connection", (socket) => {
 });
 
 const PORT = 8900;
-
-httpServer.listen(PORT, () => {
-  console.log(`Socket.io server is running on port ${PORT}`);
+connectToDatabase().then(() => {
+  httpServer.listen(PORT, () => {
+    console.log(`Socket.io server is running on port ${PORT}`);
+  });
 });

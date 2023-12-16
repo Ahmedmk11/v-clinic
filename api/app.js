@@ -64,16 +64,6 @@ app.use('/api/uploads/doctorUploads', express.static('uploads/doctorUploads')) /
 app.use('/api/uploads/patientUploads', express.static('uploads/patientUploads')) //move to patientRoutes
 
 // --------------------------------------------------
-// Check Notifications
-// --------------------------------------------------
-
-const checkNotifications = async () => {
-    console.log('Checking Notifications')
-    const notifications = await NotificationsModel.find()
-    return notifications
-}
-
-// --------------------------------------------------
 // Server
 // --------------------------------------------------
 
@@ -83,6 +73,3 @@ connectToDatabase().then(() => {
     })
 })
 
-// --------------------------------------------------
-
-export { checkNotifications }
