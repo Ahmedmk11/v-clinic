@@ -380,8 +380,8 @@ npm start
  ```
  </details>
 
-#### Check out our full API Documentation on Postman by clicking [here](https://documenter.getpostman.com/view/17286684/2s8Z6zzC3R)
-#### Check out our API Workspace on Postman by clicking [here](https://www.postman.com/crimson-escape-923343/workspace/acl-team-workspace/collection/17286684-0dc5a3aa-0a42-4d4a-9e2b-cca9f820817a?action=share&creator=24014344)
+#### Check out our full API Documentation on Postman by clicking [here]()
+#### Check out our API Workspace on Postman by clicking [here]()
 
 <br/>
 <a href="https://www.getpostman.com/"><img src="https://assets.getpostman.com/common-share/postman-logo-horizontal-320x132.png" /></a><br />
