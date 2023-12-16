@@ -164,6 +164,7 @@ const Login = () => {
                         }}>
                         <Form.Item name='remember' valuePropName='checked'>
                             <Checkbox
+                                checked={userData.remember}
                                 onChange={(e) => {
                                     setUserData({
                                         ...userData,

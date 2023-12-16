@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import axiosApi from './utils/axiosApi'
 
 import Login from './pages/general/Login/Login'
+import LandingPage from './pages/general/LandingPage/LandingPage'
 import PatientRegistration from './pages/patient/Register'
 import DoctorRegistration from './pages/doctor/RegisterDoctor'
 import DoctorMain from './pages/doctor/DoctorMain'
@@ -40,7 +41,6 @@ import Chat from './components/reusable/Chat/Chat'
 
 import { LoginGuard, PatientGuard, DoctorGuard, AdminGuard } from './AuthGuard'
 
-
 const RouteSwitch = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null)
     const [role, setRole] = useState('')
@@ -65,14 +65,7 @@ const RouteSwitch = () => {
 
     return (
         <Routes>
-            <Route
-                path='/'
-                element={
-                    <LoginGuard isAuthenticated={isAuthenticated} role={role}>
-                        <Login />
-                    </LoginGuard>
-                }
-            />
+            <Route path='/' element={<LandingPage />} />
             <Route
                 path='/login'
                 element={
@@ -118,10 +111,7 @@ const RouteSwitch = () => {
                     path='view-prescriptions'
                     element={<ViewPrescriptions />}
                 />
-                <Route
-                    path='view-health-records'
-                    element={<HealthRecords />}
-                />
+                <Route path='view-health-records' element={<HealthRecords />} />
                 <Route
                     path='prescription-info'
                     element={<PrescriptionInfo />}
