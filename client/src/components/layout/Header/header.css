@@ -97,7 +97,7 @@
     padding: 0% !important;
 
     .ant-dropdown-menu-item {
-        user-select: all;
+        user-select: none;
         min-height: 70px;
         height: fit-content;
         width: 360px;

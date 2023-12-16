@@ -46,6 +46,18 @@ const Header = () => {
     const [visible, setVisible] = useState(false)
     const [visible2, setVisible2] = useState(false)
     const [initialRender, setInitialRender] = useState(false)
+    const [read, setRead] = useState(false)
+    const [oldNotifications, setOldNotifications] = useState([
+        {
+            _id: 'no-notifs',
+            appointment_id: null,
+            doctor_id: null,
+            patient_id: null,
+            date: null,
+            message_patient: 'No notifications',
+            message_doctor: 'No notifications',
+        },
+    ])
     const [compareNotifications, setCompareNotifications] = useState([
         {
             _id: 'no-notifs',
@@ -110,12 +122,21 @@ const Header = () => {
         const userNotificationsString = JSON.stringify(userNotifications)
         const compareNotificationsString = JSON.stringify(compareNotifications)
 
+        if (read) {
+            setRead(false)
+            return
+        }
+
         if (initialRender) {
+            if (userNotifications.length <= oldNotifications.length) {
+                return
+            }
             if (userNotificationsString !== compareNotificationsString) {
+                setOldNotifications(userNotifications)
                 notification.open({
-                    message: 'New Appointment!',
+                    message: 'New Message!',
                     description:
-                        'You have a new appointment, please check your inbox for more details.',
+                        'You have a new message, please check your inbox for more details.',
                     duration: 2,
                     placement: 'bottomRight',
                 })
@@ -148,22 +169,6 @@ const Header = () => {
             src={logoIcn}
         />
     )
-
-    // useEffect(() => {
-    //     if (currUser) {
-    //         const type = role == 'patient' ? 'patient' : 'doctor'
-    //         axiosApi
-    //             .get(`/patient/get-notifications/${currUser._id}`, {
-    //                 params: { type },
-    //             })
-    //             .then((res) => {
-    //                 setUserNotifications(res.data)
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err)
-    //             })
-    //     }
-    // }, [currUser])
 
     useEffect(() => {
         if (userNotifications.length === 0) {
@@ -289,6 +294,7 @@ const Header = () => {
                                             `/patient/remove-notification/${notification._id}/${currUser._id}`
                                         )
                                         .then(() => {
+                                            setRead(true)
                                             message.success(
                                                 'Notification marked as read'
                                             )

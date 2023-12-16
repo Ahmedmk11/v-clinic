@@ -380,6 +380,7 @@ const dashboard = async (req, res) => {
             members: { $in: [id] },
         })
         //get all messages of all conversations
+        // eslint-disable-next-line no-undef
         const messages = await Promise.all(
             conversations.map(async (conversation) => {
                 const messages = await MessageModel.find({
@@ -497,7 +498,7 @@ const getDoctorStats = (appointments) => {
             value: remaingAppointmentsToday,
         },
         { title: 'Total Appointments This Month', value: thisMonthsPatients },
-        { title: 'Revenue This Month', value: '$ ' + totalRevenueThisMonth },
+        { title: 'Revenue This Month', value: '$' + totalRevenueThisMonth },
     ]
 }
 
