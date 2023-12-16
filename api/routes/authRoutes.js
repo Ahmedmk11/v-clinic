@@ -11,7 +11,6 @@ import {
 
 const router = express.Router()
 
-// readme
 router.post('/login', login)
 router.post('/logout', logout)
 router.get('/get-curr-user', getCurrUser)

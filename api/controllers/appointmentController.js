@@ -5,7 +5,6 @@ import PrescriptionModel from '../models/prescriptionsModel.js'
 import NotificationsModel from '../models/notificationsModel.js'
 import nodemailer from 'nodemailer'
 
-
 const cancelAppointmentDoctor = async (req, res) => {
     try {
         const { appointmentId } = req.body
@@ -50,16 +49,13 @@ const cancelAppointmentDoctor = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${patient.name},</p>
-                    <p>Your appointment with Dr. ${
-                        doctor.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been cancelled as the doctor is unable to conduct the appointment, you will be refunded.</p>
+                    <p>Your appointment with Dr. ${doctor.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been cancelled as the doctor is unable to conduct the appointment, you will be refunded.</p>
                     <p><strong>We apologise for this inconveince, feel free to book another session with our wide range of doctors.</strong></p>
                     <p><strong>If you think this is a mistake please contact us at this email.</strong></p>
                 </body>
@@ -82,22 +78,18 @@ const cancelAppointmentDoctor = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${doctor.name},</p>
-                    <p>Your appointment with ${
-                        patient.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been cancelled by as per your request.</p>
+                    <p>Your appointment with ${patient.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been cancelled by as per your request.</p>
                     <p><strong>If you think this is a mistake please contact us at this email.</strong></p>
                 </body>
             </html>
                 `,
         }
-
 
         transporter.sendMail(mailOptions, function (error) {
             if (error) {
@@ -128,9 +120,9 @@ const cancelAppointmentDoctor = async (req, res) => {
                 hour: '2-digit',
                 minute: '2-digit',
             })} has been cancelled, check your email for more information.`,
-            message_doctor: `Appointment with ${
-                patient.name
-            } on ${new Date(appointment.date).toLocaleDateString('en-US', {
+            message_doctor: `Appointment with ${patient.name} on ${new Date(
+                appointment.date
+            ).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -141,13 +133,10 @@ const cancelAppointmentDoctor = async (req, res) => {
         })
         await notification.save()
 
-
-        return res
-            .status(200)
-            .json({
-                message: 'Appointment cancelled successfully',
-                wallet: doctor.wallet,
-            })
+        return res.status(200).json({
+            message: 'Appointment cancelled successfully',
+            wallet: doctor.wallet,
+        })
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
@@ -173,8 +162,8 @@ const cancelAppointmentPatient = async (req, res) => {
         if (appointment.start_time - Date.now() > 86400000) {
             patient.wallet = patient.wallet + appointment.fee
             doctor.wallet = doctor.wallet - appointment.fee * 0.9
-            appointment.fee=0;
-            appointment.save();
+            appointment.fee = 0
+            appointment.save()
             await patient.save()
             await doctor.save()
         }
@@ -202,16 +191,13 @@ const cancelAppointmentPatient = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${patient.name},</p>
-                    <p>Your appointment with Dr. ${
-                        doctor.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been cancelled as you have requested.</p>
+                    <p>Your appointment with Dr. ${doctor.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been cancelled as you have requested.</p>
                     <p><strong>If you think this is a mistake please contact us at this email.</strong></p>
                 </body>
             </html>
@@ -233,22 +219,18 @@ const cancelAppointmentPatient = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${doctor.name},</p>
-                    <p>Your appointment with ${
-                        patient.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been cancelled by them.</p>
+                    <p>Your appointment with ${patient.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been cancelled by them.</p>
                     <p><strong>If you think this is a mistake please contact us at this email.</strong></p>
                 </body>
             </html>
                 `,
         }
-
 
         transporter.sendMail(mailOptions, function (error) {
             if (error) {
@@ -281,7 +263,9 @@ const cancelAppointmentPatient = async (req, res) => {
             })} has been cancelled as per your request.`,
             message_doctor: `${
                 patient.name
-            } has cancelled their appointment on ${new Date(appointment.date).toLocaleDateString('en-US', {
+            } has cancelled their appointment on ${new Date(
+                appointment.date
+            ).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -291,15 +275,11 @@ const cancelAppointmentPatient = async (req, res) => {
             })}`,
         })
         await notification.save()
-        
 
-
-        return res
-            .status(200)
-            .json({
-                message: 'Appointment cancelled successfully',
-                wallet: patient.wallet,
-            })
+        return res.status(200).json({
+            message: 'Appointment cancelled successfully',
+            wallet: patient.wallet,
+        })
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
@@ -309,12 +289,8 @@ const rescheduleAppointment = async (req, res) => {
     try {
         const { appointmentId, date, start_time, end_time } = req.body
         const appointment = await AppointmentModel.findById(appointmentId)
-        const patient = await PatientModel.findById(
-            appointment.patient_id
-        )
-        const doctor = await DoctorModel.findById(
-            appointment.doctor_id
-        )
+        const patient = await PatientModel.findById(appointment.patient_id)
+        const doctor = await DoctorModel.findById(appointment.doctor_id)
         if (!appointment) {
             return res.status(400).json({ message: 'Appointment not found' })
         }
@@ -342,22 +318,19 @@ const rescheduleAppointment = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${patient.name},</p>
-                    <p>Your appointment with Dr. ${
-                        doctor.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been rescheduled to ${
-                        new Date(date).toLocaleDateString('en-US', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        })
-                    }
+                    <p>Your appointment with Dr. ${doctor.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been rescheduled to ${new Date(
+                        date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })}
                     at ${new Date(start_time).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -383,22 +356,19 @@ const rescheduleAppointment = async (req, res) => {
                 </head>
                 <body>
                     <p>Dear ${doctor.name},</p>
-                    <p>Your appointment with ${
-                        patient.name
-                    } on ${new Date(appointment.date).toLocaleDateString(
-                        'en-US',
-                        {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }
-                    )} has been rescheduled to ${
-                        new Date(date).toLocaleDateString('en-US', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        })
-                    }
+                    <p>Your appointment with ${patient.name} on ${new Date(
+                        appointment.date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })} has been rescheduled to ${new Date(
+                        date
+                    ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })}
                     at ${new Date(start_time).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -407,7 +377,6 @@ const rescheduleAppointment = async (req, res) => {
             </html>
                 `,
         }
-
 
         transporter.sendMail(mailOptions, function (error) {
             if (error) {
@@ -434,26 +403,28 @@ const rescheduleAppointment = async (req, res) => {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
-            })} has been rescheduled to ${
-                new Date(date).toLocaleDateString('en-US', {
+            })} has been rescheduled to ${new Date(date).toLocaleDateString(
+                'en-US',
+                {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
-                })
-            }
+                }
+            )}
             at ${new Date(start_time).toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
             })}`,
             message_doctor: ` Your appointment with ${
                 patient.name
-            } has been rescheduled to ${
-                new Date(date).toLocaleDateString('en-US', {
+            } has been rescheduled to ${new Date(date).toLocaleDateString(
+                'en-US',
+                {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
-                })
-            }
+                }
+            )}
             at ${new Date(start_time).toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -543,22 +514,24 @@ const updatePrescription = async (req, res) => {
         if (!appointment) {
             return res.status(400).json({ message: 'Appointment not found' })
         }
-        const getPrescription = await PrescriptionModel.findOne({appointment_id: appointmentId})
-        if (!getPrescription){
-                await PrescriptionModel.create({
-                    appointment_id: appointmentId,
-                    patient_id: appointment.patient_id,
-                    doctor_id: appointment.doctor_id,
-                    medications: prescription.medications,
-                    notes: prescription.notes,
+        const getPrescription = await PrescriptionModel.findOne({
+            appointment_id: appointmentId,
+        })
+        if (!getPrescription) {
+            await PrescriptionModel.create({
+                appointment_id: appointmentId,
+                patient_id: appointment.patient_id,
+                doctor_id: appointment.doctor_id,
+                medications: prescription.medications,
+                notes: prescription.notes,
             })
-        }else{
+        } else {
             await PrescriptionModel.findByIdAndUpdate(getPrescription._id, {
                 medications: prescription.medications,
                 notes: prescription.notes,
-                date: Date.now()
+                date: Date.now(),
             })
-        } 
+        }
         res.status(200).json({ message: 'Prescription updated successfully' })
     } catch (err) {
         return res.status(500).json({ message: err.message })
@@ -567,11 +540,13 @@ const updatePrescription = async (req, res) => {
 
 const getPrescription = async (req, res) => {
     try {
-        const appointmentId  = req.params.id
-        const getPrescription = await PrescriptionModel.findOne({appointment_id: appointmentId})
-        if (!getPrescription){
+        const appointmentId = req.params.id
+        const getPrescription = await PrescriptionModel.findOne({
+            appointment_id: appointmentId,
+        })
+        if (!getPrescription) {
             return res.status(400).json({ message: 'Prescription not found' })
-        }else{
+        } else {
             return res.status(200).json(getPrescription)
         }
     } catch (error) {
@@ -587,5 +562,5 @@ export {
     acceptFollowUp,
     rejectFollowUp,
     updatePrescription,
-    getPrescription
+    getPrescription,
 }

@@ -9,7 +9,6 @@ import {
     getPatientAppointments,
     getPatientPrescriptions,
     getFamilyMembers,
-    populateFamilyMembers,
     getPatientDiscount,
     addPackage,
     addMedicalHistory,
@@ -39,14 +38,12 @@ import {
 
 const router = express.Router()
 
-// readme
-
-router.post('/populate-family-members/:id', populateFamilyMembers)
 router.post('/add-package/:id', addPackage)
 router.post('/buy-package-wallet/:id', buyPackageWallet)
 router.post('/buy-package-card/:id', packagePayCard)
 router.post('/pay-appointment-wallet/:id', payAppointmentWallet)
 router.post('/pay-appointment-card/:id', payAppointmentCard)
+
 router.post('/add-medical-history', addMedicalHistory)
 router.put('/update-medical-history/:id', updateMedicalHistory)
 

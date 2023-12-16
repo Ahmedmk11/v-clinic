@@ -242,20 +242,6 @@ async function getFamilyMembers(req, res) {
     }
 }
 
-async function populateFamilyMembers(req, res) {
-    try {
-        const newFamilyMember = new FamilyMemberModel(req.body)
-        await newFamilyMember.save()
-        let patient = await PatientModel.findById(req.params.id)
-        if (patient) {
-            patient = await patient.populate('familymembers')
-            res.json(patient.familymembers)
-        } else res.status(404).json({ message: 'Patient not found' })
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
-}
-
 async function getPatientDiscount(req, res) {
     try {
         let patient = await PatientModel.findById(req.params.id)
@@ -1129,7 +1115,6 @@ const checkEmailAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        
         res.status(500).json({ message: error.message })
     }
 }
@@ -1146,7 +1131,6 @@ const checkPhoneAvailability = async (req, res) => {
             res.status(200).json({ message: 200 })
         }
     } catch (error) {
-        
         res.status(500).json({ message: error.message })
     }
 }
@@ -1175,7 +1159,6 @@ export {
     getPatientAppointments,
     getPatientPrescriptions,
     getFamilyMembers,
-    populateFamilyMembers,
     getPatientDiscount,
     addPackage,
     addMedicalHistory,
