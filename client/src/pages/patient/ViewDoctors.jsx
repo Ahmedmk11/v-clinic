@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Search from '../../components/reusable/Search/Search'
 import Pagination from '../../components/reusable/Pagination/Pagination'
-import { DatePicker, Select } from 'antd'
+import { DatePicker, Select,Skeleton } from 'antd'
 import './css/ViewDoctors.css'
 import { findIntersection } from '../../utils/intersectionForSearch'
 import DoctorCard from '../../components/patient/ViewDoctors/DoctorCard'
@@ -28,6 +28,7 @@ const PatientHome = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [discount, setDiscount] = useState(1)
     const { currUser } = useContext(CurrUserContext)
+    const [skeleton, setSkeleton] = useState(true)
 
     const doctorsPerPage = 8
 
@@ -194,6 +195,7 @@ const PatientHome = () => {
             .get(`/doctor/get-active-doctors`)
             .then((res) => {
                 setDoctors(res.data)
+                setSkeleton(false)
             })
             .catch((err) => console.log(err))
     }, [])
@@ -233,6 +235,10 @@ const PatientHome = () => {
         const currentDoctor = displayedDoctors?.slice(
             indexOfFirstDoctor,
             indexOfLastDoctor
+        )
+        if(skeleton) return (<div className='card'>
+            <Skeleton active />
+        </div>
         )
         return currentDoctor ?? currentDoctor?.length > 0
             ? currentDoctor.map((doctor) => (

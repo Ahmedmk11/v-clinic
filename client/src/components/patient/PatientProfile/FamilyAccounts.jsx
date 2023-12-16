@@ -7,13 +7,14 @@ import axiosApi from '../../../utils/axiosApi'
 import LinkFamily from './LinkFamily'
 import SubscribeHealthPackage from './SubscribeHealthPackage'
 import PatientRegistrationLogic from '../Register/PatientRegistrationLogic'
+import { Skeleton } from 'antd'
 const FamilyAccounts = ({ currUser, allPackages }) => {
     const [family, setFamily] = useState([])
     const [linkFamilyModalOpen, setLinkFamilyModalOpen] = useState(false)
     const [subscribeModalOpen, setSubscribeModalOpen] = useState(false)
     const [familyMemberProfiles, setFamilyMemberProfiles] = useState([])
     const [newAccountModalOpen, setNewAccountModalOpen] = useState(false)
-
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         const fetchFamily = async () => {
             try {
@@ -23,6 +24,7 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
                     )
                     setFamily(res.data.familyMembers)
                     setFamilyMemberProfiles(res.data.familyMemberProfiles)
+                    setLoading(false)
                 }
             } catch (error) {
                 console.error(error)
@@ -35,17 +37,24 @@ const FamilyAccounts = ({ currUser, allPackages }) => {
         <>
             <div className='sub-container'>
                 <h2>My Family Accounts</h2>
-                {familyMemberProfiles?.map((member, i) => (
-                    <FamilyMemberCard
-                        key={i + 'fammem'}
-                        member={member}
-                        relation={
-                            family.find((p) => member?._id == p.id)?.relation
-                        }
-                        family={familyMemberProfiles}
-                        setFamily={setFamilyMemberProfiles}
-                    />
-                ))}
+                {loading ? (
+                    <div className='member-card'>
+                        <Skeleton active />{' '}
+                    </div>
+                ) : (
+                    familyMemberProfiles?.map((member, i) => (
+                        <FamilyMemberCard
+                            key={i + 'fammem'}
+                            member={member}
+                            relation={
+                                family.find((p) => member?._id == p.id)
+                                    ?.relation
+                            }
+                            family={familyMemberProfiles}
+                            setFamily={setFamilyMemberProfiles}
+                        />
+                    ))
+                )}
                 <div
                     className='edit-buttons'
                     style={{

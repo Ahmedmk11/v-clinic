@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { DatePicker, Select, Button } from 'antd'
+import { DatePicker, Select, Button, Skeleton } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
 import CancelAppointment from './CancelAppointment.jsx'
 import AppointmentReschedule from '../../doctor/DoctorAppointments/AppointmentReschedule.jsx'
@@ -24,6 +24,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
         useState(false)
     const [RequestFollowUpOpen, setRequestFollowUpOpen] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
+    const [skeleton, setSkeleton] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const { currUser } = useContext(CurrUserContext)
     const AppointmentsPerPage = 8
@@ -75,6 +76,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
             .then((res) => {
                 setAppointmentsList(res.data)
                 setDisplayedAppointments(res.data)
+                setSkeleton(false)
             })
             .catch((error) => {
                 console.error(error)
@@ -97,6 +99,13 @@ const AppointmentsList = ({ mode = 'patient' }) => {
             indexOfFirstAppointment,
             indexOfLastAppointment
         )
+        if (skeleton)
+            return (
+                <div className='card'>
+                    <Skeleton active />
+                </div>
+            )
+
         return currentAppointments.length > 0
             ? currentAppointments.map((appointment) => (
                   <div className='card' key={appointment.id}>

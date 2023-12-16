@@ -5,12 +5,14 @@ import axiosApi from '../../utils/axiosApi'
 const PatientViewPrescription = () => {
     const { currUser } = useContext(CurrUserContext)
     const [prescriptions, setPrescriptions] = useState([])
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         if (!currUser) return
         axiosApi
             .get('/patient/get-patient-prescriptions/' + currUser?._id)
             .then((res) => {
                 setPrescriptions(res.data)
+                setLoading(false)
             })
             .catch((err) => {
                 console.log(err)
@@ -19,7 +21,7 @@ const PatientViewPrescription = () => {
 
     return (
         <div className='page'>
-            <ViewPrescriptionsList prescriptions={prescriptions} />
+            <ViewPrescriptionsList loading={loading} prescriptions={prescriptions} />
         </div>
     )
 }

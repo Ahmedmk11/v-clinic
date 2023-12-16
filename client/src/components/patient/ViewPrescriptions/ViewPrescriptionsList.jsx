@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { DatePicker, Select } from 'antd'
+import { DatePicker, Select ,Skeleton} from 'antd'
 import Pagination from '../../reusable/Pagination/Pagination'
 import PrescriptionCard from './PrescriptionCard'
 
-const ViewPrescriptionsList = ({ prescriptions }) => {
+const ViewPrescriptionsList = ({ prescriptions,loading }) => {
     const [displayedPrescriptions, setDisplayedPrescriptions] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedStates, setSelectedStates] = useState([])
@@ -43,14 +43,18 @@ const ViewPrescriptionsList = ({ prescriptions }) => {
             indexOfFirstPrescription,
             indexOfLastPrescription
         )
-        return currentPrescriptions.length > 0
-            ? currentPrescriptions.map((prescription) => (
-                  <PrescriptionCard
-                      key={prescription._id}
-                      prescription={prescription}
-                  />
-              ))
-            : 'No prescriptions to show'
+        if (loading)
+        return<div className='card'>
+            <Skeleton active />
+        </div>
+            return currentPrescriptions.length > 0
+                ? currentPrescriptions.map((prescription) => (
+                      <PrescriptionCard
+                          key={prescription._id}
+                          prescription={prescription}
+                      />
+                  ))
+                : 'No prescriptions to show'
     }
 
     useEffect(() => {
