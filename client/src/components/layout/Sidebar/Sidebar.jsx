@@ -94,8 +94,7 @@ const Sidebar = () => {
         <div className={`sidebar ${isExpanded ? 'sidebar-expanded' : ''}`}>
             <div>
                 <div
-                    onMouseEnter={() => setIsExpanded(true)}
-                    onMouseLeave={() => setIsExpanded(false)}>
+                   >
                     <p
                         className={'sidebar-item'}
                         onClick={() => {
