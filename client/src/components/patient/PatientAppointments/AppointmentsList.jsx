@@ -108,7 +108,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
 
         return currentAppointments.length > 0
             ? currentAppointments.map((appointment) => (
-                  <div className='card' key={appointment.id}>
+                  <div className='card' key={appointment._id}>
                       <h2>{appointment?.patient_id?.name}</h2>
                       <h3>Dr. {appointment?.doctor_id.name}</h3>
                       <p>

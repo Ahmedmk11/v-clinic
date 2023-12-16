@@ -33,7 +33,7 @@ const AdminDoctorList = ({ doctors }) => {
         )
         return currentdoctors.length
             ? currentdoctors.map((doctor) => (
-                  <AdminDoctorCard key={doctor.id} doctor={doctor} />
+                  <AdminDoctorCard key={doctor._id} doctor={doctor} />
               ))
             : 'No doctors to show'
     }
