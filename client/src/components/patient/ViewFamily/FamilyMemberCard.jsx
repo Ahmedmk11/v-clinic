@@ -6,8 +6,9 @@ import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRende
 
 const FamilyMemberCard = ({ member, relation, family, setFamily }) => {
     const handleCancelSubscirption = () => {
+        console.log(member)
         axiosApi
-            .post(`/patient/add-package/${member?.id}`, {
+            .post(`/patient/add-package/${member?._id}`, {
                 packageID: '-1',
             })
             .then((res) => {

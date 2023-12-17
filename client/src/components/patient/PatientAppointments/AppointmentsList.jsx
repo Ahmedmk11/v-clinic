@@ -27,7 +27,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
     const [skeleton, setSkeleton] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const { currUser } = useContext(CurrUserContext)
-    const AppointmentsPerPage = 8
+    const AppointmentsPerPage = 6
     const applyFilters = () => {
         let filtered = appointmentsList
 
@@ -59,6 +59,7 @@ const AppointmentsList = ({ mode = 'patient' }) => {
 
     useEffect(() => {
         applyFilters()
+        setCurrentPage(1)
     }, [selectedStates, dateRange])
 
     useEffect(() => {

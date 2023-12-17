@@ -127,7 +127,7 @@ const SubscribeHealthPackage = ({
         if (targetSubscriberType == 'family') {
             try {
                 const res = await axiosApi.get(
-                    `/patient/get-patient-by-id/${subscriber.id}`
+                    `/patient/get-patient-by-id/${subscriber._id}`
                 )
                 if (res.data?.package?._id == selectedPackageId) {
                     message.error('Already subscribed to this package')

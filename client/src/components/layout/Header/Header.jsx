@@ -7,7 +7,6 @@ import sunIcn from '../../../assets/icons/sun.svg'
 import chatIcn from '../../../assets/icons/chat.svg'
 import inboxIcn from '../../../assets/icons/inbox.svg'
 import readIcn from '../../../assets/icons/read.svg'
-import logoIcn from '../../../assets/icons/logo.svg'
 import { UserOutlined, WalletOutlined, LogoutOutlined } from '@ant-design/icons'
 import CurrUser from '../../../contexts/CurrUser'
 import CurrTheme from '../../../contexts/CurrTheme'
@@ -15,7 +14,7 @@ import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRende
 import axiosApi from '../../../utils/axiosApi'
 import { FloatButton, Tooltip } from 'antd'
 import { io } from 'socket.io-client'
-
+import LogoIcon from './Logo'
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode')
 } else {
@@ -160,15 +159,7 @@ const Header = () => {
         }
     }, [])
 
-    const LogoIcon = () => (
-        <img
-            onClick={() => {
-                navigate(`/${role}`)
-            }}
-            style={{ width: 100, cursor: 'pointer' }}
-            src={logoIcn}
-        />
-    )
+    
 
     useEffect(() => {
         if (userNotifications.length === 0) {
@@ -330,7 +321,7 @@ const Header = () => {
 
     return (
         <header className='navbar'>
-            <LogoIcon />
+            <LogoIcon role={role} />
             <div id='navbar-buttons'>
                 {role !== 'admin' && (
                     <Dropdown

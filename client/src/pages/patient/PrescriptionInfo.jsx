@@ -104,7 +104,7 @@ const PrescriptionInfo = () => {
                         ))}
                     </div>
                 </div>
-                <ConditionalRender condition={SelectedPrescription.status === 'unfilled'}>
+                {/* <ConditionalRender condition={SelectedPrescription.status === 'unfilled'}>
                 <div className='sub-container'>
                     <h2>Purchase prescription</h2>
                     <div>
@@ -126,7 +126,7 @@ const PrescriptionInfo = () => {
                         </Button>
                     </div>
                 </div>
-                </ConditionalRender>
+                </ConditionalRender> */}
             </div>
         </div>
     )

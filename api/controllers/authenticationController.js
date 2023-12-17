@@ -52,7 +52,7 @@ async function login(req, res) {
             { expiresIn: remember ? '30d' : '2h' }
         )
 
-        res.cookie('token', token, {
+        res.cookie('token_clinic', token, {
             httpOnly: true,
             maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
         })
@@ -64,7 +64,7 @@ async function login(req, res) {
 }
 
 async function getCurrUser(req, res) {
-    const token = req.cookies.token
+    const token = req.cookies.token_clinic
 
     if (token) {
         try {
@@ -80,7 +80,7 @@ async function getCurrUser(req, res) {
 }
 
 async function logout(req, res) {
-    res.clearCookie('token')
+    res.clearCookie('token_clinic')
     res.status(200).json({ message: 'Logged out' })
 }
 

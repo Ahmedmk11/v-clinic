@@ -153,10 +153,10 @@ const cancelAppointmentPatient = async (req, res) => {
             appointmentId,
             { status: 'cancelled' }
         )
-        const patient = await PatientModel.findByIdAndUpdate(
+        const patient = await PatientModel.findById(
             appointment.patient_id
         )
-        const doctor = await DoctorModel.findByIdAndUpdate(
+        const doctor = await DoctorModel.findById(
             appointment.doctor_id
         )
         if (appointment.start_time - Date.now() > 86400000) {

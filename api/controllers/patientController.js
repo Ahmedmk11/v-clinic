@@ -815,7 +815,12 @@ async function cancelAutoRenewal(req, res) {
 const getFamilyMembersAppointments = async (req, res) => {
     try {
         const { id } = req.params
-        const family = await FamilyModel.findOne({ 'member.id': id })
+        let family = await FamilyModel.find({})
+        family = family.filter((family) =>
+            family.member.some((member) => member.id == id)
+        )
+        if (family.length == 0) return res.status(200).json([])
+        else family = family[0]
         const familyMembers = family.member
             .filter((familyMember) => familyMember.id != id)
             .map((member) => member.id)
@@ -826,6 +831,7 @@ const getFamilyMembersAppointments = async (req, res) => {
             .populate('patient_id')
         res.status(200).json(appointments)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Internal Server Error' })
     }
 }
@@ -841,12 +847,9 @@ const generatePrescriptionPDF = async (req, res) => {
 
     let medicationsArr = []
 
-    prescription.medications.forEach(async (medication) => {
-        const medicine = await medicineModel.findOne({
-            _id: medication.medicine_id,
-        })
+    prescription.medications.forEach((medication) => {
         medicationsArr.push({
-            name: medicine.name,
+            name: medication.name,
             dosage: medication.dosage,
             frequency: medication.frequency,
             duration: medication.duration,

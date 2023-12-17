@@ -7,20 +7,20 @@ import { Server } from "socket.io";
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5174",
+    origin: ["http://localhost:5174","http://localhost:5173"]
   },
 });
 
 let users = [];
 
 const checkNotifications = async () => {
-  console.log("Checking Notifications");
+  //console.log("Checking Notifications");
   const notifications = await NotificationsModel.find();
   return notifications;
 };
 
 const checkMedicineStock = async () => {
-  console.log("Checking Medicine Stock");
+ // console.log("Checking Medicine Stock");
   const medicines = await Medicine.find({ availableQuantity: 0 });
   return medicines;
 };
