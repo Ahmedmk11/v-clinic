@@ -301,16 +301,7 @@ const Header = () => {
                                             setVisible(false)
                                         })
                                 }}
-                                style={{
-                                    height: '70px',
-                                    cursor: 'pointer',
-                                    marginRight: '-12px',
-                                    padding: '16px',
-                                    backgroundColor: '#eee',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
+                                className='read-button-container'
                                 onMouseEnter={(e) =>
                                     (e.currentTarget.style.backgroundColor =
                                         '#ddd')
