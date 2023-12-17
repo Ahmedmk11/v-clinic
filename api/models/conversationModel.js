@@ -14,6 +14,6 @@ const ConversationSchema = new Schema(
     { timestamps: true }
 )
 
-const ConversationModel = mongoose.model('Conversation', ConversationSchema)
+const ConversationModel = mongoose.model('Chat', ConversationSchema)
 
 export default ConversationModel

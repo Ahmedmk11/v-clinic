@@ -1,4 +1,5 @@
 import NotificationsModel from "./Models/notificationsModel.js";
+import Medicine from "./Models/medicineModel.js";
 import { connectToDatabase } from "./database.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -16,6 +17,12 @@ const checkNotifications = async () => {
   console.log("Checking Notifications");
   const notifications = await NotificationsModel.find();
   return notifications;
+};
+
+const checkMedicineStock = async () => {
+  console.log("Checking Medicine Stock");
+  const medicines = await Medicine.find({ availableQuantity: 0 });
+  return medicines;
 };
 
 const addUser = (userId, socketId) => {
@@ -59,6 +66,17 @@ io.on("connection", (socket) => {
       });
     }, 5000);
   })();
+
+  //when out of stock
+  const checkMedicineStockInterval = setInterval(async () => {
+    let x = await checkMedicineStock();
+
+    io.emit("outOfStockNotification", {
+      medicineNames: x,
+    });
+  }, 10000); // Run every 1 minute (adjust the interval as needed)
+
+  checkMedicineStockInterval;
 
   //when disconnect
   socket.on("disconnect", () => {
