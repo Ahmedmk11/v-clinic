@@ -143,7 +143,7 @@ const PatientRegistrationLogic = ({
             title: 'Basic Info.',
             content: (
                 <>
-                    <Form.Item
+                    {mode == 2 && (<Form.Item
                         name='family_relation'
                         label='Relation'
                         rules={[
@@ -157,7 +157,7 @@ const PatientRegistrationLogic = ({
                             <Option value='Child'>Child</Option>
                             <Option value='Husband'>Husband</Option>
                         </Select>
-                    </Form.Item>
+                    </Form.Item>)}
 
                     <Form.Item
                         name='username'

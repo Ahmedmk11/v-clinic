@@ -57,7 +57,7 @@ const LandingPage = () => {
                         size='large'
                         type='primary'
                         onClick={() => {
-                            navigate('/regiser-doctor')
+                            navigate('/register-doctor')
                         }}>
                         Register as Doctor
                     </Button>
