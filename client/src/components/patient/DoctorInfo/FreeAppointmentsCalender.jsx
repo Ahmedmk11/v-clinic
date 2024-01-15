@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Divider, message } from 'antd'
 import ConditionalRender from '../../reusable/ConditionalRender/ConditionalRender'
-import './FreeAppointmentCalender.css'
+import './freeAppointmentCalender.css'
 import ReserveAppointment from './ReserveAppointment'
 const FreeAppointmentCalender = ({
     timeSlots,
