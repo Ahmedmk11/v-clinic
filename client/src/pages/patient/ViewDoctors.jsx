@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Search from '../../components/reusable/Search/Search'
 import Pagination from '../../components/reusable/Pagination/Pagination'
-import { DatePicker, Select,Skeleton } from 'antd'
-import './css/ViewDoctors.css'
+import { DatePicker, Select, Skeleton } from 'antd'
+import './css/viewDoctors.css'
 import { findIntersection } from '../../utils/intersectionForSearch'
 import DoctorCard from '../../components/patient/ViewDoctors/DoctorCard'
 
@@ -236,10 +236,12 @@ const PatientHome = () => {
             indexOfFirstDoctor,
             indexOfLastDoctor
         )
-        if(skeleton) return (<div className='card'>
-            <Skeleton active />
-        </div>
-        )
+        if (skeleton)
+            return (
+                <div className='card'>
+                    <Skeleton active />
+                </div>
+            )
         return currentDoctor ?? currentDoctor?.length > 0
             ? currentDoctor.map((doctor) => (
                   <DoctorCard
