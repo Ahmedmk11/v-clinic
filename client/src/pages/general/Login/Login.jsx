@@ -15,7 +15,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import axiosApi from '../../../utils/axiosApi'
 import ConditionalRender from '../../../components/reusable/ConditionalRender/ConditionalRender'
 import logoIcn from '../../../assets/icons/logo.svg'
-import './Login.css'
+import './login.css'
 import Theme from '../../../components/layout/Header/Theme'
 
 const LogoIcon = () => <img id='logo' style={{ width: 200 }} src={logoIcn} />
