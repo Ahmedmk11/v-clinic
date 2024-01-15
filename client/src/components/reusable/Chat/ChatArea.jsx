@@ -6,7 +6,7 @@ import CurrUserContext from '../../../contexts/CurrUser'
 import axiosApi from '../../../utils/axiosApi'
 import { io } from 'socket.io-client'
 import { format } from 'timeago.js'
-import './ChatArea.css'
+import './chatArea.css'
 const { TextArea } = Input
 const ChatArea = ({ selectedChat }) => {
     const [chatMessages, setChatMessages] = useState([])
@@ -59,8 +59,8 @@ const ChatArea = ({ selectedChat }) => {
         setLoad(false)
     }, [selectedChat])
 
-    const handleSendMessage = (msg=null) => {
-        if ((!message&& !msg) || !currUser || !selectedChat) return
+    const handleSendMessage = (msg = null) => {
+        if ((!message && !msg) || !currUser || !selectedChat) return
         const receiverId = selectedChat?.members?.find(
             (member) => member !== currUser?._id
         )
@@ -68,14 +68,14 @@ const ChatArea = ({ selectedChat }) => {
         socket.current.emit('sendMessage', {
             senderId: currUser?._id,
             receiverId,
-            text: message||msg,
+            text: message || msg,
         })
 
         axiosApi
             .post('chat/send-message', {
                 conversationId: selectedChat?.id,
                 sender: currUser?._id,
-                text: message||msg,
+                text: message || msg,
             })
             .then((response) => {
                 setChatMessages([...chatMessages, response.data])
@@ -91,8 +91,10 @@ const ChatArea = ({ selectedChat }) => {
         if (!currUser || !selectedChat) return
         axiosApi
             .get('videoChat/create-meeting')
-            .then(async(response) => {
-                handleSendMessage('Join video call at ' + response.data.roomLink)
+            .then(async (response) => {
+                handleSendMessage(
+                    'Join video call at ' + response.data.roomLink
+                )
                 window.open(response.data.roomLink, '_blank')
             })
             .catch((err) => {
